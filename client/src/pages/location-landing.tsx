@@ -132,7 +132,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
       <SEO 
         title={pageTitle}
         description={pageDescription}
-        canonicalUrl={canonicalUrl}
+        canonical={canonicalUrl}
         keywords={seoKeywords}
       />
       <div className="min-h-screen">

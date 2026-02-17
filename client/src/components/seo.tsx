@@ -1,16 +1,19 @@
 import { useEffect } from "react";
 
-interface SEOProps {
+export interface SEOProps {
   title?: string;
   description?: string;
   canonical?: string;
+  canonicalUrl?: string;
+  keywords?: string;
   ogImage?: string;
   ogType?: string;
   noindex?: boolean;
   structuredData?: object | object[];
 }
 
-export function SEO({ title, description, canonical, ogImage, ogType = "website", noindex, structuredData }: SEOProps) {
+export function SEO({ title, description, canonical, canonicalUrl, keywords, ogImage, ogType = "website", noindex, structuredData }: SEOProps) {
+  const resolvedCanonical = canonical || canonicalUrl;
   useEffect(() => {
     if (title) document.title = title;
     const setMeta = (name: string, content: string) => {
@@ -27,10 +30,11 @@ export function SEO({ title, description, canonical, ogImage, ogType = "website"
     if (title) setMeta("og:title", title);
     if (ogType) setMeta("og:type", ogType);
     if (ogImage) setMeta("og:image", ogImage);
-    if (canonical) {
+    if (keywords) setMeta("keywords", keywords);
+    if (resolvedCanonical) {
       let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
       if (!link) { link = document.createElement("link"); link.rel = "canonical"; document.head.appendChild(link); }
-      link.href = canonical;
+      link.href = resolvedCanonical;
     }
     if (noindex) setMeta("robots", "noindex,nofollow");
     if (structuredData) {
@@ -45,7 +49,7 @@ export function SEO({ title, description, canonical, ogImage, ogType = "website"
         document.head.appendChild(script);
       });
     }
-  }, [title, description, canonical, ogImage, ogType, noindex, structuredData]);
+  }, [title, description, resolvedCanonical, keywords, ogImage, ogType, noindex, structuredData]);
   return null;
 }
 

@@ -24,7 +24,7 @@ export default function Locations() {
       <SEO 
         title="Restaurant Booking Software by Location"
         description={`Resto serves hospitality businesses in ${locations.length}+ cities worldwide. Find AI-powered booking software for restaurants, cafes, bars, and hotels in your city.`}
-        canonicalUrl="/locations"
+        canonical="/locations"
         keywords="restaurant booking software, hospitality reservation system, AI booking by city, restaurant software locations, global hospitality technology"
       />
       <div className="min-h-screen">
