@@ -5,6 +5,10 @@ import {
   contentAssets, contentAssetUsage, rankTrackerKeywords, rankTrackerResults,
   rankTrackerCredits, gridKeywords, gridScanResults, gridRefreshCredits,
   contactMessages, seoSettings, reservations, resources,
+  callLogs, supportTickets, twilioSettings, widgetSettings, widgetChatLogs,
+  websiteChangeRequests, adminUsers, adminSettings, paymentSettings,
+  aiProviderSettings, roomTypes, rooms, roomBookings, businessHours,
+  closures, knowledgeBaseItems, teamMembers,
   type User, type InsertUser,
   type Venue, type InsertVenue,
   type BlogPost, type InsertBlogPost,
@@ -21,9 +25,27 @@ import {
   type Reservation, type InsertReservation,
   type Resource, type InsertResource,
   type RankTrackerCredits, type GridRefreshCredits,
+  type CallLog, type InsertCallLog,
+  type SupportTicket, type InsertSupportTicket,
+  type TwilioSetting, type InsertTwilioSetting,
+  type WidgetSetting, type InsertWidgetSetting,
+  type WidgetChatLog,
+  type WebsiteChangeRequest, type InsertWebsiteChangeRequest,
+  type AdminUser, type InsertAdminUser,
+  type AdminSetting, type InsertAdminSetting,
+  type PaymentSetting, type InsertPaymentSetting,
+  type AiProviderSetting, type InsertAiProviderSetting,
+  type RoomType, type InsertRoomType,
+  type Room, type InsertRoom,
+  type RoomBooking, type InsertRoomBooking,
+  type BusinessHour, type InsertBusinessHour,
+  type Closure, type InsertClosure,
+  type KnowledgeBaseItem, type InsertKnowledgeBaseItem,
+  type TeamMember, type InsertTeamMember,
 } from "@shared/schema";
 
 export interface IStorage {
+  getUsers(): Promise<User[]>;
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
@@ -73,9 +95,71 @@ export interface IStorage {
 
   getResources(venueId: string): Promise<Resource[]>;
   createResource(res: InsertResource): Promise<Resource>;
+
+  getCallLogs(venueId: string): Promise<CallLog[]>;
+  getAllCallLogs(): Promise<CallLog[]>;
+  createCallLog(log: InsertCallLog): Promise<CallLog>;
+
+  getSupportTickets(venueId: string): Promise<SupportTicket[]>;
+  getAllSupportTickets(): Promise<SupportTicket[]>;
+  createSupportTicket(ticket: InsertSupportTicket): Promise<SupportTicket>;
+  updateSupportTicket(id: string, data: Partial<InsertSupportTicket>): Promise<SupportTicket | undefined>;
+
+  getTwilioSettings(venueId: string): Promise<TwilioSetting | undefined>;
+  upsertTwilioSettings(data: InsertTwilioSetting): Promise<TwilioSetting>;
+
+  getWidgetSettings(venueId: string): Promise<WidgetSetting | undefined>;
+  upsertWidgetSettings(data: InsertWidgetSetting): Promise<WidgetSetting>;
+
+  getWidgetChatLogs(venueId: string): Promise<WidgetChatLog[]>;
+
+  getWebsiteChangeRequests(venueId: string): Promise<WebsiteChangeRequest[]>;
+  getAllWebsiteChangeRequests(): Promise<WebsiteChangeRequest[]>;
+  createWebsiteChangeRequest(req: InsertWebsiteChangeRequest): Promise<WebsiteChangeRequest>;
+  updateWebsiteChangeRequest(id: string, data: Partial<InsertWebsiteChangeRequest>): Promise<WebsiteChangeRequest | undefined>;
+
+  getAdminUsers(): Promise<AdminUser[]>;
+  createAdminUser(user: InsertAdminUser): Promise<AdminUser>;
+  updateAdminUser(id: string, data: Partial<InsertAdminUser>): Promise<AdminUser | undefined>;
+
+  getAdminSettings(): Promise<AdminSetting[]>;
+
+  getPaymentSettings(venueId: string): Promise<PaymentSetting | undefined>;
+  getAllPaymentSettings(): Promise<PaymentSetting[]>;
+  upsertPaymentSettings(data: InsertPaymentSetting): Promise<PaymentSetting>;
+
+  getAiProviderSettings(venueId: string): Promise<AiProviderSetting[]>;
+  upsertAiProviderSettings(data: InsertAiProviderSetting): Promise<AiProviderSetting>;
+
+  getRoomTypes(venueId: string): Promise<RoomType[]>;
+  createRoomType(rt: InsertRoomType): Promise<RoomType>;
+  updateRoomType(id: string, data: Partial<InsertRoomType>): Promise<RoomType | undefined>;
+
+  getRooms(venueId: string): Promise<Room[]>;
+  createRoom(room: InsertRoom): Promise<Room>;
+
+  getRoomBookings(venueId: string): Promise<RoomBooking[]>;
+  createRoomBooking(booking: InsertRoomBooking): Promise<RoomBooking>;
+  updateRoomBooking(id: string, data: Partial<InsertRoomBooking>): Promise<RoomBooking | undefined>;
+
+  getBusinessHours(venueId: string): Promise<BusinessHour[]>;
+  upsertBusinessHours(venueId: string, hours: InsertBusinessHour[]): Promise<BusinessHour[]>;
+
+  getClosures(venueId: string): Promise<Closure[]>;
+  createClosure(closure: InsertClosure): Promise<Closure>;
+  deleteClosure(id: number): Promise<void>;
+
+  getKnowledgeBaseItems(venueId: string): Promise<KnowledgeBaseItem[]>;
+
+  getTeamMembers(venueId: string): Promise<TeamMember[]>;
+  createTeamMember(member: InsertTeamMember): Promise<TeamMember>;
 }
 
 export class DatabaseStorage implements IStorage {
+  async getUsers(): Promise<User[]> {
+    return db.select().from(users).orderBy(users.email);
+  }
+
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
@@ -255,6 +339,216 @@ export class DatabaseStorage implements IStorage {
 
   async createResource(res: InsertResource): Promise<Resource> {
     const [result] = await db.insert(resources).values(res).returning();
+    return result;
+  }
+
+  async getCallLogs(venueId: string): Promise<CallLog[]> {
+    return db.select().from(callLogs).where(eq(callLogs.venueId, venueId)).orderBy(desc(callLogs.createdAt));
+  }
+
+  async getAllCallLogs(): Promise<CallLog[]> {
+    return db.select().from(callLogs).orderBy(desc(callLogs.createdAt));
+  }
+
+  async createCallLog(log: InsertCallLog): Promise<CallLog> {
+    const [result] = await db.insert(callLogs).values(log).returning();
+    return result;
+  }
+
+  async getSupportTickets(venueId: string): Promise<SupportTicket[]> {
+    return db.select().from(supportTickets).where(eq(supportTickets.venueId, venueId)).orderBy(desc(supportTickets.createdAt));
+  }
+
+  async getAllSupportTickets(): Promise<SupportTicket[]> {
+    return db.select().from(supportTickets).orderBy(desc(supportTickets.createdAt));
+  }
+
+  async createSupportTicket(ticket: InsertSupportTicket): Promise<SupportTicket> {
+    const [result] = await db.insert(supportTickets).values(ticket).returning();
+    return result;
+  }
+
+  async updateSupportTicket(id: string, data: Partial<InsertSupportTicket>): Promise<SupportTicket | undefined> {
+    const [result] = await db.update(supportTickets).set({ ...data, updatedAt: new Date() } as any).where(eq(supportTickets.id, id)).returning();
+    return result;
+  }
+
+  async getTwilioSettings(venueId: string): Promise<TwilioSetting | undefined> {
+    const [result] = await db.select().from(twilioSettings).where(eq(twilioSettings.venueId, venueId));
+    return result;
+  }
+
+  async upsertTwilioSettings(data: InsertTwilioSetting): Promise<TwilioSetting> {
+    const existing = await this.getTwilioSettings(data.venueId);
+    if (existing) {
+      const [result] = await db.update(twilioSettings).set({ ...data, updatedAt: new Date() } as any).where(eq(twilioSettings.venueId, data.venueId)).returning();
+      return result;
+    }
+    const [result] = await db.insert(twilioSettings).values(data).returning();
+    return result;
+  }
+
+  async getWidgetSettings(venueId: string): Promise<WidgetSetting | undefined> {
+    const [result] = await db.select().from(widgetSettings).where(eq(widgetSettings.venueId, venueId));
+    return result;
+  }
+
+  async upsertWidgetSettings(data: InsertWidgetSetting): Promise<WidgetSetting> {
+    const existing = await this.getWidgetSettings(data.venueId);
+    if (existing) {
+      const [result] = await db.update(widgetSettings).set({ ...data, updatedAt: new Date() } as any).where(eq(widgetSettings.venueId, data.venueId)).returning();
+      return result;
+    }
+    const [result] = await db.insert(widgetSettings).values(data).returning();
+    return result;
+  }
+
+  async getWidgetChatLogs(venueId: string): Promise<WidgetChatLog[]> {
+    return db.select().from(widgetChatLogs).where(eq(widgetChatLogs.venueId, venueId)).orderBy(desc(widgetChatLogs.createdAt));
+  }
+
+  async getWebsiteChangeRequests(venueId: string): Promise<WebsiteChangeRequest[]> {
+    return db.select().from(websiteChangeRequests).where(eq(websiteChangeRequests.venueId, venueId)).orderBy(desc(websiteChangeRequests.createdAt));
+  }
+
+  async getAllWebsiteChangeRequests(): Promise<WebsiteChangeRequest[]> {
+    return db.select().from(websiteChangeRequests).orderBy(desc(websiteChangeRequests.createdAt));
+  }
+
+  async createWebsiteChangeRequest(req: InsertWebsiteChangeRequest): Promise<WebsiteChangeRequest> {
+    const [result] = await db.insert(websiteChangeRequests).values(req).returning();
+    return result;
+  }
+
+  async updateWebsiteChangeRequest(id: string, data: Partial<InsertWebsiteChangeRequest>): Promise<WebsiteChangeRequest | undefined> {
+    const [result] = await db.update(websiteChangeRequests).set({ ...data, updatedAt: new Date() } as any).where(eq(websiteChangeRequests.id, id)).returning();
+    return result;
+  }
+
+  async getAdminUsers(): Promise<AdminUser[]> {
+    return db.select().from(adminUsers).orderBy(adminUsers.name);
+  }
+
+  async createAdminUser(user: InsertAdminUser): Promise<AdminUser> {
+    const [result] = await db.insert(adminUsers).values(user).returning();
+    return result;
+  }
+
+  async updateAdminUser(id: string, data: Partial<InsertAdminUser>): Promise<AdminUser | undefined> {
+    const [result] = await db.update(adminUsers).set({ ...data, updatedAt: new Date() } as any).where(eq(adminUsers.id, id)).returning();
+    return result;
+  }
+
+  async getAdminSettings(): Promise<AdminSetting[]> {
+    return db.select().from(adminSettings);
+  }
+
+  async getPaymentSettings(venueId: string): Promise<PaymentSetting | undefined> {
+    const [result] = await db.select().from(paymentSettings).where(eq(paymentSettings.venueId, venueId));
+    return result;
+  }
+
+  async getAllPaymentSettings(): Promise<PaymentSetting[]> {
+    return db.select().from(paymentSettings);
+  }
+
+  async upsertPaymentSettings(data: InsertPaymentSetting): Promise<PaymentSetting> {
+    const existing = await this.getPaymentSettings(data.venueId);
+    if (existing) {
+      const [result] = await db.update(paymentSettings).set({ ...data, updatedAt: new Date() } as any).where(eq(paymentSettings.venueId, data.venueId)).returning();
+      return result;
+    }
+    const [result] = await db.insert(paymentSettings).values(data).returning();
+    return result;
+  }
+
+  async getAiProviderSettings(venueId: string): Promise<AiProviderSetting[]> {
+    return db.select().from(aiProviderSettings).where(eq(aiProviderSettings.venueId, venueId));
+  }
+
+  async upsertAiProviderSettings(data: InsertAiProviderSetting): Promise<AiProviderSetting> {
+    const existing = await db.select().from(aiProviderSettings)
+      .where(and(eq(aiProviderSettings.venueId, data.venueId), eq(aiProviderSettings.provider, data.provider)));
+    if (existing.length > 0) {
+      const [result] = await db.update(aiProviderSettings).set({ ...data, updatedAt: new Date() } as any)
+        .where(and(eq(aiProviderSettings.venueId, data.venueId), eq(aiProviderSettings.provider, data.provider))).returning();
+      return result;
+    }
+    const [result] = await db.insert(aiProviderSettings).values(data).returning();
+    return result;
+  }
+
+  async getRoomTypes(venueId: string): Promise<RoomType[]> {
+    return db.select().from(roomTypes).where(eq(roomTypes.venueId, venueId)).orderBy(roomTypes.sortOrder);
+  }
+
+  async createRoomType(rt: InsertRoomType): Promise<RoomType> {
+    const [result] = await db.insert(roomTypes).values(rt).returning();
+    return result;
+  }
+
+  async updateRoomType(id: string, data: Partial<InsertRoomType>): Promise<RoomType | undefined> {
+    const [result] = await db.update(roomTypes).set({ ...data, updatedAt: new Date() } as any).where(eq(roomTypes.id, id)).returning();
+    return result;
+  }
+
+  async getRooms(venueId: string): Promise<Room[]> {
+    return db.select().from(rooms).where(eq(rooms.venueId, venueId)).orderBy(rooms.roomNumber);
+  }
+
+  async createRoom(room: InsertRoom): Promise<Room> {
+    const [result] = await db.insert(rooms).values(room).returning();
+    return result;
+  }
+
+  async getRoomBookings(venueId: string): Promise<RoomBooking[]> {
+    return db.select().from(roomBookings).where(eq(roomBookings.venueId, venueId)).orderBy(desc(roomBookings.createdAt));
+  }
+
+  async createRoomBooking(booking: InsertRoomBooking): Promise<RoomBooking> {
+    const [result] = await db.insert(roomBookings).values(booking as any).returning();
+    return result;
+  }
+
+  async updateRoomBooking(id: string, data: Partial<InsertRoomBooking>): Promise<RoomBooking | undefined> {
+    const [result] = await db.update(roomBookings).set({ ...data, updatedAt: new Date() } as any).where(eq(roomBookings.id, id)).returning();
+    return result;
+  }
+
+  async getBusinessHours(venueId: string): Promise<BusinessHour[]> {
+    return db.select().from(businessHours).where(eq(businessHours.venueId, venueId)).orderBy(businessHours.dayOfWeek);
+  }
+
+  async upsertBusinessHours(venueId: string, hours: InsertBusinessHour[]): Promise<BusinessHour[]> {
+    await db.delete(businessHours).where(eq(businessHours.venueId, venueId));
+    if (hours.length === 0) return [];
+    const results = await db.insert(businessHours).values(hours).returning();
+    return results;
+  }
+
+  async getClosures(venueId: string): Promise<Closure[]> {
+    return db.select().from(closures).where(eq(closures.venueId, venueId)).orderBy(closures.date);
+  }
+
+  async createClosure(closure: InsertClosure): Promise<Closure> {
+    const [result] = await db.insert(closures).values(closure).returning();
+    return result;
+  }
+
+  async deleteClosure(id: number): Promise<void> {
+    await db.delete(closures).where(eq(closures.id, id));
+  }
+
+  async getKnowledgeBaseItems(venueId: string): Promise<KnowledgeBaseItem[]> {
+    return db.select().from(knowledgeBaseItems).where(eq(knowledgeBaseItems.venueId, venueId)).orderBy(desc(knowledgeBaseItems.createdAt));
+  }
+
+  async getTeamMembers(venueId: string): Promise<TeamMember[]> {
+    return db.select().from(teamMembers).where(eq(teamMembers.venueId, venueId));
+  }
+
+  async createTeamMember(member: InsertTeamMember): Promise<TeamMember> {
+    const [result] = await db.insert(teamMembers).values(member).returning();
     return result;
   }
 }

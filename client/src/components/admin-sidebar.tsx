@@ -1,163 +1,95 @@
-import { useLocation, Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import {
   LayoutDashboard,
+  Building2,
+  Users,
+  CreditCard,
+  Globe,
+  FileEdit,
+  MessageSquare,
+  Phone,
+  PhoneCall,
   FileText,
   Search,
-  Grid3X3,
-  CalendarDays,
-  Users,
+  LifeBuoy,
+  BarChart3,
+  Download,
+  Bell,
   Settings,
-  ChevronsUpDown,
-  Building2,
-  Gauge,
-  User,
+  Puzzle,
 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
   SidebarHeader,
-  SidebarFooter,
 } from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useVenue } from "@/lib/venue-context";
-import logoPath from "@assets/image_1771294424707.png";
 
-const menuItems = [
+const navItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
+  { title: "Clients", url: "/admin/clients", icon: Building2 },
+  { title: "CRM", url: "/admin/crm", icon: MessageSquare },
+  { title: "Users", url: "/admin/users", icon: Users },
+  { title: "Billing", url: "/admin/billing", icon: CreditCard },
+  { title: "Websites", url: "/admin/websites", icon: Globe },
+  { title: "Website Changes", url: "/admin/website-changes", icon: FileEdit },
+  { title: "Widget Config", url: "/admin/widget-config", icon: Puzzle },
+  { title: "Twilio", url: "/admin/twilio", icon: Phone },
+  { title: "Call Logs", url: "/admin/call-logs", icon: PhoneCall },
   { title: "Content Engine", url: "/admin/content", icon: FileText },
-  { title: "Rank Tracker", url: "/admin/keywords", icon: Search },
-  { title: "Local Grid", url: "/admin/grid", icon: Grid3X3 },
-  { title: "Reservations", url: "/admin/reservations", icon: CalendarDays },
-  { title: "Leads & CRM", url: "/admin/leads", icon: Users },
-  { title: "Venues", url: "/admin/venues", icon: Building2 },
-];
-
-const bottomItems = [
+  { title: "SEO & Rankings", url: "/admin/seo", icon: Search },
+  { title: "Support Tickets", url: "/admin/support", icon: LifeBuoy },
+  { title: "Analytics", url: "/admin/analytics", icon: BarChart3 },
+  { title: "Export Data", url: "/admin/export", icon: Download },
+  { title: "Notifications", url: "/admin/notifications", icon: Bell },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
 
 export function AdminSidebar() {
   const [location] = useLocation();
-  const { venues, selectedVenue, selectVenue } = useVenue();
 
   return (
     <Sidebar>
-      <SidebarHeader className="p-4 space-y-3">
-        <Link href="/">
-          <img src={logoPath} alt="Resto" className="w-full max-h-full object-contain" data-testid="img-admin-sidebar-logo" />
-        </Link>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              className="flex items-center gap-2 w-full rounded-md border px-3 py-2 text-sm hover-elevate"
-              data-testid="button-admin-venue-selector"
-            >
-              <Building2 className="w-4 h-4 text-muted-foreground shrink-0" />
-              <span className="truncate flex-1 text-left">
-                {selectedVenue?.name || "Select venue"}
-              </span>
-              <ChevronsUpDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-[--radix-dropdown-menu-trigger-width]">
-            {venues.map((v) => (
-              <DropdownMenuItem
-                key={v.id}
-                onClick={() => selectVenue(v)}
-                data-testid={`menu-admin-venue-${v.id}`}
-              >
-                <div className="flex flex-col gap-0.5">
-                  <span className="font-medium text-sm">{v.name}</span>
-                  {v.type && (
-                    <span className="text-xs text-muted-foreground">{v.type}</span>
-                  )}
-                </div>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <SidebarHeader className="p-4 border-b">
+        <div className="flex flex-col gap-0.5">
+          <span className="font-semibold text-sm" data-testid="text-admin-title">Super Admin</span>
+          <span className="text-xs text-muted-foreground" data-testid="text-admin-email">admin@resto.restaurant</span>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Administration</SidebarGroupLabel>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={
-                      item.url === "/admin"
-                        ? location === "/admin"
-                        : location.startsWith(item.url)
-                    }
-                  >
-                    <Link href={item.url} data-testid={`link-admin-sidebar-${item.title.replace(/\s+/g, '-').toLowerCase()}`}>
-                      <item.icon className="w-4 h-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navItems.map((item) => {
+                const isActive =
+                  item.url === "/admin"
+                    ? location === "/admin"
+                    : location.startsWith(item.url);
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.title}
+                    >
+                      <Link href={item.url} data-testid={`link-admin-${item.title.toLowerCase().replace(/\s+/g, "-")}`}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarGroup>
-          <SidebarGroupLabel>Switch View</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="/dashboard" data-testid="link-admin-switch-dashboard">
-                    <Gauge className="w-4 h-4" />
-                    <span>Main Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="/client" data-testid="link-admin-switch-client">
-                    <User className="w-4 h-4" />
-                    <span>Client Portal</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {bottomItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={location.startsWith(item.url)}
-                  >
-                    <Link href={item.url} data-testid={`link-admin-sidebar-${item.title.toLowerCase()}`}>
-                      <item.icon className="w-4 h-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarFooter>
     </Sidebar>
   );
 }

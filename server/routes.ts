@@ -1,7 +1,14 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { db } from "./db";
+import { desc } from "drizzle-orm";
 import { storage } from "./storage";
 import {
+  twilioSettings as twilioSettingsTable,
+  widgetSettings as widgetSettingsTable,
+  rankTrackerKeywords as rankTrackerKeywordsTable,
+  gridKeywords as gridKeywordsTable,
+  reservations as reservationsTable,
   insertVenueSchema,
   insertBlogPostSchema,
   insertDomainSchema,
@@ -13,6 +20,20 @@ import {
   insertContactMessageSchema,
   insertReservationSchema,
   insertResourceSchema,
+  insertCallLogSchema,
+  insertSupportTicketSchema,
+  insertTwilioSettingsSchema,
+  insertWidgetSettingsSchema,
+  insertWebsiteChangeRequestSchema,
+  insertAdminUserSchema,
+  insertPaymentSettingSchema,
+  insertAiProviderSettingSchema,
+  insertRoomTypeSchema,
+  insertRoomSchema,
+  insertRoomBookingSchema,
+  insertBusinessHourSchema,
+  insertClosureSchema,
+  insertTeamMemberSchema,
 } from "@shared/schema";
 import { fromError } from "zod-validation-error";
 
@@ -20,6 +41,11 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  app.get("/api/users", async (_req, res) => {
+    const userList = await storage.getUsers();
+    res.json(userList);
+  });
 
   app.get("/api/venues", async (_req, res) => {
     const venueList = await storage.getVenues();
@@ -345,6 +371,317 @@ export async function registerRoutes(
     const metaTitle = `${title || keyword} | Expert Guide ${new Date().getFullYear()}`;
     const metaDescription = `Discover everything about ${keyword}. Learn key strategies, best practices, and actionable tips.`;
     res.json({ metaTitle, metaDescription });
+  });
+
+  // Call Logs
+  app.get("/api/call-logs", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const logs = await storage.getCallLogs(venueId);
+    res.json(logs);
+  });
+
+  app.post("/api/call-logs", async (req, res) => {
+    const parsed = insertCallLogSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const log = await storage.createCallLog(parsed.data);
+    res.status(201).json(log);
+  });
+
+  // Support Tickets
+  app.get("/api/support-tickets", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const tickets = await storage.getSupportTickets(venueId);
+    res.json(tickets);
+  });
+
+  app.post("/api/support-tickets", async (req, res) => {
+    const parsed = insertSupportTicketSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const ticket = await storage.createSupportTicket(parsed.data);
+    res.status(201).json(ticket);
+  });
+
+  app.patch("/api/support-tickets/:id", async (req, res) => {
+    const ticket = await storage.updateSupportTicket(req.params.id, req.body);
+    if (!ticket) return res.status(404).json({ error: "Support ticket not found" });
+    res.json(ticket);
+  });
+
+  // Twilio Settings
+  app.get("/api/twilio-settings", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json(null);
+    const settings = await storage.getTwilioSettings(venueId);
+    res.json(settings || null);
+  });
+
+  app.put("/api/twilio-settings", async (req, res) => {
+    const parsed = insertTwilioSettingsSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const settings = await storage.upsertTwilioSettings(parsed.data);
+    res.json(settings);
+  });
+
+  // Widget Settings
+  app.get("/api/widget-settings", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json(null);
+    const settings = await storage.getWidgetSettings(venueId);
+    res.json(settings || null);
+  });
+
+  app.put("/api/widget-settings", async (req, res) => {
+    const parsed = insertWidgetSettingsSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const settings = await storage.upsertWidgetSettings(parsed.data);
+    res.json(settings);
+  });
+
+  // Widget Chat Logs
+  app.get("/api/widget-chat-logs", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const logs = await storage.getWidgetChatLogs(venueId);
+    res.json(logs);
+  });
+
+  // Website Change Requests
+  app.get("/api/website-change-requests", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const requests = await storage.getWebsiteChangeRequests(venueId);
+    res.json(requests);
+  });
+
+  app.post("/api/website-change-requests", async (req, res) => {
+    const parsed = insertWebsiteChangeRequestSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const request = await storage.createWebsiteChangeRequest(parsed.data);
+    res.status(201).json(request);
+  });
+
+  app.patch("/api/website-change-requests/:id", async (req, res) => {
+    const request = await storage.updateWebsiteChangeRequest(req.params.id, req.body);
+    if (!request) return res.status(404).json({ error: "Website change request not found" });
+    res.json(request);
+  });
+
+  // Admin Users
+  app.get("/api/admin-users", async (_req, res) => {
+    const users = await storage.getAdminUsers();
+    res.json(users);
+  });
+
+  app.post("/api/admin-users", async (req, res) => {
+    const parsed = insertAdminUserSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const user = await storage.createAdminUser(parsed.data);
+    res.status(201).json(user);
+  });
+
+  app.patch("/api/admin-users/:id", async (req, res) => {
+    const user = await storage.updateAdminUser(req.params.id, req.body);
+    if (!user) return res.status(404).json({ error: "Admin user not found" });
+    res.json(user);
+  });
+
+  // Admin Settings
+  app.get("/api/admin-settings", async (_req, res) => {
+    const settings = await storage.getAdminSettings();
+    res.json(settings);
+  });
+
+  // Payment Settings
+  app.get("/api/payment-settings", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json(null);
+    const settings = await storage.getPaymentSettings(venueId);
+    res.json(settings || null);
+  });
+
+  app.put("/api/payment-settings", async (req, res) => {
+    const parsed = insertPaymentSettingSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const settings = await storage.upsertPaymentSettings(parsed.data);
+    res.json(settings);
+  });
+
+  // AI Provider Settings
+  app.get("/api/ai-provider-settings", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const settings = await storage.getAiProviderSettings(venueId);
+    res.json(settings);
+  });
+
+  app.put("/api/ai-provider-settings", async (req, res) => {
+    const parsed = insertAiProviderSettingSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const settings = await storage.upsertAiProviderSettings(parsed.data);
+    res.json(settings);
+  });
+
+  // Room Types
+  app.get("/api/room-types", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const types = await storage.getRoomTypes(venueId);
+    res.json(types);
+  });
+
+  app.post("/api/room-types", async (req, res) => {
+    const parsed = insertRoomTypeSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const roomType = await storage.createRoomType(parsed.data);
+    res.status(201).json(roomType);
+  });
+
+  app.patch("/api/room-types/:id", async (req, res) => {
+    const roomType = await storage.updateRoomType(req.params.id, req.body);
+    if (!roomType) return res.status(404).json({ error: "Room type not found" });
+    res.json(roomType);
+  });
+
+  // Rooms
+  app.get("/api/rooms", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const roomList = await storage.getRooms(venueId);
+    res.json(roomList);
+  });
+
+  app.post("/api/rooms", async (req, res) => {
+    const parsed = insertRoomSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const room = await storage.createRoom(parsed.data);
+    res.status(201).json(room);
+  });
+
+  // Room Bookings
+  app.get("/api/room-bookings", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const bookings = await storage.getRoomBookings(venueId);
+    res.json(bookings);
+  });
+
+  app.post("/api/room-bookings", async (req, res) => {
+    const parsed = insertRoomBookingSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const booking = await storage.createRoomBooking(parsed.data);
+    res.status(201).json(booking);
+  });
+
+  app.patch("/api/room-bookings/:id", async (req, res) => {
+    const booking = await storage.updateRoomBooking(req.params.id, req.body);
+    if (!booking) return res.status(404).json({ error: "Room booking not found" });
+    res.json(booking);
+  });
+
+  // Business Hours
+  app.get("/api/business-hours", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const hours = await storage.getBusinessHours(venueId);
+    res.json(hours);
+  });
+
+  app.put("/api/business-hours", async (req, res) => {
+    const { venueId, hours } = req.body;
+    if (!venueId || !Array.isArray(hours)) return res.status(400).json({ error: "venueId and hours array are required" });
+    const results = await storage.upsertBusinessHours(venueId, hours);
+    res.json(results);
+  });
+
+  // Closures
+  app.get("/api/closures", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const closureList = await storage.getClosures(venueId);
+    res.json(closureList);
+  });
+
+  app.post("/api/closures", async (req, res) => {
+    const parsed = insertClosureSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const closure = await storage.createClosure(parsed.data);
+    res.status(201).json(closure);
+  });
+
+  app.delete("/api/closures/:id", async (req, res) => {
+    await storage.deleteClosure(parseInt(req.params.id));
+    res.json({ success: true });
+  });
+
+  // Knowledge Base
+  app.get("/api/knowledge-base", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const items = await storage.getKnowledgeBaseItems(venueId);
+    res.json(items);
+  });
+
+  // Team Members
+  app.get("/api/team-members", async (req, res) => {
+    const venueId = req.query.venueId as string | undefined;
+    if (!venueId) return res.json([]);
+    const members = await storage.getTeamMembers(venueId);
+    res.json(members);
+  });
+
+  app.post("/api/team-members", async (req, res) => {
+    const parsed = insertTeamMemberSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: fromError(parsed.error).toString() });
+    const member = await storage.createTeamMember(parsed.data);
+    res.status(201).json(member);
+  });
+
+  // Admin-only endpoints (all data, no venueId filter)
+  app.get("/api/admin/call-logs", async (_req, res) => {
+    const logs = await storage.getAllCallLogs();
+    res.json(logs);
+  });
+
+  app.get("/api/admin/support-tickets", async (_req, res) => {
+    const tickets = await storage.getAllSupportTickets();
+    res.json(tickets);
+  });
+
+  app.get("/api/admin/website-change-requests", async (_req, res) => {
+    const requests = await storage.getAllWebsiteChangeRequests();
+    res.json(requests);
+  });
+
+  app.get("/api/admin/payment-settings", async (_req, res) => {
+    const settings = await storage.getAllPaymentSettings();
+    res.json(settings);
+  });
+
+  app.get("/api/admin/twilio-settings", async (_req, res) => {
+    const allSettings = await db.select().from(twilioSettingsTable);
+    res.json(allSettings);
+  });
+
+  app.get("/api/admin/widget-settings", async (_req, res) => {
+    const allSettings = await db.select().from(widgetSettingsTable);
+    res.json(allSettings);
+  });
+
+  app.get("/api/admin/rank-keywords", async (_req, res) => {
+    const kws = await db.select().from(rankTrackerKeywordsTable);
+    res.json(kws);
+  });
+
+  app.get("/api/admin/grid-keywords", async (_req, res) => {
+    const kws = await db.select().from(gridKeywordsTable);
+    res.json(kws);
+  });
+
+  app.get("/api/admin/reservations", async (_req, res) => {
+    const rvns = await db.select().from(reservationsTable).orderBy(desc(reservationsTable.createdAt));
+    res.json(rvns);
   });
 
   return httpServer;
