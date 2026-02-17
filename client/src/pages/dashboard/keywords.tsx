@@ -1,8 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -11,61 +13,64 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, ArrowUp, ArrowDown, Minus, TrendingUp, Target, Hash } from "lucide-react";
-import { useWorkspace } from "@/lib/workspace-context";
-import type { RankTrackerKeyword } from "@shared/schema";
-
-function TrendIndicator({ current, previous }: { current?: number | null; previous?: number | null }) {
-  if (!current || !previous) return <Minus className="w-3 h-3 text-muted-foreground" />;
-  const diff = previous - current;
-  if (Math.abs(diff) < 0.5) return <Minus className="w-3 h-3 text-muted-foreground" />;
-  if (diff > 0) {
-    return (
-      <span className="flex items-center gap-0.5 text-xs font-medium text-green-600 dark:text-green-400">
-        <ArrowUp className="w-3 h-3" />
-        {diff.toFixed(1)}
-      </span>
-    );
-  }
-  return (
-    <span className="flex items-center gap-0.5 text-xs font-medium text-red-500">
-      <ArrowDown className="w-3 h-3" />
-      {Math.abs(diff).toFixed(1)}
-    </span>
-  );
-}
-
-function DifficultyBar({ value }: { value?: number | null }) {
-  if (!value) return <span className="text-muted-foreground">{"\u2014"}</span>;
-  const color =
-    value < 30 ? "bg-green-500" : value < 60 ? "bg-yellow-500" : "bg-red-500";
-  return (
-    <div className="flex items-center gap-2">
-      <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${value}%` }} />
-      </div>
-      <span className="text-xs font-mono">{value}</span>
-    </div>
-  );
-}
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Plus, Search, Trash2, Hash } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useVenue } from "@/lib/venue-context";
+import type { RankKeyword } from "@shared/schema";
 
 export default function RankTracker() {
-  const { selectedWorkspace } = useWorkspace();
-  const { data: allKeywords, isLoading } = useQuery<RankTrackerKeyword[]>({
-    queryKey: ["/api/rank-keywords"],
+  const { selectedVenue } = useVenue();
+  const [addOpen, setAddOpen] = useState(false);
+  const [newKeyword, setNewKeyword] = useState("");
+  const { toast } = useToast();
+
+  const { data: allKeywords, isLoading } = useQuery<RankKeyword[]>({
+    queryKey: ["/api/rank-keywords", selectedVenue?.id],
+    enabled: !!selectedVenue,
   });
 
-  const keywords = selectedWorkspace
-    ? (allKeywords || []).filter((k) => k.workspaceId === selectedWorkspace.id)
+  const keywords = selectedVenue
+    ? (allKeywords || []).filter((k) => k.venueId === selectedVenue.id)
     : allKeywords || [];
 
-  const avgPosition = keywords.length
-    ? (keywords.reduce((sum, k) => sum + (k.currentPosition || 0), 0) / keywords.length).toFixed(1)
-    : "\u2014";
+  const addMutation = useMutation({
+    mutationFn: async () => {
+      return apiRequest("POST", "/api/rank-keywords", {
+        venueId: selectedVenue!.id,
+        keyword: newKeyword,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/rank-keywords"] });
+      toast({ title: "Keyword added" });
+      setAddOpen(false);
+      setNewKeyword("");
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
 
-  const top3 = keywords.filter((k) => k.currentPosition && k.currentPosition <= 3).length;
-  const top10 = keywords.filter((k) => k.currentPosition && k.currentPosition <= 10).length;
-  const improving = keywords.filter((k) => k.trend === "up").length;
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest("DELETE", `/api/rank-keywords/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/rank-keywords"] });
+      toast({ title: "Keyword removed" });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
 
   return (
     <div className="space-y-6">
@@ -74,21 +79,50 @@ export default function RankTracker() {
           <h1 className="text-2xl font-bold" data-testid="text-page-title">Rank Tracker</h1>
           <p className="text-muted-foreground mt-1">
             Monitor keyword positions
-            {selectedWorkspace && <span> for <span className="font-medium text-foreground">{selectedWorkspace.name}</span></span>}
+            {selectedVenue && <span> for <span className="font-medium text-foreground">{selectedVenue.name}</span></span>}
           </p>
         </div>
-        <Button data-testid="button-add-keyword">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Keywords
-        </Button>
+        {selectedVenue && (
+          <Dialog open={addOpen} onOpenChange={setAddOpen}>
+            <DialogTrigger asChild>
+              <Button data-testid="button-add-keyword">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Keyword
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Keyword</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 mt-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="new-keyword">Keyword</Label>
+                  <Input
+                    id="new-keyword"
+                    placeholder="e.g. best restaurant downtown"
+                    value={newKeyword}
+                    onChange={(e) => setNewKeyword(e.target.value)}
+                    data-testid="input-new-keyword"
+                  />
+                </div>
+                <Button
+                  className="w-full"
+                  onClick={() => addMutation.mutate()}
+                  disabled={!newKeyword || addMutation.isPending}
+                  data-testid="button-submit-keyword"
+                >
+                  {addMutation.isPending ? "Adding..." : "Add Keyword"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
-          { label: "Avg. Position", value: avgPosition, icon: Target },
-          { label: "Top 3", value: top3, icon: TrendingUp },
-          { label: "Top 10", value: top10, icon: Hash },
-          { label: "Improving", value: improving, icon: ArrowUp },
+          { label: "Total Keywords", value: keywords.length, icon: Hash },
+          { label: "Tracked", value: keywords.length, icon: Search },
         ].map((m) => (
           <Card key={m.label} className="p-4">
             <div className="flex items-center justify-between gap-2">
@@ -114,17 +148,14 @@ export default function RankTracker() {
             <TableHeader>
               <TableRow>
                 <TableHead>Keyword</TableHead>
-                <TableHead className="text-right">Position</TableHead>
-                <TableHead>Change</TableHead>
-                <TableHead className="text-right">Volume</TableHead>
-                <TableHead>Difficulty</TableHead>
-                <TableHead>URL</TableHead>
+                <TableHead>Added</TableHead>
+                <TableHead className="w-10" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {keywords.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
                     No keywords tracked yet. Add keywords to start monitoring.
                   </TableCell>
                 </TableRow>
@@ -132,30 +163,20 @@ export default function RankTracker() {
                 keywords.map((kw) => (
                   <TableRow key={kw.id} data-testid={`row-keyword-${kw.id}`}>
                     <TableCell>
-                      <span className="font-medium text-sm">{kw.keyword}</span>
+                      <span className="font-medium text-sm" data-testid={`text-keyword-${kw.id}`}>{kw.keyword}</span>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <span className="font-mono font-bold text-sm">
-                        {kw.currentPosition ? `#${kw.currentPosition.toFixed(1)}` : "\u2014"}
-                      </span>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {kw.createdAt ? new Date(kw.createdAt).toLocaleDateString() : "\u2014"}
                     </TableCell>
                     <TableCell>
-                      <TrendIndicator current={kw.currentPosition} previous={kw.previousPosition} />
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-mono">
-                      {kw.searchVolume?.toLocaleString() || "\u2014"}
-                    </TableCell>
-                    <TableCell>
-                      <DifficultyBar value={kw.difficulty} />
-                    </TableCell>
-                    <TableCell>
-                      {kw.url ? (
-                        <span className="text-xs text-muted-foreground truncate max-w-[200px] block">
-                          {kw.url}
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground">{"\u2014"}</span>
-                      )}
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => deleteMutation.mutate(kw.id)}
+                        data-testid={`button-delete-keyword-${kw.id}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))

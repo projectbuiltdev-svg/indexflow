@@ -4,11 +4,11 @@ import {
   FileText,
   Search,
   Grid3X3,
-  BarChart3,
   Users,
   Settings,
   ChevronsUpDown,
   Building2,
+  CalendarDays,
 } from "lucide-react";
 import {
   Sidebar,
@@ -28,7 +28,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useWorkspace } from "@/lib/workspace-context";
+import { useVenue } from "@/lib/venue-context";
 import logoPath from "@assets/image_1771294424707.png";
 
 const menuItems = [
@@ -36,7 +36,7 @@ const menuItems = [
   { title: "Content Engine", url: "/dashboard/content", icon: FileText },
   { title: "Rank Tracker", url: "/dashboard/keywords", icon: Search },
   { title: "Local Grid", url: "/dashboard/grid", icon: Grid3X3 },
-  { title: "GSC Analytics", url: "/dashboard/gsc", icon: BarChart3 },
+  { title: "Reservations", url: "/dashboard/reservations", icon: CalendarDays },
   { title: "Leads & CRM", url: "/dashboard/leads", icon: Users },
 ];
 
@@ -46,39 +46,37 @@ const bottomItems = [
 
 export function AppSidebar() {
   const [location] = useLocation();
-  const { workspaces, selectedWorkspace, selectWorkspace } = useWorkspace();
+  const { venues, selectedVenue, selectVenue } = useVenue();
 
   return (
     <Sidebar>
       <SidebarHeader className="p-4 space-y-3">
         <Link href="/">
-          <img src={logoPath} alt="IndexFlow" className="w-full max-h-full object-contain" data-testid="img-sidebar-logo" />
+          <img src={logoPath} alt="Resto" className="w-full max-h-full object-contain" data-testid="img-sidebar-logo" />
         </Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
               className="flex items-center gap-2 w-full rounded-md border px-3 py-2 text-sm hover-elevate"
-              data-testid="button-workspace-selector"
+              data-testid="button-venue-selector"
             >
               <Building2 className="w-4 h-4 text-muted-foreground shrink-0" />
               <span className="truncate flex-1 text-left">
-                {selectedWorkspace?.name || "Select workspace"}
+                {selectedVenue?.name || "Select venue"}
               </span>
               <ChevronsUpDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-[--radix-dropdown-menu-trigger-width]">
-            {workspaces.map((ws) => (
+            {venues.map((v) => (
               <DropdownMenuItem
-                key={ws.id}
-                onClick={() => selectWorkspace(ws)}
-                data-testid={`menu-workspace-${ws.slug}`}
+                key={v.id}
+                onClick={() => selectVenue(v)}
+                data-testid={`menu-venue-${v.id}`}
               >
                 <div className="flex flex-col gap-0.5">
-                  <span className="font-medium text-sm">{ws.name}</span>
-                  {ws.industry && (
-                    <span className="text-xs text-muted-foreground">{ws.industry}</span>
-                  )}
+                  <span className="font-medium text-sm">{v.name}</span>
+                  <span className="text-xs text-muted-foreground capitalize">{v.type}</span>
                 </div>
               </DropdownMenuItem>
             ))}

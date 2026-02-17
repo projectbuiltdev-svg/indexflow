@@ -1,21 +1,11 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Grid3X3, MapPin, TrendingUp, Eye } from "lucide-react";
-import { useWorkspace } from "@/lib/workspace-context";
-
-interface GridScanWithKeyword {
-  id: string;
-  gridKeywordId: string;
-  workspaceId: string;
-  gridData: number[][];
-  avgRank: number | null;
-  visibility: number | null;
-  scannedAt: string | null;
-  keyword: string;
-  location: string;
-}
+import { useVenue } from "@/lib/venue-context";
+import type { GridScanResult } from "@shared/schema";
 
 function GridCell({ rank }: { rank: number }) {
   let bgClass = "bg-red-500/20 text-red-700 dark:text-red-400";
@@ -30,38 +20,61 @@ function GridCell({ rank }: { rank: number }) {
   );
 }
 
-function SearchGrid({ gridData }: { gridData: number[][] }) {
+interface GridGroup {
+  keyword: string;
+  scanDate: string;
+  gridSize: number;
+  cells: GridScanResult[];
+}
+
+function SearchGrid({ cells, gridSize }: { cells: GridScanResult[]; gridSize: number }) {
+  const sorted = [...cells].sort((a, b) => a.gridIndex - b.gridIndex);
   return (
-    <div className="grid grid-cols-5 gap-1.5">
-      {gridData.flat().map((rank, i) => (
-        <GridCell key={i} rank={rank} />
+    <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+      {sorted.map((cell, i) => (
+        <GridCell key={cell.id ?? i} rank={cell.rank ?? 20} />
       ))}
     </div>
   );
 }
 
 export default function LocalGrid() {
-  const { selectedWorkspace } = useWorkspace();
-  const { data: results, isLoading } = useQuery<GridScanWithKeyword[]>({
-    queryKey: ["/api/grid-scan-results-with-keywords"],
+  const { selectedVenue } = useVenue();
+  const { data: results, isLoading } = useQuery<GridScanResult[]>({
+    queryKey: ["/api/grid-scan-results", selectedVenue?.id],
+    enabled: !!selectedVenue,
   });
 
-  const displayResults = selectedWorkspace
-    ? (results || []).filter((r) => r.workspaceId === selectedWorkspace.id)
+  const displayResults = selectedVenue
+    ? (results || []).filter((r) => r.venueId === selectedVenue.id)
     : results || [];
 
-  const avgVisibility = displayResults.length
-    ? (displayResults.reduce((sum, g) => sum + (g.visibility || 0), 0) / displayResults.length).toFixed(0)
-    : "0";
+  const gridGroups = useMemo(() => {
+    const groups = new Map<string, GridGroup>();
+    for (const cell of displayResults) {
+      const dateStr = cell.scanDate ? new Date(cell.scanDate).toISOString().split("T")[0] : "unknown";
+      const key = `${cell.keyword}__${dateStr}`;
+      if (!groups.has(key)) {
+        groups.set(key, {
+          keyword: cell.keyword,
+          scanDate: dateStr,
+          gridSize: cell.gridSize,
+          cells: [],
+        });
+      }
+      groups.get(key)!.cells.push(cell);
+    }
+    return Array.from(groups.values());
+  }, [displayResults]);
 
   const avgRank = displayResults.length
-    ? (displayResults.reduce((sum, g) => sum + (g.avgRank || 0), 0) / displayResults.length).toFixed(1)
+    ? (displayResults.reduce((sum, g) => sum + (g.rank || 0), 0) / displayResults.length).toFixed(1)
     : "\u2014";
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">5x5 Local Search Grid</h1>
+        <h1 className="text-2xl font-bold" data-testid="text-page-title">Local Search Grid</h1>
         <p className="text-muted-foreground mt-1">Visualize local pack visibility across geographic areas</p>
       </div>
 
@@ -69,8 +82,8 @@ export default function LocalGrid() {
         <Card className="p-4">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <p className="text-sm text-muted-foreground">Grid Checks</p>
-              <p className="text-xl font-bold mt-1" data-testid="text-grid-checks">{displayResults.length}</p>
+              <p className="text-sm text-muted-foreground">Grid Scans</p>
+              <p className="text-xl font-bold mt-1" data-testid="text-grid-checks">{gridGroups.length}</p>
             </div>
             <Grid3X3 className="w-5 h-5 text-primary" />
           </div>
@@ -78,8 +91,8 @@ export default function LocalGrid() {
         <Card className="p-4">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <p className="text-sm text-muted-foreground">Avg Visibility</p>
-              <p className="text-xl font-bold mt-1" data-testid="text-avg-visibility">{avgVisibility}%</p>
+              <p className="text-sm text-muted-foreground">Total Cells</p>
+              <p className="text-xl font-bold mt-1" data-testid="text-total-cells">{displayResults.length}</p>
             </div>
             <Eye className="w-5 h-5 text-primary" />
           </div>
@@ -119,28 +132,28 @@ export default function LocalGrid() {
             </Card>
           ))}
         </div>
-      ) : displayResults.length === 0 ? (
+      ) : gridGroups.length === 0 ? (
         <Card className="p-8 text-center">
           <Grid3X3 className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-          <p className="text-muted-foreground">No grid checks yet. Run a local grid scan to see results.</p>
+          <p className="text-muted-foreground">No grid scans yet. Run a local grid scan to see results.</p>
         </Card>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayResults.map((result) => (
-            <Card key={result.id} className="p-5" data-testid={`card-grid-${result.id}`}>
+          {gridGroups.map((group, idx) => (
+            <Card key={`${group.keyword}-${group.scanDate}-${idx}`} className="p-5" data-testid={`card-grid-${idx}`}>
               <div className="flex items-start justify-between gap-2 mb-4">
                 <div>
-                  <h3 className="font-semibold text-sm">{result.keyword}</h3>
+                  <h3 className="font-semibold text-sm" data-testid={`text-grid-keyword-${idx}`}>{group.keyword}</h3>
                   <div className="flex items-center gap-1 mt-1">
                     <MapPin className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">{result.location}</span>
+                    <span className="text-xs text-muted-foreground">{group.scanDate}</span>
                   </div>
                 </div>
                 <Badge variant="secondary" className="text-xs shrink-0">
-                  {result.visibility?.toFixed(0)}% visible
+                  {group.gridSize}x{group.gridSize}
                 </Badge>
               </div>
-              <SearchGrid gridData={result.gridData} />
+              <SearchGrid cells={group.cells} gridSize={group.gridSize} />
             </Card>
           ))}
         </div>

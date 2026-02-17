@@ -42,7 +42,6 @@ import {
   FileText,
   ExternalLink,
   Eye,
-  MousePointer,
   MoreHorizontal,
   Send,
   Clock,
@@ -55,7 +54,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useWorkspace } from "@/lib/workspace-context";
+import { useVenue } from "@/lib/venue-context";
 import type { BlogPost, Campaign } from "@shared/schema";
 
 function StatusBadge({ status }: { status: string }) {
@@ -80,7 +79,7 @@ function QualityBadge({ status }: { status: string | null }) {
   return <Badge variant="outline" className="text-xs">{status}</Badge>;
 }
 
-function CreatePostDialog({ workspaceId, campaigns }: { workspaceId: string; campaigns: Campaign[] }) {
+function CreatePostDialog({ venueId, campaigns }: { venueId: string; campaigns: Campaign[] }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
@@ -94,7 +93,7 @@ function CreatePostDialog({ workspaceId, campaigns }: { workspaceId: string; cam
   const createMutation = useMutation({
     mutationFn: async () => {
       return apiRequest("POST", "/api/blog-posts", {
-        workspaceId,
+        venueId,
         title,
         slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
         primaryKeyword,
@@ -242,11 +241,10 @@ function PostEditor({ post, onClose }: { post: BlogPost; onClose: () => void }) 
 
   const saveMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest("PATCH", `/api/blog-posts/${post.id}`, {
+      return apiRequest("PUT", `/api/blog-posts/${post.id}`, {
         title,
         description,
         mdxContent,
-        wordCount: mdxContent.split(/\s+/).filter(Boolean).length,
       });
     },
     onSuccess: () => {
@@ -376,7 +374,7 @@ function PostEditor({ post, onClose }: { post: BlogPost; onClose: () => void }) 
 }
 
 export default function ContentEngine() {
-  const { selectedWorkspace } = useWorkspace();
+  const { selectedVenue } = useVenue();
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<string>("createdAt");
@@ -391,27 +389,22 @@ export default function ContentEngine() {
   });
 
   const posts = (allPosts || []).filter((p) => {
-    if (selectedWorkspace && p.workspaceId !== selectedWorkspace.id) return false;
+    if (selectedVenue && p.venueId !== selectedVenue.id) return false;
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
     return true;
   });
 
-  const wsCampaigns = campaigns.filter((c) => !selectedWorkspace || c.workspaceId === selectedWorkspace.id);
+  const venueCampaigns = campaigns.filter((c) => !selectedVenue || c.venueId === selectedVenue.id);
 
   const sortedPosts = [...posts].sort((a, b) => {
     if (sortField === "createdAt") {
       return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
     }
-    if (sortField === "clicks") return (b.clicks || 0) - (a.clicks || 0);
-    if (sortField === "impressions") return (b.impressions || 0) - (a.impressions || 0);
-    if (sortField === "wordCount") return (b.wordCount || 0) - (a.wordCount || 0);
     return 0;
   });
 
   const published = posts.filter((p) => p.status === "published").length;
   const drafts = posts.filter((p) => p.status === "draft").length;
-  const totalClicks = posts.reduce((sum, p) => sum + (p.clicks || 0), 0);
-  const totalImpressions = posts.reduce((sum, p) => sum + (p.impressions || 0), 0);
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -448,24 +441,22 @@ export default function ContentEngine() {
           <h1 className="text-2xl font-bold" data-testid="text-page-title">Content Engine</h1>
           <p className="text-muted-foreground mt-1">
             Manage and deploy programmatic SEO content
-            {selectedWorkspace && (
+            {selectedVenue && (
               <span className="ml-1">
-                for <span className="font-medium text-foreground">{selectedWorkspace.name}</span>
+                for <span className="font-medium text-foreground">{selectedVenue.name}</span>
               </span>
             )}
           </p>
         </div>
-        {selectedWorkspace && (
-          <CreatePostDialog workspaceId={selectedWorkspace.id} campaigns={wsCampaigns} />
+        {selectedVenue && (
+          <CreatePostDialog venueId={selectedVenue.id} campaigns={venueCampaigns} />
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
           { label: "Published", value: published, icon: FileText, color: "text-green-600 dark:text-green-400" },
           { label: "Drafts", value: drafts, icon: FileText, color: "text-yellow-600 dark:text-yellow-400" },
-          { label: "Total Clicks", value: totalClicks.toLocaleString(), icon: MousePointer, color: "text-primary" },
-          { label: "Impressions", value: totalImpressions.toLocaleString(), icon: Eye, color: "text-primary" },
         ].map((m) => (
           <Card key={m.label} className="p-4">
             <div className="flex items-center justify-between gap-2">
@@ -504,9 +495,6 @@ export default function ContentEngine() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="createdAt">Newest</SelectItem>
-              <SelectItem value="clicks">Clicks</SelectItem>
-              <SelectItem value="impressions">Impressions</SelectItem>
-              <SelectItem value="wordCount">Word Count</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -530,19 +518,16 @@ export default function ContentEngine() {
                 <TableHead>Keyword</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Quality</TableHead>
-                <TableHead className="text-right">Words</TableHead>
-                <TableHead className="text-right">Clicks</TableHead>
-                <TableHead className="text-right">Pos.</TableHead>
                 <TableHead className="w-10" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedPosts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                    {selectedWorkspace
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    {selectedVenue
                       ? "No posts yet. Create your first post to get started."
-                      : "Select a workspace to view posts."}
+                      : "Select a venue to view posts."}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -571,15 +556,6 @@ export default function ContentEngine() {
                     <TableCell>
                       <QualityBadge status={post.qualityGateStatus} />
                     </TableCell>
-                    <TableCell className="text-right text-sm font-mono">
-                      {post.wordCount?.toLocaleString() || "\u2014"}
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-mono">
-                      {post.clicks?.toLocaleString() || "0"}
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-mono">
-                      {post.position ? `#${post.position.toFixed(1)}` : "\u2014"}
-                    </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -588,23 +564,23 @@ export default function ContentEngine() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => setEditingPost(post)} data-testid={`menu-edit-${post.id}`}>
-                            <Pencil className="w-3.5 h-3.5 mr-2" />
+                          <DropdownMenuItem onClick={() => setEditingPost(post)} data-testid={`menu-edit-post-${post.id}`}>
+                            <Pencil className="w-4 h-4 mr-2" />
                             Edit
                           </DropdownMenuItem>
                           {post.status === "draft" && (
-                            <DropdownMenuItem onClick={() => publishMutation.mutate(post.id)} data-testid={`menu-publish-${post.id}`}>
-                              <Send className="w-3.5 h-3.5 mr-2" />
-                              Publish
+                            <DropdownMenuItem onClick={() => publishMutation.mutate(post.id)} data-testid={`menu-publish-post-${post.id}`}>
+                              <Send className="w-4 h-4 mr-2" />
+                              Publish Now
                             </DropdownMenuItem>
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             className="text-destructive"
                             onClick={() => deleteMutation.mutate(post.id)}
-                            data-testid={`menu-delete-${post.id}`}
+                            data-testid={`menu-delete-post-${post.id}`}
                           >
-                            <Trash2 className="w-3.5 h-3.5 mr-2" />
+                            <Trash2 className="w-4 h-4 mr-2" />
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -617,40 +593,6 @@ export default function ContentEngine() {
           </Table>
         )}
       </Card>
-
-      {wsCampaigns.length > 0 && (
-        <div className="space-y-3">
-          <h2 className="text-lg font-semibold" data-testid="text-campaigns-heading">Campaigns</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {wsCampaigns.map((campaign) => (
-              <Card key={campaign.id} className="p-4" data-testid={`card-campaign-${campaign.id}`}>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="font-medium text-sm truncate">
-                    {campaign.name || `Campaign ${campaign.id.slice(0, 8)}`}
-                  </span>
-                  <Badge variant={campaign.status === "completed" ? "default" : "secondary"} className="text-xs shrink-0">
-                    {campaign.status}
-                  </Badge>
-                </div>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span>{campaign.generatedPosts || 0}/{campaign.totalPosts || 0} generated</span>
-                  {(campaign.failedPosts || 0) > 0 && (
-                    <span className="text-destructive">{campaign.failedPosts} failed</span>
-                  )}
-                </div>
-                {campaign.totalPosts && campaign.totalPosts > 0 && (
-                  <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full transition-all"
-                      style={{ width: `${Math.min(100, ((campaign.generatedPosts || 0) / campaign.totalPosts) * 100)}%` }}
-                    />
-                  </div>
-                )}
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

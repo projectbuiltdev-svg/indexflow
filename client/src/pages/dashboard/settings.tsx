@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -22,13 +20,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Settings, Globe, Key, Bell, Shield, Plus, Trash2, ExternalLink } from "lucide-react";
+import { Settings, Globe, Key, Bell, Shield, Plus, Trash2, ExternalLink, Wifi, WifiOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useWorkspace } from "@/lib/workspace-context";
+import { useVenue } from "@/lib/venue-context";
 import type { Domain, SeoSettings } from "@shared/schema";
 
-function DomainManager({ workspaceId }: { workspaceId: string }) {
+function DomainManager({ venueId }: { venueId: string }) {
   const [addOpen, setAddOpen] = useState(false);
   const [newDomain, setNewDomain] = useState("");
   const [blogTemplate, setBlogTemplate] = useState("editorial");
@@ -39,12 +37,12 @@ function DomainManager({ workspaceId }: { workspaceId: string }) {
     queryKey: ["/api/domains"],
   });
 
-  const domains = allDomains.filter((d) => d.workspaceId === workspaceId);
+  const domains = allDomains.filter((d) => d.venueId === venueId);
 
   const createMutation = useMutation({
     mutationFn: async () => {
       return apiRequest("POST", "/api/domains", {
-        workspaceId,
+        venueId,
         domain: newDomain,
         blogTemplate,
         accentColor,
@@ -176,12 +174,6 @@ function DomainManager({ workspaceId }: { workspaceId: string }) {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <Badge
-                      variant={d.sslStatus === "active" ? "default" : "secondary"}
-                      className={`text-xs ${d.sslStatus === "active" ? "bg-green-600 text-white" : ""}`}
-                    >
-                      SSL: {d.sslStatus}
-                    </Badge>
                     <Button
                       size="icon"
                       variant="ghost"
@@ -201,31 +193,29 @@ function DomainManager({ workspaceId }: { workspaceId: string }) {
   );
 }
 
-function SeoSettingsCard({ workspaceId }: { workspaceId: string }) {
+function SeoSettingsCard({ venueId }: { venueId: string }) {
   const { data: allSettings = [] } = useQuery<SeoSettings[]>({
     queryKey: ["/api/seo-settings"],
   });
 
-  const settings = allSettings.find((s) => s.workspaceId === workspaceId);
+  const settings = allSettings.find((s) => s.venueId === venueId);
 
-  const [defaultTitle, setDefaultTitle] = useState(settings?.defaultTitle || "");
-  const [defaultDescription, setDefaultDescription] = useState(settings?.defaultDescription || "");
-  const [robotsTxt, setRobotsTxt] = useState(settings?.robotsTxt || "");
-  const [sitemapEnabled, setSitemapEnabled] = useState(settings?.sitemapEnabled ?? true);
-  const [schemaMarkupEnabled, setSchemaMarkupEnabled] = useState(settings?.schemaMarkupEnabled ?? true);
-  const [canonicalBaseUrl, setCanonicalBaseUrl] = useState(settings?.canonicalBaseUrl || "");
+  const [provider, setProvider] = useState(settings?.provider || "");
+  const [apiKey, setApiKey] = useState(settings?.apiKey || "");
+  const [apiLogin, setApiLogin] = useState(settings?.apiLogin || "");
+  const [apiPassword, setApiPassword] = useState(settings?.apiPassword || "");
+  const [siteUrl, setSiteUrl] = useState(settings?.siteUrl || "");
   const { toast } = useToast();
 
   const saveMutation = useMutation({
     mutationFn: async () => {
       return apiRequest("PUT", "/api/seo-settings", {
-        workspaceId,
-        defaultTitle,
-        defaultDescription,
-        robotsTxt,
-        sitemapEnabled,
-        schemaMarkupEnabled,
-        canonicalBaseUrl,
+        venueId,
+        provider,
+        apiKey,
+        apiLogin,
+        apiPassword,
+        siteUrl,
       });
     },
     onSuccess: () => {
@@ -244,71 +234,71 @@ function SeoSettingsCard({ workspaceId }: { workspaceId: string }) {
           <ExternalLink className="w-5 h-5 text-primary" />
         </div>
         <div className="flex-1 space-y-4">
-          <div>
-            <h3 className="font-semibold">SEO Settings</h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              Default SEO configuration for this workspace
-            </p>
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div>
+              <h3 className="font-semibold">SEO Provider Settings</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                Configure your SEO provider connection
+              </p>
+            </div>
+            {settings && (
+              <Badge variant={settings.isConnected ? "default" : "secondary"} className={`text-xs ${settings.isConnected ? "bg-green-600 text-white" : ""}`}>
+                {settings.isConnected ? (
+                  <><Wifi className="w-3 h-3 mr-1" />Connected</>
+                ) : (
+                  <><WifiOff className="w-3 h-3 mr-1" />Not Connected</>
+                )}
+              </Badge>
+            )}
           </div>
           <div className="space-y-3">
             <div className="space-y-1.5">
-              <Label>Default Title Tag</Label>
+              <Label>Provider</Label>
               <Input
-                value={defaultTitle}
-                onChange={(e) => setDefaultTitle(e.target.value)}
-                placeholder="{{page_title}} | {{workspace_name}}"
-                data-testid="input-seo-title"
+                value={provider}
+                onChange={(e) => setProvider(e.target.value)}
+                placeholder="e.g. DataForSEO, SEMrush, Ahrefs"
+                data-testid="input-seo-provider"
               />
             </div>
             <div className="space-y-1.5">
-              <Label>Default Meta Description</Label>
-              <Textarea
-                value={defaultDescription}
-                onChange={(e) => setDefaultDescription(e.target.value)}
-                placeholder="Default meta description template..."
-                className="min-h-[80px]"
-                data-testid="textarea-seo-description"
+              <Label>API Key</Label>
+              <Input
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="Your API key"
+                type="password"
+                data-testid="input-seo-api-key"
               />
             </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>API Login</Label>
+                <Input
+                  value={apiLogin}
+                  onChange={(e) => setApiLogin(e.target.value)}
+                  placeholder="Login / username"
+                  data-testid="input-seo-api-login"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label>API Password</Label>
+                <Input
+                  value={apiPassword}
+                  onChange={(e) => setApiPassword(e.target.value)}
+                  placeholder="Password"
+                  type="password"
+                  data-testid="input-seo-api-password"
+                />
+              </div>
+            </div>
             <div className="space-y-1.5">
-              <Label>Canonical Base URL</Label>
+              <Label>Site URL</Label>
               <Input
-                value={canonicalBaseUrl}
-                onChange={(e) => setCanonicalBaseUrl(e.target.value)}
+                value={siteUrl}
+                onChange={(e) => setSiteUrl(e.target.value)}
                 placeholder="https://example.com"
-                data-testid="input-seo-canonical"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>robots.txt</Label>
-              <Textarea
-                value={robotsTxt}
-                onChange={(e) => setRobotsTxt(e.target.value)}
-                placeholder="User-agent: *&#10;Allow: /"
-                className="min-h-[80px] font-mono text-sm"
-                data-testid="textarea-seo-robots"
-              />
-            </div>
-            <div className="flex items-center justify-between gap-4 py-2">
-              <div>
-                <p className="text-sm font-medium">Sitemap Generation</p>
-                <p className="text-xs text-muted-foreground">Auto-generate sitemap.xml</p>
-              </div>
-              <Switch
-                checked={sitemapEnabled}
-                onCheckedChange={setSitemapEnabled}
-                data-testid="switch-sitemap"
-              />
-            </div>
-            <div className="flex items-center justify-between gap-4 py-2">
-              <div>
-                <p className="text-sm font-medium">Schema Markup</p>
-                <p className="text-xs text-muted-foreground">Add structured data to posts</p>
-              </div>
-              <Switch
-                checked={schemaMarkupEnabled}
-                onCheckedChange={setSchemaMarkupEnabled}
-                data-testid="switch-schema-markup"
+                data-testid="input-seo-site-url"
               />
             </div>
           </div>
@@ -326,31 +316,31 @@ function SeoSettingsCard({ workspaceId }: { workspaceId: string }) {
 }
 
 export default function SettingsPage() {
-  const { selectedWorkspace } = useWorkspace();
+  const { selectedVenue } = useVenue();
 
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 className="text-2xl font-bold" data-testid="text-page-title">Settings</h1>
         <p className="text-muted-foreground mt-1">
-          Manage your IndexFlow configuration
-          {selectedWorkspace && (
+          Manage your configuration
+          {selectedVenue && (
             <span className="ml-1">
-              for <span className="font-medium text-foreground">{selectedWorkspace.name}</span>
+              for <span className="font-medium text-foreground">{selectedVenue.name}</span>
             </span>
           )}
         </p>
       </div>
 
-      {selectedWorkspace ? (
+      {selectedVenue ? (
         <>
-          <DomainManager workspaceId={selectedWorkspace.id} />
-          <SeoSettingsCard workspaceId={selectedWorkspace.id} />
+          <DomainManager venueId={selectedVenue.id} />
+          <SeoSettingsCard venueId={selectedVenue.id} />
         </>
       ) : (
         <Card className="p-8 text-center">
           <Settings className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-          <p className="text-muted-foreground">Select a workspace from the sidebar to manage settings.</p>
+          <p className="text-muted-foreground">Select a venue from the sidebar to manage settings.</p>
         </Card>
       )}
 
@@ -384,7 +374,7 @@ export default function SettingsPage() {
           <div className="flex-1">
             <h3 className="font-semibold">Notifications</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Configure alerts for ranking changes, new leads, and deployment status.
+              Configure alerts for ranking changes, new messages, and deployment status.
             </p>
             <Button variant="outline" className="mt-4" data-testid="button-manage-notifications">
               Configure Alerts

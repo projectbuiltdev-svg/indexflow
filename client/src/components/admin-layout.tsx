@@ -1,7 +1,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { useWorkspace } from "@/lib/workspace-context";
+import { useVenue } from "@/lib/venue-context";
 import { Badge } from "@/components/ui/badge";
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -10,7 +10,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     "--sidebar-width-icon": "3rem",
   };
 
-  const { selectedWorkspace } = useWorkspace();
+  const { selectedVenue } = useVenue();
 
   return (
     <SidebarProvider style={style as React.CSSProperties}>
@@ -20,9 +20,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           <header className="flex items-center justify-between gap-4 px-4 h-14 border-b bg-background/80 backdrop-blur-sm sticky top-0 z-40">
             <div className="flex items-center gap-3">
               <SidebarTrigger data-testid="button-admin-sidebar-toggle" />
-              {selectedWorkspace && (
-                <Badge variant="secondary" className="text-xs" data-testid="badge-admin-workspace">
-                  {selectedWorkspace.name}
+              {selectedVenue && (
+                <Badge variant="secondary" className="text-xs" data-testid="badge-admin-venue">
+                  {selectedVenue.name}
                 </Badge>
               )}
               <Badge variant="outline" className="text-xs" data-testid="badge-super-admin">

@@ -21,7 +21,7 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { useWorkspace } from "@/lib/workspace-context";
+import { useVenue } from "@/lib/venue-context";
 import logoPath from "@assets/image_1771294424707.png";
 
 const menuItems = [
@@ -39,21 +39,21 @@ const bottomItems = [
 
 export function ClientSidebar() {
   const [location] = useLocation();
-  const { selectedWorkspace } = useWorkspace();
+  const { selectedVenue } = useVenue();
 
   return (
     <Sidebar>
       <SidebarHeader className="p-4 space-y-3">
         <Link href="/">
-          <img src={logoPath} alt="IndexFlow" className="w-full max-h-full object-contain" data-testid="img-client-sidebar-logo" />
+          <img src={logoPath} alt="Resto" className="w-full max-h-full object-contain" data-testid="img-client-sidebar-logo" />
         </Link>
         <div
           className="flex items-center gap-2 w-full rounded-md border px-3 py-2 text-sm"
-          data-testid="text-client-workspace-name"
+          data-testid="text-client-venue-name"
         >
           <Building2 className="w-4 h-4 text-muted-foreground shrink-0" />
           <span className="truncate flex-1 text-left font-medium">
-            {selectedWorkspace?.name || "My Workspace"}
+            {selectedVenue?.name || "My Venue"}
           </span>
         </div>
       </SidebarHeader>

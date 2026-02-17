@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -11,61 +10,39 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Users, UserPlus, CalendarCheck, Phone, Mail, Plus } from "lucide-react";
-import { useWorkspace } from "@/lib/workspace-context";
-import type { Lead } from "@shared/schema";
+import { MessageSquare, Mail, Phone, Building2 } from "lucide-react";
+import { useVenue } from "@/lib/venue-context";
+import type { ContactMessage } from "@shared/schema";
 
-function LeadStatusBadge({ status }: { status: string }) {
-  if (status === "booked") return <Badge variant="default" className="bg-green-600 dark:bg-green-700 text-white" data-testid={`badge-lead-${status}`}>{status}</Badge>;
-  if (status === "qualified") return <Badge variant="default" data-testid={`badge-lead-${status}`}>{status}</Badge>;
-  if (status === "lost") return <Badge variant="destructive" data-testid={`badge-lead-${status}`}>{status}</Badge>;
-  return <Badge variant="outline" data-testid={`badge-lead-${status}`}>{status}</Badge>;
-}
-
-function SourceBadge({ source }: { source: string }) {
-  return <Badge variant="secondary" data-testid={`badge-source-${source}`}>{source}</Badge>;
-}
-
-export default function LeadsCRM() {
-  const { selectedWorkspace } = useWorkspace();
-  const { data: allLeads, isLoading } = useQuery<Lead[]>({
-    queryKey: ["/api/leads"],
+export default function ContactMessages() {
+  const { selectedVenue } = useVenue();
+  const { data: allMessages, isLoading } = useQuery<ContactMessage[]>({
+    queryKey: ["/api/contact-messages"],
   });
 
-  const leads = selectedWorkspace
-    ? (allLeads || []).filter((l) => l.workspaceId === selectedWorkspace.id)
-    : allLeads || [];
-
-  const totalLeads = leads.length;
-  const newLeads = leads.filter((l) => l.status === "new").length;
-  const booked = leads.filter((l) => l.status === "booked").length;
-  const conversionRate = totalLeads > 0 ? ((booked / totalLeads) * 100).toFixed(0) : "0";
+  const messages = allMessages || [];
+  const totalMessages = messages.length;
+  const today = new Date().toDateString();
+  const todayMessages = messages.filter((m) => m.createdAt && new Date(m.createdAt).toDateString() === today).length;
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-2xl font-bold" data-testid="text-page-title">Leads & CRM</h1>
-          <p className="text-muted-foreground mt-1">Track leads from organic search to booking</p>
-        </div>
-        <Button data-testid="button-add-lead">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Lead
-        </Button>
+      <div>
+        <h1 className="text-2xl font-bold" data-testid="text-page-title">Contact Messages</h1>
+        <p className="text-muted-foreground mt-1">View incoming inquiries and contact messages</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { label: "Total Leads", value: totalLeads, icon: Users },
-          { label: "New", value: newLeads, icon: UserPlus },
-          { label: "Booked", value: booked, icon: CalendarCheck },
-          { label: "Conversion", value: `${conversionRate}%`, icon: CalendarCheck },
+          { label: "Total Messages", value: totalMessages, icon: MessageSquare },
+          { label: "Today", value: todayMessages, icon: MessageSquare },
+          { label: "Unique Companies", value: new Set(messages.filter((m) => m.company).map((m) => m.company)).size, icon: Building2 },
         ].map((m) => (
           <Card key={m.label} className="p-4">
             <div className="flex items-center justify-between gap-2">
               <div>
                 <p className="text-sm text-muted-foreground">{m.label}</p>
-                <p className="text-xl font-bold mt-1" data-testid={`text-lead-${m.label.toLowerCase()}`}>{m.value}</p>
+                <p className="text-xl font-bold mt-1" data-testid={`text-msg-${m.label.toLowerCase().replace(/\s+/g, '-')}`}>{m.value}</p>
               </div>
               <m.icon className="w-5 h-5 text-primary" />
             </div>
@@ -86,56 +63,58 @@ export default function LeadsCRM() {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Contact</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Keyword</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created</TableHead>
+                <TableHead>Company</TableHead>
+                <TableHead>Inquiry Type</TableHead>
+                <TableHead>Message</TableHead>
+                <TableHead>Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {leads.length === 0 ? (
+              {messages.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                    No leads yet. Leads will appear here as they come in.
+                    No contact messages yet. Messages will appear here as they come in.
                   </TableCell>
                 </TableRow>
               ) : (
-                leads.map((lead) => (
-                  <TableRow key={lead.id} data-testid={`row-lead-${lead.id}`}>
-                    <TableCell className="font-medium text-sm">{lead.name}</TableCell>
+                messages.map((msg) => (
+                  <TableRow key={msg.id} data-testid={`row-message-${msg.id}`}>
+                    <TableCell className="font-medium text-sm" data-testid={`text-msg-name-${msg.id}`}>{msg.name}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        {lead.email && (
+                      <div className="flex flex-col gap-1">
+                        {msg.email && (
                           <span className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Mail className="w-3 h-3" />
-                            {lead.email}
+                            {msg.email}
                           </span>
                         )}
-                        {lead.phone && (
+                        {msg.phone && (
                           <span className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Phone className="w-3 h-3" />
-                            {lead.phone}
+                            {msg.phone}
                           </span>
                         )}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <SourceBadge source={lead.source} />
+                    <TableCell className="text-sm">
+                      {msg.company || "\u2014"}
                     </TableCell>
                     <TableCell>
-                      {lead.keyword ? (
-                        <Badge variant="secondary" className="text-xs font-normal">
-                          {lead.keyword}
+                      {msg.inquiryType ? (
+                        <Badge variant="secondary" className="text-xs" data-testid={`badge-inquiry-${msg.id}`}>
+                          {msg.inquiryType}
                         </Badge>
                       ) : (
                         <span className="text-muted-foreground">{"\u2014"}</span>
                       )}
                     </TableCell>
                     <TableCell>
-                      <LeadStatusBadge status={lead.status} />
+                      <span className="text-sm text-muted-foreground line-clamp-2 max-w-[200px] block" data-testid={`text-msg-preview-${msg.id}`}>
+                        {msg.message}
+                      </span>
                     </TableCell>
                     <TableCell className="text-xs text-muted-foreground">
-                      {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "\u2014"}
+                      {msg.createdAt ? new Date(msg.createdAt).toLocaleDateString() : "\u2014"}
                     </TableCell>
                   </TableRow>
                 ))

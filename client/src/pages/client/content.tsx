@@ -20,16 +20,14 @@ import {
 } from "@/components/ui/select";
 import {
   FileText,
-  Eye,
-  MousePointer,
   Clock,
   CheckCircle2,
   XCircle,
+  Eye,
   Pencil,
   Filter,
-  ArrowUpDown,
 } from "lucide-react";
-import { useWorkspace } from "@/lib/workspace-context";
+import { useVenue } from "@/lib/venue-context";
 import type { BlogPost } from "@shared/schema";
 
 function StatusBadge({ status }: { status: string }) {
@@ -48,34 +46,25 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export default function ClientContent() {
-  const { selectedWorkspace } = useWorkspace();
+  const { selectedVenue } = useVenue();
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [sortField, setSortField] = useState<string>("createdAt");
 
   const { data: allPosts, isLoading } = useQuery<BlogPost[]>({
     queryKey: ["/api/blog-posts"],
   });
 
   const posts = (allPosts || []).filter((p) => {
-    if (selectedWorkspace && p.workspaceId !== selectedWorkspace.id) return false;
+    if (selectedVenue && p.venueId !== selectedVenue.id) return false;
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
     return true;
   });
 
   const sortedPosts = [...posts].sort((a, b) => {
-    if (sortField === "createdAt") {
-      return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
-    }
-    if (sortField === "clicks") return (b.clicks || 0) - (a.clicks || 0);
-    if (sortField === "impressions") return (b.impressions || 0) - (a.impressions || 0);
-    if (sortField === "wordCount") return (b.wordCount || 0) - (a.wordCount || 0);
-    return 0;
+    return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
   });
 
   const published = posts.filter((p) => p.status === "published").length;
   const drafts = posts.filter((p) => p.status === "draft").length;
-  const totalClicks = posts.reduce((sum, p) => sum + (p.clicks || 0), 0);
-  const totalImpressions = posts.reduce((sum, p) => sum + (p.impressions || 0), 0);
 
   return (
     <div className="space-y-6">
@@ -83,20 +72,18 @@ export default function ClientContent() {
         <h1 className="text-2xl font-bold" data-testid="text-page-title">My Content</h1>
         <p className="text-muted-foreground mt-1">
           View your published and scheduled content
-          {selectedWorkspace && (
+          {selectedVenue && (
             <span className="ml-1">
-              for <span className="font-medium text-foreground">{selectedWorkspace.name}</span>
+              for <span className="font-medium text-foreground">{selectedVenue.name}</span>
             </span>
           )}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
           { label: "Published", value: published, icon: FileText, color: "text-green-600 dark:text-green-400" },
           { label: "Drafts", value: drafts, icon: FileText, color: "text-yellow-600 dark:text-yellow-400" },
-          { label: "Total Clicks", value: totalClicks.toLocaleString(), icon: MousePointer, color: "text-primary" },
-          { label: "Impressions", value: totalImpressions.toLocaleString(), icon: Eye, color: "text-primary" },
         ].map((m) => (
           <Card key={m.label} className="p-4">
             <div className="flex items-center justify-between gap-2">
@@ -127,20 +114,6 @@ export default function ClientContent() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center gap-2">
-          <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
-          <Select value={sortField} onValueChange={setSortField}>
-            <SelectTrigger className="w-32" data-testid="select-client-sort-field">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="createdAt">Newest</SelectItem>
-              <SelectItem value="clicks">Clicks</SelectItem>
-              <SelectItem value="impressions">Impressions</SelectItem>
-              <SelectItem value="wordCount">Word Count</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
         <span className="text-sm text-muted-foreground ml-auto">
           {sortedPosts.length} post{sortedPosts.length !== 1 ? "s" : ""}
         </span>
@@ -160,15 +133,13 @@ export default function ClientContent() {
                 <TableHead>Title</TableHead>
                 <TableHead>Keyword</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Words</TableHead>
-                <TableHead className="text-right">Clicks</TableHead>
-                <TableHead className="text-right">Pos.</TableHead>
+                <TableHead>Created</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedPosts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                     No content available yet.
                   </TableCell>
                 </TableRow>
@@ -188,14 +159,8 @@ export default function ClientContent() {
                     <TableCell>
                       <StatusBadge status={post.status} />
                     </TableCell>
-                    <TableCell className="text-right text-sm font-mono">
-                      {post.wordCount?.toLocaleString() || "\u2014"}
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-mono">
-                      {post.clicks?.toLocaleString() || "0"}
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-mono">
-                      {post.position ? `#${post.position.toFixed(1)}` : "\u2014"}
+                    <TableCell className="text-sm text-muted-foreground">
+                      {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "\u2014"}
                     </TableCell>
                   </TableRow>
                 ))
