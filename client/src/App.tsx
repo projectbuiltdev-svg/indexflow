@@ -110,9 +110,10 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
+      <Route path="/admin" component={AdminRoutes} />
       <Route path="/admin/:rest*" component={AdminRoutes} />
-      <Route path="/dashboard/:rest*" component={ClientRoutes} />
       <Route path="/dashboard" component={ClientRoutes} />
+      <Route path="/dashboard/:rest*" component={ClientRoutes} />
       <Route component={NotFound} />
     </Switch>
   );
