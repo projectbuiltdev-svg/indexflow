@@ -1,61 +1,114 @@
+import { useState } from "react";
 import { useVenue } from "@/lib/venue-context";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Database } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Download, Database, Building2, CalendarCheck, MessageSquare, LifeBuoy } from "lucide-react";
 
-const exportCategories = [
-  "Venues",
-  "Users",
-  "Reservations",
-  "Call Logs",
-  "Blog Posts",
-  "Domains",
-  "Contact Messages",
-  "Support Tickets",
-  "Resources",
-  "Team Members",
-  "Business Hours",
-  "Closures",
-  "Room Types",
-  "Rooms",
-  "Room Bookings",
+function downloadCSV(filename: string, headers: string[], rows: string[][]) {
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) => row.map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(",")),
+  ].join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+interface ExportCategory {
+  name: string;
+  endpoint: string;
+  icon: typeof Building2;
+  headers: string[];
+  rowMapper: (item: Record<string, unknown>) => string[];
+}
+
+const exportCategories: ExportCategory[] = [
+  {
+    name: "Venues",
+    endpoint: "/api/venues",
+    icon: Building2,
+    headers: ["ID", "Name", "Type", "Plan", "Status", "Phone", "Email", "Address"],
+    rowMapper: (v) => [String(v.id), String(v.name), String(v.type), String(v.plan), String(v.status), String(v.phone || ""), String(v.email || ""), String(v.address || "")],
+  },
+  {
+    name: "Reservations",
+    endpoint: "/api/admin/reservations",
+    icon: CalendarCheck,
+    headers: ["ID", "Venue ID", "Guest Name", "Email", "Phone", "Party Size", "Date", "Time", "Status"],
+    rowMapper: (r) => [String(r.id), String(r.venueId), String(r.guestName), String(r.guestEmail || ""), String(r.guestPhone || ""), String(r.partySize), String(r.date), String(r.time), String(r.status || "")],
+  },
+  {
+    name: "Contact Messages",
+    endpoint: "/api/contact-messages",
+    icon: MessageSquare,
+    headers: ["ID", "Name", "Email", "Phone", "Company", "Inquiry Type", "Message", "Date"],
+    rowMapper: (m) => [String(m.id), String(m.name), String(m.email), String(m.phone || ""), String(m.company || ""), String(m.inquiryType || ""), String(m.message), String(m.createdAt || "")],
+  },
+  {
+    name: "Support Tickets",
+    endpoint: "/api/admin/support-tickets",
+    icon: LifeBuoy,
+    headers: ["ID", "Venue ID", "Subject", "Category", "Priority", "Status", "Date"],
+    rowMapper: (t) => [String(t.id), String(t.venueId), String(t.subject), String(t.category), String(t.priority), String(t.status), String(t.createdAt || "")],
+  },
 ];
 
 export default function AdminExport() {
   useVenue();
   const { toast } = useToast();
+  const [loadingCategory, setLoadingCategory] = useState<string | null>(null);
 
-  const handleExport = (category: string) => {
-    toast({
-      title: "Export Started",
-      description: `Preparing ${category} export...`,
-    });
+  const handleExport = async (category: ExportCategory) => {
+    setLoadingCategory(category.name);
+    try {
+      const res = await fetch(category.endpoint, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch data");
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        toast({ title: "No data", description: `No ${category.name.toLowerCase()} to export.` });
+        setLoadingCategory(null);
+        return;
+      }
+      const rows = data.map(category.rowMapper);
+      downloadCSV(`${category.name.toLowerCase().replace(/\s+/g, "_")}_export.csv`, category.headers, rows);
+      toast({ title: "Export complete", description: `${data.length} ${category.name.toLowerCase()} exported.` });
+    } catch (err) {
+      toast({ title: "Export failed", description: String(err), variant: "destructive" });
+    } finally {
+      setLoadingCategory(null);
+    }
   };
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center gap-2">
         <Database className="h-6 w-6" />
-        <h1 className="text-2xl font-semibold" data-testid="page-title-export">
-          Export Data
-        </h1>
+        <h1 className="text-2xl font-semibold" data-testid="page-title-export">Export Data</h1>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {exportCategories.map((category) => (
-          <Card key={category} data-testid={`card-export-${category.toLowerCase().replace(/\s+/g, "-")}`}>
+          <Card key={category.name} data-testid={`card-export-${category.name.toLowerCase().replace(/\s+/g, "-")}`}>
             <CardHeader className="pb-3">
-              <CardTitle className="text-base">{category}</CardTitle>
+              <div className="flex items-center gap-2">
+                <category.icon className="h-5 w-5 text-muted-foreground" />
+                <CardTitle className="text-base">{category.name}</CardTitle>
+              </div>
             </CardHeader>
             <CardContent>
               <Button
                 variant="outline"
                 onClick={() => handleExport(category)}
-                data-testid={`button-export-${category.toLowerCase().replace(/\s+/g, "-")}`}
+                disabled={loadingCategory === category.name}
+                data-testid={`button-export-${category.name.toLowerCase().replace(/\s+/g, "-")}`}
               >
                 <Download className="h-4 w-4 mr-2" />
-                Download CSV
+                {loadingCategory === category.name ? "Exporting..." : "Download CSV"}
               </Button>
             </CardContent>
           </Card>

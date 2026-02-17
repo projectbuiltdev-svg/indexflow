@@ -1,49 +1,64 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useVenue } from "@/lib/venue-context";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/hooks/use-toast";
-import { Plus, BedDouble } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Plus, Pencil, BedDouble } from "lucide-react";
+
+const roomTypeFormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional(),
+  basePrice: z.string().min(1, "Base rate is required"),
+  maxOccupancy: z.coerce.number().min(1, "Max occupancy must be at least 1"),
+  amenities: z.string().optional(),
+});
+
+type RoomTypeFormValues = z.infer<typeof roomTypeFormSchema>;
 
 export default function RoomTypes() {
   const { selectedVenue } = useVenue();
   const venueId = selectedVenue?.id;
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", description: "", basePrice: "100", maxOccupancy: "2" });
+  const [editId, setEditId] = useState<string | null>(null);
+
+  const form = useForm<RoomTypeFormValues>({
+    resolver: zodResolver(roomTypeFormSchema),
+    defaultValues: { name: "", description: "", basePrice: "100", maxOccupancy: 2, amenities: "" },
+  });
 
   const { data: roomTypes = [], isLoading } = useQuery<any[]>({
-    queryKey: ["/api/room-types", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/room-types?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/room-types?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   const createMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (values: RoomTypeFormValues) => {
       await apiRequest("POST", "/api/room-types", {
         venueId,
-        name: form.name,
-        description: form.description || undefined,
-        basePrice: form.basePrice,
-        maxOccupancy: parseInt(form.maxOccupancy),
+        name: values.name,
+        description: values.description || undefined,
+        basePrice: values.basePrice,
+        maxOccupancy: values.maxOccupancy,
+        amenities: values.amenities || undefined,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/room-types"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/room-types?venueId=${venueId}`] });
       setDialogOpen(false);
-      setForm({ name: "", description: "", basePrice: "100", maxOccupancy: "2" });
+      form.reset();
       toast({ title: "Room type added" });
     },
     onError: (err: Error) => {
@@ -51,8 +66,55 @@ export default function RoomTypes() {
     },
   });
 
+  const editMutation = useMutation({
+    mutationFn: async (values: RoomTypeFormValues) => {
+      await apiRequest("PATCH", `/api/room-types/${editId}`, {
+        name: values.name,
+        description: values.description || undefined,
+        basePrice: values.basePrice,
+        maxOccupancy: values.maxOccupancy,
+        amenities: values.amenities || undefined,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/room-types?venueId=${venueId}`] });
+      setDialogOpen(false);
+      setEditId(null);
+      form.reset();
+      toast({ title: "Room type updated" });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const openEdit = (rt: any) => {
+    setEditId(rt.id);
+    form.reset({
+      name: rt.name || "",
+      description: rt.description || "",
+      basePrice: rt.basePrice ? String(rt.basePrice) : "100",
+      maxOccupancy: rt.maxOccupancy || 2,
+      amenities: rt.amenities || "",
+    });
+    setDialogOpen(true);
+  };
+
+  const openCreate = () => {
+    setEditId(null);
+    form.reset({ name: "", description: "", basePrice: "100", maxOccupancy: 2, amenities: "" });
+    setDialogOpen(true);
+  };
+
+  const onSubmit = (values: RoomTypeFormValues) => {
+    if (editId) editMutation.mutate(values);
+    else createMutation.mutate(values);
+  };
+
+  const isPending = createMutation.isPending || editMutation.isPending;
+
   if (!venueId) {
-    return <div className="p-6" data-testid="no-venue-message">Select a venue from the sidebar</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to manage room types.</div>;
   }
 
   if (isLoading) {
@@ -70,19 +132,32 @@ export default function RoomTypes() {
         <h1 className="text-2xl font-semibold" data-testid="page-title">Room Types</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button data-testid="button-add-room-type"><Plus className="h-4 w-4 mr-2" />Add Room Type</Button>
+            <Button onClick={openCreate} data-testid="button-add-room-type"><Plus className="h-4 w-4 mr-2" />Add Room Type</Button>
           </DialogTrigger>
           <DialogContent>
-            <DialogHeader><DialogTitle>Add Room Type</DialogTitle></DialogHeader>
-            <div className="space-y-4">
-              <div><Label>Name</Label><Input data-testid="input-room-type-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-              <div><Label>Description</Label><Textarea data-testid="input-room-type-description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
-              <div><Label>Base Price</Label><Input data-testid="input-room-type-price" type="number" min="0" step="0.01" value={form.basePrice} onChange={(e) => setForm({ ...form, basePrice: e.target.value })} /></div>
-              <div><Label>Max Occupancy</Label><Input data-testid="input-room-type-occupancy" type="number" min="1" value={form.maxOccupancy} onChange={(e) => setForm({ ...form, maxOccupancy: e.target.value })} /></div>
-              <Button data-testid="button-submit-room-type" className="w-full" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !form.name}>
-                {createMutation.isPending ? "Adding..." : "Add Room Type"}
-              </Button>
-            </div>
+            <DialogHeader><DialogTitle>{editId ? "Edit Room Type" : "Add Room Type"}</DialogTitle></DialogHeader>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField control={form.control} name="name" render={({ field }) => (
+                  <FormItem><FormLabel>Name</FormLabel><FormControl><Input data-testid="input-room-type-name" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="description" render={({ field }) => (
+                  <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea data-testid="input-room-type-description" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="basePrice" render={({ field }) => (
+                  <FormItem><FormLabel>Base Rate</FormLabel><FormControl><Input data-testid="input-room-type-price" type="number" min="0" step="0.01" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="maxOccupancy" render={({ field }) => (
+                  <FormItem><FormLabel>Max Occupancy</FormLabel><FormControl><Input data-testid="input-room-type-occupancy" type="number" min="1" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="amenities" render={({ field }) => (
+                  <FormItem><FormLabel>Amenities</FormLabel><FormControl><Input data-testid="input-room-type-amenities" placeholder="WiFi, TV, Mini-bar" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <Button type="submit" className="w-full" disabled={isPending} data-testid="button-submit-room-type">
+                  {isPending ? "Saving..." : editId ? "Update Room Type" : "Add Room Type"}
+                </Button>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>
@@ -99,19 +174,25 @@ export default function RoomTypes() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Base Price</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Base Rate</TableHead>
                   <TableHead>Max Occupancy</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>Amenities</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {roomTypes.map((rt: any) => (
                   <TableRow key={rt.id} data-testid={`room-type-row-${rt.id}`}>
                     <TableCell>{rt.name}</TableCell>
+                    <TableCell className="max-w-xs truncate">{rt.description || "-"}</TableCell>
                     <TableCell>${rt.basePrice}</TableCell>
                     <TableCell>{rt.maxOccupancy}</TableCell>
+                    <TableCell className="max-w-xs truncate">{rt.amenities || "-"}</TableCell>
                     <TableCell>
-                      <Badge variant={rt.isActive ? "default" : "secondary"}>{rt.isActive ? "Active" : "Inactive"}</Badge>
+                      <Button size="icon" variant="ghost" onClick={() => openEdit(rt)} data-testid={`button-edit-room-type-${rt.id}`}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

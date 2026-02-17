@@ -1,57 +1,75 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useVenue } from "@/lib/venue-context";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Building } from "lucide-react";
+
+const roomFormSchema = z.object({
+  roomNumber: z.string().min(1, "Room number is required"),
+  floor: z.string().optional(),
+  roomTypeId: z.string().min(1, "Room type is required"),
+  status: z.string().optional(),
+});
+
+type RoomFormValues = z.infer<typeof roomFormSchema>;
+
+function statusVariant(status: string) {
+  switch (status) {
+    case "available": return "default" as const;
+    case "occupied": return "secondary" as const;
+    case "maintenance": return "destructive" as const;
+    default: return "default" as const;
+  }
+}
 
 export default function RoomsList() {
   const { selectedVenue } = useVenue();
   const venueId = selectedVenue?.id;
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ roomNumber: "", floor: "", roomTypeId: "" });
+
+  const form = useForm<RoomFormValues>({
+    resolver: zodResolver(roomFormSchema),
+    defaultValues: { roomNumber: "", floor: "", roomTypeId: "", status: "available" },
+  });
 
   const { data: rooms = [], isLoading } = useQuery<any[]>({
-    queryKey: ["/api/rooms", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/rooms?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/rooms?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   const { data: roomTypes = [] } = useQuery<any[]>({
-    queryKey: ["/api/room-types", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/room-types?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/room-types?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   const createMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (values: RoomFormValues) => {
       await apiRequest("POST", "/api/rooms", {
         venueId,
-        roomNumber: form.roomNumber,
-        floor: form.floor || undefined,
-        roomTypeId: form.roomTypeId,
+        roomNumber: values.roomNumber,
+        floor: values.floor || undefined,
+        roomTypeId: values.roomTypeId,
+        status: values.status || "available",
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/rooms"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/rooms?venueId=${venueId}`] });
       setDialogOpen(false);
-      setForm({ roomNumber: "", floor: "", roomTypeId: "" });
+      form.reset();
       toast({ title: "Room added" });
     },
     onError: (err: Error) => {
@@ -60,7 +78,7 @@ export default function RoomsList() {
   });
 
   if (!venueId) {
-    return <div className="p-6" data-testid="no-venue-message">Select a venue from the sidebar</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to manage rooms.</div>;
   }
 
   if (isLoading) {
@@ -87,24 +105,43 @@ export default function RoomsList() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>Add Room</DialogTitle></DialogHeader>
-            <div className="space-y-4">
-              <div><Label>Room Number</Label><Input data-testid="input-room-number" value={form.roomNumber} onChange={(e) => setForm({ ...form, roomNumber: e.target.value })} /></div>
-              <div><Label>Floor</Label><Input data-testid="input-room-floor" value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} /></div>
-              <div>
-                <Label>Room Type</Label>
-                <Select value={form.roomTypeId} onValueChange={(v) => setForm({ ...form, roomTypeId: v })}>
-                  <SelectTrigger data-testid="select-room-type"><SelectValue placeholder="Select type" /></SelectTrigger>
-                  <SelectContent>
-                    {roomTypes.map((rt: any) => (
-                      <SelectItem key={rt.id} value={rt.id}>{rt.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button data-testid="button-submit-room" className="w-full" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !form.roomNumber || !form.roomTypeId}>
-                {createMutation.isPending ? "Adding..." : "Add Room"}
-              </Button>
-            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit((v) => createMutation.mutate(v))} className="space-y-4">
+                <FormField control={form.control} name="roomNumber" render={({ field }) => (
+                  <FormItem><FormLabel>Room Number</FormLabel><FormControl><Input data-testid="input-room-number" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="floor" render={({ field }) => (
+                  <FormItem><FormLabel>Floor</FormLabel><FormControl><Input data-testid="input-room-floor" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="roomTypeId" render={({ field }) => (
+                  <FormItem><FormLabel>Room Type</FormLabel><FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger data-testid="select-room-type"><SelectValue placeholder="Select type" /></SelectTrigger>
+                      <SelectContent>
+                        {roomTypes.map((rt: any) => (
+                          <SelectItem key={rt.id} value={String(rt.id)}>{rt.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="status" render={({ field }) => (
+                  <FormItem><FormLabel>Status</FormLabel><FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger data-testid="select-room-status"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="available">Available</SelectItem>
+                        <SelectItem value="occupied">Occupied</SelectItem>
+                        <SelectItem value="maintenance">Maintenance</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl><FormMessage /></FormItem>
+                )} />
+                <Button type="submit" className="w-full" disabled={createMutation.isPending} data-testid="button-submit-room">
+                  {createMutation.isPending ? "Adding..." : "Add Room"}
+                </Button>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>
@@ -121,19 +158,21 @@ export default function RoomsList() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Room Number</TableHead>
-                  <TableHead>Floor</TableHead>
                   <TableHead>Type</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>Floor</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {rooms.map((r: any) => (
                   <TableRow key={r.id} data-testid={`room-row-${r.id}`}>
                     <TableCell>{r.roomNumber}</TableCell>
-                    <TableCell>{r.floor || "-"}</TableCell>
                     <TableCell>{getRoomTypeName(r.roomTypeId)}</TableCell>
+                    <TableCell>{r.floor || "-"}</TableCell>
                     <TableCell>
-                      <Badge variant={r.isActive ? "default" : "secondary"}>{r.isActive ? "Active" : "Inactive"}</Badge>
+                      <Badge variant={statusVariant(r.status || "available")} data-testid={`room-status-${r.id}`}>
+                        {r.status || "available"}
+                      </Badge>
                     </TableCell>
                   </TableRow>
                 ))}

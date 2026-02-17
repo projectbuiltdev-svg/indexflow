@@ -14,6 +14,7 @@ interface WidgetSetting {
   primaryColor: string | null;
   position: string | null;
   voiceEnabled: boolean | null;
+  welcomeMessage: string | null;
 }
 
 export default function AdminWidgetConfig() {
@@ -85,7 +86,7 @@ export default function AdminWidgetConfig() {
                         <span className="text-muted-foreground text-sm">{ws.primaryColor || "-"}</span>
                       </div>
                     </TableCell>
-                    <TableCell>{ws.position || "-"}</TableCell>
+                    <TableCell className="text-muted-foreground">{ws.position || "-"}</TableCell>
                     <TableCell>
                       <Badge variant={ws.voiceEnabled ? "default" : "outline"}>
                         {ws.voiceEnabled ? "Yes" : "No"}

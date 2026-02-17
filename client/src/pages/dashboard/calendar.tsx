@@ -1,52 +1,68 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useVenue } from "@/lib/venue-context";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+
+const reservationFormSchema = z.object({
+  guestName: z.string().min(1, "Guest name is required"),
+  guestEmail: z.string().email().optional().or(z.literal("")),
+  partySize: z.coerce.number().min(1),
+  date: z.string().min(1, "Date is required"),
+  time: z.string().min(1, "Time is required"),
+  notes: z.string().optional(),
+});
+
+type ReservationFormValues = z.infer<typeof reservationFormSchema>;
 
 export default function DashboardCalendar() {
   const { selectedVenue } = useVenue();
   const venueId = selectedVenue?.id;
   const { toast } = useToast();
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ guest_name: "", guest_email: "", party_size: "2", date: "", time: "19:00", notes: "" });
+
+  const form = useForm<ReservationFormValues>({
+    resolver: zodResolver(reservationFormSchema),
+    defaultValues: { guestName: "", guestEmail: "", partySize: 2, date: "", time: "19:00", notes: "" },
+  });
 
   const { data: reservations = [], isLoading } = useQuery<any[]>({
-    queryKey: ["/api/reservations", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/reservations?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/reservations?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   const createMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (values: ReservationFormValues) => {
       await apiRequest("POST", "/api/reservations", {
         venueId,
-        guestName: form.guest_name,
-        guestEmail: form.guest_email || undefined,
-        partySize: parseInt(form.party_size),
-        date: form.date,
-        time: form.time,
-        notes: form.notes || undefined,
+        guestName: values.guestName,
+        guestEmail: values.guestEmail || undefined,
+        partySize: values.partySize,
+        date: values.date,
+        time: values.time,
+        notes: values.notes || undefined,
         source: "manual",
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/reservations"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/reservations?venueId=${venueId}`] });
       setDialogOpen(false);
-      setForm({ guest_name: "", guest_email: "", party_size: "2", date: "", time: "19:00", notes: "" });
+      form.reset();
       toast({ title: "Reservation created" });
     },
     onError: (err: Error) => {
@@ -55,7 +71,7 @@ export default function DashboardCalendar() {
   });
 
   if (!venueId) {
-    return <div className="p-6" data-testid="no-venue-message">Select a venue from the sidebar</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to view the calendar.</div>;
   }
 
   const year = currentDate.getFullYear();
@@ -63,18 +79,19 @@ export default function DashboardCalendar() {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const monthLabel = currentDate.toLocaleString("default", { month: "long", year: "numeric" });
-
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const countsByDay: Record<string, number> = {};
   reservations.forEach((r: any) => {
-    if (r.date) {
-      countsByDay[r.date] = (countsByDay[r.date] || 0) + 1;
-    }
+    if (r.date) countsByDay[r.date] = (countsByDay[r.date] || 0) + 1;
   });
 
   const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
+
+  const selectedDayReservations = selectedDay
+    ? reservations.filter((r: any) => r.date === selectedDay)
+    : [];
 
   if (isLoading) {
     return (
@@ -95,17 +112,31 @@ export default function DashboardCalendar() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>New Reservation</DialogTitle></DialogHeader>
-            <div className="space-y-4">
-              <div><Label>Guest Name</Label><Input data-testid="input-guest-name" value={form.guest_name} onChange={(e) => setForm({ ...form, guest_name: e.target.value })} /></div>
-              <div><Label>Guest Email</Label><Input data-testid="input-guest-email" type="email" value={form.guest_email} onChange={(e) => setForm({ ...form, guest_email: e.target.value })} /></div>
-              <div><Label>Party Size</Label><Input data-testid="input-party-size" type="number" min="1" value={form.party_size} onChange={(e) => setForm({ ...form, party_size: e.target.value })} /></div>
-              <div><Label>Date</Label><Input data-testid="input-date" type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /></div>
-              <div><Label>Time</Label><Input data-testid="input-time" type="time" value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} /></div>
-              <div><Label>Notes</Label><Textarea data-testid="input-notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
-              <Button data-testid="button-submit-reservation" className="w-full" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !form.guest_name || !form.date}>
-                {createMutation.isPending ? "Creating..." : "Create Reservation"}
-              </Button>
-            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit((v) => createMutation.mutate(v))} className="space-y-4">
+                <FormField control={form.control} name="guestName" render={({ field }) => (
+                  <FormItem><FormLabel>Guest Name</FormLabel><FormControl><Input data-testid="input-guest-name" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="guestEmail" render={({ field }) => (
+                  <FormItem><FormLabel>Guest Email</FormLabel><FormControl><Input data-testid="input-guest-email" type="email" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="partySize" render={({ field }) => (
+                  <FormItem><FormLabel>Party Size</FormLabel><FormControl><Input data-testid="input-party-size" type="number" min="1" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="date" render={({ field }) => (
+                  <FormItem><FormLabel>Date</FormLabel><FormControl><Input data-testid="input-date" type="date" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="time" render={({ field }) => (
+                  <FormItem><FormLabel>Time</FormLabel><FormControl><Input data-testid="input-time" type="time" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="notes" render={({ field }) => (
+                  <FormItem><FormLabel>Notes</FormLabel><FormControl><Textarea data-testid="input-notes" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <Button type="submit" className="w-full" disabled={createMutation.isPending} data-testid="button-submit-reservation">
+                  {createMutation.isPending ? "Creating..." : "Create Reservation"}
+                </Button>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>
@@ -129,11 +160,13 @@ export default function DashboardCalendar() {
               const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
               const count = countsByDay[dateStr] || 0;
               const isToday = dateStr === new Date().toISOString().slice(0, 10);
+              const isSelected = dateStr === selectedDay;
               return (
                 <div
                   key={day}
-                  className={`p-2 min-h-[60px] rounded-md border text-sm ${isToday ? "border-primary bg-primary/5" : "border-border"}`}
+                  className={`p-2 min-h-[60px] rounded-md border text-sm cursor-pointer ${isToday ? "border-primary bg-primary/5" : "border-border"} ${isSelected ? "ring-2 ring-primary" : ""}`}
                   data-testid={`calendar-day-${dateStr}`}
+                  onClick={() => setSelectedDay(dateStr)}
                 >
                   <div className="font-medium">{day}</div>
                   {count > 0 && (
@@ -145,6 +178,40 @@ export default function DashboardCalendar() {
           </div>
         </CardContent>
       </Card>
+
+      {selectedDay && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Reservations for {selectedDay}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {selectedDayReservations.length === 0 ? (
+              <p className="text-muted-foreground" data-testid="empty-day-state">No reservations for this day.</p>
+            ) : (
+              <Table data-testid="day-reservations-table">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Guest</TableHead>
+                    <TableHead>Party Size</TableHead>
+                    <TableHead>Time</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {selectedDayReservations.map((r: any) => (
+                    <TableRow key={r.id} data-testid={`day-reservation-row-${r.id}`}>
+                      <TableCell>{r.guestName}</TableCell>
+                      <TableCell>{r.partySize}</TableCell>
+                      <TableCell>{r.time}</TableCell>
+                      <TableCell><Badge variant="secondary">{r.status}</Badge></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

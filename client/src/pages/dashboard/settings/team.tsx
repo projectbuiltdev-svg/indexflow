@@ -1,44 +1,62 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useVenue } from "@/lib/venue-context";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Users } from "lucide-react";
+
+const teamMemberFormSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().email("Valid email is required"),
+  role: z.string().min(1, "Role is required"),
+  phone: z.string().optional(),
+});
+
+type TeamMemberFormValues = z.infer<typeof teamMemberFormSchema>;
 
 export default function SettingsTeam() {
   const { selectedVenue } = useVenue();
   const venueId = selectedVenue?.id;
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ email: "", role: "staff" });
+
+  const form = useForm<TeamMemberFormValues>({
+    resolver: zodResolver(teamMemberFormSchema),
+    defaultValues: { name: "", email: "", role: "staff", phone: "" },
+  });
 
   const { data: members = [], isLoading } = useQuery<any[]>({
-    queryKey: ["/api/team-members", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/team-members?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/team-members?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   const createMutation = useMutation({
-    mutationFn: async () => {
-      await apiRequest("POST", "/api/team-members", { venueId, email: form.email, role: form.role });
+    mutationFn: async (values: TeamMemberFormValues) => {
+      await apiRequest("POST", "/api/team-members", {
+        venueId,
+        name: values.name || undefined,
+        email: values.email,
+        role: values.role,
+        phone: values.phone || undefined,
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/team-members"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/team-members?venueId=${venueId}`] });
       setDialogOpen(false);
-      setForm({ email: "", role: "staff" });
-      toast({ title: "Team member invited" });
+      form.reset();
+      toast({ title: "Team member added" });
     },
     onError: (err: Error) => {
       toast({ title: "Error", description: err.message, variant: "destructive" });
@@ -46,7 +64,7 @@ export default function SettingsTeam() {
   });
 
   if (!venueId) {
-    return <div className="p-6" data-testid="no-venue-message">Select a venue from the sidebar</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to manage team members.</div>;
   }
 
   if (isLoading) {
@@ -67,24 +85,35 @@ export default function SettingsTeam() {
             <Button data-testid="button-add-member"><Plus className="h-4 w-4 mr-2" />Add Member</Button>
           </DialogTrigger>
           <DialogContent>
-            <DialogHeader><DialogTitle>Invite Team Member</DialogTitle></DialogHeader>
-            <div className="space-y-4">
-              <div><Label>Email</Label><Input data-testid="input-member-email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
-              <div>
-                <Label>Role</Label>
-                <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v })}>
-                  <SelectTrigger data-testid="select-member-role"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="staff">Staff</SelectItem>
-                    <SelectItem value="manager">Manager</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button data-testid="button-submit-member" className="w-full" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !form.email}>
-                {createMutation.isPending ? "Inviting..." : "Invite Member"}
-              </Button>
-            </div>
+            <DialogHeader><DialogTitle>Add Team Member</DialogTitle></DialogHeader>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit((v) => createMutation.mutate(v))} className="space-y-4">
+                <FormField control={form.control} name="name" render={({ field }) => (
+                  <FormItem><FormLabel>Name</FormLabel><FormControl><Input data-testid="input-member-name" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormItem><FormLabel>Email</FormLabel><FormControl><Input data-testid="input-member-email" type="email" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="role" render={({ field }) => (
+                  <FormItem><FormLabel>Role</FormLabel><FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger data-testid="select-member-role"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="staff">Staff</SelectItem>
+                        <SelectItem value="manager">Manager</SelectItem>
+                        <SelectItem value="admin">Admin</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="phone" render={({ field }) => (
+                  <FormItem><FormLabel>Phone</FormLabel><FormControl><Input data-testid="input-member-phone" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <Button type="submit" className="w-full" disabled={createMutation.isPending} data-testid="button-submit-member">
+                  {createMutation.isPending ? "Adding..." : "Add Member"}
+                </Button>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>
@@ -100,21 +129,19 @@ export default function SettingsTeam() {
             <Table data-testid="team-table">
               <TableHeader>
                 <TableRow>
+                  <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Role</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Invited</TableHead>
+                  <TableHead>Phone</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {members.map((m: any) => (
                   <TableRow key={m.id} data-testid={`member-row-${m.id}`}>
+                    <TableCell>{m.name || "-"}</TableCell>
                     <TableCell>{m.email}</TableCell>
                     <TableCell className="capitalize">{m.role}</TableCell>
-                    <TableCell>
-                      <Badge variant={m.status === "active" ? "default" : "secondary"}>{m.status}</Badge>
-                    </TableCell>
-                    <TableCell>{m.invitedAt ? new Date(m.invitedAt).toLocaleDateString() : "-"}</TableCell>
+                    <TableCell>{m.phone || "-"}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

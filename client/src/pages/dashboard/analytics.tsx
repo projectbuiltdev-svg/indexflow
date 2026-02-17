@@ -10,44 +10,30 @@ export default function DashboardAnalytics() {
   const venueId = selectedVenue?.id;
 
   const { data: reservations = [], isLoading: loadingRes } = useQuery<any[]>({
-    queryKey: ["/api/reservations", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/reservations?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/reservations?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   const { data: chatLogs = [], isLoading: loadingChat } = useQuery<any[]>({
-    queryKey: ["/api/widget-chat-logs", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/widget-chat-logs?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/widget-chat-logs?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   const { data: callLogs = [], isLoading: loadingCalls } = useQuery<any[]>({
-    queryKey: ["/api/call-logs", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/call-logs?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/call-logs?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   if (!venueId) {
-    return <div className="p-6" data-testid="no-venue-message">Select a venue from the sidebar</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to view analytics.</div>;
   }
 
   const isLoading = loadingRes || loadingChat || loadingCalls;
 
-  const statusCounts: Record<string, number> = {};
-  const sourceCounts: Record<string, number> = {};
-  reservations.forEach((r: any) => {
-    statusCounts[r.status || "unknown"] = (statusCounts[r.status || "unknown"] || 0) + 1;
-    sourceCounts[r.source || "unknown"] = (sourceCounts[r.source || "unknown"] || 0) + 1;
-  });
+  const confirmed = reservations.filter((r: any) => r.status === "confirmed").length;
+  const pending = reservations.filter((r: any) => r.status === "pending").length;
+  const cancelled = reservations.filter((r: any) => r.status === "cancelled").length;
+  const completed = reservations.filter((r: any) => r.status === "completed").length;
 
   const callStatusCounts: Record<string, number> = {};
   const totalDuration = callLogs.reduce((sum: number, c: any) => {
@@ -81,29 +67,22 @@ export default function DashboardAnalytics() {
               <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Total Reservations</CardTitle></CardHeader>
               <CardContent><div className="text-2xl font-bold">{reservations.length}</div></CardContent>
             </Card>
-            {Object.entries(statusCounts).map(([status, count]) => (
-              <Card key={status} data-testid={`stat-status-${status}`}>
-                <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground capitalize">{status}</CardTitle></CardHeader>
-                <CardContent><div className="text-2xl font-bold">{count}</div></CardContent>
-              </Card>
-            ))}
+            <Card data-testid="stat-status-confirmed">
+              <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Confirmed</CardTitle></CardHeader>
+              <CardContent><div className="text-2xl font-bold">{confirmed}</div></CardContent>
+            </Card>
+            <Card data-testid="stat-status-pending">
+              <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Pending</CardTitle></CardHeader>
+              <CardContent><div className="text-2xl font-bold">{pending}</div></CardContent>
+            </Card>
+            <Card data-testid="stat-status-cancelled">
+              <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Cancelled</CardTitle></CardHeader>
+              <CardContent><div className="text-2xl font-bold">{cancelled}</div></CardContent>
+            </Card>
           </div>
-          <Card>
-            <CardHeader><CardTitle>Source Breakdown</CardTitle></CardHeader>
-            <CardContent>
-              {Object.keys(sourceCounts).length === 0 ? (
-                <p className="text-muted-foreground">No data available.</p>
-              ) : (
-                <div className="space-y-2">
-                  {Object.entries(sourceCounts).map(([source, count]) => (
-                    <div key={source} className="flex items-center justify-between" data-testid={`source-${source}`}>
-                      <span className="capitalize">{source}</span>
-                      <span className="font-medium">{count}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
+          <Card data-testid="stat-status-completed">
+            <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Completed</CardTitle></CardHeader>
+            <CardContent><div className="text-2xl font-bold">{completed}</div></CardContent>
           </Card>
         </TabsContent>
 

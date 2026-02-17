@@ -1,53 +1,87 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { useVenue } from "@/lib/venue-context";
 import { useToast } from "@/hooks/use-toast";
-import { Download, CalendarCheck, Phone, Clock, XCircle, Table2, Users, BedDouble, Building, Ticket, Globe, FileText } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Download, CalendarCheck, Phone, Ticket } from "lucide-react";
 
-const exportCategories = [
-  { label: "Reservations", icon: CalendarCheck },
-  { label: "Call Logs", icon: Phone },
-  { label: "Business Hours", icon: Clock },
-  { label: "Closures", icon: XCircle },
-  { label: "Resources", icon: Table2 },
-  { label: "Team Members", icon: Users },
-  { label: "Room Types", icon: BedDouble },
-  { label: "Rooms", icon: Building },
-  { label: "Room Bookings", icon: BedDouble },
-  { label: "Support Tickets", icon: Ticket },
-  { label: "Website Changes", icon: Globe },
-  { label: "Blog Posts", icon: FileText },
+function convertToCSV(data: any[]): string {
+  if (data.length === 0) return "";
+  const headers = Object.keys(data[0]);
+  const rows = data.map((row) =>
+    headers.map((h) => {
+      const val = row[h];
+      if (val === null || val === undefined) return "";
+      const str = String(val).replace(/"/g, '""');
+      return `"${str}"`;
+    }).join(",")
+  );
+  return [headers.join(","), ...rows].join("\n");
+}
+
+function downloadCSV(content: string, filename: string) {
+  const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+const exportItems = [
+  { label: "Reservations", endpoint: "reservations", icon: CalendarCheck },
+  { label: "Call Logs", endpoint: "call-logs", icon: Phone },
+  { label: "Support Tickets", endpoint: "support-tickets", icon: Ticket },
 ];
 
 export default function DashboardExport() {
   const { selectedVenue } = useVenue();
   const { toast } = useToast();
+  const [loading, setLoading] = useState<string | null>(null);
 
   if (!selectedVenue?.id) {
-    return <div className="p-6" data-testid="no-venue-message">Select a venue from the sidebar</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to export data.</div>;
   }
 
-  const handleExport = (label: string) => {
-    toast({ title: `Export ${label}`, description: "CSV export will be available soon." });
+  const handleExport = async (item: typeof exportItems[0]) => {
+    setLoading(item.endpoint);
+    try {
+      const res = await fetch(`/api/${item.endpoint}?venueId=${selectedVenue.id}`);
+      if (!res.ok) throw new Error("Failed to fetch data");
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        toast({ title: "No data", description: `No ${item.label.toLowerCase()} to export.` });
+        return;
+      }
+      const csv = convertToCSV(data);
+      downloadCSV(csv, `${item.endpoint}-${selectedVenue.id}.csv`);
+      toast({ title: "Export complete", description: `${item.label} exported successfully.` });
+    } catch (err: any) {
+      toast({ title: "Export failed", description: err.message, variant: "destructive" });
+    } finally {
+      setLoading(null);
+    }
   };
 
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-semibold" data-testid="page-title">Export Data</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {exportCategories.map((cat) => (
-          <Card key={cat.label} data-testid={`export-card-${cat.label.toLowerCase().replace(/\s+/g, "-")}`}>
+        {exportItems.map((item) => (
+          <Card key={item.endpoint} data-testid={`export-card-${item.endpoint}`}>
             <CardHeader className="flex flex-row items-center gap-2 space-y-0 pb-2">
-              <cat.icon className="h-5 w-5 text-muted-foreground" />
-              <CardTitle className="text-sm font-medium">{cat.label}</CardTitle>
+              <item.icon className="h-5 w-5 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">{item.label}</CardTitle>
             </CardHeader>
             <CardContent>
               <Button
                 variant="outline"
-                onClick={() => handleExport(cat.label)}
-                data-testid={`button-export-${cat.label.toLowerCase().replace(/\s+/g, "-")}`}
+                onClick={() => handleExport(item)}
+                disabled={loading === item.endpoint}
+                data-testid={`button-export-${item.endpoint}`}
               >
-                <Download className="h-4 w-4 mr-2" />Export CSV
+                <Download className="h-4 w-4 mr-2" />
+                {loading === item.endpoint ? "Exporting..." : "Export CSV"}
               </Button>
             </CardContent>
           </Card>

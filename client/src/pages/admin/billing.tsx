@@ -10,6 +10,8 @@ import type { Venue } from "@shared/schema";
 interface PaymentSetting {
   id: number;
   venueId: string;
+  stripeSecretKey: string | null;
+  stripePublishableKey: string | null;
   stripeConnected: boolean | null;
   paypalConnected: boolean | null;
   depositAmount: string | null;
@@ -28,7 +30,6 @@ export default function AdminBilling() {
   });
 
   const isLoading = venuesLoading || paymentsLoading;
-
   const venueMap = new Map(venues.map((v) => [v.id, v]));
 
   return (
@@ -60,6 +61,7 @@ export default function AdminBilling() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Venue</TableHead>
+                  <TableHead>Stripe Key</TableHead>
                   <TableHead>Stripe</TableHead>
                   <TableHead>PayPal</TableHead>
                   <TableHead>Deposit</TableHead>
@@ -70,6 +72,9 @@ export default function AdminBilling() {
                   <TableRow key={ps.id} data-testid={`row-payment-${ps.id}`}>
                     <TableCell className="font-medium">
                       {venueMap.get(ps.venueId)?.name || ps.venueId}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground font-mono text-sm">
+                      {ps.stripePublishableKey ? `${ps.stripePublishableKey.slice(0, 12)}...` : "-"}
                     </TableCell>
                     <TableCell>
                       <Badge variant={ps.stripeConnected ? "default" : "outline"}>

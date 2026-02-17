@@ -10,6 +10,7 @@ import type { Venue } from "@shared/schema";
 interface TwilioSetting {
   id: number;
   venueId: string;
+  accountSid: string | null;
   phoneNumber: string | null;
   isConnected: boolean | null;
   voicePersona: string | null;
@@ -59,6 +60,7 @@ export default function AdminTwilio() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Venue</TableHead>
+                  <TableHead>Account SID</TableHead>
                   <TableHead>Phone Number</TableHead>
                   <TableHead>Connected</TableHead>
                   <TableHead>Voice Persona</TableHead>
@@ -71,13 +73,16 @@ export default function AdminTwilio() {
                     <TableCell className="font-medium">
                       {venueMap.get(ts.venueId)?.name || ts.venueId}
                     </TableCell>
-                    <TableCell>{ts.phoneNumber || "-"}</TableCell>
+                    <TableCell className="text-muted-foreground font-mono text-sm">
+                      {ts.accountSid ? `${ts.accountSid.slice(0, 10)}...` : "-"}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{ts.phoneNumber || "-"}</TableCell>
                     <TableCell>
                       <Badge variant={ts.isConnected ? "default" : "outline"}>
                         {ts.isConnected ? "Connected" : "Not Connected"}
                       </Badge>
                     </TableCell>
-                    <TableCell>{ts.voicePersona || "-"}</TableCell>
+                    <TableCell className="text-muted-foreground">{ts.voicePersona || "-"}</TableCell>
                     <TableCell className="text-muted-foreground">
                       {ts.maxCallDuration ? `${ts.maxCallDuration} min` : "-"}
                     </TableCell>

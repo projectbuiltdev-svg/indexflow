@@ -1,48 +1,62 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useVenue } from "@/lib/venue-context";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Table2 } from "lucide-react";
+
+const resourceFormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  type: z.string().min(1, "Type is required"),
+  capacity: z.coerce.number().min(1, "Capacity must be at least 1"),
+  description: z.string().optional(),
+});
+
+type ResourceFormValues = z.infer<typeof resourceFormSchema>;
 
 export default function SettingsResources() {
   const { selectedVenue } = useVenue();
   const venueId = selectedVenue?.id;
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", type: "table", capacity: "4" });
+
+  const form = useForm<ResourceFormValues>({
+    resolver: zodResolver(resourceFormSchema),
+    defaultValues: { name: "", type: "table", capacity: 4, description: "" },
+  });
 
   const { data: resources = [], isLoading } = useQuery<any[]>({
-    queryKey: ["/api/resources", { venueId }],
-    queryFn: async () => {
-      const res = await fetch(`/api/resources?venueId=${venueId}`);
-      return res.json();
-    },
+    queryKey: [`/api/resources?venueId=${venueId}`],
     enabled: !!venueId,
   });
 
   const createMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (values: ResourceFormValues) => {
       await apiRequest("POST", "/api/resources", {
         venueId,
-        name: form.name,
-        type: form.type,
-        capacity: parseInt(form.capacity),
+        name: values.name,
+        type: values.type,
+        capacity: values.capacity,
+        description: values.description || undefined,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/resources"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/resources?venueId=${venueId}`] });
       setDialogOpen(false);
-      setForm({ name: "", type: "table", capacity: "4" });
+      form.reset();
       toast({ title: "Resource added" });
     },
     onError: (err: Error) => {
@@ -51,7 +65,7 @@ export default function SettingsResources() {
   });
 
   if (!venueId) {
-    return <div className="p-6" data-testid="no-venue-message">Select a venue from the sidebar</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to manage resources.</div>;
   }
 
   if (isLoading) {
@@ -73,25 +87,36 @@ export default function SettingsResources() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>Add Resource</DialogTitle></DialogHeader>
-            <div className="space-y-4">
-              <div><Label>Name</Label><Input data-testid="input-resource-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-              <div>
-                <Label>Type</Label>
-                <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
-                  <SelectTrigger data-testid="select-resource-type"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="table">Table</SelectItem>
-                    <SelectItem value="booth">Booth</SelectItem>
-                    <SelectItem value="bar">Bar</SelectItem>
-                    <SelectItem value="patio">Patio</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div><Label>Capacity</Label><Input data-testid="input-resource-capacity" type="number" min="1" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} /></div>
-              <Button data-testid="button-submit-resource" className="w-full" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !form.name}>
-                {createMutation.isPending ? "Adding..." : "Add Resource"}
-              </Button>
-            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit((v) => createMutation.mutate(v))} className="space-y-4">
+                <FormField control={form.control} name="name" render={({ field }) => (
+                  <FormItem><FormLabel>Name</FormLabel><FormControl><Input data-testid="input-resource-name" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="type" render={({ field }) => (
+                  <FormItem><FormLabel>Type</FormLabel><FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger data-testid="select-resource-type"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="table">Table</SelectItem>
+                        <SelectItem value="booth">Booth</SelectItem>
+                        <SelectItem value="bar">Bar</SelectItem>
+                        <SelectItem value="patio">Patio</SelectItem>
+                        <SelectItem value="room">Room</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="capacity" render={({ field }) => (
+                  <FormItem><FormLabel>Capacity</FormLabel><FormControl><Input data-testid="input-resource-capacity" type="number" min="1" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="description" render={({ field }) => (
+                  <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea data-testid="input-resource-description" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <Button type="submit" className="w-full" disabled={createMutation.isPending} data-testid="button-submit-resource">
+                  {createMutation.isPending ? "Adding..." : "Add Resource"}
+                </Button>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>
