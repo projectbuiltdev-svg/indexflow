@@ -167,7 +167,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4 h-16">
             <div className="flex items-center gap-2">
-              <img src={logoPath} alt="IndexFlow" className="h-8" data-testid="img-logo" />
+              <img src={logoPath} alt="IndexFlow" className="h-32" data-testid="img-logo" />
             </div>
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors" data-testid="link-features">Features</a>
