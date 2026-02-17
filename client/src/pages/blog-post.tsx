@@ -20,7 +20,7 @@ interface PostData {
   description: string | null;
   category: string;
   tags: string[] | null;
-  compiled_html: string | null;
+  compiledHtml: string | null;
   publishedAt: string | null;
 }
 
@@ -68,10 +68,10 @@ function EditorialArticle({ post }: { post: PostData }) {
           <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
             <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> Resto Editorial</span>
             <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {formatDate(post.publishedAt)}</span>
-            <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {estimateReadTime(post.compiled_html)}</span>
+            <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {estimateReadTime(post.compiledHtml)}</span>
           </div>
         </header>
-        <div className={PROSE_BASE} dangerouslySetInnerHTML={{ __html: post.compiled_html || "" }} data-testid="post-body" />
+        <div className={PROSE_BASE} dangerouslySetInnerHTML={{ __html: post.compiledHtml || "" }} data-testid="post-body" />
         {post.tags && post.tags.length > 0 && (
           <footer className="mt-12 pt-6 border-t border-stone-200 dark:border-border">
             <div className="flex items-center gap-2 flex-wrap">
@@ -102,12 +102,12 @@ function MagazineArticle({ post }: { post: PostData }) {
           <div className="flex items-center gap-4 text-sm opacity-40 flex-wrap">
             <span>Resto Editorial</span>
             <span>{formatDate(post.publishedAt)}</span>
-            <span>{estimateReadTime(post.compiled_html)}</span>
+            <span>{estimateReadTime(post.compiledHtml)}</span>
           </div>
         </div>
       </div>
       <article className="max-w-3xl mx-auto px-4 sm:px-6 py-10 lg:py-14 bg-zinc-50 dark:bg-transparent">
-        <div className={PROSE_BASE} dangerouslySetInnerHTML={{ __html: post.compiled_html || "" }} data-testid="post-body" />
+        <div className={PROSE_BASE} dangerouslySetInnerHTML={{ __html: post.compiledHtml || "" }} data-testid="post-body" />
         {post.tags && post.tags.length > 0 && (
           <footer className="mt-12 pt-6 border-t border-border">
             <div className="flex items-center gap-2 flex-wrap">
@@ -136,10 +136,10 @@ function MinimalArticle({ post }: { post: PostData }) {
             <p className="text-muted-foreground leading-relaxed mb-4">{post.description}</p>
           )}
           <div className="text-xs text-muted-foreground/60">
-            Resto Editorial -- {formatDate(post.publishedAt)} -- {estimateReadTime(post.compiled_html)}
+            Resto Editorial -- {formatDate(post.publishedAt)} -- {estimateReadTime(post.compiledHtml)}
           </div>
         </header>
-        <div className={`${PROSE_BASE} prose-base`} dangerouslySetInnerHTML={{ __html: post.compiled_html || "" }} data-testid="post-body" />
+        <div className={`${PROSE_BASE} prose-base`} dangerouslySetInnerHTML={{ __html: post.compiledHtml || "" }} data-testid="post-body" />
         {post.tags && post.tags.length > 0 && (
           <footer className="mt-10 pt-6 border-t border-border">
             <div className="flex items-center gap-2 flex-wrap">
@@ -167,10 +167,10 @@ function ClassicArticle({ post }: { post: PostData }) {
             <p className="text-muted-foreground font-serif leading-relaxed max-w-2xl mx-auto mb-4">{post.description}</p>
           )}
           <div className="text-xs text-muted-foreground/60 font-serif italic">
-            By Resto Editorial -- {formatDate(post.publishedAt)} -- {estimateReadTime(post.compiled_html)}
+            By Resto Editorial -- {formatDate(post.publishedAt)} -- {estimateReadTime(post.compiledHtml)}
           </div>
         </header>
-        <div className={`${PROSE_BASE} prose-headings:font-serif`} dangerouslySetInnerHTML={{ __html: post.compiled_html || "" }} data-testid="post-body" />
+        <div className={`${PROSE_BASE} prose-headings:font-serif`} dangerouslySetInnerHTML={{ __html: post.compiledHtml || "" }} data-testid="post-body" />
         {post.tags && post.tags.length > 0 && (
           <footer className="mt-12 pt-6 border-t-2 border-double border-amber-200/50 dark:border-foreground/20 text-center">
             <div className="flex items-center justify-center gap-2 flex-wrap">
@@ -200,13 +200,13 @@ function GridArticle({ post }: { post: PostData }) {
           <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
             <span>Resto Editorial</span>
             <span>{formatDate(post.publishedAt)}</span>
-            <span>{estimateReadTime(post.compiled_html)}</span>
+            <span>{estimateReadTime(post.compiledHtml)}</span>
           </div>
         </div>
       </div>
       <article className="max-w-3xl mx-auto px-4 sm:px-6 pb-12 lg:pb-16">
         <div className="bg-white dark:bg-card border border-slate-200 dark:border-border rounded-md p-6 lg:p-10">
-          <div className={PROSE_BASE} dangerouslySetInnerHTML={{ __html: post.compiled_html || "" }} data-testid="post-body" />
+          <div className={PROSE_BASE} dangerouslySetInnerHTML={{ __html: post.compiledHtml || "" }} data-testid="post-body" />
         </div>
         {post.tags && post.tags.length > 0 && (
           <footer className="mt-6 flex items-center gap-2 flex-wrap">
@@ -233,12 +233,12 @@ function BrutalistArticle({ post }: { post: PostData }) {
             <p className="text-lg opacity-60 leading-relaxed max-w-3xl mb-4">{post.description}</p>
           )}
           <div className="text-xs font-mono opacity-40 uppercase">
-            Resto Editorial / {formatDate(post.publishedAt)} / {estimateReadTime(post.compiled_html)}
+            Resto Editorial / {formatDate(post.publishedAt)} / {estimateReadTime(post.compiledHtml)}
           </div>
         </div>
       </div>
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
-        <div className={`${PROSE_BASE} prose-headings:uppercase prose-headings:font-black`} dangerouslySetInnerHTML={{ __html: post.compiled_html || "" }} data-testid="post-body" />
+        <div className={`${PROSE_BASE} prose-headings:uppercase prose-headings:font-black`} dangerouslySetInnerHTML={{ __html: post.compiledHtml || "" }} data-testid="post-body" />
         {post.tags && post.tags.length > 0 && (
           <footer className="mt-12 pt-6 border-t-4 border-foreground">
             <div className="flex items-center gap-2 flex-wrap">

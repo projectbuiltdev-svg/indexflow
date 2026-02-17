@@ -1303,11 +1303,17 @@ export async function registerRoutes(
   app.get("/api/public/blog/posts", async (req, res) => {
     try {
       const domain = req.query.domain as string;
-      if (!domain) return res.json([]);
+      if (!domain) return res.json({ blogTemplate: "editorial", accentColor: null, accentForeground: null, posts: [] });
       const domainRecord = await storage.getVenueDomainByDomain(domain);
-      if (!domainRecord) return res.json([]);
+      if (!domainRecord) return res.json({ blogTemplate: "editorial", accentColor: null, accentForeground: null, posts: [] });
+      const venue = await storage.getVenue(domainRecord.venueId);
       const posts = await storage.getVenueBlogPosts(domainRecord.venueId, "published");
-      res.json(posts);
+      res.json({
+        blogTemplate: (venue as any)?.blogTemplate || "editorial",
+        accentColor: (venue as any)?.accentColor || null,
+        accentForeground: (venue as any)?.accentForeground || null,
+        posts,
+      });
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch blog posts" });
     }
