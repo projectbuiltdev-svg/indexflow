@@ -1,0 +1,818 @@
+import type { Express, Request, Response } from "express";
+import { storage } from "./storage";
+import { compileMdxToHtml } from "./mdx-compiler";
+import { insertVenueBlogPostSchema, insertVenueDomainSchema, insertContentAssetSchema, insertContentAssetUsageSchema, blogTemplates } from "@shared/schema";
+import { z } from "zod";
+import { bulkCreateDraftPosts, generateCampaignDrafts, generateSingleDraft } from "./draft-generator";
+import { randomUUID } from "crypto";
+import OpenAI from "openai";
+import fs from "fs";
+import path from "path";
+
+const VALID_CATEGORIES = [
+  "general", "booking-systems", "ai-automation", "voice-sms", "website-design",
+  "payments-deposits", "comparisons", "pricing-cost", "industry-guides",
+  "local-guides", "operations-management",
+];
+
+function normalizeCategory(cat: string | undefined | null): string {
+  if (!cat) return "general";
+  const lower = cat.trim().toLowerCase();
+  return VALID_CATEGORIES.includes(lower) ? lower : "general";
+}
+
+function normalizeTags(tags: any): string[] | null {
+  if (!Array.isArray(tags)) return null;
+  const normalized = tags
+    .map((t: any) => String(t).trim().toLowerCase())
+    .filter((t: string) => t.length > 0 && t.length <= 50);
+  const unique = Array.from(new Set(normalized));
+  return unique.length > 0 ? unique.slice(0, 20) : null;
+}
+
+function isSuperAdmin(req: Request): boolean {
+  const session = (req as any).session;
+  if (session?.adminRole === "super_admin") return true;
+  const authHeader = req.headers["x-admin-role"];
+  if (authHeader === "super_admin") return true;
+  return false;
+}
+
+function requireSuperAdmin(req: Request, res: Response): boolean {
+  if (!isSuperAdmin(req)) {
+    res.status(403).json({ error: "Forbidden: super_admin required" });
+    return false;
+  }
+  return true;
+}
+
+export function registerContentRoutes(app: Express) {
+
+  app.get("/api/admin/venues", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const venues = await storage.getVenues();
+      const restoVenue = {
+        id: "resto-platform",
+        shardId: 0,
+        ownerId: "system",
+        name: "Resto.Restaurant",
+        type: "platform",
+        address: null,
+        city: null,
+        state: null,
+        postalCode: null,
+        country: null,
+        phone: null,
+        email: null,
+        website: "https://resto.restaurant",
+        latitude: null,
+        longitude: null,
+        timezone: "UTC",
+        plan: "complete",
+        status: "active",
+        createdAt: new Date("2024-01-01"),
+        updatedAt: new Date(),
+      };
+      res.json([restoVenue, ...venues]);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const data = insertVenueBlogPostSchema.parse({
+        ...req.body,
+        category: normalizeCategory(req.body.category),
+        tags: normalizeTags(req.body.tags),
+      });
+      const post = await storage.createVenueBlogPost(data);
+      res.status(201).json(post);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+
+  app.put("/api/admin/blog/posts/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const updates = { ...req.body };
+      if ("category" in updates) updates.category = normalizeCategory(updates.category);
+      if ("tags" in updates) updates.tags = normalizeTags(updates.tags);
+      const post = await storage.updateVenueBlogPost(req.params.id, updates);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+      res.json(post);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/posts", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const venueId = req.query.venueId as string;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+      const status = req.query.status as string | undefined;
+      const posts = await storage.getVenueBlogPosts(venueId, status);
+      res.json(posts);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/posts/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+      res.json(post);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.delete("/api/admin/blog/posts/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const deleted = await storage.deleteVenueBlogPost(req.params.id);
+      if (!deleted) return res.status(404).json({ error: "Post not found" });
+      res.json({ success: true });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/publish-now", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const { html, errors } = await compileMdxToHtml(post.mdxContent);
+      if (errors.length > 0) {
+        return res.status(400).json({ error: "MDX compilation failed", errors });
+      }
+
+      const updated = await storage.updateVenueBlogPost(post.id, {
+        compiledHtml: html,
+        status: "published",
+        publishedAt: new Date(),
+      });
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/process-images", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const mdx = post.mdxContent;
+      if (!mdx) return res.status(400).json({ error: "Post has no content" });
+
+      const promptRegex = /<BlogImage\s+prompt="([^"]+)"\s*\/>/g;
+      const placeholders: Array<{ fullMatch: string; prompt: string; index: number }> = [];
+      let match;
+      while ((match = promptRegex.exec(mdx)) !== null) {
+        placeholders.push({ fullMatch: match[0], prompt: match[1], index: placeholders.length });
+      }
+
+      if (placeholders.length === 0) {
+        return res.json({ message: "No image placeholders found", images: [], updatedMdx: mdx });
+      }
+
+      const openai = new OpenAI({
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+      });
+
+      const seoPrompt = `You are an SEO specialist. For each image prompt below, generate optimized image metadata.
+
+Post title: "${post.title}"
+Post category: "${post.category || "general"}"
+Target keyword: "${post.primaryKeyword || ""}"
+
+For EACH image prompt, return a JSON object with:
+- "alt": SEO-optimized alt text (60-125 chars, include target keyword naturally in at least one, describe the image accurately)
+- "caption": A brief, informative caption for below the image (optional, 1 sentence)
+- "searchQuery": An optimized search query for stock photo banks (3-6 words, specific and searchable)
+- "schemaType": The schema.org ImageObject type context ("photograph", "illustration", or "infographic")
+
+Return a JSON array with one object per image, in order. Return ONLY valid JSON, no markdown.
+
+Image prompts:
+${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [{ role: "user", content: seoPrompt }],
+        max_tokens: 2048,
+        temperature: 0.3,
+      });
+
+      let imageData: Array<{ alt: string; caption: string; searchQuery: string; schemaType: string }> = [];
+      try {
+        const raw = response.choices[0]?.message?.content || "[]";
+        const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+        imageData = JSON.parse(cleaned);
+      } catch {
+        return res.status(500).json({ error: "Failed to parse AI response for image SEO" });
+      }
+
+      const images = placeholders.map((p, i) => ({
+        index: i,
+        prompt: p.prompt,
+        alt: imageData[i]?.alt || p.prompt.slice(0, 125),
+        caption: imageData[i]?.caption || "",
+        searchQuery: imageData[i]?.searchQuery || p.prompt.split(",")[0].trim(),
+        schemaType: imageData[i]?.schemaType || "photograph",
+        originalTag: p.fullMatch,
+      }));
+
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "name": post.title,
+        "image": images.map((img) => ({
+          "@type": "ImageObject",
+          "description": img.alt,
+          "caption": img.caption,
+          "representativeOfPage": img.index === 0,
+        })),
+      };
+
+      res.json({
+        postId: post.id,
+        title: post.title,
+        placeholderCount: placeholders.length,
+        images,
+        schema,
+        message: `Processed ${images.length} image placeholders with SEO metadata`,
+      });
+    } catch (err: any) {
+      console.error("[ProcessImages] Error:", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/apply-images", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const { images } = req.body;
+      if (!images || !Array.isArray(images)) {
+        return res.status(400).json({ error: "images array required with src, alt, caption for each placeholder" });
+      }
+
+      let updatedMdx = post.mdxContent;
+      const promptRegex = /<BlogImage\s+prompt="([^"]+)"\s*\/>/g;
+      const matches: string[] = [];
+      let m;
+      while ((m = promptRegex.exec(post.mdxContent)) !== null) {
+        matches.push(m[0]);
+      }
+
+      if (images.length < matches.length) {
+        return res.status(400).json({ error: `Provided ${images.length} images but post has ${matches.length} placeholders` });
+      }
+
+      const sanitizeAttr = (val: string): string => {
+        return val.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      };
+      const validateUrl = (url: string): string => {
+        const trimmed = (url || "").trim();
+        if (/^https?:\/\//i.test(trimmed)) return sanitizeAttr(trimmed);
+        return "";
+      };
+
+      for (let i = 0; i < Math.min(matches.length, images.length); i++) {
+        const img = images[i];
+        const safeSrc = validateUrl(img.src);
+        if (!safeSrc) continue;
+        const attrs = [
+          `src="${safeSrc}"`,
+          `alt="${sanitizeAttr(img.alt || "")}"`,
+        ];
+        if (img.caption) attrs.push(`caption="${sanitizeAttr(img.caption)}"`);
+        if (img.credit) attrs.push(`credit="${sanitizeAttr(img.credit)}"`);
+        if (img.creditUrl) {
+          const safeCredit = validateUrl(img.creditUrl);
+          if (safeCredit) attrs.push(`creditUrl="${safeCredit}"`);
+        }
+        const replacement = `<BlogImage ${attrs.join(" ")} />`;
+        updatedMdx = updatedMdx.replace(matches[i], replacement);
+      }
+
+      const { html, errors } = await compileMdxToHtml(updatedMdx);
+      if (errors.length > 0) {
+        return res.status(400).json({ error: "MDX compilation failed after image replacement", errors });
+      }
+
+      const updated = await storage.updateVenueBlogPost(post.id, {
+        mdxContent: updatedMdx,
+        compiledHtml: html,
+      });
+
+      res.json({
+        message: `Applied ${images.filter((img: any) => img.src).length} images to post`,
+        post: updated,
+      });
+    } catch (err: any) {
+      console.error("[ApplyImages] Error:", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/schedule", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { publish_at } = req.body;
+      if (!publish_at) return res.status(400).json({ error: "publish_at required" });
+
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const updated = await storage.updateVenueBlogPost(post.id, {
+        status: "scheduled",
+        publishAt: new Date(publish_at),
+      });
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/content/preview", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { mdx } = req.body;
+      if (!mdx) return res.status(400).json({ error: "mdx required" });
+      const result = await compileMdxToHtml(mdx);
+      res.json(result);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/assets/search", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const source = (req.query.source as string) || "pexels";
+      const q = req.query.q as string;
+      const page = parseInt(req.query.page as string) || 1;
+      if (!q) return res.status(400).json({ error: "q (query) required" });
+
+      let results: any[] = [];
+
+      if (source === "pexels") {
+        const apiKey = process.env.PEXELS_API_KEY;
+        if (!apiKey) return res.status(503).json({ error: "Stock image search is not available" });
+        const resp = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(q)}&per_page=20&page=${page}`, {
+          headers: { Authorization: apiKey },
+        });
+        const data = await resp.json() as any;
+        results = (data.photos || []).map((p: any) => ({
+          source: "pexels",
+          source_asset_id: String(p.id),
+          thumb_url: p.src?.medium || p.src?.small,
+          full_url: p.src?.large2x || p.src?.original,
+          width: p.width,
+          height: p.height,
+          credit_name: p.photographer,
+          credit_url: p.photographer_url,
+          license_note: "Pexels License",
+        }));
+      } else if (source === "unsplash") {
+        const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+        if (!accessKey) return res.status(503).json({ error: "Stock image search is not available" });
+        const unsplashUrl = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(q)}&per_page=30&page=${page}`;
+        const resp = await fetch(unsplashUrl, {
+          headers: { Authorization: `Client-ID ${accessKey}` },
+        });
+        const data = await resp.json() as any;
+        if (data.errors) {
+          console.error("Unsplash API error:", data.errors);
+          return res.status(resp.status).json({ error: data.errors.join(", ") });
+        }
+        console.log(`Unsplash search "${q}": total=${data.total}, results=${(data.results || []).length}`);
+        results = (data.results || []).map((p: any) => ({
+          source: "unsplash",
+          source_asset_id: p.id,
+          thumb_url: p.urls?.small,
+          full_url: p.urls?.full,
+          width: p.width,
+          height: p.height,
+          credit_name: p.user?.name,
+          credit_url: p.user?.links?.html,
+          license_note: "Unsplash License",
+        }));
+      } else if (source === "pixabay") {
+        const apiKey = process.env.PIXABAY_API_KEY;
+        if (!apiKey) return res.status(503).json({ error: "Stock image search is not available" });
+        const resp = await fetch(`https://pixabay.com/api/?key=${apiKey}&q=${encodeURIComponent(q)}&per_page=20&page=${page}&image_type=photo`);
+        const data = await resp.json() as any;
+        results = (data.hits || []).map((p: any) => ({
+          source: "pixabay",
+          source_asset_id: String(p.id),
+          thumb_url: p.webformatURL,
+          full_url: p.largeImageURL,
+          width: p.imageWidth,
+          height: p.imageHeight,
+          credit_name: p.user,
+          credit_url: `https://pixabay.com/users/${p.user}-${p.user_id}/`,
+          license_note: "Pixabay License",
+        }));
+      }
+
+      res.json(results);
+    } catch (err: any) {
+      res.status(500).json({ error: "Failed to search stock images" });
+    }
+  });
+
+  app.post("/api/admin/assets/save", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const data = insertContentAssetSchema.parse(req.body);
+      const asset = await storage.createContentAsset({
+        ...data,
+        publicUrl: data.originalUrl,
+      });
+      res.status(201).json(asset);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:postId/assets/attach", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const data = insertContentAssetUsageSchema.parse({
+        ...req.body,
+        postId: req.params.postId,
+      });
+      const usage = await storage.createContentAssetUsage(data);
+      res.status(201).json(usage);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/domains", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const venueId = req.query.venueId as string;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+      const domains = await storage.getVenueDomains(venueId);
+      res.json(domains);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/domains", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const data = insertVenueDomainSchema.parse(req.body);
+      const domain = await storage.createVenueDomain(data);
+      res.status(201).json(domain);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+
+  app.patch("/api/admin/blog/domains/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const updateSchema = z.object({
+        blogTemplate: z.enum(blogTemplates).optional(),
+        isPrimary: z.boolean().optional(),
+        accentColor: z.string().max(20).optional().nullable(),
+        accentForeground: z.string().max(20).optional().nullable(),
+      });
+      const data = updateSchema.parse(req.body);
+      const updated = await storage.updateVenueDomain(req.params.id, data);
+      if (!updated) return res.status(404).json({ error: "Domain not found" });
+      res.json(updated);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+
+  app.delete("/api/admin/blog/domains/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const deleted = await storage.deleteVenueDomain(req.params.id);
+      if (!deleted) return res.status(404).json({ error: "Domain not found" });
+      res.json({ success: true });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  const bulkCreateSchema = z.object({
+    venueId: z.string().min(1),
+    posts: z.array(z.object({
+      title: z.string().min(1),
+      primaryKeyword: z.string().min(1),
+      intent: z.string().optional(),
+      funnel: z.string().optional(),
+      category: z.string().optional(),
+    })).min(1).max(50),
+  });
+
+  app.post("/api/admin/blog/posts/bulk/create", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const data = bulkCreateSchema.parse(req.body);
+      const campaignId = randomUUID();
+      await storage.createContentCampaign({
+        id: campaignId,
+        venueId: data.venueId,
+        name: `Bulk ${new Date().toISOString().slice(0, 10)}`,
+        status: "active",
+        postsTotal: data.posts.length,
+      });
+      const posts = await bulkCreateDraftPosts({
+        venueId: data.venueId,
+        campaignId,
+        posts: data.posts,
+      });
+      res.status(201).json({ campaignId, posts });
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/bulk/generate", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { venueId, campaignId } = req.body;
+      if (!venueId || !campaignId) {
+        return res.status(400).json({ error: "venueId and campaignId required" });
+      }
+
+      res.writeHead(200, {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      });
+
+      const sendSSE = (data: any) => {
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+      };
+
+      sendSSE({ type: "started" });
+
+      const result = await generateCampaignDrafts(venueId, campaignId, (completed, total) => {
+        sendSSE({ type: "progress", completed, total });
+      });
+
+      sendSSE({ type: "complete", ...result });
+      res.end();
+    } catch (err: any) {
+      if (!res.headersSent) {
+        res.status(500).json({ error: err.message });
+      } else {
+        res.write(`data: ${JSON.stringify({ type: "error", message: err.message })}\n\n`);
+        res.end();
+      }
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/regenerate", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      await storage.updateVenueBlogPost(req.params.id, {
+        generationStatus: "pending",
+        qualityGateStatus: "unknown",
+        qualityFailReasons: null,
+        mdxContent: "",
+      });
+      const result = await generateSingleDraft(req.params.id);
+      if (!result) return res.status(500).json({ error: "Generation failed" });
+      res.json(result);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/approve-and-schedule", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const { publish_at } = req.body;
+
+      const { html, errors } = await compileMdxToHtml(post.mdxContent);
+      if (errors.length > 0) {
+        return res.status(400).json({ error: "MDX compilation failed", errors });
+      }
+
+      if (publish_at) {
+        const updated = await storage.updateVenueBlogPost(post.id, {
+          compiledHtml: html,
+          status: "scheduled",
+          publishAt: new Date(publish_at),
+          generationStatus: "generated",
+          qualityGateStatus: "pass",
+        });
+        res.json(updated);
+      } else {
+        const updated = await storage.updateVenueBlogPost(post.id, {
+          compiledHtml: html,
+          status: "published",
+          publishedAt: new Date(),
+          generationStatus: "generated",
+          qualityGateStatus: "pass",
+        });
+        res.json(updated);
+      }
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/campaigns/:venueId", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const campaigns = await storage.getVenueCampaigns(req.params.venueId);
+      res.json(campaigns);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/posts/campaign/:venueId/:campaignId", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const posts = await storage.getVenueBlogPostsByCampaign(req.params.venueId, req.params.campaignId);
+      res.json(posts);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/export-mdx", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { venueId } = req.body;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+
+      const posts = await storage.getVenueBlogPosts(venueId);
+      const exportable = posts.filter(p => p.mdxContent && p.mdxContent.length > 100);
+
+      if (exportable.length === 0) {
+        return res.json({ exported: 0, message: "No posts with content to export" });
+      }
+
+      const baseDir = path.resolve(process.cwd(), "apps", "marketing", "content", "blog");
+      const exported: string[] = [];
+
+      for (const post of exportable) {
+        const category = normalizeCategory(post.category);
+        const safeSlug = (post.slug || "untitled").replace(/[^a-z0-9-]/g, "-").replace(/(^-|-$)+/g, "").slice(0, 120) || "untitled";
+        const categoryDir = path.join(baseDir, category);
+        fs.mkdirSync(categoryDir, { recursive: true });
+
+        const date = post.publishedAt
+          ? new Date(post.publishedAt).toISOString().slice(0, 10)
+          : post.createdAt
+          ? new Date(post.createdAt).toISOString().slice(0, 10)
+          : new Date().toISOString().slice(0, 10);
+
+        const description = post.description || `Learn about ${post.primaryKeyword || post.title}. Expert insights for hospitality businesses.`;
+
+        const frontmatter = [
+          "---",
+          `title: "${post.title.replace(/"/g, '\\"')}"`,
+          `description: "${description.replace(/"/g, '\\"')}"`,
+          `date: "${date}"`,
+          `slug: "${post.slug}"`,
+          `category: "${category}"`,
+          post.primaryKeyword ? `keyword: "${post.primaryKeyword}"` : null,
+          post.intent ? `intent: "${post.intent}"` : null,
+          post.funnel ? `funnel: "${post.funnel}"` : null,
+          post.tags && post.tags.length > 0 ? `tags: [${post.tags.map(t => `"${t}"`).join(", ")}]` : null,
+          "---",
+        ].filter(Boolean).join("\n");
+
+        const mdxBody = post.mdxContent.replace(/```mdx\n?/g, "").replace(/```\n?$/g, "").trim();
+        const fileContent = `${frontmatter}\n\n${mdxBody}\n`;
+
+        const filePath = path.join(categoryDir, `${safeSlug}.mdx`);
+        fs.writeFileSync(filePath, fileContent, "utf-8");
+        exported.push(`${category}/${safeSlug}.mdx`);
+      }
+
+      res.json({
+        exported: exported.length,
+        files: exported,
+        outputDir: baseDir,
+      });
+    } catch (err: any) {
+      console.error("[ExportMDX] Error:", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/public/blog/posts", async (req, res) => {
+    try {
+      const domain = (req.query.domain as string) || req.hostname;
+      const normalized = domain.toLowerCase().replace(/^www\./, "").split(":")[0];
+
+      const venueDomain = await storage.getVenueDomainByDomain(normalized);
+      if (!venueDomain) {
+        return res.status(404).json({ error: "Domain not found" });
+      }
+
+      const posts = await storage.getPublishedPostsByVenue(venueDomain.venueId);
+      const safeList = posts.map(p => ({
+        slug: p.slug,
+        title: p.title,
+        description: p.description,
+        category: p.category,
+        tags: p.tags,
+        publishedAt: p.publishedAt,
+      }));
+
+      res.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
+      res.json({
+        blogTemplate: venueDomain.blogTemplate || "editorial",
+        accentColor: venueDomain.accentColor || null,
+        accentForeground: venueDomain.accentForeground || null,
+        posts: safeList,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/public/blog/post", async (req, res) => {
+    try {
+      const domain = (req.query.domain as string) || req.hostname;
+      const slug = req.query.slug as string;
+      if (!slug) return res.status(400).json({ error: "slug required" });
+
+      const normalized = domain.toLowerCase().replace(/^www\./, "").split(":")[0];
+      const venueDomain = await storage.getVenueDomainByDomain(normalized);
+      if (!venueDomain) {
+        return res.status(404).json({ error: "Domain not found" });
+      }
+
+      const post = await storage.getVenueBlogPostBySlug(venueDomain.venueId, slug);
+      if (!post || post.status !== "published") {
+        return res.status(404).json({ error: "Post not found" });
+      }
+
+      res.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
+      res.json({
+        blogTemplate: venueDomain.blogTemplate || "editorial",
+        accentColor: venueDomain.accentColor || null,
+        accentForeground: venueDomain.accentForeground || null,
+        slug: post.slug,
+        title: post.title,
+        description: post.description,
+        category: post.category,
+        tags: post.tags,
+        compiled_html: post.compiledHtml,
+        publishedAt: post.publishedAt,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+}
+
+export async function runScheduledPublisher() {
+  try {
+    const duePosts = await storage.getScheduledPostsDue();
+    for (const post of duePosts) {
+      try {
+        const { html, errors } = await compileMdxToHtml(post.mdxContent);
+        if (errors.length === 0) {
+          await storage.updateVenueBlogPost(post.id, {
+            compiledHtml: html,
+            status: "published",
+            publishedAt: new Date(),
+          });
+          console.log(`[Scheduler] Published post: ${post.title} (${post.id})`);
+        } else {
+          console.error(`[Scheduler] MDX errors for post ${post.id}:`, errors);
+        }
+      } catch (err) {
+        console.error(`[Scheduler] Failed to publish post ${post.id}:`, err);
+      }
+    }
+  } catch (err) {
+    console.error("[Scheduler] Error:", err);
+  }
+}
