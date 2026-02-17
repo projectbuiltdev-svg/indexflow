@@ -939,8 +939,17 @@ export async function registerRoutes(
     }
   });
 
+  // Admin auth middleware - protects all /api/admin/* routes in production
+  const requireAdminAuth = (req: any, res: any, next: any) => {
+    if (process.env.NODE_ENV === "production") {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    }
+    next();
+  };
+
   // Admin aggregate endpoints (used by admin dashboard pages)
-  app.get("/api/admin/venues", async (req, res) => {
+  app.get("/api/admin/venues", requireAdminAuth, async (req, res) => {
     try {
       const venues = await storage.getVenues();
       res.json(venues);
@@ -949,7 +958,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/call-logs", async (req, res) => {
+  app.get("/api/admin/call-logs", requireAdminAuth, async (req, res) => {
     try {
       const venues = await storage.getVenues();
       const allLogs: any[] = [];
@@ -968,7 +977,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/widget-settings", async (req, res) => {
+  app.get("/api/admin/widget-settings", requireAdminAuth, async (req, res) => {
     try {
       const venues = await storage.getVenues();
       const allSettings: any[] = [];
@@ -982,7 +991,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/blog/posts", async (req, res) => {
+  app.get("/api/admin/blog/posts", requireAdminAuth, async (req, res) => {
     try {
       const venueId = req.query.venueId as string;
       if (!venueId) return res.json([]);
@@ -993,7 +1002,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/admin/blog/posts", async (req, res) => {
+  app.post("/api/admin/blog/posts", requireAdminAuth, async (req, res) => {
     try {
       const post = await storage.createVenueBlogPost(req.body);
       res.json(post);
@@ -1002,7 +1011,7 @@ export async function registerRoutes(
     }
   });
 
-  app.put("/api/admin/blog/posts/:id", async (req, res) => {
+  app.put("/api/admin/blog/posts/:id", requireAdminAuth, async (req, res) => {
     try {
       const post = await storage.updateVenueBlogPost(req.params.id, req.body);
       res.json(post);
@@ -1011,7 +1020,7 @@ export async function registerRoutes(
     }
   });
 
-  app.delete("/api/admin/blog/posts/:id", async (req, res) => {
+  app.delete("/api/admin/blog/posts/:id", requireAdminAuth, async (req, res) => {
     try {
       await storage.deleteVenueBlogPost(req.params.id);
       res.json({ success: true });
@@ -1020,7 +1029,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/admin/blog/posts/:id/publish-now", async (req, res) => {
+  app.post("/api/admin/blog/posts/:id/publish-now", requireAdminAuth, async (req, res) => {
     try {
       const post = await storage.updateVenueBlogPost(req.params.id, { status: "published", publishedAt: new Date() });
       res.json(post);
@@ -1029,7 +1038,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/admin/blog/posts/:id/schedule", async (req, res) => {
+  app.post("/api/admin/blog/posts/:id/schedule", requireAdminAuth, async (req, res) => {
     try {
       const post = await storage.updateVenueBlogPost(req.params.id, { status: "scheduled", publishAt: new Date(req.body.publishAt) });
       res.json(post);
@@ -1038,7 +1047,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/blog/posts/campaign/:venueId/:campaignId", async (req, res) => {
+  app.get("/api/admin/blog/posts/campaign/:venueId/:campaignId", requireAdminAuth, async (req, res) => {
     try {
       const posts = await storage.getVenueBlogPostsByCampaign(req.params.venueId, req.params.campaignId);
       res.json(posts);
@@ -1047,7 +1056,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/blog/domains", async (req, res) => {
+  app.get("/api/admin/blog/domains", requireAdminAuth, async (req, res) => {
     try {
       const venueId = req.query.venueId as string;
       if (!venueId) return res.json([]);
@@ -1058,7 +1067,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/admin/blog/domains", async (req, res) => {
+  app.post("/api/admin/blog/domains", requireAdminAuth, async (req, res) => {
     try {
       const domain = await storage.createVenueDomain(req.body);
       res.json(domain);
@@ -1067,7 +1076,7 @@ export async function registerRoutes(
     }
   });
 
-  app.delete("/api/admin/blog/domains/:id", async (req, res) => {
+  app.delete("/api/admin/blog/domains/:id", requireAdminAuth, async (req, res) => {
     try {
       await storage.deleteVenueDomain(req.params.id);
       res.json({ success: true });
@@ -1076,7 +1085,7 @@ export async function registerRoutes(
     }
   });
 
-  app.patch("/api/admin/blog/domains/:id", async (req, res) => {
+  app.patch("/api/admin/blog/domains/:id", requireAdminAuth, async (req, res) => {
     try {
       const domain = await storage.updateVenueDomain(req.params.id, req.body);
       res.json(domain);
@@ -1085,7 +1094,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/blog/campaigns/:venueId", async (req, res) => {
+  app.get("/api/admin/blog/campaigns/:venueId", requireAdminAuth, async (req, res) => {
     try {
       const campaigns = await storage.getVenueCampaigns(req.params.venueId);
       res.json(campaigns);
@@ -1094,7 +1103,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/assets/search", async (req, res) => {
+  app.get("/api/admin/assets/search", requireAdminAuth, async (req, res) => {
     try {
       res.json([]);
     } catch (error) {
@@ -1102,7 +1111,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/admin/assets/save", async (req, res) => {
+  app.post("/api/admin/assets/save", requireAdminAuth, async (req, res) => {
     try {
       res.json({ id: Date.now(), ...req.body });
     } catch (error) {
@@ -1110,7 +1119,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/admin/blog/posts/bulk/create", async (req, res) => {
+  app.post("/api/admin/blog/posts/bulk/create", requireAdminAuth, async (req, res) => {
     try {
       const posts = req.body.posts || [];
       const created = [];
@@ -1124,7 +1133,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/admin/blog/posts/bulk/generate", async (req, res) => {
+  app.post("/api/admin/blog/posts/bulk/generate", requireAdminAuth, async (req, res) => {
     try {
       res.json({ message: "Content generation is not available in this environment" });
     } catch (error) {
@@ -1132,7 +1141,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/admin/content/preview", async (req, res) => {
+  app.post("/api/admin/content/preview", requireAdminAuth, async (req, res) => {
     try {
       res.json({ html: req.body.content || "" });
     } catch (error) {
