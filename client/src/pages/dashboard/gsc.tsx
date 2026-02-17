@@ -32,7 +32,7 @@ export default function GscAnalytics() {
   const avgCtr = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100).toFixed(1) : "0";
   const avgPos = gscData?.length
     ? (gscData.reduce((sum, d) => sum + (d.position || 0), 0) / gscData.length).toFixed(1)
-    : "—";
+    : "\u2014";
 
   const dateMap = new Map<string, { clicks: number; impressions: number }>();
   gscData?.forEach((d) => {
@@ -143,15 +143,15 @@ export default function GscAnalytics() {
                   <TableRow key={q.id} data-testid={`row-gsc-${q.id}`}>
                     <TableCell className="font-medium text-sm">{q.query}</TableCell>
                     <TableCell className="text-xs text-muted-foreground truncate max-w-[200px]">
-                      {q.page || "—"}
+                      {q.page || "\u2014"}
                     </TableCell>
                     <TableCell className="text-right font-mono text-sm">{q.clicks}</TableCell>
                     <TableCell className="text-right font-mono text-sm">{q.impressions}</TableCell>
                     <TableCell className="text-right font-mono text-sm">
-                      {q.ctr ? `${(q.ctr * 100).toFixed(1)}%` : "—"}
+                      {q.ctr ? `${(q.ctr * 100).toFixed(1)}%` : "\u2014"}
                     </TableCell>
                     <TableCell className="text-right font-mono text-sm">
-                      {q.position ? q.position.toFixed(1) : "—"}
+                      {q.position ? q.position.toFixed(1) : "\u2014"}
                     </TableCell>
                   </TableRow>
                 ))

@@ -122,14 +122,14 @@ export default function LeadsCRM() {
                           {lead.keyword}
                         </Badge>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">{"\u2014"}</span>
                       )}
                     </TableCell>
                     <TableCell>
                       <LeadStatusBadge status={lead.status} />
                     </TableCell>
                     <TableCell className="text-xs text-muted-foreground">
-                      {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "—"}
+                      {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "\u2014"}
                     </TableCell>
                   </TableRow>
                 ))

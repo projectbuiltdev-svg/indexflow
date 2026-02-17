@@ -3,7 +3,18 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Grid3X3, MapPin, TrendingUp, Eye } from "lucide-react";
-import type { GridResult } from "@shared/schema";
+
+interface GridScanWithKeyword {
+  id: string;
+  gridKeywordId: string;
+  workspaceId: string;
+  gridData: number[][];
+  avgRank: number | null;
+  visibility: number | null;
+  scannedAt: string | null;
+  keyword: string;
+  location: string;
+}
 
 function GridCell({ rank }: { rank: number }) {
   let bgClass = "bg-red-500/20 text-red-700 dark:text-red-400";
@@ -29,17 +40,19 @@ function SearchGrid({ gridData }: { gridData: number[][] }) {
 }
 
 export default function LocalGrid() {
-  const { data: gridResults, isLoading } = useQuery<GridResult[]>({
-    queryKey: ["/api/grid-results"],
+  const { data: results, isLoading } = useQuery<GridScanWithKeyword[]>({
+    queryKey: ["/api/grid-scan-results-with-keywords"],
   });
 
-  const avgVisibility = gridResults?.length
-    ? (gridResults.reduce((sum, g) => sum + (g.visibility || 0), 0) / gridResults.length).toFixed(0)
+  const displayResults = results || [];
+
+  const avgVisibility = displayResults.length
+    ? (displayResults.reduce((sum, g) => sum + (g.visibility || 0), 0) / displayResults.length).toFixed(0)
     : "0";
 
-  const avgRank = gridResults?.length
-    ? (gridResults.reduce((sum, g) => sum + (g.avgRank || 0), 0) / gridResults.length).toFixed(1)
-    : "—";
+  const avgRank = displayResults.length
+    ? (displayResults.reduce((sum, g) => sum + (g.avgRank || 0), 0) / displayResults.length).toFixed(1)
+    : "\u2014";
 
   return (
     <div className="space-y-6">
@@ -53,7 +66,7 @@ export default function LocalGrid() {
           <div className="flex items-center justify-between gap-2">
             <div>
               <p className="text-sm text-muted-foreground">Grid Checks</p>
-              <p className="text-xl font-bold mt-1" data-testid="text-grid-checks">{gridResults?.length || 0}</p>
+              <p className="text-xl font-bold mt-1" data-testid="text-grid-checks">{displayResults.length}</p>
             </div>
             <Grid3X3 className="w-5 h-5 text-primary" />
           </div>
@@ -102,14 +115,14 @@ export default function LocalGrid() {
             </Card>
           ))}
         </div>
-      ) : gridResults?.length === 0 ? (
+      ) : displayResults.length === 0 ? (
         <Card className="p-8 text-center">
           <Grid3X3 className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
           <p className="text-muted-foreground">No grid checks yet. Run a local grid scan to see results.</p>
         </Card>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {gridResults?.map((result) => (
+          {displayResults.map((result) => (
             <Card key={result.id} className="p-5" data-testid={`card-grid-${result.id}`}>
               <div className="flex items-start justify-between gap-2 mb-4">
                 <div>
@@ -123,7 +136,7 @@ export default function LocalGrid() {
                   {result.visibility?.toFixed(0)}% visible
                 </Badge>
               </div>
-              <SearchGrid gridData={result.gridData as number[][]} />
+              <SearchGrid gridData={result.gridData} />
             </Card>
           ))}
         </div>

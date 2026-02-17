@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, ArrowUp, ArrowDown, Minus, TrendingUp, Target, Hash } from "lucide-react";
-import type { Keyword } from "@shared/schema";
+import type { RankTrackerKeyword } from "@shared/schema";
 
 function TrendIndicator({ current, previous }: { current?: number | null; previous?: number | null }) {
   if (!current || !previous) return <Minus className="w-3 h-3 text-muted-foreground" />;
@@ -35,7 +35,7 @@ function TrendIndicator({ current, previous }: { current?: number | null; previo
 }
 
 function DifficultyBar({ value }: { value?: number | null }) {
-  if (!value) return <span className="text-muted-foreground">—</span>;
+  if (!value) return <span className="text-muted-foreground">{"\u2014"}</span>;
   const color =
     value < 30 ? "bg-green-500" : value < 60 ? "bg-yellow-500" : "bg-red-500";
   return (
@@ -49,13 +49,13 @@ function DifficultyBar({ value }: { value?: number | null }) {
 }
 
 export default function RankTracker() {
-  const { data: keywords, isLoading } = useQuery<Keyword[]>({
-    queryKey: ["/api/keywords"],
+  const { data: keywords, isLoading } = useQuery<RankTrackerKeyword[]>({
+    queryKey: ["/api/rank-keywords"],
   });
 
   const avgPosition = keywords?.length
     ? (keywords.reduce((sum, k) => sum + (k.currentPosition || 0), 0) / keywords.length).toFixed(1)
-    : "—";
+    : "\u2014";
 
   const top3 = keywords?.filter((k) => k.currentPosition && k.currentPosition <= 3).length || 0;
   const top10 = keywords?.filter((k) => k.currentPosition && k.currentPosition <= 10).length || 0;
@@ -66,7 +66,7 @@ export default function RankTracker() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold" data-testid="text-page-title">Rank Tracker</h1>
-          <p className="text-muted-foreground mt-1">Monitor keyword positions across all clients</p>
+          <p className="text-muted-foreground mt-1">Monitor keyword positions across all workspaces</p>
         </div>
         <Button data-testid="button-add-keyword">
           <Plus className="w-4 h-4 mr-2" />
@@ -127,14 +127,14 @@ export default function RankTracker() {
                     </TableCell>
                     <TableCell className="text-right">
                       <span className="font-mono font-bold text-sm">
-                        {kw.currentPosition ? `#${kw.currentPosition.toFixed(1)}` : "—"}
+                        {kw.currentPosition ? `#${kw.currentPosition.toFixed(1)}` : "\u2014"}
                       </span>
                     </TableCell>
                     <TableCell>
                       <TrendIndicator current={kw.currentPosition} previous={kw.previousPosition} />
                     </TableCell>
                     <TableCell className="text-right text-sm font-mono">
-                      {kw.searchVolume?.toLocaleString() || "—"}
+                      {kw.searchVolume?.toLocaleString() || "\u2014"}
                     </TableCell>
                     <TableCell>
                       <DifficultyBar value={kw.difficulty} />
@@ -145,7 +145,7 @@ export default function RankTracker() {
                           {kw.url}
                         </span>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">{"\u2014"}</span>
                       )}
                     </TableCell>
                   </TableRow>

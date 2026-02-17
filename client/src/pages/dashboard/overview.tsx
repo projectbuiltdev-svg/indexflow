@@ -23,7 +23,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import type { Client, Article, Keyword, Lead } from "@shared/schema";
+import type { Workspace, BlogPost, RankTrackerKeyword, Lead } from "@shared/schema";
 
 const chartData = [
   { name: "Jan", impressions: 12400, clicks: 890, leads: 23 },
@@ -94,31 +94,31 @@ function MetricCard({
 }
 
 export default function DashboardOverview() {
-  const { data: clients, isLoading: clientsLoading } = useQuery<Client[]>({
-    queryKey: ["/api/clients"],
+  const { data: workspaces, isLoading: workspacesLoading } = useQuery<Workspace[]>({
+    queryKey: ["/api/workspaces"],
   });
 
-  const { data: articles, isLoading: articlesLoading } = useQuery<Article[]>({
-    queryKey: ["/api/articles"],
+  const { data: posts, isLoading: postsLoading } = useQuery<BlogPost[]>({
+    queryKey: ["/api/blog-posts"],
   });
 
-  const { data: keywords, isLoading: keywordsLoading } = useQuery<Keyword[]>({
-    queryKey: ["/api/keywords"],
+  const { data: keywords, isLoading: keywordsLoading } = useQuery<RankTrackerKeyword[]>({
+    queryKey: ["/api/rank-keywords"],
   });
 
   const { data: leads, isLoading: leadsLoading } = useQuery<Lead[]>({
     queryKey: ["/api/leads"],
   });
 
-  const loading = clientsLoading || articlesLoading || keywordsLoading || leadsLoading;
+  const loading = workspacesLoading || postsLoading || keywordsLoading || leadsLoading;
 
-  const totalArticles = articles?.length || 0;
+  const totalPosts = posts?.length || 0;
   const totalKeywords = keywords?.length || 0;
   const totalLeads = leads?.length || 0;
-  const activeClients = clients?.filter((c) => c.status === "active").length || 0;
+  const activeWorkspaces = workspaces?.filter((w) => w.status === "active").length || 0;
 
-  const recentArticles = articles
-    ?.filter((a) => a.status === "published")
+  const recentPosts = posts
+    ?.filter((p) => p.status === "published")
     .slice(0, 5) || [];
 
   const topKeywords = keywords
@@ -134,15 +134,15 @@ export default function DashboardOverview() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
-          title="Active Clients"
-          value={activeClients}
+          title="Active Workspaces"
+          value={activeWorkspaces}
           change={{ value: "+2", positive: true }}
           icon={Globe}
           loading={loading}
         />
         <MetricCard
-          title="Articles Published"
-          value={totalArticles}
+          title="Blog Posts"
+          value={totalPosts}
           change={{ value: "+18%", positive: true }}
           icon={FileText}
           loading={loading}
@@ -243,7 +243,7 @@ export default function DashboardOverview() {
       <div className="grid lg:grid-cols-2 gap-6">
         <Card className="p-5">
           <div className="flex items-center justify-between gap-4 mb-4">
-            <h3 className="font-semibold">Recent Articles</h3>
+            <h3 className="font-semibold">Recent Posts</h3>
             <BarChart3 className="w-4 h-4 text-muted-foreground" />
           </div>
           {loading ? (
@@ -254,19 +254,19 @@ export default function DashboardOverview() {
                 </div>
               ))}
             </div>
-          ) : recentArticles.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-4">No published articles yet.</p>
+          ) : recentPosts.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4">No published posts yet.</p>
           ) : (
             <div className="space-y-3">
-              {recentArticles.map((article) => (
-                <div key={article.id} className="flex items-center justify-between gap-4 py-2 border-b last:border-0">
+              {recentPosts.map((post) => (
+                <div key={post.id} className="flex items-center justify-between gap-4 py-2 border-b last:border-0">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate" data-testid={`text-article-${article.id}`}>{article.title}</p>
-                    <p className="text-xs text-muted-foreground">{article.targetKeyword}</p>
+                    <p className="text-sm font-medium truncate" data-testid={`text-post-${post.id}`}>{post.title}</p>
+                    <p className="text-xs text-muted-foreground">{post.primaryKeyword}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <Badge variant="secondary" className="text-xs">
-                      {article.clicks || 0} clicks
+                      {post.clicks || 0} clicks
                     </Badge>
                   </div>
                 </div>

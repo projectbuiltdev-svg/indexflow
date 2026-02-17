@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, FileText, ExternalLink, Eye, MousePointer } from "lucide-react";
-import type { Article } from "@shared/schema";
+import type { BlogPost } from "@shared/schema";
 
 function StatusBadge({ status }: { status: string }) {
   if (status === "published") return <Badge variant="default" className="bg-green-600 dark:bg-green-700 text-white" data-testid={`badge-status-${status}`}>{status}</Badge>;
@@ -21,14 +21,14 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export default function ContentEngine() {
-  const { data: articles, isLoading } = useQuery<Article[]>({
-    queryKey: ["/api/articles"],
+  const { data: posts, isLoading } = useQuery<BlogPost[]>({
+    queryKey: ["/api/blog-posts"],
   });
 
-  const published = articles?.filter((a) => a.status === "published").length || 0;
-  const drafts = articles?.filter((a) => a.status === "draft").length || 0;
-  const totalClicks = articles?.reduce((sum, a) => sum + (a.clicks || 0), 0) || 0;
-  const totalImpressions = articles?.reduce((sum, a) => sum + (a.impressions || 0), 0) || 0;
+  const published = posts?.filter((p) => p.status === "published").length || 0;
+  const drafts = posts?.filter((p) => p.status === "draft").length || 0;
+  const totalClicks = posts?.reduce((sum, p) => sum + (p.clicks || 0), 0) || 0;
+  const totalImpressions = posts?.reduce((sum, p) => sum + (p.impressions || 0), 0) || 0;
 
   return (
     <div className="space-y-6">
@@ -37,9 +37,9 @@ export default function ContentEngine() {
           <h1 className="text-2xl font-bold" data-testid="text-page-title">Content Engine</h1>
           <p className="text-muted-foreground mt-1">Manage and deploy programmatic SEO content</p>
         </div>
-        <Button data-testid="button-add-article">
+        <Button data-testid="button-add-post">
           <Plus className="w-4 h-4 mr-2" />
-          New Article
+          New Post
         </Button>
       </div>
 
@@ -83,40 +83,40 @@ export default function ContentEngine() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {articles?.length === 0 ? (
+              {posts?.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                    No articles yet. Create your first article to get started.
+                    No posts yet. Create your first post to get started.
                   </TableCell>
                 </TableRow>
               ) : (
-                articles?.map((article) => (
-                  <TableRow key={article.id} data-testid={`row-article-${article.id}`}>
+                posts?.map((post) => (
+                  <TableRow key={post.id} data-testid={`row-post-${post.id}`}>
                     <TableCell>
                       <div className="flex items-center gap-2 max-w-xs">
-                        <span className="font-medium text-sm truncate">{article.title}</span>
+                        <span className="font-medium text-sm truncate">{post.title}</span>
                         <ExternalLink className="w-3 h-3 text-muted-foreground shrink-0" />
                       </div>
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary" className="text-xs font-normal">
-                        {article.targetKeyword}
+                        {post.primaryKeyword}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={article.status} />
+                      <StatusBadge status={post.status} />
                     </TableCell>
                     <TableCell className="text-right text-sm font-mono">
-                      {article.wordCount?.toLocaleString() || "—"}
+                      {post.wordCount?.toLocaleString() || "\u2014"}
                     </TableCell>
                     <TableCell className="text-right text-sm font-mono">
-                      {article.clicks?.toLocaleString() || "0"}
+                      {post.clicks?.toLocaleString() || "0"}
                     </TableCell>
                     <TableCell className="text-right text-sm font-mono">
-                      {article.impressions?.toLocaleString() || "0"}
+                      {post.impressions?.toLocaleString() || "0"}
                     </TableCell>
                     <TableCell className="text-right text-sm font-mono">
-                      {article.position ? `#${article.position.toFixed(1)}` : "—"}
+                      {post.position ? `#${post.position.toFixed(1)}` : "\u2014"}
                     </TableCell>
                   </TableRow>
                 ))
