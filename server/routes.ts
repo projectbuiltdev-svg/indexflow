@@ -1126,11 +1126,120 @@ export async function registerRoutes(
 
   app.post("/api/admin/content/preview", requireAdminAuth, async (req, res) => {
     try {
-      res.json({ html: req.body.content || "" });
+      const mdx = req.body.mdx || "";
+      if (!mdx.trim()) return res.json({ html: "", errors: [] });
+
+      const errors: string[] = [];
+      let html = mdx;
+
+      html = html.replace(/<BlogImage\s+([^>]*)\/?>/g, (_match: string, attrs: string) => {
+        const src = attrs.match(/src="([^"]*)"/)?.[1] || "";
+        const alt = attrs.match(/alt="([^"]*)"/)?.[1] || "";
+        const caption = attrs.match(/caption="([^"]*)"/)?.[1] || "";
+        const credit = attrs.match(/credit="([^"]*)"/)?.[1] || "";
+        const creditUrl = attrs.match(/creditUrl="([^"]*)"/)?.[1] || "";
+        let figcaption = "";
+        if (caption || credit) {
+          const creditHtml = creditUrl
+            ? `<span class="credit">Photo by <a href="${creditUrl}" target="_blank" rel="noopener">${credit}</a></span>`
+            : credit ? `<span class="credit">Photo by ${credit}</span>` : "";
+          figcaption = `<figcaption>${caption ? `${caption} ` : ""}${creditHtml}</figcaption>`;
+        }
+        return `<figure class="blog-image"><img src="${src}" alt="${alt}" loading="lazy" />${figcaption}</figure>`;
+      });
+
+      html = html.replace(/<CallToAction\s+([^>]*)\/?>/g, (_match: string, attrs: string) => {
+        const text = attrs.match(/(?:text|title)="([^"]*)"/)?.[1] || "Learn More";
+        const href = attrs.match(/href="([^"]*)"/)?.[1] || "#";
+        return `<div class="cta-block"><a href="${href}" class="cta-button">${text}</a></div>`;
+      });
+
+      html = html.replace(/<\/?(?:import|export)\s[^>]*>/g, "");
+      html = html.replace(/^import\s.*$/gm, "");
+      html = html.replace(/^export\s.*$/gm, "");
+
+      const lines = html.split("\n");
+      const result: string[] = [];
+      let inList = false;
+      let listType = "";
+
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+
+        if (line.match(/^#{1,6}\s/)) {
+          if (inList) { result.push(listType === "ol" ? "</ol>" : "</ul>"); inList = false; }
+          const level = line.match(/^(#{1,6})\s/)![1].length;
+          const text = line.replace(/^#{1,6}\s+/, "");
+          result.push(`<h${level}>${processInline(text)}</h${level}>`);
+          continue;
+        }
+
+        if (line.match(/^---\s*$/)) {
+          if (inList) { result.push(listType === "ol" ? "</ol>" : "</ul>"); inList = false; }
+          result.push("<hr />");
+          continue;
+        }
+
+        if (line.match(/^\d+\.\s/)) {
+          if (!inList || listType !== "ol") {
+            if (inList) result.push(listType === "ol" ? "</ol>" : "</ul>");
+            result.push("<ol>");
+            inList = true;
+            listType = "ol";
+          }
+          const text = line.replace(/^\d+\.\s+/, "");
+          result.push(`<li>${processInline(text)}</li>`);
+          continue;
+        }
+
+        if (line.match(/^[-*]\s/)) {
+          if (!inList || listType !== "ul") {
+            if (inList) result.push(listType === "ol" ? "</ol>" : "</ul>");
+            result.push("<ul>");
+            inList = true;
+            listType = "ul";
+          }
+          const text = line.replace(/^[-*]\s+/, "");
+          result.push(`<li>${processInline(text)}</li>`);
+          continue;
+        }
+
+        if (inList && line.trim() === "") {
+          result.push(listType === "ol" ? "</ol>" : "</ul>");
+          inList = false;
+          continue;
+        }
+
+        if (line.startsWith("<")) {
+          if (inList) { result.push(listType === "ol" ? "</ol>" : "</ul>"); inList = false; }
+          result.push(line);
+          continue;
+        }
+
+        if (line.trim() === "") {
+          continue;
+        }
+
+        if (inList) { result.push(listType === "ol" ? "</ol>" : "</ul>"); inList = false; }
+        result.push(`<p>${processInline(line)}</p>`);
+      }
+
+      if (inList) result.push(listType === "ol" ? "</ol>" : "</ul>");
+      html = result.join("\n");
+
+      res.json({ html, errors });
     } catch (error) {
       res.status(500).json({ error: "Failed to preview content" });
     }
   });
+
+  function processInline(text: string): string {
+    text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    text = text.replace(/\*(.+?)\*/g, "<em>$1</em>");
+    text = text.replace(/`(.+?)`/g, "<code>$1</code>");
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    return text;
+  }
 
   // Old-style rank-keywords / grid-keywords endpoints (used by admin SEO pages)
   app.get("/api/rank-keywords", async (req, res) => {
