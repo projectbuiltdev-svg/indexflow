@@ -1228,6 +1228,94 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/contact-messages", async (req, res) => {
+    try {
+      const venueId = req.query.venueId as string;
+      const messages = await storage.getContactMessages();
+      if (venueId) {
+        return res.json(messages.filter((m: any) => m.venueId === venueId));
+      }
+      res.json(messages);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch contact messages" });
+    }
+  });
+
+  app.get("/api/reservations", async (req, res) => {
+    try {
+      const venueId = req.query.venueId as string;
+      if (!venueId) return res.json([]);
+      const date = req.query.date as string;
+      if (date) {
+        const reservations = await storage.getReservationsByDate(venueId, date);
+        return res.json(reservations);
+      }
+      const reservations = await storage.getReservations(venueId);
+      res.json(reservations);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch reservations" });
+    }
+  });
+
+  app.get("/api/calls", async (req, res) => {
+    try {
+      const venueId = req.query.venueId as string;
+      if (!venueId) return res.json([]);
+      const calls = await storage.getCallLogs(venueId);
+      res.json(calls);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch calls" });
+    }
+  });
+
+  app.get("/api/admin/reservations", requireAdminAuth, async (req, res) => {
+    try {
+      const venues = await storage.getVenues();
+      const allReservations: any[] = [];
+      for (const venue of venues) {
+        const reservations = await storage.getReservations(venue.id);
+        allReservations.push(...reservations);
+      }
+      allReservations.sort((a, b) => {
+        const da = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const db = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return db - da;
+      });
+      res.json(allReservations);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch reservations" });
+    }
+  });
+
+  app.get("/api/public/blog/posts", async (req, res) => {
+    try {
+      const domain = req.query.domain as string;
+      if (!domain) return res.json([]);
+      const domainRecord = await storage.getVenueDomainByDomain(domain);
+      if (!domainRecord) return res.json([]);
+      const posts = await storage.getVenueBlogPosts(domainRecord.venueId, "published");
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch blog posts" });
+    }
+  });
+
+  app.get("/api/public/blog/post", async (req, res) => {
+    try {
+      const domain = req.query.domain as string;
+      const slug = req.query.slug as string;
+      if (!domain || !slug) return res.status(400).json({ error: "domain and slug required" });
+      const domainRecord = await storage.getVenueDomainByDomain(domain);
+      if (!domainRecord) return res.status(404).json({ error: "Domain not found" });
+      const posts = await storage.getVenueBlogPosts(domainRecord.venueId, "published");
+      const post = posts.find(p => p.slug === slug);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+      res.json(post);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch blog post" });
+    }
+  });
+
   // Room Types
   app.get("/api/venues/:venueId/room-types", async (req, res) => {
     try {
