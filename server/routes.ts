@@ -1135,15 +1135,14 @@ export async function registerRoutes(
       html = html.replace(/<BlogImage\s+([^>]*)\/?>/g, (_match: string, attrs: string) => {
         const src = attrs.match(/src="([^"]*)"/)?.[1] || "";
         const alt = attrs.match(/alt="([^"]*)"/)?.[1] || "";
-        const caption = attrs.match(/caption="([^"]*)"/)?.[1] || "";
         const credit = attrs.match(/credit="([^"]*)"/)?.[1] || "";
         const creditUrl = attrs.match(/creditUrl="([^"]*)"/)?.[1] || "";
         let figcaption = "";
-        if (caption || credit) {
+        if (credit) {
           const creditHtml = creditUrl
-            ? `<span class="credit">Photo by <a href="${creditUrl}" target="_blank" rel="noopener">${credit}</a></span>`
-            : credit ? `<span class="credit">Photo by ${credit}</span>` : "";
-          figcaption = `<figcaption>${caption ? `${caption} ` : ""}${creditHtml}</figcaption>`;
+            ? `<span class="credit">Image by <a href="${creditUrl}" target="_blank" rel="noopener">${credit}</a></span>`
+            : `<span class="credit">Image by ${credit}</span>`;
+          figcaption = `<figcaption>${creditHtml}</figcaption>`;
         }
         return `<figure class="blog-image"><img src="${src}" alt="${alt}" loading="lazy" />${figcaption}</figure>`;
       });
