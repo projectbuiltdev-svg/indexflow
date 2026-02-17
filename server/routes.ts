@@ -301,6 +301,95 @@ export async function registerRoutes(
     res.status(201).json(data);
   });
 
+  app.post("/api/mdx-preview", async (req, res) => {
+    const { mdx } = req.body;
+    if (!mdx || typeof mdx !== "string") return res.status(400).json({ error: "mdx string is required" });
+    const html = mdx
+      .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+      .replace(/^## (.+)$/gm, "<h2>$1</h2>")
+      .replace(/^# (.+)$/gm, "<h1>$1</h1>")
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(/`(.+?)`/g, "<code>$1</code>")
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" />')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+      .replace(/^- (.+)$/gm, "<li>$1</li>")
+      .replace(/(<li>.*<\/li>\n?)+/g, (m) => `<ul>${m}</ul>`)
+      .replace(/\n{2,}/g, "</p><p>")
+      .replace(/\n/g, "<br/>");
+    res.json({ html: `<div class="prose">${html}</div>` });
+  });
+
+  app.post("/api/ai/generate-content", async (req, res) => {
+    const { postId, keyword, intent, funnel, title, tone } = req.body;
+    if (!postId || !keyword) return res.status(400).json({ error: "postId and keyword are required" });
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    res.flushHeaders();
+
+    const sections = [
+      `# ${title || "Untitled Article"}\n\n`,
+      `## Introduction\n\nThis article covers **${keyword}** from a ${intent || "informational"} perspective. `,
+      `Whether you're looking for practical tips or in-depth understanding, this guide has you covered.\n\n`,
+      `## What is ${keyword}?\n\n`,
+      `Understanding *${keyword}* is essential for anyone looking to improve their online presence. `,
+      `It encompasses strategies, tools, and best practices that drive measurable results.\n\n`,
+      `## Key Benefits\n\n`,
+      `- Increased organic traffic and visibility\n`,
+      `- Better user engagement and conversion rates\n`,
+      `- Long-term sustainable growth\n`,
+      `- Competitive advantage in your market\n\n`,
+      `## How to Get Started\n\n`,
+      `Getting started with ${keyword} doesn't have to be complicated. `,
+      `Follow these steps to build a solid foundation:\n\n`,
+      `1. **Research** your target audience and competitors\n`,
+      `2. **Plan** your content strategy around ${funnel || "top-of-funnel"} topics\n`,
+      `3. **Create** high-quality, valuable content consistently\n`,
+      `4. **Measure** results and iterate on your approach\n\n`,
+      `## Conclusion\n\n`,
+      `Mastering ${keyword} takes time, but the results are worth the investment. `,
+      `Start implementing these strategies today and track your progress over time.\n`,
+    ];
+
+    let fullContent = "";
+    for (let i = 0; i < sections.length; i++) {
+      fullContent += sections[i];
+      res.write(`data: ${JSON.stringify({ chunk: sections[i], progress: Math.round(((i + 1) / sections.length) * 100) })}\n\n`);
+      await new Promise((r) => setTimeout(r, 150 + Math.random() * 200));
+    }
+
+    await storage.updateBlogPost(postId, { body: fullContent, generationStatus: "completed", wordCount: fullContent.split(/\s+/).length });
+    res.write(`data: ${JSON.stringify({ done: true, wordCount: fullContent.split(/\s+/).length })}\n\n`);
+    res.end();
+  });
+
+  app.post("/api/ai/generate-meta", async (req, res) => {
+    const { keyword, title, body } = req.body;
+    if (!keyword) return res.status(400).json({ error: "keyword is required" });
+    const metaTitle = `${title || keyword} | Expert Guide ${new Date().getFullYear()}`;
+    const metaDescription = `Discover everything about ${keyword}. Learn key strategies, best practices, and actionable tips to boost your results. Updated for ${new Date().getFullYear()}.`;
+    const excerpt = body
+      ? body.replace(/[#*\-_`\[\]()!]/g, "").trim().slice(0, 160) + "..."
+      : `A comprehensive guide to ${keyword} covering strategies, tips, and best practices for measurable results.`;
+    res.json({ metaTitle, metaDescription, excerpt });
+  });
+
+  app.get("/api/stock-images/search", async (req, res) => {
+    const query = req.query.q as string;
+    if (!query) return res.status(400).json({ error: "q query parameter is required" });
+    const mockImages = Array.from({ length: 8 }, (_, i) => ({
+      id: `img_${i + 1}`,
+      url: `https://images.unsplash.com/photo-${1500000000000 + i * 100000}?w=800&q=80`,
+      thumbnail: `https://images.unsplash.com/photo-${1500000000000 + i * 100000}?w=200&q=60`,
+      alt: `${query} stock image ${i + 1}`,
+      width: 1200,
+      height: 800,
+      attribution: `Photo by Contributor ${i + 1} on Unsplash`,
+    }));
+    res.json({ query, results: mockImages, total: mockImages.length });
+  });
+
   app.get("/api/seo-settings", async (req, res) => {
     const workspaceId = req.query.workspaceId as string | undefined;
     if (workspaceId) {
