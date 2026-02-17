@@ -75,6 +75,9 @@ export async function registerRoutes(
   registerAuthRoutes(app);
 
   app.get("/api/db-dump", (_req, res) => {
+    if (process.env.NODE_ENV === "production") {
+      return res.status(403).json({ error: "Not available in production" });
+    }
     const dumpPath = path.resolve("resto_database_dump.sql");
     if (!fs.existsSync(dumpPath)) {
       return res.status(404).send("Dump file not found");
@@ -847,13 +850,18 @@ export async function registerRoutes(
     }
   });
 
+  // Admin auth middleware - protects all /api/admin/* routes in production
+  const requireAdminAuth = (req: any, res: any, next: any) => {
+    if (process.env.NODE_ENV === "production") {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    }
+    next();
+  };
+
   // Admin Settings
-  app.get("/api/admin/settings/:key", async (req, res) => {
+  app.get("/api/admin/settings/:key", requireAdminAuth, async (req, res) => {
     try {
-      if (process.env.NODE_ENV === "production") {
-        const userId = (req as any).user?.id;
-        if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      }
       const setting = await storage.getAdminSetting(req.params.key);
       res.json(setting || {});
     } catch (error) {
@@ -861,12 +869,8 @@ export async function registerRoutes(
     }
   });
 
-  app.put("/api/admin/settings/:key", async (req, res) => {
+  app.put("/api/admin/settings/:key", requireAdminAuth, async (req, res) => {
     try {
-      if (process.env.NODE_ENV === "production") {
-        const userId = (req as any).user?.id;
-        if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      }
       const setting = await storage.setAdminSetting(req.params.key, req.body.value);
       res.json(setting);
     } catch (error) {
@@ -880,12 +884,8 @@ export async function registerRoutes(
     priority: z.enum(["low", "medium", "high", "urgent"]).optional()
   });
 
-  app.get("/api/admin/support-tickets", async (req, res) => {
+  app.get("/api/admin/support-tickets", requireAdminAuth, async (req, res) => {
     try {
-      if (process.env.NODE_ENV === "production") {
-        const userId = (req as any).user?.id;
-        if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      }
       const tickets = await storage.getAllSupportTickets();
       res.json(tickets);
     } catch (error) {
@@ -893,12 +893,8 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/support-tickets/:id", async (req, res) => {
+  app.get("/api/admin/support-tickets/:id", requireAdminAuth, async (req, res) => {
     try {
-      if (process.env.NODE_ENV === "production") {
-        const userId = (req as any).user?.id;
-        if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      }
       
       const ticket = await storage.getSupportTicket(req.params.id);
       if (!ticket) {
@@ -910,12 +906,8 @@ export async function registerRoutes(
     }
   });
 
-  app.patch("/api/admin/support-tickets/:id", async (req, res) => {
+  app.patch("/api/admin/support-tickets/:id", requireAdminAuth, async (req, res) => {
     try {
-      if (process.env.NODE_ENV === "production") {
-        const userId = (req as any).user?.id;
-        if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      }
       
       const validatedData = adminTicketUpdateSchema.parse(req.body);
       const updates: Record<string, string> = {};
@@ -938,15 +930,6 @@ export async function registerRoutes(
       res.status(500).json({ error: "Failed to update ticket" });
     }
   });
-
-  // Admin auth middleware - protects all /api/admin/* routes in production
-  const requireAdminAuth = (req: any, res: any, next: any) => {
-    if (process.env.NODE_ENV === "production") {
-      const userId = req.user?.id;
-      if (!userId) return res.status(401).json({ error: "Unauthorized" });
-    }
-    next();
-  };
 
   // Admin aggregate endpoints (used by admin dashboard pages)
   app.get("/api/admin/venues", requireAdminAuth, async (req, res) => {
