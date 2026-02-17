@@ -19,7 +19,7 @@ export default function NotFound() {
       <SEO 
         title="Page Not Found" 
         description="The page you're looking for doesn't exist. Browse our restaurant booking software, pricing, or contact us for help."
-        canonicalUrl="/404"
+        canonical="/404"
       />
       <section className="py-16 lg:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

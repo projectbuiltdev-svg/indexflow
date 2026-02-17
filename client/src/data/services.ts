@@ -1,11 +1,11 @@
-export interface ServiceData {
+export interface ServiceType {
   name: string;
   slug: string;
   description: string;
   icon: string;
 }
 
-export const services: ServiceData[] = [
+export const serviceTypes: ServiceType[] = [
   { name: "Restaurant Booking", slug: "restaurant-booking", description: "AI-powered reservation system for restaurants", icon: "utensils" },
   { name: "Hotel Reservations", slug: "hotel-reservations", description: "Room booking and management for hotels", icon: "building" },
   { name: "Cafe Management", slug: "cafe-management", description: "Queue and reservation management for cafes", icon: "coffee" },
@@ -16,6 +16,8 @@ export const services: ServiceData[] = [
   { name: "Voice Booking", slug: "voice-booking", description: "AI phone booking assistant for venues", icon: "phone" },
 ];
 
-export function getServiceBySlug(slug: string): ServiceData | undefined {
-  return services.find(s => s.slug === slug);
+export function getServiceBySlug(slug: string): ServiceType | undefined {
+  return serviceTypes.find(s => s.slug === slug);
 }
+
+export const services = serviceTypes;
