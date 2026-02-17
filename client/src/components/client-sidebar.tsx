@@ -4,7 +4,7 @@ import {
   FileText,
   Search,
   Grid3X3,
-  BarChart3,
+  CalendarDays,
   Users,
   Settings,
   Building2,
@@ -29,8 +29,8 @@ const menuItems = [
   { title: "My Content", url: "/client/content", icon: FileText },
   { title: "Rankings", url: "/client/keywords", icon: Search },
   { title: "Local Grid", url: "/client/grid", icon: Grid3X3 },
-  { title: "Analytics", url: "/client/gsc", icon: BarChart3 },
-  { title: "My Leads", url: "/client/leads", icon: Users },
+  { title: "Reservations", url: "/client/reservations", icon: CalendarDays },
+  { title: "Messages", url: "/client/leads", icon: Users },
 ];
 
 const bottomItems = [
