@@ -42,7 +42,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="p-4">
         <Link href="/">
-          <img src={logoPath} alt="IndexFlow" className="h-28" data-testid="img-sidebar-logo" />
+          <img src={logoPath} alt="IndexFlow" className="w-full max-h-full object-contain" data-testid="img-sidebar-logo" />
         </Link>
       </SidebarHeader>
       <SidebarContent>
