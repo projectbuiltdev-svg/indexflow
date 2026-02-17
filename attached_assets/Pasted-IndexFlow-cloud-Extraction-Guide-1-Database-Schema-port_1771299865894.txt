@@ -1,0 +1,90 @@
+IndexFlow.cloud -- Extraction Guide
+1. Database Schema (port from shared/schema.ts)
+Tables to extract and rename:
+
+Current (resto.restaurant)	New (indexflow.cloud)	Purpose
+venues	workspaces or projects	Multi-tenant container
+venue_blog_posts	blog_posts	Content Engine posts
+venue_domains	domains	Domain management
+content_assets	content_assets	Image assets
+content_asset_usages	content_asset_usages	Image usage tracking
+content_campaigns	campaigns	Bulk generation batches
+rank_tracker_keywords	rank_tracker_keywords	Keyword tracking
+rank_tracker_results	rank_tracker_results	SERP results
+rank_tracker_credits	rank_tracker_credits	Credit system
+rank_tracker_history	rank_tracker_history	History log
+grid_keywords	grid_keywords	Local grid keywords
+grid_scan_results	grid_scan_results	Grid scan data
+grid_refresh_credits	grid_refresh_credits	Grid credits
+grid_refresh_history	grid_refresh_history	Grid history
+seo_settings	seo_settings	GSC config per workspace
+contact_messages	leads	CRM leads
+reservations (partial)	conversions	Attribution tracking
+Drop all restaurant-specific tables (reservations, business_hours, closures, resources, team_members, twilio_settings, widget_settings, room_types, etc.).
+
+2. Backend Files to Port
+Core modules (from server/):
+
+File	What it does	Adaptation needed
+content-routes.ts	Content Engine API (CRUD, bulk create, generate, publish, image resolve, MDX export, public blog API)	Replace venueId with workspaceId, remove admin role checks, add proper auth
+draft-generator.ts	GPT-4o bulk content generation with SSE streaming, quality gates	Minimal -- mostly standalone
+image-resolver.ts	Pixabay/Pexels image pipeline with AI SEO metadata	No changes needed -- fully generic
+storage.ts	IStorage interface + MemStorage + DbStorage	Extract only the methods for the tables listed above
+SEO route handlers (rank tracker, grid)	DataForSEO API integration	Find these in your routes, extract the rank tracker + grid endpoints
+GSC routes	Google Search Console data ingestion	Extract GSC OAuth + data fetch logic
+External API dependencies (secrets to set up fresh):
+
+DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD -- Rank Tracker + Local Grid
+PIXABAY_API_KEY / PEXELS_API_KEY -- Image resolution pipeline
+OpenAI API key -- Content generation (GPT-4o)
+Google OAuth credentials -- GSC ingestion
+3. Frontend Pages to Port
+From client/src/pages/admin/:
+
+Page	Feature
+content.tsx	Content Engine (post list, editor, bulk generator, campaigns, domains, image management)
+SEO/rank tracker pages	Keyword tracking UI, grid visualization
+CRM/leads pages	Lead funnel, attribution
+From client/src/pages/:
+
+Page	Feature
+blog.tsx	Public blog reader (6 templates)
+blog-post.tsx	Single post article reader
+4. Recommended New Project Structure
+indexflow.cloud/
+  shared/
+    schema.ts          -- Clean schema (workspaces, blog_posts, domains, etc.)
+  server/
+    routes.ts          -- API routes
+    storage.ts         -- IStorage with only IndexFlow methods
+    content-engine.ts  -- Content CRUD, bulk gen, publish, export
+    draft-generator.ts -- GPT-4o generation + quality gates
+    image-resolver.ts  -- Stock photo pipeline
+    rank-tracker.ts    -- DataForSEO keyword tracking
+    local-grid.ts      -- 5x5 geo SERP scanner
+    gsc.ts             -- Google Search Console ingestion
+    crm.ts             -- Lead funnel + attribution
+  client/src/
+    pages/
+      dashboard.tsx    -- Overview
+      content.tsx      -- Content Engine
+      rank-tracker.tsx -- Keyword tracking
+      local-grid.tsx   -- Grid visualization
+      gsc.tsx          -- Search Console data
+      crm.tsx          -- Lead funnel
+      settings.tsx     -- Workspace settings, domains, API keys
+    components/
+      blog-templates/  -- 6 public blog templates
+5. Step-by-Step Process
+Create new Replit project with Node.js + PostgreSQL
+Copy and adapt shared/schema.ts -- only the tables listed above, rename venue references
+Copy draft-generator.ts and image-resolver.ts -- these are nearly standalone
+Extract content routes from content-routes.ts into the new project
+Extract rank tracker + grid + GSC route handlers
+Build fresh auth -- user accounts, workspaces, billing (Stripe)
+Port the admin UI pages -- adapt to new routing/auth
+Port blog templates from blog.tsx and blog-post.tsx
+Set up secrets for DataForSEO, Pixabay, Pexels, OpenAI, Google OAuth
+Deploy to indexflow.cloud
+Key Decision: Where to Build
+Option A -- Separate Replit project (recommended for a commercial product). Clean separation, own database, own deployment. Reference this codebase as you build.
