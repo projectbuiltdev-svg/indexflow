@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MessageCircle } from "lucide-react";
 import type { Venue } from "@shared/schema";
+import { AdminLayout } from "@/components/admin-layout";
 
 interface WidgetSetting {
   id: number;
@@ -32,6 +33,7 @@ export default function AdminWidgetConfig() {
   const venueMap = new Map(venues.map((v) => [v.id, v]));
 
   return (
+    <AdminLayout>
     <div className="p-6 space-y-6">
       <div className="flex items-center gap-2">
         <MessageCircle className="h-6 w-6" />
@@ -100,5 +102,6 @@ export default function AdminWidgetConfig() {
         </CardContent>
       </Card>
     </div>
+    </AdminLayout>
   );
 }

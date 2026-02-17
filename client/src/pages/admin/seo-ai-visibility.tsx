@@ -1,11 +1,13 @@
 import { useVenue } from "@/lib/venue-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bot } from "lucide-react";
+import { AdminLayout } from "@/components/admin-layout";
 
 export default function AdminAIVisibility() {
   useVenue();
 
   return (
+    <AdminLayout>
     <div className="p-6 space-y-6">
       <div className="flex items-center gap-2">
         <Bot className="h-6 w-6" />
@@ -29,5 +31,6 @@ export default function AdminAIVisibility() {
         </CardContent>
       </Card>
     </div>
+    </AdminLayout>
   );
 }

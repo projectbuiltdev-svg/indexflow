@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PhoneCall } from "lucide-react";
 import type { CallLog, Venue } from "@shared/schema";
+import { AdminLayout } from "@/components/admin-layout";
 
 export default function AdminCallLogs() {
   useVenue();
@@ -28,6 +29,7 @@ export default function AdminCallLogs() {
     : logs.filter((l) => l.venueId === filterVenueId);
 
   return (
+    <AdminLayout>
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
@@ -103,5 +105,6 @@ export default function AdminCallLogs() {
         </CardContent>
       </Card>
     </div>
+    </AdminLayout>
   );
 }

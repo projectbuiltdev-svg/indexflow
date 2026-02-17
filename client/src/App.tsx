@@ -46,6 +46,11 @@ const AdminSeo = lazy(() => import("@/pages/admin/seo"));
 const AdminWebsiteChanges = lazy(() => import("@/pages/admin/website-changes"));
 const AdminCrm = lazy(() => import("@/pages/admin/crm"));
 const AdminContent = lazy(() => import("@/pages/admin/content"));
+const AdminSeoRankTracker = lazy(() => import("@/pages/admin/seo-rank-tracker"));
+const AdminSeoLocalGrid = lazy(() => import("@/pages/admin/seo-local-grid"));
+const AdminSeoAIVisibility = lazy(() => import("@/pages/admin/seo-ai-visibility"));
+const AdminCallLogs = lazy(() => import("@/pages/admin/call-logs"));
+const AdminWidgetConfig = lazy(() => import("@/pages/admin/widget-config"));
 
 const SelectVenue = lazy(() => import("@/pages/dashboard/select-venue"));
 const Today = lazy(() => import("@/pages/dashboard/today"));
@@ -252,6 +257,11 @@ function Router() {
         <Route path="/admin/content">{() => <AdminRoute component={AdminContent} permission="*" />}</Route>
         <Route path="/admin/notifications">{() => <AdminRoute component={AdminNotifications} permission="notifications" />}</Route>
         <Route path="/admin/settings">{() => <AdminRoute component={AdminSettings} permission="settings" />}</Route>
+        <Route path="/admin/seo/rank-tracker">{() => <AdminRoute component={AdminSeoRankTracker} permission="seo" />}</Route>
+        <Route path="/admin/seo/local-grid">{() => <AdminRoute component={AdminSeoLocalGrid} permission="seo" />}</Route>
+        <Route path="/admin/seo/ai-visibility">{() => <AdminRoute component={AdminSeoAIVisibility} permission="seo" />}</Route>
+        <Route path="/admin/call-logs">{() => <AdminRoute component={AdminCallLogs} permission="calls" />}</Route>
+        <Route path="/admin/widget-config">{() => <AdminRoute component={AdminWidgetConfig} permission="widgets" />}</Route>
         <Route path="/select-venue" component={SelectVenue} />
         <Route path="/:venueId/today" component={Today} />
         <Route path="/:venueId/calendar" component={CalendarView} />

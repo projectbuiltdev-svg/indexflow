@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { Grid3X3, Plus, Trash2 } from "lucide-react";
+import { AdminLayout } from "@/components/admin-layout";
 
 interface GridKeyword {
   id: number;
@@ -73,6 +74,7 @@ export default function AdminLocalGrid() {
   });
 
   return (
+    <AdminLayout>
     <div className="p-6 space-y-6">
       <div className="flex items-center gap-2">
         <Grid3X3 className="h-6 w-6" />
@@ -208,5 +210,6 @@ export default function AdminLocalGrid() {
         </>
       )}
     </div>
+    </AdminLayout>
   );
 }
