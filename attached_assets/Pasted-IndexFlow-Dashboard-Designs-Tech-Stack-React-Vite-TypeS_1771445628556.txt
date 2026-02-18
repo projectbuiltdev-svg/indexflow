@@ -1,0 +1,745 @@
+IndexFlow Dashboard Designs
+Tech Stack
+React + Vite + TypeScript
+Tailwind CSS + shadcn/ui
+Wouter (routing)
+TanStack Query (data fetching)
+Recharts (charts)
+Lucide React (icons)
+Drizzle ORM + PostgreSQL
+Color Palette (index.css variables)
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 221 83% 53%;
+  --sidebar-background: 222 47% 11%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-accent: 217 33% 17%;
+  --sidebar-accent-foreground: 210 40% 98%;
+}
+.dark {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --card: 217 33% 17%;
+  --card-foreground: 210 40% 98%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --border: 217 33% 17%;
+  --sidebar-background: 222 55% 8%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-accent: 217 33% 14%;
+  --sidebar-accent-foreground: 210 40% 98%;
+}
+SUPER ADMIN DASHBOARD
+This is for IndexFlow platform owners to manage all agencies/workspaces.
+
+Super Admin Sidebar Navigation
+Logo: "IndexFlow" + icon (Zap from lucide)
+Collapsed icon width: 4rem
+Expanded width: 16rem
+Groups:
+  [Dashboard]
+    - Dashboard              (LayoutDashboard)
+  [Agencies]
+    - All Agencies           (Building2)
+    - Pending Approvals      (ClipboardCheck)
+  [Content]
+    - All Posts              (FileText)
+    - All Campaigns          (Megaphone)
+    - Content Moderation     (ShieldAlert)
+  [Platform SEO]
+    - Keyword Usage          (TrendingUp)
+    - API Usage              (Activity)
+  [Billing]
+    - Subscriptions          (RefreshCw)
+    - Revenue                (DollarSign)
+    - Invoices               (Receipt)
+    - Payouts                (Banknote)
+  [System]
+    - API Keys               (Key)
+    - Twilio                 (Phone)
+    - Email                  (Mail)
+    - Infrastructure         (Server)
+  [Users]
+    - All Users              (Users)
+    - Admin Users            (UserCog)
+  [Support]
+    - All Tickets            (LifeBuoy)
+    - Call Logs              (PhoneCall)
+    - Announcements          (Bell)
+  [Settings]
+    - Platform Config        (Settings)
+    - Branding               (Palette)
+Footer:
+    - User avatar + name + role
+    - Theme toggle (Sun/Moon)
+    - Logout
+Super Admin Pages
+Page: Dashboard (/admin)
+Header: "Platform Overview"
+Row 1: 5 stat cards (equal width)
+  [Total Agencies] count + trend
+  [Total Workspaces] count + trend
+  [MRR] $amount + % change
+  [Active Users] count + trend
+  [System Health] status indicator (green/yellow/red)
+Row 2: 2 charts (50/50 split)
+  [Left]  Area chart: MRR over last 12 months
+  [Right] Bar chart: New agencies per month
+Row 3: 2 panels (50/50 split)
+  [Left]  Recent Activity feed (signups, upgrades, content published)
+  [Right] Plan Distribution pie chart (Solo / Pro / White Label / Enterprise)
+Row 4: Full width table
+  "Recent Agencies" -- 5 most recently created
+  Columns: Agency Name | Plan (badge) | Owner | Workspaces | Created | Status (badge)
+Page: All Agencies (/admin/agencies)
+Header: "All Agencies" + [Add Agency] button (primary)
+Filters row: Search input | Plan dropdown (All/Solo/Pro/WhiteLabel/Enterprise) | Status dropdown (All/Active/Suspended/Pending)
+Table (full width):
+  Columns: Agency Name | Owner Email | Plan (badge) | Workspaces | Posts | Users | Status (badge) | Actions (dropdown)
+  Actions: View | Edit | Suspend | Delete
+Click row -> Agency Detail page (/admin/agencies/:id):
+  Header: Agency name + plan badge + status badge + [Edit] [Suspend] buttons
+  Tabs: Overview | Workspaces | Users | Usage | Billing
+  Overview tab:
+    Row 1: 4 stat cards -- Workspaces | Total Posts | Keywords Tracked | Revenue Generated
+    Row 2: Recent activity timeline for this agency
+  Workspaces tab:
+    Table: Workspace Name | Domain | Posts | Keywords | Status | Created | Actions
+  Users tab:
+    Table: Name | Email | Role (badge) | Last Login | Status | Actions
+  Usage tab:
+    Charts: API calls over time, content generated over time, SEO scans over time
+    Table: Date | Action | Details | Credits Used
+  Billing tab:
+    Current plan card + [Change Plan] button
+    Invoice history table: Invoice # | Amount | Status | Date | Actions
+Page: Pending Approvals (/admin/agencies/pending)
+Header: "Pending Approvals" + count badge
+Table:
+  Columns: Agency Name | Owner | Email | Requested Plan | Domain | Submitted | Actions
+  Actions: [Approve] (primary) | [Reject] (destructive) | [View Details]
+Approve dialog: Confirm plan, set initial credits, send welcome email checkbox
+Reject dialog: Rejection reason textarea, send notification checkbox
+Page: All Posts (/admin/content/posts)
+Header: "All Posts" + total count badge
+Filters: Agency dropdown | Workspace dropdown | Status dropdown | Category dropdown | Search
+Table:
+  Columns: Title | Agency | Workspace | Status (badge) | Words | Images | Schema (badge) | Published | Actions
+  Actions: View | Flag | Delete
+Page: All Campaigns (/admin/content/campaigns)
+Header: "All Campaigns"
+Filters: Agency dropdown | Status dropdown | Date range
+Table:
+  Columns: Campaign Name | Agency | Workspace | Post Count | Status (badge) | Created | Actions
+  Actions: View | Delete
+Page: Content Moderation (/admin/content/moderation)
+Header: "Content Moderation" + flagged count badge
+Tabs: Flagged Content | Abuse Reports
+Flagged Content tab:
+  Table: Post Title | Agency | Reason | Flagged By | Date | Actions
+  Actions: [Review] [Dismiss] [Remove Content] [Suspend Agency]
+Abuse Reports tab:
+  Table: Report # | Agency | Reporter | Description | Status | Date | Actions
+Page: Keyword Usage (/admin/seo/keywords)
+Header: "Platform Keyword Usage"
+Row 1: 3 stat cards
+  [Total Keywords Tracked] | [Active Agencies Using SEO] | [Keywords Added This Month]
+Row 2: Bar chart -- keywords per agency (top 20)
+Row 3: Table
+  Columns: Agency | Workspace | Keywords Tracked | Last Refresh | Credits Remaining
+Page: API Usage (/admin/seo/api-usage)
+Header: "API Usage & Quotas"
+Row 1: 4 stat cards
+  [DataForSEO Calls Today] | [Monthly Quota Used %] | [OpenAI Tokens Used] | [Image API Calls]
+Row 2: Line chart -- API calls per day (last 30 days), lines for each service
+Row 3: Table -- per-service breakdown
+  Columns: Service | Calls Today | Calls This Month | Quota | Status (badge) | Cost
+  Services: DataForSEO, OpenAI, Pexels, Pixabay, Unsplash
+Page: Subscriptions (/admin/billing/subscriptions)
+Header: "Subscriptions"
+Row 1: 4 stat cards
+  [MRR] | [ARR] | [Churn Rate %] | [ARPU]
+Table:
+  Columns: Agency | Plan (badge) | Amount | Billing Cycle | Status (badge) | Next Billing | Actions
+  Actions: View | Change Plan | Cancel
+Page: Revenue (/admin/billing/revenue)
+Header: "Revenue"
+Row 1: 4 stat cards
+  [Total Revenue] | [This Month] | [Growth %] | [Avg Revenue Per Agency]
+Row 2: Area chart -- monthly revenue (last 12 months)
+Row 3: 2 charts (50/50)
+  [Left] Revenue by plan tier (stacked bar)
+  [Right] New vs churned revenue (bar chart)
+Page: Invoices (/admin/billing/invoices)
+Header: "Platform Invoices" + [Create Invoice] button
+Filters: Agency dropdown | Status dropdown | Date range
+Table:
+  Columns: Invoice # | Agency | Amount | Status (badge) | Due Date | Paid Date | Actions
+  Actions: View | Send | Mark Paid | Void
+Page: Payouts (/admin/billing/payouts)
+Header: "White Label Payouts"
+Only visible for agencies on White Label or Enterprise plans with rev-share enabled.
+Row 1: 2 stat cards
+  [Pending Payouts] | [Paid This Month]
+Table:
+  Columns: Agency | Amount | Period | Status (badge) | Requested | Paid | Actions
+  Actions: Approve | Reject | View Details
+Page: API Keys (/admin/system/api-keys)
+Header: "Platform API Keys"
+Cards (one per service):
+  [OpenAI]        -- API key input (masked) + [Save] [Test] buttons + usage stat
+  [Pexels]        -- API key input (masked) + [Save] [Test] buttons + usage stat
+  [Pixabay]       -- API key input (masked) + [Save] [Test] buttons + usage stat
+  [Unsplash]      -- API key input (masked) + [Save] [Test] buttons + usage stat
+  [DataForSEO]    -- Login + Password inputs (masked) + [Save] [Test] buttons + usage stat
+Each card shows: Last tested date, status badge (Connected/Error), monthly usage count
+Page: Twilio (/admin/system/twilio)
+Header: "Platform Twilio"
+Config card:
+  Account SID, Auth Token (masked), default phone number
+  [Save] [Test Connection] buttons
+Phone Numbers table:
+  Columns: Number | Assigned Agency | Type (Voice/SMS/Both) | Status | Actions
+Usage stats:
+  Row: 3 stat cards -- Calls This Month | SMS This Month | Estimated Cost
+  Chart: Daily call/SMS volume (last 30 days)
+Page: Email (/admin/system/email)
+Header: "Email Configuration"
+SMTP Config card:
+  Host, Port, Username, Password (masked), From Address, From Name
+  [Save] [Send Test Email] buttons
+Email Templates section:
+  List: Welcome | Invoice | Password Reset | Support Reply | Announcement
+  Each: [Edit] [Preview] buttons
+  Edit opens template editor with subject + body (simple rich text)
+Page: Infrastructure (/admin/system/infrastructure)
+Header: "Infrastructure Health"
+Row 1: 4 stat cards
+  [Server Status] green/red | [DB Connections] count | [Queue Length] | [Error Rate %]
+Row 2: 2 charts (50/50)
+  [Left] Response time (line chart, last 24h)
+  [Right] Error rate (line chart, last 24h)
+Row 3: Recent errors table
+  Columns: Timestamp | Endpoint | Status Code | Message | Agency | Actions
+  Actions: View Stack Trace
+Page: All Users (/admin/users)
+Header: "All Users" + total count badge
+Filters: Search | Agency dropdown | Role dropdown | Status dropdown
+Table:
+  Columns: Name | Email | Agency | Role (badge) | Last Login | Status (badge) | Actions
+  Actions: View | Edit | Reset Password | Suspend | Delete
+Page: Admin Users (/admin/users/admins)
+Header: "Admin Users" + [Add Admin] button
+Table:
+  Columns: Name | Email | Role (badge: super_admin/admin/support) | Last Login | Actions
+  Actions: Edit | Remove
+Add Admin dialog:
+  Name, Email, Role dropdown, [Send Invite] button
+Page: All Tickets (/admin/support/tickets)
+Header: "Support Tickets" + open count badge
+Filters: Status (Open/In Progress/Resolved/Closed) | Priority (Low/Medium/High/Urgent) | Agency dropdown
+Table:
+  Columns: # | Subject | Agency | Priority (badge, color-coded) | Status (badge) | Created | Assigned To | Actions
+  Actions: View | Assign | Reply | Close
+Page: Call Logs (/admin/support/calls)
+Header: "Platform Call Logs"
+Filters: Agency dropdown | Date range | Direction (Inbound/Outbound) | Status
+Table:
+  Columns: Date/Time | Agency | Phone Number | Direction (badge) | Duration | Status | Recording | Actions
+  Actions: Play Recording | View Details
+Page: Announcements (/admin/support/announcements)
+Header: "System Announcements" + [New Announcement] button
+Table:
+  Columns: Title | Type (badge: Maintenance/Feature/Update/Alert) | Status (Active/Scheduled/Expired) | Published | Expires | Actions
+  Actions: Edit | Deactivate | Delete
+New Announcement dialog:
+  Title input, Type dropdown, Content textarea (rich text),
+  Publish date picker, Expiry date picker,
+  Target audience (All/Plan-specific checkboxes),
+  [Publish] [Schedule] buttons
+Page: Platform Config (/admin/settings/config)
+Header: "Platform Configuration"
+Sections:
+  [Plans & Limits]
+    Table: Plan | Price | Workspaces Limit | Post Limit/mo | Keywords Limit | Users Limit | [Edit]
+    Per plan row edit: all limits adjustable
+  [Feature Flags]
+    Toggle switches: White Label | CRM | Widget | Twilio | CMS Sync | Schema Detection | Link Builder
+    Each toggle: feature name + description + on/off switch
+  [Defaults]
+    Quality gate thresholds: Min words, Max words, Min headings, Min images
+    Credit amounts per plan: Rank Tracker, Grid Scan (inputs per plan tier)
+    Default timezone dropdown
+Page: Branding (/admin/settings/branding)
+Header: "IndexFlow Branding"
+  Logo upload (drag & drop) + preview
+  Platform name input
+  Tagline input
+  Primary color picker + preview swatch
+  Favicon upload + preview
+  [Save] button
+CLIENT DASHBOARD
+This is for agencies logging in to manage their content/SEO work.
+
+Client Sidebar Navigation
+Logo: Workspace name (or white-label brand name/logo)
+Collapsed icon width: 4rem
+Expanded width: 16rem
+Groups:
+  [Dashboard]
+    - Dashboard              (LayoutDashboard)
+  [Content Engine]
+    - Posts                  (FileText)
+    - Pages                  (File)
+    - Campaigns              (Megaphone)
+    - Domains                (Globe)
+  [SEO]
+    - Links                  (Link)
+    - Health                 (HeartPulse)
+    - CMS                    (RefreshCw)
+    - Reports                (BarChart3)
+    - Invoices               (Receipt)
+  [Rank Tracker]
+    - Track Keywords         (TrendingUp)
+    - Local Search Grid      (MapPin)
+    - Google Search Console  (Monitor)
+  [Twilio]
+    - Call Logs              (PhoneCall)
+    - Voice Settings         (Mic)
+    - SMS Settings           (MessageSquare)
+  [Widget]
+    - Monitoring             (Activity)
+    - Widget Code            (Code)
+  [CRM]
+    - Pipeline               (Kanban)
+    - Contacts               (Contact)
+  [Analytics]
+    - Overview               (BarChart3)
+    - Export Data             (Download)
+  [Connections]
+    - AI Providers           (Brain)
+    - Image Banks            (ImageIcon)
+    - Payments               (CreditCard)
+    - Twilio Account         (Phone)
+  [AI Training]
+    - Knowledge Base         (BookOpen)
+    - Channels               (Radio)
+  [Settings]
+    - Team & Invites         (Users)
+    - White Label            (Palette)
+    - Billing & Usage        (CreditCard)
+    - Setup Guide            (Compass)
+  [Support]
+    - Documentation          (BookOpen)
+    - Support Tickets        (LifeBuoy)
+Top-right header (not sidebar):
+    - Theme toggle (Sun/Moon)
+    - Avatar dropdown: Account | Sign Out
+Client Pages
+Page: Dashboard (/)
+Header: "Dashboard" + workspace name + plan badge
+Row 1: 5 stat cards
+  [Total Posts] | [Published] | [Keywords Tracked] | [Open Deals] | [Revenue (invoices)]
+Row 2: 2 charts (60/40 split)
+  [Left]  Area chart: Content published per month (last 6 months)
+  [Right] Donut chart: Posts by status (Draft / Review / Published / Scheduled)
+Row 3: 2 panels (50/50 split)
+  [Left]  "Recent Posts" -- last 5 posts with title + status badge + date
+  [Right] "SEO Snapshot" -- top 5 tracked keywords + current position + change arrow
+Row 4: Full width
+  "Pipeline Summary" -- horizontal bar showing deal count per stage, color-coded
+Row 5: "Content Due Today" panel -- posts with upcoming deadlines
+Page: Posts (/content/posts)
+Header: "Posts" + [New Post] button (primary) + [Bulk Generate] button (outline)
+Filters row: Search | Status dropdown | Category dropdown | Schema Type dropdown
+Table:
+  Columns: Title | Category | Status (badge) | Words | Images | Schema (badge) | Published Date | Actions
+  Actions: Edit | Preview | Duplicate | Export MDX | Delete
+Bulk Generate dialog (modal):
+  - Campaign name input
+  - Topic/keyword textarea (one per line)
+  - Category dropdown
+  - Target word count range (slider: 1500-2500)
+  - [Generate] button -> SSE progress bar with per-post status updates
+Page: Post Editor (/content/posts/:id)
+Layout: 2 columns (70/30)
+Left column:
+  - Title input (large text)
+  - Category dropdown
+  - Content editor (textarea or rich text)
+  - Image placeholders shown inline with [Resolve Images] button
+Right column (sticky sidebar):
+  - Status dropdown (Draft / Review / Published / Scheduled)
+  - Published date picker (if scheduled)
+  - Primary keyword input
+  - Meta title input (with character count)
+  - Meta description textarea (with character count)
+  - Slug input (auto-generated, editable)
+  Collapsible sections:
+    [Schema Markup]
+      - Schema type dropdown (20 types)
+      - [Auto-Detect] button
+      - JSON-LD preview (code block, copyable)
+    [SEO Score]
+      - Score badge (0-100, color: red/yellow/green)
+      - Checklist: title length, meta desc, headings, images, internal links, keyword density
+    [Links]
+      - Internal link count
+      - External link count
+      - [Suggest Links] button
+      - Link list with rel attribute badges (dofollow/nofollow)
+    [CMS Export]
+      - Target CMS dropdown (WordPress/Webflow/Shopify/Ghost/Wix)
+      - [Export] button
+      - [Export MDX] button
+Page: Pages (/content/pages)
+Header: "Pages" + [Add Page] button
+Table:
+  Columns: Page Title | URL | Type | SEO Score | Last Updated | Actions
+  Actions: Edit | Audit | Delete
+Used for managing site pages for internal linking context.
+Page: Campaigns (/content/campaigns)
+Header: "Campaigns" + [New Campaign] button
+Table:
+  Columns: Campaign Name | Post Count | Completed | Status (badge) | Created | Actions
+  Actions: View Posts | Resume Generation | Delete
+Campaign detail view:
+  Progress bar: X of Y posts generated
+  Per-post status list: title + status (Pending/Generating/Quality Check/Ready/Failed)
+  [Retry Failed] button
+Page: Domains (/content/domains)
+Header: "Domains" + [Add Domain] button
+Table:
+  Columns: Domain | Status (badge: Verified/Pending/Failed) | Posts Published | Added | Actions
+  Actions: Verify | Edit | Remove
+Add Domain dialog:
+  Domain input + DNS verification instructions (TXT record)
+  [Verify] button
+Page: Links (/seo/links)
+Header: "Link Builder"
+Tabs: Suggestions | Auto-Link | Orphan Report | Link Health
+Suggestions tab:
+  Table: Source Post | Target Post | Anchor Text | Relevance Score | Actions
+  Actions: [Apply Link] [Dismiss]
+Auto-Link tab:
+  [Run Bulk Auto-Link] button
+  Results: X links added across Y posts
+  Table: Post | Links Added | Details
+Orphan Report tab:
+  Posts with zero internal links pointing to them
+  Table: Post Title | Published Date | Incoming Links (0) | Actions
+  Actions: [Find Link Opportunities]
+Link Health tab:
+  Table: URL | Status (200/301/404/500 badge) | Post | Anchor Text | Last Checked | Actions
+  Actions: [Fix] [Remove]
+  [Check All Links] button
+Page: Health (/seo/health)
+Header: "SEO Health" (On-Page Auditor)
+[Run Audit] button (for selected pages or all)
+Overall score card: Score (0-100) + grade (A/B/C/D/F)
+Issues list grouped by severity:
+  Critical (red): Missing titles, broken links, duplicate content
+  Warning (yellow): Short meta descriptions, missing alt text, thin content
+  Info (blue): Optimization suggestions
+Per-page audit results table:
+  Columns: Page | Score | Critical | Warnings | Info | Last Audited | Actions
+  Actions: View Details | Re-Audit
+Page: CMS (/seo/cms)
+Header: "CMS Integration"
+Cards (one per CMS): WordPress | Webflow | Shopify | Ghost | Wix
+Each card:
+  CMS logo/icon + name
+  Connection status badge (Connected/Not Connected)
+  [Configure] button -> dialog with API credentials
+  [Sync Posts] button (if connected)
+  Last sync date + post count synced
+Sync log table:
+  Columns: Date | CMS | Posts Synced | Status | Errors | Actions
+  Actions: View Details | Retry
+Page: Reports (/seo/reports)
+Header: "Reports" + [Save Report] button
+Tabs: Content | SEO | Revenue
+Content tab:
+  Row 1: Stat cards -- Total Posts | Published | Avg Word Count | Image Coverage %
+  Row 2: [Left] Bar chart: Posts by category | [Right] Bar chart: Posts by month
+  Row 3: Schema coverage pie chart + posts by status breakdown
+SEO tab:
+  Row 1: Stat cards -- Pages Audited | Avg SEO Score | Keywords Tracked | Avg Position
+  Row 2: SEO score distribution histogram
+  Row 3: Top improving / declining keywords table
+Revenue tab:
+  Row 1: Stat cards -- Total Invoiced | Paid | Outstanding | Overdue
+  Row 2: Revenue area chart (monthly)
+  Row 3: Invoice status pie chart
+Saved Reports section:
+  List of previously saved snapshots with date + [View] [Delete]
+Page: Invoices (/seo/invoices)
+Header: "Invoices" + [Create Invoice] button
+Stat cards row: Draft | Sent | Paid | Overdue (each with count + total $)
+Table:
+  Columns: Invoice # | Client | Amount | Tax | Total | Status (badge, color) | Due Date | Actions
+  Actions: View | Edit | Send | Mark Paid | Download PDF | Delete
+Invoice editor (full page):
+  Header: Invoice # (auto: INV-0001) | Status dropdown | Due date picker
+  Client info: Name, email, address inputs
+  Line items table: Description | Qty | Unit Price | Total | [Remove]
+  [Add Line Item] button
+  Footer: Subtotal | Tax % input | Tax amount | Total
+  Currency dropdown (USD/EUR/GBP/AUD/CAD)
+  Notes textarea
+  [Save Draft] [Send Invoice] buttons
+Page: Track Keywords (/rank-tracker/keywords)
+Header: "Track Keywords" + credits remaining badge + [Buy Credits] button
+Subheader: [Add Keywords] button + [Refresh All] button (uses credits)
+Table:
+  Columns: Keyword | Position | Change (arrow + number, green/red) | URL | Search Volume | Last Checked | Actions
+  Actions: View History | Remove
+Keyword detail (expandable row or side panel):
+  - Position history line chart (last 30 days)
+  - Competitor positions table
+Buy Credits dialog:
+  Options: 5 credits for $10 | 25 credits for $35
+  [Purchase] button (Stripe checkout)
+Page: Local Search Grid (/rank-tracker/local-grid)
+Header: "Local Search Grid" + credits remaining badge + [Buy Credits] button
+Setup panel (if no scans yet):
+  - Business name input
+  - Location (address) input
+  - Keyword input
+  - Grid size: 5x5 (fixed)
+  - [Run Scan] button (uses 1 credit)
+Results:
+  - 5x5 grid visualization
+    Green cells: rank 1-3
+    Yellow cells: rank 4-10
+    Red cells: rank 11+
+    Gray cells: not found
+  - Each cell shows rank number
+  - Click cell -> details panel with competitors at that grid point
+  - Scan history dropdown to compare previous scans
+  - [Export as Image] button
+Page: Google Search Console (/rank-tracker/gsc)
+Header: "Google Search Console"
+[Connect GSC] button (if not connected) -> OAuth flow
+Once connected:
+  Date range selector (7d / 28d / 3mo / 6mo / 12mo / custom)
+  Row 1: 4 stat cards
+    [Total Clicks] | [Total Impressions] | [Avg CTR %] | [Avg Position]
+  Row 2: Line chart -- clicks + impressions over time (dual Y-axis)
+  Row 3: Table -- top queries
+    Columns: Query | Clicks | Impressions | CTR | Position | Change
+  Row 4: Table -- top pages
+    Columns: Page | Clicks | Impressions | CTR | Position
+Page: Call Logs (/twilio/calls)
+Header: "Call Logs"
+Filters: Date range | Direction (Inbound/Outbound/All) | Status
+Table:
+  Columns: Date/Time | Phone Number | Direction (badge) | Duration | Status (badge) | AI Summary | Actions
+  Actions: Play Recording | View Transcript | View Details
+Call detail panel:
+  Full transcript, AI-extracted info (name, party size, date/time if reservation), recording player
+Page: Voice Settings (/twilio/voice)
+Header: "Voice Settings"
+  Greeting message textarea
+  Voice selection dropdown (available TTS voices)
+  Language dropdown
+  AI response behavior config
+  Call forwarding number input
+  Business hours toggle (only answer during hours)
+  [Save] [Test Call] buttons
+Page: SMS Settings (/twilio/sms)
+Header: "SMS Settings"
+  Auto-reply toggle
+  Keyword responses table: Keyword | Response Template | [Edit] [Delete]
+  Keywords: CANCEL, CONFIRM, STATUS, HOURS, HELP (customizable)
+  Template variables reference: {name}, {date}, {time}, {venue}
+  [Add Keyword] button
+  [Save] button
+Page: Widget Monitoring (/widget/monitoring)
+Header: "Widget Monitoring"
+Row 1: 4 stat cards
+  [Total Conversations] | [Active Now] | [Avg Response Time] | [Satisfaction Score]
+Row 2: Line chart -- conversations per day (last 30 days)
+Row 3: Recent conversations table
+  Columns: Visitor | Started | Messages | Duration | Status | Actions
+  Actions: View Transcript | Flag
+Page: Widget Code (/widget/code)
+Header: "Embed Code"
+  Widget preview (live preview panel showing current config)
+  Customization:
+    Position dropdown (Bottom Right / Bottom Left)
+    Primary color picker
+    Welcome message input
+    Closed pill text input (e.g., "Chat with us")
+  Code snippet (read-only, copyable):
+    <script> tag with workspace ID embedded
+    [Copy Code] button
+  Testing:
+    [Open Widget Demo] button -> opens preview in new tab
+Page: Pipeline (/crm/pipeline)
+Header: "Sales Pipeline" + [Add Deal] button + toggle: Board View / List View
+Board View (default):
+  - Horizontal scrollable kanban columns
+  - Each column = pipeline stage (colored header bar)
+  - [Create Default Stages] button if no stages exist (seeds: Leads, Demo, Proposal, Closed Won)
+  - Deal cards: Contact name, deal value ($), expected close date
+  - Drag deals between columns
+  - Column footer: deal count + total value
+List View:
+  Table: Deal Name | Contact | Value | Stage (badge) | Expected Close | Assigned To | Actions
+[Add Deal] dialog:
+  - Deal name input
+  - Contact dropdown (searchable, with [+ New Contact] option)
+  - Value input + currency dropdown (USD/EUR/GBP/AUD/CAD)
+  - Stage dropdown
+  - Expected close date picker
+  - Assigned to input
+  - Source dropdown
+  - Notes textarea
+Page: Contacts (/crm/contacts)
+Header: "Contacts" + [Add Contact] button + contact count badge
+Search bar + tag filter dropdown + source filter dropdown
+Table:
+  Columns: Name | Email | Company | Phone | Tags (badges) | Deals | Source | Actions
+  Actions: View | Edit | Delete
+Contact detail dialog:
+  Left: Contact info (name, email, phone, company, website, tags, source, notes)
+  Right: Associated deals list + activity timeline
+[Add Contact] dialog:
+  Name, Email, Phone, Company, Website inputs
+  Tags (multi-select/create)
+  Source dropdown (Manual, Website, Referral, Import, Other)
+  Notes textarea
+Page: Analytics Overview (/analytics)
+Header: "Analytics Overview"
+Date range selector
+Row 1: 4 stat cards
+  [Page Views] | [Unique Visitors] | [Bounce Rate %] | [Avg Session Duration]
+Row 2: Line chart -- traffic over time
+Row 3: 2 charts (50/50)
+  [Left] Top pages table (Title | Views | Unique | Bounce Rate)
+  [Right] Traffic sources pie chart (Direct / Search / Social / Referral)
+Page: Export Data (/analytics/export)
+Header: "Export Data"
+Export options cards:
+  [Content] -- Export all posts as CSV/JSON/MDX
+  [Keywords] -- Export rank tracker data as CSV
+  [Contacts] -- Export CRM contacts as CSV
+  [Invoices] -- Export invoices as CSV/PDF
+  [Analytics] -- Export analytics data as CSV
+Each card: Description + format dropdown + date range + [Export] button
+Page: AI Providers (/connections/ai)
+Header: "AI Providers (BYOK)"
+Cards (one per provider):
+  [OpenAI]      -- API key input (masked) + model dropdown + [Save] [Test]
+  [Grok]        -- API key input (masked) + [Save] [Test]
+  [Anthropic]   -- API key input (masked) + model dropdown + [Save] [Test]
+  [Google AI]   -- API key input (masked) + [Save] [Test]
+  [Mistral]     -- API key input (masked) + [Save] [Test]
+  [Cohere]      -- API key input (masked) + [Save] [Test]
+  [Perplexity]  -- API key input (masked) + [Save] [Test]
+Each card: Provider logo/icon, connection status badge, last tested date
+Note at top: "Using platform defaults if no key provided"
+Page: Image Banks (/connections/images)
+Header: "Image Banks"
+Cards:
+  [Unsplash]  -- API key input (masked) + [Save] [Test] + usage stats
+  [Pexels]    -- API key input (masked) + [Save] [Test] + usage stats
+  [Pixabay]   -- API key input (masked) + [Save] [Test] + usage stats
+Note: "Leave blank to use platform defaults"
+Page: Payments (/connections/payments)
+Header: "Payment Connections"
+Cards:
+  [Stripe]  -- API key + webhook URL + [Save] [Test Connection]
+  [PayPal]  -- Client ID + Secret + [Save] [Test Connection]
+Connection status badge on each
+Page: Twilio Account (/connections/twilio)
+Header: "Twilio Account"
+  Account SID input
+  Auth Token input (masked)
+  Phone Number input
+  [Save] [Test Connection] buttons
+  Status: Connection status badge + last verified date
+Page: Knowledge Base (/training/knowledge-base)
+Header: "Knowledge Base" + [Add Entry] button
+Table:
+  Columns: Title | Category | Type (FAQ/Info/Instruction) | Status | Updated | Actions
+  Actions: Edit | Delete
+Add/Edit dialog:
+  Title input
+  Category dropdown
+  Type dropdown
+  Content textarea (supports markdown)
+  [Save] button
+Page: Channels (/training/channels)
+Header: "AI Channels"
+Cards:
+  [Widget]
+    - Status: Active/Inactive toggle
+    - Personality/tone dropdown (Professional / Friendly / Casual)
+    - Response length preference (Concise / Balanced / Detailed)
+    - [Save] button
+  [Twilio]
+    - Status: Active/Inactive toggle
+    - Voice personality config
+    - SMS response style config
+    - [Save] button
+Page: Team & Invites (/settings/team)
+Header: "Team" + [Invite Member] button
+Table:
+  Columns: Name | Email | Role (dropdown: owner/admin/editor/viewer) | Status (badge) | Joined | Actions
+  Actions: Change Role | Remove
+Pending invites section:
+  Table: Email | Role | Invited | Status | Actions
+  Actions: Resend | Cancel
+Invite dialog:
+  Email input + Role dropdown + [Send Invite] button
+Page: White Label (/settings/white-label)
+Header: "White Label" (only visible on White Label / Enterprise plans)
+  Brand name input
+  Logo upload (drag & drop) + preview
+  Favicon upload + preview
+  Primary color picker + swatch preview
+  Custom domain input + DNS instructions
+  Support email input
+  Custom login page toggle
+  [Save] [Preview] buttons
+Note for Solo/Pro plans: "Upgrade to White Label plan to access branding customization"
+Page: Billing & Usage (/settings/billing)
+Header: "Billing & Usage"
+Current Plan card:
+  Plan name (badge) | Price | Next billing date | [Change Plan] [Cancel] buttons
+Usage section:
+  Row: 4 progress bars
+    Workspaces: X of Y used
+    Posts this month: X of Y limit
+    Keywords: X of Y limit
+    Users: X of Y limit
+Credits section:
+  2 cards: Rank Tracker credits remaining | Grid Scan credits remaining
+  [Buy Credits] buttons
+Payment method:
+  Current card on file (masked) + [Update] button
+Invoice history:
+  Table: Date | Amount | Status | [Download PDF]
