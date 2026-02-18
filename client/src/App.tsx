@@ -7,7 +7,6 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Home = lazy(() => import("@/pages/home"));
 const AIWidget = lazy(() => import("@/components/ai-widget").then(m => ({ default: m.AIWidget })));
@@ -30,6 +29,30 @@ const DevClient = lazy(() => import("@/pages/dev-client"));
 const DevAdmin = lazy(() => import("@/pages/dev-admin"));
 
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
+const AdminAgencies = lazy(() => import("@/pages/admin/agencies"));
+const AdminAgencyDetail = lazy(() => import("@/pages/admin/agency-detail"));
+const AdminAgenciesPending = lazy(() => import("@/pages/admin/agencies-pending"));
+const AdminContentPosts = lazy(() => import("@/pages/admin/content-posts"));
+const AdminContentCampaigns = lazy(() => import("@/pages/admin/content-campaigns"));
+const AdminContentModeration = lazy(() => import("@/pages/admin/content-moderation"));
+const AdminPlatformSeoKeywords = lazy(() => import("@/pages/admin/platform-seo-keywords"));
+const AdminPlatformSeoApi = lazy(() => import("@/pages/admin/platform-seo-api"));
+const AdminBillingSubscriptions = lazy(() => import("@/pages/admin/billing-subscriptions"));
+const AdminBillingRevenue = lazy(() => import("@/pages/admin/billing-revenue"));
+const AdminBillingInvoices = lazy(() => import("@/pages/admin/billing-invoices"));
+const AdminBillingPayouts = lazy(() => import("@/pages/admin/billing-payouts"));
+const AdminSystemApiKeys = lazy(() => import("@/pages/admin/system-api-keys"));
+const AdminSystemTwilio = lazy(() => import("@/pages/admin/system-twilio"));
+const AdminSystemEmail = lazy(() => import("@/pages/admin/system-email"));
+const AdminSystemInfrastructure = lazy(() => import("@/pages/admin/system-infrastructure"));
+const AdminUsersAll = lazy(() => import("@/pages/admin/users-all"));
+const AdminUsersAdmins = lazy(() => import("@/pages/admin/users-admins"));
+const AdminSupportTickets = lazy(() => import("@/pages/admin/support-tickets"));
+const AdminSupportCallLogs = lazy(() => import("@/pages/admin/support-call-logs"));
+const AdminSupportAnnouncements = lazy(() => import("@/pages/admin/support-announcements"));
+const AdminSettingsConfig = lazy(() => import("@/pages/admin/settings-config"));
+const AdminSettingsBranding = lazy(() => import("@/pages/admin/settings-branding"));
+
 const AdminClients = lazy(() => import("@/pages/admin/clients"));
 const AdminUsers = lazy(() => import("@/pages/admin/users"));
 const AdminBilling = lazy(() => import("@/pages/admin/billing"));
@@ -59,12 +82,53 @@ const BookingDetail = lazy(() => import("@/pages/dashboard/booking-detail"));
 const Calls = lazy(() => import("@/pages/dashboard/calls"));
 const CallDetail = lazy(() => import("@/pages/dashboard/call-detail"));
 const Analytics = lazy(() => import("@/pages/dashboard/analytics"));
+
+const ContentPosts = lazy(() => import("@/pages/dashboard/content-posts"));
+const ContentPages = lazy(() => import("@/pages/dashboard/content-pages"));
+const ContentCampaigns = lazy(() => import("@/pages/dashboard/content-campaigns"));
+const ContentDomains = lazy(() => import("@/pages/dashboard/content-domains"));
+
+const SeoLinks = lazy(() => import("@/pages/dashboard/seo-links"));
+const SeoHealth = lazy(() => import("@/pages/dashboard/seo-health"));
+const SeoCms = lazy(() => import("@/pages/dashboard/seo-cms"));
+const SeoReports = lazy(() => import("@/pages/dashboard/seo-reports"));
+const SeoInvoices = lazy(() => import("@/pages/dashboard/seo-invoices"));
+
+const TwilioCallLogs = lazy(() => import("@/pages/dashboard/twilio-call-logs"));
+const TwilioVoice = lazy(() => import("@/pages/dashboard/twilio-voice"));
+const TwilioSms = lazy(() => import("@/pages/dashboard/twilio-sms"));
+
+const WidgetMonitoring = lazy(() => import("@/pages/dashboard/widget-monitoring"));
+const WidgetCode = lazy(() => import("@/pages/dashboard/widget-code"));
+
+const CrmPipeline = lazy(() => import("@/pages/dashboard/crm-pipeline"));
+const CrmContacts = lazy(() => import("@/pages/dashboard/crm-contacts"));
+
+const AnalyticsOverview = lazy(() => import("@/pages/dashboard/analytics-overview"));
+const AnalyticsExport = lazy(() => import("@/pages/dashboard/analytics-export"));
+
+const ConnectionsAi = lazy(() => import("@/pages/dashboard/connections-ai"));
+const ConnectionsImages = lazy(() => import("@/pages/dashboard/connections-images"));
+const ConnectionsPayments = lazy(() => import("@/pages/dashboard/connections-payments"));
+const ConnectionsTwilio = lazy(() => import("@/pages/dashboard/connections-twilio"));
+
+const AiTrainingKb = lazy(() => import("@/pages/dashboard/ai-training-kb"));
+const AiTrainingChannels = lazy(() => import("@/pages/dashboard/ai-training-channels"));
+
+const SettingsTeamNew = lazy(() => import("@/pages/dashboard/settings-team"));
+const SettingsWhiteLabel = lazy(() => import("@/pages/dashboard/settings-white-label"));
+const SettingsBilling = lazy(() => import("@/pages/dashboard/settings-billing"));
+const SettingsSetup = lazy(() => import("@/pages/dashboard/settings-setup"));
+
+const SupportDocs = lazy(() => import("@/pages/dashboard/support-docs"));
+const SupportTickets = lazy(() => import("@/pages/dashboard/support-tickets"));
+
 const SettingsHours = lazy(() => import("@/pages/dashboard/settings/hours"));
 const SettingsClosures = lazy(() => import("@/pages/dashboard/settings/closures"));
 const SettingsResources = lazy(() => import("@/pages/dashboard/settings/resources"));
 const SettingsTeam = lazy(() => import("@/pages/dashboard/settings/team"));
 const SettingsTrainWidget = lazy(() => import("@/pages/dashboard/settings/train-widget"));
-const SettingsWidgetCode = lazy(() => import("@/pages/dashboard/settings/widget-code"));
+const SettingsWidgetCodeOld = lazy(() => import("@/pages/dashboard/settings/widget-code"));
 const SettingsPayments = lazy(() => import("@/pages/dashboard/settings/payments"));
 const SettingsTwilioSetup = lazy(() => import("@/pages/dashboard/settings/twilio-setup"));
 const SettingsTwilioVoice = lazy(() => import("@/pages/dashboard/settings/twilio-voice"));
@@ -148,7 +212,7 @@ const HotelMinimalistic = lazy(() => import("@/pages/templates/hotel-minimalisti
 
 function getAdminRole(): AdminRole {
   try {
-    const session = localStorage.getItem("resto_admin_session");
+    const session = localStorage.getItem("indexflow_admin_session");
     if (session) {
       const parsed = JSON.parse(session);
       return (parsed.role as AdminRole) || "super_admin";
@@ -240,7 +304,34 @@ function Router() {
         <Route path="/client-login" component={Login} />
         <Route path="/dev/client" component={DevClient} />
         <Route path="/dev/admin" component={DevAdmin} />
+
+        {/* Super Admin Dashboard Routes */}
         <Route path="/admin">{() => <AdminRoute component={AdminDashboard} permission="dashboard" />}</Route>
+        <Route path="/admin/agencies">{() => <AdminRoute component={AdminAgencies} permission="*" />}</Route>
+        <Route path="/admin/agencies/detail">{() => <AdminRoute component={AdminAgencyDetail} permission="*" />}</Route>
+        <Route path="/admin/agencies/pending">{() => <AdminRoute component={AdminAgenciesPending} permission="*" />}</Route>
+        <Route path="/admin/content/posts">{() => <AdminRoute component={AdminContentPosts} permission="*" />}</Route>
+        <Route path="/admin/content/campaigns">{() => <AdminRoute component={AdminContentCampaigns} permission="*" />}</Route>
+        <Route path="/admin/content/moderation">{() => <AdminRoute component={AdminContentModeration} permission="*" />}</Route>
+        <Route path="/admin/platform-seo/keywords">{() => <AdminRoute component={AdminPlatformSeoKeywords} permission="*" />}</Route>
+        <Route path="/admin/platform-seo/api-usage">{() => <AdminRoute component={AdminPlatformSeoApi} permission="*" />}</Route>
+        <Route path="/admin/billing/subscriptions">{() => <AdminRoute component={AdminBillingSubscriptions} permission="*" />}</Route>
+        <Route path="/admin/billing/revenue">{() => <AdminRoute component={AdminBillingRevenue} permission="*" />}</Route>
+        <Route path="/admin/billing/invoices">{() => <AdminRoute component={AdminBillingInvoices} permission="*" />}</Route>
+        <Route path="/admin/billing/payouts">{() => <AdminRoute component={AdminBillingPayouts} permission="*" />}</Route>
+        <Route path="/admin/system/api-keys">{() => <AdminRoute component={AdminSystemApiKeys} permission="*" />}</Route>
+        <Route path="/admin/system/twilio">{() => <AdminRoute component={AdminSystemTwilio} permission="*" />}</Route>
+        <Route path="/admin/system/email">{() => <AdminRoute component={AdminSystemEmail} permission="*" />}</Route>
+        <Route path="/admin/system/infrastructure">{() => <AdminRoute component={AdminSystemInfrastructure} permission="*" />}</Route>
+        <Route path="/admin/users/all">{() => <AdminRoute component={AdminUsersAll} permission="*" />}</Route>
+        <Route path="/admin/users/admins">{() => <AdminRoute component={AdminUsersAdmins} permission="*" />}</Route>
+        <Route path="/admin/support/tickets">{() => <AdminRoute component={AdminSupportTickets} permission="*" />}</Route>
+        <Route path="/admin/support/call-logs">{() => <AdminRoute component={AdminSupportCallLogs} permission="*" />}</Route>
+        <Route path="/admin/support/announcements">{() => <AdminRoute component={AdminSupportAnnouncements} permission="*" />}</Route>
+        <Route path="/admin/settings/config">{() => <AdminRoute component={AdminSettingsConfig} permission="*" />}</Route>
+        <Route path="/admin/settings/branding">{() => <AdminRoute component={AdminSettingsBranding} permission="*" />}</Route>
+
+        {/* Legacy admin routes for backward compatibility */}
         <Route path="/admin/clients">{() => <AdminRoute component={AdminClients} permission="clients" />}</Route>
         <Route path="/admin/users">{() => <AdminRoute component={AdminUsers} permission="users" />}</Route>
         <Route path="/admin/billing">{() => <AdminRoute component={AdminBilling} permission="billing" />}</Route>
@@ -262,6 +353,8 @@ function Router() {
         <Route path="/admin/seo/ai-visibility">{() => <AdminRoute component={AdminSeoAIVisibility} permission="seo" />}</Route>
         <Route path="/admin/call-logs">{() => <AdminRoute component={AdminCallLogs} permission="calls" />}</Route>
         <Route path="/admin/widget-config">{() => <AdminRoute component={AdminWidgetConfig} permission="widgets" />}</Route>
+
+        {/* Client Dashboard Routes */}
         <Route path="/select-workspace" component={SelectWorkspace} />
         <Route path="/:workspaceId/today" component={Today} />
         <Route path="/:workspaceId/calendar" component={CalendarView} />
@@ -269,12 +362,68 @@ function Router() {
         <Route path="/:workspaceId/calls" component={Calls} />
         <Route path="/:workspaceId/calls/:callId" component={CallDetail} />
         <Route path="/:workspaceId/analytics" component={Analytics} />
+
+        {/* Content Engine */}
+        <Route path="/:workspaceId/content/posts" component={ContentPosts} />
+        <Route path="/:workspaceId/content/pages" component={ContentPages} />
+        <Route path="/:workspaceId/content/campaigns" component={ContentCampaigns} />
+        <Route path="/:workspaceId/content/domains" component={ContentDomains} />
+
+        {/* SEO */}
+        <Route path="/:workspaceId/seo/links" component={SeoLinks} />
+        <Route path="/:workspaceId/seo/health" component={SeoHealth} />
+        <Route path="/:workspaceId/seo/cms" component={SeoCms} />
+        <Route path="/:workspaceId/seo/reports" component={SeoReports} />
+        <Route path="/:workspaceId/seo/invoices" component={SeoInvoices} />
+
+        {/* Rank Tracker */}
+        <Route path="/:workspaceId/rank-tracker/track-keywords" component={RankTracker} />
+        <Route path="/:workspaceId/rank-tracker/local-search-grid" component={DashboardLocalSearchGrid} />
+        <Route path="/:workspaceId/rank-tracker/google-search-console" component={GoogleSearchConsole} />
+
+        {/* Twilio */}
+        <Route path="/:workspaceId/twilio/call-logs" component={TwilioCallLogs} />
+        <Route path="/:workspaceId/twilio/voice" component={TwilioVoice} />
+        <Route path="/:workspaceId/twilio/sms" component={TwilioSms} />
+
+        {/* Widget */}
+        <Route path="/:workspaceId/widget/monitoring" component={WidgetMonitoring} />
+        <Route path="/:workspaceId/widget/code" component={WidgetCode} />
+
+        {/* CRM */}
+        <Route path="/:workspaceId/crm/pipeline" component={CrmPipeline} />
+        <Route path="/:workspaceId/crm/contacts" component={CrmContacts} />
+
+        {/* Analytics */}
+        <Route path="/:workspaceId/analytics/overview" component={AnalyticsOverview} />
+        <Route path="/:workspaceId/analytics/export" component={AnalyticsExport} />
+
+        {/* Connections */}
+        <Route path="/:workspaceId/connections/ai-providers" component={ConnectionsAi} />
+        <Route path="/:workspaceId/connections/image-banks" component={ConnectionsImages} />
+        <Route path="/:workspaceId/connections/payments" component={ConnectionsPayments} />
+        <Route path="/:workspaceId/connections/twilio" component={ConnectionsTwilio} />
+
+        {/* AI Training */}
+        <Route path="/:workspaceId/ai-training/knowledge-base" component={AiTrainingKb} />
+        <Route path="/:workspaceId/ai-training/channels" component={AiTrainingChannels} />
+
+        {/* Settings */}
+        <Route path="/:workspaceId/settings/team" component={SettingsTeamNew} />
+        <Route path="/:workspaceId/settings/white-label" component={SettingsWhiteLabel} />
+        <Route path="/:workspaceId/settings/billing" component={SettingsBilling} />
+        <Route path="/:workspaceId/settings/setup-guide" component={SettingsSetup} />
+
+        {/* Support */}
+        <Route path="/:workspaceId/support/documentation" component={SupportDocs} />
+        <Route path="/:workspaceId/support/tickets" component={SupportTickets} />
+
+        {/* Legacy client dashboard routes */}
         <Route path="/:workspaceId/settings/hours" component={SettingsHours} />
         <Route path="/:workspaceId/settings/closures" component={SettingsClosures} />
         <Route path="/:workspaceId/settings/resources" component={SettingsResources} />
-        <Route path="/:workspaceId/settings/team" component={SettingsTeam} />
         <Route path="/:workspaceId/settings/train-widget" component={SettingsTrainWidget} />
-        <Route path="/:workspaceId/settings/widget-code" component={SettingsWidgetCode} />
+        <Route path="/:workspaceId/settings/widget-code" component={SettingsWidgetCodeOld} />
         <Route path="/:workspaceId/settings/payments" component={SettingsPayments} />
         <Route path="/:workspaceId/settings/twilio-setup" component={SettingsTwilioSetup} />
         <Route path="/:workspaceId/settings/twilio-voice" component={SettingsTwilioVoice} />
@@ -290,13 +439,11 @@ function Router() {
         <Route path="/:workspaceId/rooms" component={Rooms} />
         <Route path="/:workspaceId/room-bookings" component={RoomBookings} />
         <Route path="/:workspaceId/export-data" component={ExportData} />
-        <Route path="/:workspaceId/rank-tracker/google-search-console" component={GoogleSearchConsole} />
-        <Route path="/:workspaceId/rank-tracker/track-keywords" component={RankTracker} />
-        <Route path="/:workspaceId/rank-tracker/local-search-grid" component={DashboardLocalSearchGrid} />
         <Route path="/:workspaceId/website-changes" component={WebsiteChanges} />
         <Route path="/:workspaceId/documentation" component={Documentation} />
         <Route path="/:workspaceId/support" component={Support} />
-        
+
+        {/* Template previews */}
         <Route path="/preview/restaurant-bold" component={RestaurantBold} />
         <Route path="/preview/restaurant-vibrant" component={RestaurantVibrant} />
         <Route path="/preview/restaurant-simple" component={RestaurantSimple} />
@@ -322,7 +469,7 @@ function Router() {
 
 function AppContent() {
   const [location] = useLocation();
-  const isDashboard = location.startsWith("/client-login") || 
+  const isAppRoute = location.startsWith("/client-login") || 
                       location.startsWith("/select-workspace") || 
                       location.startsWith("/preview/") ||
                       location.startsWith("/widget-demo") ||
@@ -342,8 +489,14 @@ function AppContent() {
                       location.includes("/support") ||
                       location.includes("/export-data") ||
                       location.includes("/ai-training") ||
-                      location.includes("/rank-tracker/") ||
-                      location.includes("/website-changes");
+                      location.includes("/rank-tracker") ||
+                      location.includes("/website-changes") ||
+                      location.includes("/content/") ||
+                      location.includes("/seo/") ||
+                      location.includes("/twilio/") ||
+                      location.includes("/widget/") ||
+                      location.includes("/crm/") ||
+                      location.includes("/connections/");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -352,7 +505,7 @@ function AppContent() {
   return (
     <>
       <Router />
-      {!isDashboard && <AIWidget />}
+      {!isAppRoute && <AIWidget />}
     </>
   );
 }

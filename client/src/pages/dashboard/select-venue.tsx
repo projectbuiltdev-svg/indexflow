@@ -30,8 +30,8 @@ export default function SelectVenue() {
   });
 
   useEffect(() => {
-    document.title = "My Locations - Resto";
-    const session = JSON.parse(localStorage.getItem("resto_session") || "{}");
+    document.title = "My Workspaces - indexFlow";
+    const session = JSON.parse(localStorage.getItem("indexflow_session") || "{}");
     if (!session.email) {
       setLocation("/client-login");
       return;
@@ -60,7 +60,7 @@ export default function SelectVenue() {
   }, [searchQuery]);
 
   const handleSelectVenue = (workspaceId: string) => {
-    localStorage.setItem("resto_current_venue", workspaceId);
+    localStorage.setItem("indexflow_workspace_id", workspaceId);
     setLocation(`/${workspaceId}/today`);
   };
 

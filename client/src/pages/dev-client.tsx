@@ -6,16 +6,15 @@ export default function DevClient() {
 
   useEffect(() => {
     // Auto-login for dev access
-    localStorage.setItem("resto_session", JSON.stringify({
+    localStorage.setItem("indexflow_session", JSON.stringify({
       email: "client@demo.com",
-      venues: [
-        { id: "venue-1", name: "La Bella Italia" },
-        { id: "venue-2", name: "The Golden Dragon" },
+      workspaces: [
+        { id: "venue-golden-fork", name: "The Golden Fork" },
+        { id: "venue-skyline-bar", name: "Skyline Rooftop Bar" },
       ]
     }));
     
-    // Redirect to dashboard
-    setLocation("/venue-1/today");
+    setLocation("/venue-golden-fork/today");
   }, [setLocation]);
 
   return (

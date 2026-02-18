@@ -1,7 +1,7 @@
 # indexFlow - Multi-Tenant Workspace Management SaaS
 
 ## Overview
-indexFlow is a multi-tenant hospitality booking SaaS platform for restaurants, hotels, and bars. It features a marketing landing page and a full dashboard with modules for content engine (blog), keyword rank tracker, 5x5 local search grid visualization, reservations, contact messages/CRM, and SEO settings. All data is workspace-scoped with a workspace selector in the sidebar.
+indexFlow is a multi-tenant hospitality booking SaaS platform for restaurants, hotels, and bars. It features a marketing landing page, a Super Admin Dashboard, and a Client Dashboard with modules for content engine (blog), keyword rank tracker, 5x5 local search grid visualization, reservations, contact messages/CRM, and SEO settings. All data is workspace-scoped with a workspace selector in the sidebar.
 
 ## Architecture
 - **Frontend**: React + Vite + TailwindCSS + shadcn/ui components
@@ -9,20 +9,23 @@ indexFlow is a multi-tenant hospitality booking SaaS platform for restaurants, h
 - **Database**: PostgreSQL with Drizzle ORM (mix of serial integer IDs and varchar(36) UUID primary keys)
 - **Routing**: wouter (client-side)
 - **State**: TanStack React Query
-- **Workspace Context**: WorkspaceProvider wraps DashboardLayout, persists selection to localStorage
+- **Workspace Context**: WorkspaceProvider wraps ClientLayout, persists selection to localStorage
 
 ## Key Files
-- `shared/schema.ts` - All data models (37 tables: workspaces, users, workspaceBlogPosts, workspaceDomains, workspaceContentAssets, workspaceCampaigns, rankTrackerKeywords, gridKeywords, gridScanResults, contactMessages, seoIntegrations, reservations, etc.)
+- `shared/schema.ts` - All data models (37 tables)
 - `server/db.ts` - Database connection
 - `server/storage.ts` - DatabaseStorage class implementing IStorage interface (workspace-scoped)
 - `server/routes.ts` - All API endpoints under /api/ (workspace-scoped)
 - `server/seed.ts` - Seed data
-- `client/src/App.tsx` - Main router with landing page and dashboard routes
+- `client/src/App.tsx` - Main router with 100+ routes (landing, admin, client dashboard)
 - `client/src/lib/workspace-context.tsx` - Workspace context provider with localStorage persistence
-- `client/src/components/app-sidebar.tsx` - Sidebar with workspace selector dropdown
-- `client/src/components/dashboard-layout.tsx` - Dashboard layout with active workspace badge
-- `client/src/pages/landing.tsx` - Marketing landing page
-- `client/src/pages/dashboard/` - Dashboard pages (overview, content, keywords, grid, gsc, leads, reservations, settings)
+- `client/src/components/admin-sidebar.tsx` - Super Admin sidebar with 8 collapsible sections
+- `client/src/components/client-sidebar.tsx` - Client Dashboard sidebar with 11 collapsible sections
+- `client/src/components/admin-layout.tsx` - Admin layout with SidebarProvider + UserAvatarDropdown
+- `client/src/components/client-layout.tsx` - Client layout with WorkspaceProvider + UserAvatarDropdown
+- `client/src/components/user-avatar-dropdown.tsx` - Avatar dropdown with theme toggle, account, sign out
+- `client/src/pages/admin/` - 24 Super Admin pages (dashboard + 23 sub-pages)
+- `client/src/pages/dashboard/` - 30+ Client Dashboard pages
 
 ## Design Tokens
 - Primary color: HSL 197 90% 50% (sky blue)
@@ -35,19 +38,81 @@ indexFlow is a multi-tenant hospitality booking SaaS platform for restaurants, h
 - JS property names use `workspaceId` while DB columns remain `venue_id` for backward compatibility
 - Primary keys: workspaces/users use varchar(36) UUIDs, most other tables use serial integers
 - All resource tables have `venue_id` (DB) / `workspaceId` (JS) foreign key referencing workspaces
-- Key tables: venues/workspaces, users, venue_blog_posts, venue_domains, venue_content_assets, venue_campaigns, rank_tracker_keywords, grid_keywords, grid_scan_results, contact_messages, seo_integrations, reservations, venue_menus, venue_menu_items, venue_reviews, venue_social_accounts, venue_hours, venue_amenities, venue_photos, venue_staff, staff_schedules, phone_calls, chat_conversations, chat_messages, invoices, invoice_line_items, content_reports, crm_contacts, crm_pipeline_stages, crm_deals
 - CRITICAL: Do NOT run db:push - database already has correct schema from SQL import
 
 ## Routes
+
+### Super Admin Dashboard
+- `/admin` - Admin Dashboard overview
+- `/admin/agencies` - All Agencies
+- `/admin/agencies/detail` - Agency Detail
+- `/admin/agencies/pending` - Pending Approvals
+- `/admin/content/posts` - All Posts
+- `/admin/content/campaigns` - All Campaigns
+- `/admin/content/moderation` - Content Moderation
+- `/admin/platform-seo/keywords` - Keyword Usage
+- `/admin/platform-seo/api-usage` - API Usage
+- `/admin/billing/subscriptions` - Subscriptions
+- `/admin/billing/revenue` - Revenue
+- `/admin/billing/invoices` - Invoices
+- `/admin/billing/payouts` - Payouts
+- `/admin/system/api-keys` - Platform API Keys
+- `/admin/system/twilio` - Twilio Management
+- `/admin/system/email` - Email Configuration
+- `/admin/system/infrastructure` - Infrastructure
+- `/admin/users/all` - All Users
+- `/admin/users/admins` - Admin Users
+- `/admin/support/tickets` - Support Tickets
+- `/admin/support/call-logs` - Call Logs
+- `/admin/support/announcements` - System Announcements
+- `/admin/settings/config` - Platform Config
+- `/admin/settings/branding` - Branding
+
+### Client Dashboard (/:workspaceId prefix)
+- `/:workspaceId/today` - Dashboard Overview
+- `/:workspaceId/content/posts` - Content Posts
+- `/:workspaceId/content/pages` - Content Pages
+- `/:workspaceId/content/campaigns` - Campaigns
+- `/:workspaceId/content/domains` - Domains
+- `/:workspaceId/seo/links` - Internal Links
+- `/:workspaceId/seo/health` - SEO Health
+- `/:workspaceId/seo/cms` - CMS Integration
+- `/:workspaceId/seo/reports` - SEO Reports
+- `/:workspaceId/seo/invoices` - SEO Invoices
+- `/:workspaceId/rank-tracker/track-keywords` - Track Keywords
+- `/:workspaceId/rank-tracker/local-search-grid` - Local Search Grid
+- `/:workspaceId/rank-tracker/google-search-console` - Google Search Console
+- `/:workspaceId/twilio/call-logs` - Call Logs
+- `/:workspaceId/twilio/voice` - Voice Settings
+- `/:workspaceId/twilio/sms` - SMS Settings
+- `/:workspaceId/widget/monitoring` - Widget Monitoring
+- `/:workspaceId/widget/code` - Widget Code
+- `/:workspaceId/crm/pipeline` - CRM Pipeline
+- `/:workspaceId/crm/contacts` - CRM Contacts
+- `/:workspaceId/analytics/overview` - Analytics Overview
+- `/:workspaceId/analytics/export` - Export Data
+- `/:workspaceId/connections/ai-providers` - AI Provider Connections
+- `/:workspaceId/connections/image-banks` - Image Bank Connections
+- `/:workspaceId/connections/payments` - Payment Connections
+- `/:workspaceId/connections/twilio` - Twilio Account Connection
+- `/:workspaceId/ai-training/knowledge-base` - Knowledge Base
+- `/:workspaceId/ai-training/channels` - AI Channels
+- `/:workspaceId/settings/team` - Team & Invites
+- `/:workspaceId/settings/white-label` - White Label
+- `/:workspaceId/settings/billing` - Billing & Usage
+- `/:workspaceId/settings/setup-guide` - Setup Guide
+- `/:workspaceId/support/documentation` - Documentation
+- `/:workspaceId/support/tickets` - Support Tickets
+
+### Marketing Pages
 - `/` - Landing page / Home
-- `/dashboard` - Dashboard overview
-- `/dashboard/content` - Content engine with post CRUD
-- `/dashboard/keywords` - Rank tracker (keyword list)
-- `/dashboard/grid` - 5x5 local search grid with colored cells
-- `/dashboard/gsc` - GSC analytics (placeholder/coming soon)
-- `/dashboard/reservations` - Reservation management
-- `/dashboard/leads` - Contact messages / CRM
-- `/dashboard/settings` - Settings (domains, SEO integrations, API keys)
+- `/how-it-works` - About
+- `/solutions/*` - Solution pages (restaurants, cafes, bars, hotels, multi-location)
+- `/platform/*` - Platform feature pages
+- `/pricing` - Pricing
+- `/blog` - Blog
+- `/templates` - Templates
+- `/contact` - Contact
 - `/select-workspace` - Workspace selector page
 
 ## API Endpoints
@@ -96,7 +161,7 @@ All prefixed with `/api/`:
 - **Database columns**: venue_id, venue_blog_posts, etc. (preserved for backward compatibility)
 - **API paths**: /api/workspaces/, ?workspaceId= (no /api/admin/ prefix)
 - **Frontend context**: WorkspaceProvider, useWorkspace, selectedWorkspace
-- **localStorage key**: indexflow_workspace_id
+- **localStorage keys**: indexflow_workspace_id, indexflow_admin_session, indexflow_session
 
 ## Testing Policy
 - Do NOT run Playwright e2e tests (run_test). The user has disabled e2e testing permanently.
@@ -104,12 +169,11 @@ All prefixed with `/api/`:
 
 ## Recent Changes (Feb 2026)
 - Complete global rename: venue → workspace across codebase (60+ files, 600+ occurrences)
-- Renamed schema.ts exports: venues → workspaces, Venue → Workspace, VenueBlogPost → WorkspaceBlogPost, etc.
-- Created workspace-context.tsx replacing venue-context.tsx
-- Updated storage.ts: IStorage interface and DatabaseStorage use workspace naming
-- Updated routes.ts: /api/workspaces/ endpoints, workspaceId params
-- Removed /api/admin/ prefix from all routes
-- Removed x-admin-role header authentication pattern
-- Session-based auth via Replit auth integration (setupAuth in routes.ts)
-- SEO automation module with validation, link suggestions, orphan reports, keyword cannibalization
+- Rebuilt Super Admin sidebar with 8 collapsible sections (Dashboard, Agencies, Content, Platform SEO, Billing, System, Users, Support, Settings)
+- Rebuilt Client Dashboard sidebar with 11 collapsible sections (Dashboard, Content Engine, SEO, Twilio, Widget, CRM, Analytics, Connections, AI Training, Settings, Support)
+- Created UserAvatarDropdown component with theme toggle, account, sign out
+- Updated both AdminLayout and ClientLayout headers with avatar dropdown
+- Created 23 Super Admin stub pages and 30 Client Dashboard stub pages
+- Updated App.tsx with 100+ routes including all new admin/client dashboard routes
+- Fixed all localStorage keys: resto_* → indexflow_*
 - Logo asset: @assets/image_1771351451425.png (indexFlow logo)

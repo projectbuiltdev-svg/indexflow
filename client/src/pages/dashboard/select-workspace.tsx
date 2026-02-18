@@ -18,7 +18,7 @@ interface Workspace {
   status: string;
 }
 
-const VENUES_PER_PAGE = 10;
+const WORKSPACES_PER_PAGE = 10;
 
 export default function SelectWorkspace() {
   const [, setLocation] = useLocation();
@@ -30,15 +30,15 @@ export default function SelectWorkspace() {
   });
 
   useEffect(() => {
-    document.title = "My Locations - Resto";
-    const session = JSON.parse(localStorage.getItem("resto_session") || "{}");
+    document.title = "My Workspaces - indexFlow";
+    const session = JSON.parse(localStorage.getItem("indexflow_session") || "{}");
     if (!session.email) {
       setLocation("/client-login");
       return;
     }
   }, [setLocation]);
 
-  const filteredVenues = useMemo(() => {
+  const filteredWorkspaces = useMemo(() => {
     if (!searchQuery.trim()) return workspaces;
     const q = searchQuery.toLowerCase();
     return workspaces.filter(v =>
@@ -49,10 +49,10 @@ export default function SelectWorkspace() {
     );
   }, [workspaces, searchQuery]);
 
-  const totalPages = Math.ceil(filteredVenues.length / VENUES_PER_PAGE);
-  const paginatedVenues = filteredVenues.slice(
-    (currentPage - 1) * VENUES_PER_PAGE,
-    currentPage * VENUES_PER_PAGE
+  const totalPages = Math.ceil(filteredWorkspaces.length / WORKSPACES_PER_PAGE);
+  const paginatedWorkspaces = filteredWorkspaces.slice(
+    (currentPage - 1) * WORKSPACES_PER_PAGE,
+    currentPage * WORKSPACES_PER_PAGE
   );
 
   useEffect(() => {
@@ -60,11 +60,11 @@ export default function SelectWorkspace() {
   }, [searchQuery]);
 
   const handleSelectWorkspace = (workspaceId: string) => {
-    localStorage.setItem("resto_current_venue", workspaceId);
+    localStorage.setItem("indexflow_workspace_id", workspaceId);
     setLocation(`/${workspaceId}/today`);
   };
 
-  const getVenueTypeLabel = (type: string) => {
+  const getWorkspaceTypeLabel = (type: string) => {
     const types: Record<string, string> = {
       restaurant: "Restaurant",
       cafe: "Cafe",
@@ -80,11 +80,11 @@ export default function SelectWorkspace() {
       <div className="w-full max-w-2xl mx-auto pt-8">
         <div className="text-center mb-8">
           <img src={indexFlowLogo} alt="indexFlow Workspace Management Dashboard" className="h-16 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold" data-testid="text-locations-title">My Locations</h1>
+          <h1 className="text-2xl font-bold" data-testid="text-workspaces-title">My Workspaces</h1>
           <p className="text-muted-foreground">
             {workspaces.length === 0
-              ? "You don't have any locations yet"
-              : `Managing ${workspaces.length} location${workspaces.length !== 1 ? "s" : ""}`
+              ? "You don't have any workspaces yet"
+              : `Managing ${workspaces.length} workspace${workspaces.length !== 1 ? "s" : ""}`
             }
           </p>
         </div>
@@ -94,15 +94,15 @@ export default function SelectWorkspace() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search locations..."
+                placeholder="Search workspaces..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
                 data-testid="input-search-workspaces"
               />
             </div>
-            <Badge variant="secondary" data-testid="badge-venue-count">
-              {filteredVenues.length} of {workspaces.length}
+            <Badge variant="secondary" data-testid="badge-workspace-count">
+              {filteredWorkspaces.length} of {workspaces.length}
             </Badge>
           </div>
         )}
@@ -111,26 +111,26 @@ export default function SelectWorkspace() {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12" data-testid="loading-workspaces">
               <Loader2 className="w-8 h-8 animate-spin text-muted-foreground mb-3" />
-              <p className="text-muted-foreground text-sm">Loading locations...</p>
+              <p className="text-muted-foreground text-sm">Loading workspaces...</p>
             </div>
-          ) : paginatedVenues.length === 0 && searchQuery ? (
+          ) : paginatedWorkspaces.length === 0 && searchQuery ? (
             <div className="text-center py-12" data-testid="no-search-results">
               <Search className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-              <p className="text-muted-foreground">No locations match "{searchQuery}"</p>
+              <p className="text-muted-foreground">No workspaces match "{searchQuery}"</p>
             </div>
-          ) : paginatedVenues.length === 0 ? (
+          ) : paginatedWorkspaces.length === 0 ? (
             <div className="text-center py-12" data-testid="empty-workspaces">
               <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-              <p className="text-muted-foreground">No locations found</p>
-              <p className="text-muted-foreground text-sm mt-1">Contact us to add your first location.</p>
+              <p className="text-muted-foreground">No workspaces found</p>
+              <p className="text-muted-foreground text-sm mt-1">Contact us to add your first workspace.</p>
             </div>
           ) : (
-            paginatedVenues.map((venue) => (
+            paginatedWorkspaces.map((workspace) => (
               <Card 
-                key={venue.id} 
+                key={workspace.id} 
                 className="cursor-pointer hover-elevate transition-all"
-                onClick={() => handleSelectWorkspace(venue.id)}
-                data-testid={`card-venue-${venue.id}`}
+                onClick={() => handleSelectWorkspace(workspace.id)}
+                data-testid={`card-workspace-${workspace.id}`}
               >
                 <CardContent className="p-4 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -139,13 +139,13 @@ export default function SelectWorkspace() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium truncate">{venue.name}</span>
-                        <Badge variant="secondary" className="text-xs shrink-0">{getVenueTypeLabel(venue.type)}</Badge>
+                        <span className="font-medium truncate">{workspace.name}</span>
+                        <Badge variant="secondary" className="text-xs shrink-0">{getWorkspaceTypeLabel(workspace.type)}</Badge>
                       </div>
-                      {(venue.address || venue.city) && (
+                      {(workspace.address || workspace.city) && (
                         <p className="text-xs text-muted-foreground mt-0.5 truncate flex items-center gap-1">
                           <MapPin className="w-3 h-3 shrink-0" />
-                          {[venue.address, venue.city, venue.state].filter(Boolean).join(", ")}
+                          {[workspace.address, workspace.city, workspace.state].filter(Boolean).join(", ")}
                         </p>
                       )}
                     </div>
@@ -186,16 +186,16 @@ export default function SelectWorkspace() {
         )}
 
         {workspaces.length > 0 && (
-          <div className="mt-8 p-4 rounded-md border border-dashed text-center" data-testid="card-add-location">
+          <div className="mt-8 p-4 rounded-md border border-dashed text-center" data-testid="card-add-workspace">
             <Building2 className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-sm font-medium mb-1">Need another location?</p>
+            <p className="text-sm font-medium mb-1">Need another workspace?</p>
             <p className="text-xs text-muted-foreground mb-3">
-              Add unlimited locations for just $25/month each
+              Add unlimited workspaces for just $25/month each
             </p>
             <a href="/contact">
-              <Button variant="outline" size="sm" data-testid="button-add-location">
+              <Button variant="outline" size="sm" data-testid="button-add-workspace">
                 <Plus className="w-4 h-4 mr-1" />
-                Add Location
+                Add Workspace
               </Button>
             </a>
           </div>

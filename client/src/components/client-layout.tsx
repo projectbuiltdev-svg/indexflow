@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ClientSidebar } from "@/components/client-sidebar";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { UserAvatarDropdown } from "@/components/user-avatar-dropdown";
 import { WorkspaceProvider, useWorkspace } from "@/lib/workspace-context";
 import { Badge } from "@/components/ui/badge";
 
@@ -21,12 +21,12 @@ function ClientLayoutInner({ children }: ClientLayoutProps) {
             <div className="flex items-center gap-2 flex-wrap">
               <SidebarTrigger data-testid="button-client-sidebar-toggle" />
               {selectedWorkspace && (
-                <Badge variant="secondary" data-testid="badge-venue-name">
+                <Badge variant="secondary" data-testid="badge-workspace-name">
                   {selectedWorkspace.name}
                 </Badge>
               )}
             </div>
-            <ThemeToggle />
+            <UserAvatarDropdown />
           </header>
           <main className="flex-1 overflow-auto">
             {children}

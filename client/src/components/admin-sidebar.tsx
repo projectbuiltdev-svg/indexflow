@@ -3,20 +3,12 @@ import logoImage from "@assets/image_1771330330596.png";
 import {
   LayoutDashboard,
   Building2,
-  Kanban,
-  Users,
-  CreditCard,
-  Globe,
-  FileEdit,
-  MessageSquare,
-  Phone,
-  PhoneCall,
   PenTool,
   Search,
+  CreditCard,
+  Server,
+  Users,
   LifeBuoy,
-  BarChart3,
-  Download,
-  Bell,
   Settings,
   ChevronDown,
 } from "lucide-react";
@@ -49,44 +41,110 @@ import {
 } from "@/components/ui/collapsible";
 import { useWorkspace } from "@/lib/workspace-context";
 
-const navItemsBefore = [
-  { title: "Dashboard", icon: LayoutDashboard, path: "/admin" },
-  { title: "Clients", icon: Building2, path: "/admin/clients" },
-  { title: "CRM Pipeline", icon: Kanban, path: "/admin/crm" },
-  { title: "Users", icon: Users, path: "/admin/users" },
-  { title: "Billing", icon: CreditCard, path: "/admin/billing" },
-  { title: "Websites", icon: Globe, path: "/admin/websites" },
-  { title: "Website Changes", icon: FileEdit, path: "/admin/website-changes" },
-  { title: "Widget Config", icon: MessageSquare, path: "/admin/widget-config" },
-  { title: "Twilio", icon: Phone, path: "/admin/twilio" },
-  { title: "Call Logs", icon: PhoneCall, path: "/admin/call-logs" },
-  { title: "Content Engine", icon: PenTool, path: "/admin/content" },
-];
+interface CollapsibleSection {
+  title: string;
+  icon: React.ComponentType<any>;
+  path: string;
+  items: Array<{
+    title: string;
+    path: string;
+  }>;
+}
 
-const navItemsAfter = [
-  { title: "Support Tickets", icon: LifeBuoy, path: "/admin/support" },
-  { title: "Analytics", icon: BarChart3, path: "/admin/analytics" },
-  { title: "Export Data", icon: Download, path: "/admin/export" },
-  { title: "Notifications", icon: Bell, path: "/admin/notifications" },
-  { title: "Settings", icon: Settings, path: "/admin/settings" },
-];
-
-const seoSubItems = [
-  { title: "Rank Tracker", path: "/admin/seo/rank-tracker" },
-  { title: "Local Grid", path: "/admin/seo/local-grid" },
-  { title: "AI Visibility", path: "/admin/seo/ai-visibility" },
+const collapsibleSections: CollapsibleSection[] = [
+  {
+    title: "Agencies",
+    icon: Building2,
+    path: "/admin/agencies",
+    items: [
+      { title: "All Agencies", path: "/admin/agencies" },
+      { title: "Agency Detail", path: "/admin/agencies/detail" },
+      { title: "Pending Approvals", path: "/admin/agencies/pending" },
+    ],
+  },
+  {
+    title: "Content",
+    icon: PenTool,
+    path: "/admin/content",
+    items: [
+      { title: "All Posts", path: "/admin/content/posts" },
+      { title: "All Campaigns", path: "/admin/content/campaigns" },
+      { title: "Content Moderation", path: "/admin/content/moderation" },
+    ],
+  },
+  {
+    title: "Platform SEO",
+    icon: Search,
+    path: "/admin/platform-seo",
+    items: [
+      { title: "Keyword Usage", path: "/admin/platform-seo/keywords" },
+      { title: "API Usage", path: "/admin/platform-seo/api-usage" },
+    ],
+  },
+  {
+    title: "Billing",
+    icon: CreditCard,
+    path: "/admin/billing",
+    items: [
+      { title: "Subscriptions", path: "/admin/billing/subscriptions" },
+      { title: "Revenue", path: "/admin/billing/revenue" },
+      { title: "Invoices", path: "/admin/billing/invoices" },
+      { title: "Payouts", path: "/admin/billing/payouts" },
+    ],
+  },
+  {
+    title: "System",
+    icon: Server,
+    path: "/admin/system",
+    items: [
+      { title: "API Keys", path: "/admin/system/api-keys" },
+      { title: "Twilio", path: "/admin/system/twilio" },
+      { title: "Email", path: "/admin/system/email" },
+      { title: "Infrastructure", path: "/admin/system/infrastructure" },
+    ],
+  },
+  {
+    title: "Users",
+    icon: Users,
+    path: "/admin/users",
+    items: [
+      { title: "All Users", path: "/admin/users/all" },
+      { title: "Admin Users", path: "/admin/users/admins" },
+    ],
+  },
+  {
+    title: "Support",
+    icon: LifeBuoy,
+    path: "/admin/support",
+    items: [
+      { title: "All Tickets", path: "/admin/support/tickets" },
+      { title: "Call Logs", path: "/admin/support/call-logs" },
+      { title: "System Announcements", path: "/admin/support/announcements" },
+    ],
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    path: "/admin/settings",
+    items: [
+      { title: "Platform Config", path: "/admin/settings/config" },
+      { title: "Branding", path: "/admin/settings/branding" },
+    ],
+  },
 ];
 
 export function AdminSidebar() {
   const [location] = useLocation();
-  const { venues, selectedWorkspace, selectWorkspace } = useWorkspace();
+  const { workspaces, selectedWorkspace, selectWorkspace } = useWorkspace();
 
   const isActive = (path: string) => {
     if (path === "/admin") return location === "/admin";
     return location.startsWith(path);
   };
 
-  const isSeoActive = location.startsWith("/admin/seo");
+  const isSectionActive = (path: string) => {
+    return location.startsWith(path);
+  };
 
   return (
     <Sidebar>
@@ -100,21 +158,21 @@ export function AdminSidebar() {
         <Select
           value={selectedWorkspace?.id ?? ""}
           onValueChange={(val) => {
-            const venue = venues.find((v) => v.id === val) ?? null;
-            selectWorkspace(venue);
+            const workspace = workspaces.find((w) => w.id === val) ?? null;
+            selectWorkspace(workspace);
           }}
         >
-          <SelectTrigger data-testid="select-venue" className="w-full">
-            <SelectValue placeholder="Select venue" />
+          <SelectTrigger data-testid="select-workspace" className="w-full">
+            <SelectValue placeholder="Select workspace" />
           </SelectTrigger>
           <SelectContent>
-            {venues.map((venue) => (
+            {workspaces.map((workspace) => (
               <SelectItem
-                key={venue.id}
-                value={venue.id}
-                data-testid={`select-venue-option-${venue.id}`}
+                key={workspace.id}
+                value={workspace.id}
+                data-testid={`select-workspace-option-${workspace.id}`}
               >
-                {venue.name}
+                {workspace.name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -126,75 +184,59 @@ export function AdminSidebar() {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItemsBefore.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.path)}
-                    tooltip={item.title}
-                  >
-                    <Link
-                      href={item.path}
-                      data-testid={`link-${item.path.replace(/\//g, "-").slice(1)}`}
-                    >
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {/* Dashboard - Top level item */}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive("/admin")}
+                  tooltip="Dashboard"
+                  data-testid="link-admin"
+                >
+                  <Link href="/admin">
+                    <LayoutDashboard />
+                    <span>Dashboard</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
 
-              <Collapsible defaultOpen={isSeoActive} className="group/collapsible">
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isSeoActive}
-                      tooltip="SEO & Rankings"
-                      data-testid="link-admin-seo"
-                    >
-                      <Search />
-                      <span>SEO & Rankings</span>
-                      <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {seoSubItems.map((sub) => (
-                        <SidebarMenuSubItem key={sub.path}>
-                          <SidebarMenuSubButton
-                            asChild
-                            isActive={location === sub.path}
-                          >
-                            <Link
-                              href={sub.path}
-                              data-testid={`link-${sub.path.replace(/\//g, "-").slice(1)}`}
+              {/* Collapsible sections */}
+              {collapsibleSections.map((section) => (
+                <Collapsible
+                  key={section.path}
+                  defaultOpen={isSectionActive(section.path)}
+                  className="group/collapsible"
+                >
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton
+                        isActive={isSectionActive(section.path)}
+                        tooltip={section.title}
+                        data-testid={`link-${section.path.replace(/\//g, "-").slice(1)}`}
+                      >
+                        <section.icon />
+                        <span>{section.title}</span>
+                        <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {section.items.map((item) => (
+                          <SidebarMenuSubItem key={item.path}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={location === item.path}
+                              data-testid={`link-${item.path.replace(/\//g, "-").slice(1)}`}
                             >
-                              <span>{sub.title}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {navItemsAfter.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.path)}
-                    tooltip={item.title}
-                  >
-                    <Link
-                      href={item.path}
-                      data-testid={`link-${item.path.replace(/\//g, "-").slice(1)}`}
-                    >
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                              <Link href={item.path}>
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
