@@ -1,10 +1,20 @@
 import { db } from "./db";
-import { workspaces, workspaceBlogPosts, workspaceDomains, rankTrackerKeywords, gridKeywords, gridScanResults, contentCampaigns, seoSettings, contactMessages } from "@shared/schema";
-import { sql } from "drizzle-orm";
+import { workspaces, workspaceBlogPosts, workspaceDomains, rankTrackerKeywords, gridKeywords, gridScanResults, contentCampaigns, seoSettings, contactMessages, users } from "@shared/schema";
+import { sql, eq } from "drizzle-orm";
 
 export async function seedDatabase() {
   const existing = await db.select().from(workspaces);
   if (existing.length > 0) return;
+
+  const existingUser = await db.select().from(users).where(eq(users.id, "system"));
+  if (existingUser.length === 0) {
+    await db.insert(users).values({
+      id: "system",
+      email: "system@indexflow.cloud",
+      firstName: "System",
+      lastName: "Admin",
+    });
+  }
 
   const [v1, v2, v3, v4] = await db.insert(workspaces).values([
     {
