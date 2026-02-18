@@ -228,6 +228,16 @@ function hasAdminPermission(role: AdminRole, permission: string): boolean {
   return perms.includes(permission);
 }
 
+const ClientLayout = lazy(() => import("@/components/client-layout").then(m => ({ default: m.ClientLayout })));
+
+function ClientRoute({ component: Component }: { component: ComponentType }) {
+  return (
+    <ClientLayout>
+      <Component />
+    </ClientLayout>
+  );
+}
+
 function AdminRoute({ component: Component, permission }: { component: ComponentType; permission: string }) {
   const role = getAdminRole();
   if (!hasAdminPermission(role, permission)) {
@@ -356,92 +366,92 @@ function Router() {
 
         {/* Client Dashboard Routes */}
         <Route path="/select-workspace" component={SelectWorkspace} />
-        <Route path="/:workspaceId/today" component={Today} />
-        <Route path="/:workspaceId/calendar" component={CalendarView} />
-        <Route path="/:workspaceId/bookings/:bookingId" component={BookingDetail} />
-        <Route path="/:workspaceId/calls" component={Calls} />
-        <Route path="/:workspaceId/calls/:callId" component={CallDetail} />
-        <Route path="/:workspaceId/analytics" component={Analytics} />
+        <Route path="/:workspaceId/today">{() => <ClientRoute component={Today} />}</Route>
+        <Route path="/:workspaceId/calendar">{() => <ClientRoute component={CalendarView} />}</Route>
+        <Route path="/:workspaceId/bookings/:bookingId">{() => <ClientRoute component={BookingDetail} />}</Route>
+        <Route path="/:workspaceId/calls">{() => <ClientRoute component={Calls} />}</Route>
+        <Route path="/:workspaceId/calls/:callId">{() => <ClientRoute component={CallDetail} />}</Route>
+        <Route path="/:workspaceId/analytics">{() => <ClientRoute component={Analytics} />}</Route>
 
         {/* Content Engine */}
-        <Route path="/:workspaceId/content/posts" component={ContentPosts} />
-        <Route path="/:workspaceId/content/pages" component={ContentPages} />
-        <Route path="/:workspaceId/content/campaigns" component={ContentCampaigns} />
-        <Route path="/:workspaceId/content/domains" component={ContentDomains} />
+        <Route path="/:workspaceId/content/posts">{() => <ClientRoute component={ContentPosts} />}</Route>
+        <Route path="/:workspaceId/content/pages">{() => <ClientRoute component={ContentPages} />}</Route>
+        <Route path="/:workspaceId/content/campaigns">{() => <ClientRoute component={ContentCampaigns} />}</Route>
+        <Route path="/:workspaceId/content/domains">{() => <ClientRoute component={ContentDomains} />}</Route>
 
         {/* SEO */}
-        <Route path="/:workspaceId/seo/links" component={SeoLinks} />
-        <Route path="/:workspaceId/seo/health" component={SeoHealth} />
-        <Route path="/:workspaceId/seo/cms" component={SeoCms} />
-        <Route path="/:workspaceId/seo/reports" component={SeoReports} />
-        <Route path="/:workspaceId/seo/invoices" component={SeoInvoices} />
+        <Route path="/:workspaceId/seo/links">{() => <ClientRoute component={SeoLinks} />}</Route>
+        <Route path="/:workspaceId/seo/health">{() => <ClientRoute component={SeoHealth} />}</Route>
+        <Route path="/:workspaceId/seo/cms">{() => <ClientRoute component={SeoCms} />}</Route>
+        <Route path="/:workspaceId/seo/reports">{() => <ClientRoute component={SeoReports} />}</Route>
+        <Route path="/:workspaceId/seo/invoices">{() => <ClientRoute component={SeoInvoices} />}</Route>
 
         {/* Rank Tracker */}
-        <Route path="/:workspaceId/rank-tracker/track-keywords" component={RankTracker} />
-        <Route path="/:workspaceId/rank-tracker/local-search-grid" component={DashboardLocalSearchGrid} />
-        <Route path="/:workspaceId/rank-tracker/google-search-console" component={GoogleSearchConsole} />
+        <Route path="/:workspaceId/rank-tracker/track-keywords">{() => <ClientRoute component={RankTracker} />}</Route>
+        <Route path="/:workspaceId/rank-tracker/local-search-grid">{() => <ClientRoute component={DashboardLocalSearchGrid} />}</Route>
+        <Route path="/:workspaceId/rank-tracker/google-search-console">{() => <ClientRoute component={GoogleSearchConsole} />}</Route>
 
         {/* Twilio */}
-        <Route path="/:workspaceId/twilio/call-logs" component={TwilioCallLogs} />
-        <Route path="/:workspaceId/twilio/voice" component={TwilioVoice} />
-        <Route path="/:workspaceId/twilio/sms" component={TwilioSms} />
+        <Route path="/:workspaceId/twilio/call-logs">{() => <ClientRoute component={TwilioCallLogs} />}</Route>
+        <Route path="/:workspaceId/twilio/voice">{() => <ClientRoute component={TwilioVoice} />}</Route>
+        <Route path="/:workspaceId/twilio/sms">{() => <ClientRoute component={TwilioSms} />}</Route>
 
         {/* Widget */}
-        <Route path="/:workspaceId/widget/monitoring" component={WidgetMonitoring} />
-        <Route path="/:workspaceId/widget/code" component={WidgetCode} />
+        <Route path="/:workspaceId/widget/monitoring">{() => <ClientRoute component={WidgetMonitoring} />}</Route>
+        <Route path="/:workspaceId/widget/code">{() => <ClientRoute component={WidgetCode} />}</Route>
 
         {/* CRM */}
-        <Route path="/:workspaceId/crm/pipeline" component={CrmPipeline} />
-        <Route path="/:workspaceId/crm/contacts" component={CrmContacts} />
+        <Route path="/:workspaceId/crm/pipeline">{() => <ClientRoute component={CrmPipeline} />}</Route>
+        <Route path="/:workspaceId/crm/contacts">{() => <ClientRoute component={CrmContacts} />}</Route>
 
         {/* Analytics */}
-        <Route path="/:workspaceId/analytics/overview" component={AnalyticsOverview} />
-        <Route path="/:workspaceId/analytics/export" component={AnalyticsExport} />
+        <Route path="/:workspaceId/analytics/overview">{() => <ClientRoute component={AnalyticsOverview} />}</Route>
+        <Route path="/:workspaceId/analytics/export">{() => <ClientRoute component={AnalyticsExport} />}</Route>
 
         {/* Connections */}
-        <Route path="/:workspaceId/connections/ai-providers" component={ConnectionsAi} />
-        <Route path="/:workspaceId/connections/image-banks" component={ConnectionsImages} />
-        <Route path="/:workspaceId/connections/payments" component={ConnectionsPayments} />
-        <Route path="/:workspaceId/connections/twilio" component={ConnectionsTwilio} />
+        <Route path="/:workspaceId/connections/ai-providers">{() => <ClientRoute component={ConnectionsAi} />}</Route>
+        <Route path="/:workspaceId/connections/image-banks">{() => <ClientRoute component={ConnectionsImages} />}</Route>
+        <Route path="/:workspaceId/connections/payments">{() => <ClientRoute component={ConnectionsPayments} />}</Route>
+        <Route path="/:workspaceId/connections/twilio">{() => <ClientRoute component={ConnectionsTwilio} />}</Route>
 
         {/* AI Training */}
-        <Route path="/:workspaceId/ai-training/knowledge-base" component={AiTrainingKb} />
-        <Route path="/:workspaceId/ai-training/channels" component={AiTrainingChannels} />
+        <Route path="/:workspaceId/ai-training/knowledge-base">{() => <ClientRoute component={AiTrainingKb} />}</Route>
+        <Route path="/:workspaceId/ai-training/channels">{() => <ClientRoute component={AiTrainingChannels} />}</Route>
 
         {/* Settings */}
-        <Route path="/:workspaceId/settings/team" component={SettingsTeamNew} />
-        <Route path="/:workspaceId/settings/white-label" component={SettingsWhiteLabel} />
-        <Route path="/:workspaceId/settings/billing" component={SettingsBilling} />
-        <Route path="/:workspaceId/settings/setup-guide" component={SettingsSetup} />
+        <Route path="/:workspaceId/settings/team">{() => <ClientRoute component={SettingsTeamNew} />}</Route>
+        <Route path="/:workspaceId/settings/white-label">{() => <ClientRoute component={SettingsWhiteLabel} />}</Route>
+        <Route path="/:workspaceId/settings/billing">{() => <ClientRoute component={SettingsBilling} />}</Route>
+        <Route path="/:workspaceId/settings/setup-guide">{() => <ClientRoute component={SettingsSetup} />}</Route>
 
         {/* Support */}
-        <Route path="/:workspaceId/support/documentation" component={SupportDocs} />
-        <Route path="/:workspaceId/support/tickets" component={SupportTickets} />
+        <Route path="/:workspaceId/support/documentation">{() => <ClientRoute component={SupportDocs} />}</Route>
+        <Route path="/:workspaceId/support/tickets">{() => <ClientRoute component={SupportTickets} />}</Route>
 
         {/* Legacy client dashboard routes */}
-        <Route path="/:workspaceId/settings/hours" component={SettingsHours} />
-        <Route path="/:workspaceId/settings/closures" component={SettingsClosures} />
-        <Route path="/:workspaceId/settings/resources" component={SettingsResources} />
-        <Route path="/:workspaceId/settings/train-widget" component={SettingsTrainWidget} />
-        <Route path="/:workspaceId/settings/widget-code" component={SettingsWidgetCodeOld} />
-        <Route path="/:workspaceId/settings/payments" component={SettingsPayments} />
-        <Route path="/:workspaceId/settings/twilio-setup" component={SettingsTwilioSetup} />
-        <Route path="/:workspaceId/settings/twilio-voice" component={SettingsTwilioVoice} />
-        <Route path="/:workspaceId/settings/twilio-sms" component={SettingsTwilioSms} />
-        <Route path="/:workspaceId/byok/openai" component={ByokOpenai} />
-        <Route path="/:workspaceId/byok/grok" component={ByokGrok} />
-        <Route path="/:workspaceId/byok/anthropic" component={ByokAnthropic} />
-        <Route path="/:workspaceId/byok/google" component={ByokGoogle} />
-        <Route path="/:workspaceId/byok/mistral" component={ByokMistral} />
-        <Route path="/:workspaceId/byok/cohere" component={ByokCohere} />
-        <Route path="/:workspaceId/byok/perplexity" component={ByokPerplexity} />
-        <Route path="/:workspaceId/room-types" component={RoomTypes} />
-        <Route path="/:workspaceId/rooms" component={Rooms} />
-        <Route path="/:workspaceId/room-bookings" component={RoomBookings} />
-        <Route path="/:workspaceId/export-data" component={ExportData} />
-        <Route path="/:workspaceId/website-changes" component={WebsiteChanges} />
-        <Route path="/:workspaceId/documentation" component={Documentation} />
-        <Route path="/:workspaceId/support" component={Support} />
+        <Route path="/:workspaceId/settings/hours">{() => <ClientRoute component={SettingsHours} />}</Route>
+        <Route path="/:workspaceId/settings/closures">{() => <ClientRoute component={SettingsClosures} />}</Route>
+        <Route path="/:workspaceId/settings/resources">{() => <ClientRoute component={SettingsResources} />}</Route>
+        <Route path="/:workspaceId/settings/train-widget">{() => <ClientRoute component={SettingsTrainWidget} />}</Route>
+        <Route path="/:workspaceId/settings/widget-code">{() => <ClientRoute component={SettingsWidgetCodeOld} />}</Route>
+        <Route path="/:workspaceId/settings/payments">{() => <ClientRoute component={SettingsPayments} />}</Route>
+        <Route path="/:workspaceId/settings/twilio-setup">{() => <ClientRoute component={SettingsTwilioSetup} />}</Route>
+        <Route path="/:workspaceId/settings/twilio-voice">{() => <ClientRoute component={SettingsTwilioVoice} />}</Route>
+        <Route path="/:workspaceId/settings/twilio-sms">{() => <ClientRoute component={SettingsTwilioSms} />}</Route>
+        <Route path="/:workspaceId/byok/openai">{() => <ClientRoute component={ByokOpenai} />}</Route>
+        <Route path="/:workspaceId/byok/grok">{() => <ClientRoute component={ByokGrok} />}</Route>
+        <Route path="/:workspaceId/byok/anthropic">{() => <ClientRoute component={ByokAnthropic} />}</Route>
+        <Route path="/:workspaceId/byok/google">{() => <ClientRoute component={ByokGoogle} />}</Route>
+        <Route path="/:workspaceId/byok/mistral">{() => <ClientRoute component={ByokMistral} />}</Route>
+        <Route path="/:workspaceId/byok/cohere">{() => <ClientRoute component={ByokCohere} />}</Route>
+        <Route path="/:workspaceId/byok/perplexity">{() => <ClientRoute component={ByokPerplexity} />}</Route>
+        <Route path="/:workspaceId/room-types">{() => <ClientRoute component={RoomTypes} />}</Route>
+        <Route path="/:workspaceId/rooms">{() => <ClientRoute component={Rooms} />}</Route>
+        <Route path="/:workspaceId/room-bookings">{() => <ClientRoute component={RoomBookings} />}</Route>
+        <Route path="/:workspaceId/export-data">{() => <ClientRoute component={ExportData} />}</Route>
+        <Route path="/:workspaceId/website-changes">{() => <ClientRoute component={WebsiteChanges} />}</Route>
+        <Route path="/:workspaceId/documentation">{() => <ClientRoute component={Documentation} />}</Route>
+        <Route path="/:workspaceId/support" >{() => <ClientRoute component={Support} />}</Route>
 
         {/* Template previews */}
         <Route path="/preview/restaurant-bold" component={RestaurantBold} />
