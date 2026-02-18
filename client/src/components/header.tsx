@@ -1,92 +1,51 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, LogIn, Globe, ArrowRight, ChevronDown, Utensils, Coffee, Wine, Hotel, Building, MessageSquare, Phone, Bot, BarChart3, Search, TrendingUp, Globe2, Layout, Palette, Code, Headphones, Shield, Zap, FileText, HelpCircle, BookOpen, Mail, MapPin, Calendar, Moon, Sun, Grid3X3 } from "lucide-react";
+import { Menu, X, LogIn, ArrowRight, ChevronDown, FileText, Search, TrendingUp, Grid3X3, Code, Link2, ClipboardCheck, Layout, Users, Receipt, Bot, Palette, Briefcase, Building2, Rocket, User, Globe, Mail, Handshake, GraduationCap, BookOpen, HelpCircle, Newspaper, BarChart3, Radio, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "./theme-toggle";
-import { SiteSearch } from "./site-search";
-
-const languages = [
-  { code: "en", label: "English" },
-  { code: "es", label: "Español" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "it", label: "Italiano" },
-];
 import indexFlowLogo from "@assets/image_1771351451425.png";
 
-const solutions = [
-  { href: "/solutions/restaurants", label: "Restaurants", icon: Utensils, desc: "Table management & online reservations" },
-  { href: "/solutions/hotels", label: "Hotels", icon: Hotel, desc: "Room booking & AI concierge" },
-  { href: "/solutions/cafes", label: "Cafés", icon: Coffee, desc: "Quick-service & walk-in management" },
-  { href: "/solutions/bars", label: "Bars", icon: Wine, desc: "Nightlife & event booking management" },
-];
-
 const featureItems = [
-  { href: "/platform/ai-concierge", label: "Virtual Concierge", icon: Bot, desc: "AI booking widget on your website" },
-  { href: "/features/voice-booking", label: "Voice Booking (AI)", icon: Phone, desc: "Twilio | Hospitality Customer Service number" },
-  { href: "/features/sms-confirmations", label: "SMS Confirmations", icon: MessageSquare, desc: "Automated booking confirmations & reminders" },
+  { href: "/platform/content-engine", label: "Content Engine", icon: FileText, desc: "AI-powered blog & content creation" },
+  { href: "/platform/rank-tracking", label: "Rank Tracker", icon: TrendingUp, desc: "Monitor 1000+ keywords on Google" },
+  { href: "/platform/local-search-grid", label: "Local Search Grid", icon: Grid3X3, desc: "See where you rank across the map" },
+  { href: "/platform/schema-markup", label: "Schema Markup", icon: Code, desc: "Structured data for rich results" },
+  { href: "/platform/link-builder", label: "Link Builder", icon: Link2, desc: "Internal & external link management" },
+  { href: "/platform/seo-audit", label: "On-Page SEO Audit", icon: ClipboardCheck, desc: "Automated page-level SEO checks" },
+  { href: "/platform/cms-integration", label: "CMS Integration", icon: Layout, desc: "Connect your existing CMS" },
+  { href: "/platform/crm-pipeline", label: "CRM & Pipeline", icon: Users, desc: "Manage leads and deals" },
+  { href: "/platform/invoices-reports", label: "Invoices & Reports", icon: Receipt, desc: "Billing and performance reports" },
+  { href: "/platform/ai-widget-voice", label: "AI Widget & Voice", icon: Bot, desc: "AI concierge & voice booking" },
+  { href: "/platform/white-label", label: "White Label", icon: Palette, desc: "Your brand, your platform" },
 ];
 
-const moreFeatureItems = [
-  { href: "/features/prepaid-reservations", label: "RSVP Monetized", icon: Shield, desc: "Prepaid reservations to reduce no-shows" },
-  { href: "/features/waitlist", label: "Waitlist Management", icon: Calendar, desc: "Smart queue & capacity control" },
-  { href: "/features/multi-language", label: "Multi-Language Booking", icon: Globe2, desc: "Accept bookings in 20+ languages" },
+const solutionItems = [
+  { href: "/solutions/seo-agencies", label: "For SEO Agencies", icon: Search, desc: "Scale SEO delivery for clients" },
+  { href: "/solutions/content-agencies", label: "For Content Agencies", icon: FileText, desc: "Streamline content production" },
+  { href: "/solutions/marketing-agencies", label: "For Marketing Agencies", icon: Briefcase, desc: "Full-stack marketing toolkit" },
+  { href: "/solutions/freelancers", label: "For Freelancers", icon: User, desc: "Professional tools at freelancer pricing" },
+  { href: "/solutions/enterprise", label: "For Enterprise", icon: Building2, desc: "Custom solutions at scale" },
 ];
 
 const resourceItems = [
-  { href: "/blog", label: "Blog", icon: BookOpen, desc: "Hospitality industry insights & tips" },
-  { href: "/docs", label: "Documentation", icon: FileText, desc: "Setup guides & API reference" },
-  { href: "/faq", label: "FAQ", icon: HelpCircle, desc: "Frequently asked questions" },
-  { href: "/testimonials", label: "Testimonials", icon: MessageSquare, desc: "Client reviews & feedback" },
-  { href: "/case-studies", label: "Case Studies", icon: FileText, desc: "In-depth client success stories" },
+  { href: "/docs", label: "Documentation", icon: BookOpen, desc: "Setup guides & platform docs" },
+  { href: "/docs/api", label: "API Reference", icon: Code, desc: "REST API documentation" },
+  { href: "/blog", label: "Blog", icon: Newspaper, desc: "Industry insights & tips" },
+  { href: "/case-studies", label: "Case Studies", icon: BarChart3, desc: "Client success stories" },
+  { href: "/changelog", label: "Changelog", icon: Rocket, desc: "Latest updates & releases" },
+  { href: "/status", label: "Status Page", icon: Radio, desc: "System uptime & incidents" },
 ];
 
-const platformItems = [
-  { href: "/platform/dashboard", label: "Client Dashboard", icon: Layout, desc: "Set up & manage workspace operations" },
-  { href: "/platform/integrations", label: "Integrations", icon: Code, desc: "Stripe | PayPal | Twilio" },
-  { href: "/platform/byok", label: "BYOK", icon: Shield, desc: "Bring Your Own AI Keys" },
-];
-
-const webDesignItems = [
-  { href: "/platform/hospitality-websites", label: "Hospitality Websites", icon: Globe, desc: "Bespoke Industry Solutions" },
-  { href: "/platform/seo", label: "Search Engine Optimization", icon: Search, desc: "SEO done for you" },
-  { href: "/platform/content-marketing", label: "Content Marketing", icon: BookOpen, desc: "Blog articles done for you" },
-  { href: "/services/local-citations", label: "Local Citations", icon: MapPin, desc: "Get found across 50+ directories" },
-  { href: "/solutions/multi-location", label: "Multiple Location Pages", icon: Building, desc: "Show up in Google across every city or area you operate in" },
-];
-
-const analyticsItems = [
-  { href: "/platform/local-search-grid", label: "Local Search Grid", icon: Grid3X3, desc: "See where you rank across the map" },
-  { href: "/platform/rank-tracking", label: "Rank Tracking", icon: TrendingUp, desc: "Monitor 1000 Keywords on Google + AI" },
-  { href: "/platform/search-console", label: "GSC", icon: Search, desc: "Google Search Console integrated" },
-  { href: "/features/analytics", label: "Analytics", icon: BarChart3, desc: "Booking, widget & call performance" },
-];
-
-const comparisonNavItems = [
-  { href: "/comparisons/opentable", label: "OpenTable Alternative", icon: Utensils, desc: "Why venues switch from OpenTable" },
-  { href: "/comparisons/resy", label: "Resy Alternative", icon: Calendar, desc: "Resto vs Resy side-by-side" },
-  { href: "/comparisons/best-booking-systems", label: "Best Booking Systems", icon: Search, desc: "2026 restaurant booking software guide" },
-  { href: "/comparisons/pricing", label: "Pricing Comparison", icon: FileText, desc: "Transparent cost breakdown" },
-  { href: "/comparisons/platform", label: "Platform Comparison", icon: BarChart3, desc: "Feature-by-feature capability matrix" },
-];
-
-const contactItems = [
-  { href: "/contact", label: "Contact Us", icon: Mail, desc: "Get in touch" },
-  { href: "/contact", label: "Book a Demo", icon: Calendar, desc: "See it live" },
-  { href: "/locations", label: "Locations", icon: Globe2, desc: "Find us nearby" },
+const companyItems = [
+  { href: "/about", label: "About", icon: Globe, desc: "Our mission & story" },
+  { href: "/contact", label: "Contact", icon: Mail, desc: "Get in touch with us" },
+  { href: "/partners", label: "Partners", icon: Handshake, desc: "Partner program & benefits" },
+  { href: "/careers", label: "Careers", icon: GraduationCap, desc: "Join our team" },
 ];
 
 interface NavItem {
   href: string;
   label: string;
   icon: any;
-  hash?: string;
   desc?: string;
 }
 
@@ -100,7 +59,6 @@ interface NavDropdownProps {
   items: NavItem[];
   location: string;
   testId: string;
-  variant?: "utility" | "main";
   align?: "start" | "end";
   columns?: MegaColumn[];
   footer?: { label: string; href: string };
@@ -127,7 +85,7 @@ function MegaMenuItem({ item, location, testId, onClick }: { item: NavItem; loca
   );
 }
 
-function NavDropdown({ label, items, location, testId, variant = "main", align = "start", columns, footer }: NavDropdownProps) {
+function NavDropdown({ label, items, location, testId, align = "start", columns, footer }: NavDropdownProps) {
   const allItems = columns ? columns.flatMap(c => c.items) : items;
   const isActive = allItems.some((item) => location === item.href || location.startsWith(item.href + "/"));
   const [open, setOpen] = useState(false);
@@ -152,39 +110,6 @@ function NavDropdown({ label, items, location, testId, variant = "main", align =
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, [open]);
-
-  if (variant === "utility") {
-    return (
-      <div className="relative" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
-        <button
-          className="flex items-center gap-1 text-xs text-white/80 hover:text-white transition-colors outline-none"
-          data-testid={testId}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {label}
-          <ChevronDown className={`w-3 h-3 transition-transform duration-300 ease-in-out ${open ? "rotate-180" : ""}`} />
-        </button>
-        {open && (
-          <div className={`absolute top-full pt-1 z-50 ${align === "end" ? "right-0" : "left-0"}`}>
-            <div className="min-w-[160px] rounded-md border border-border/50 bg-white dark:bg-popover shadow-sm p-1">
-              {items.map((item) => (
-                <Link key={item.label} href={item.href}>
-                  <div
-                    className="flex items-center gap-2 px-2 py-1.5 text-sm rounded-sm cursor-pointer hover-elevate transition-colors"
-                    data-testid={`${testId}-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-                    onClick={() => setOpen(false)}
-                  >
-                    <item.icon className="w-4 h-4 text-muted-foreground" />
-                    {item.label}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
 
   const isMega = columns && columns.length > 0;
 
@@ -253,6 +178,21 @@ function NavDropdown({ label, items, location, testId, variant = "main", align =
                   />
                 ))}
               </div>
+              {footer && (
+                <div className="border-t border-border/30 mt-1 pt-2">
+                  <Link href={footer.href}>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-between"
+                      data-testid={`${testId}-footer-cta`}
+                      onClick={() => setOpen(false)}
+                    >
+                      {footer.label}
+                      <ArrowRight className="w-4 h-4" />
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -382,30 +322,52 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      <div className="hidden lg:block bg-primary dark:bg-primary/90">
+      <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-border/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-9">
-            <div className="flex items-center gap-4">
-              <NavDropdown label="Resources" items={resourceItems} location={location} testId="link-nav-resources" variant="utility" />
-              <NavDropdown label="Contact" items={contactItems} location={location} testId="link-nav-contact" variant="utility" />
-            </div>
-            <div className="flex items-center gap-3">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-1 text-xs text-white/80 hover:text-white transition-colors outline-none focus:outline-none focus:ring-0" data-testid="button-language">
-                    <Globe className="w-3 h-3" />
-                    EN
-                    <ChevronDown className="w-3 h-3" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="border-border/50 shadow-sm">
-                  {languages.map((lang) => (
-                    <DropdownMenuItem key={lang.code} data-testid={`lang-${lang.code}`}>
-                      {lang.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+          <div className="flex items-center justify-between h-14 lg:h-16">
+            <Link href="/" className="flex items-center flex-shrink-0" data-testid="link-home-logo">
+              <img
+                src={indexFlowLogo}
+                alt="indexFlow - SEO & Content Platform for Agencies"
+                className="h-10 lg:h-12 w-auto"
+              />
+            </Link>
+
+            <nav className="hidden lg:flex items-center gap-0.5">
+              <NavDropdown
+                label="Features"
+                items={[]}
+                location={location}
+                testId="link-nav-features"
+                columns={[
+                  { label: "SEO Tools", items: featureItems.slice(0, 6) },
+                  { label: "Platform", items: featureItems.slice(6) },
+                ]}
+                footer={{ label: "View all features", href: "/platform/content-engine" }}
+              />
+              <NavDropdown
+                label="Solutions"
+                items={solutionItems}
+                location={location}
+                testId="link-nav-solutions"
+                footer={{ label: "Compare plans", href: "/pricing" }}
+              />
+              <NavLink href="/pricing" label="Pricing" location={location} testId="link-nav-pricing" />
+              <NavDropdown
+                label="Resources"
+                items={resourceItems}
+                location={location}
+                testId="link-nav-resources"
+              />
+              <NavDropdown
+                label="Company"
+                items={companyItems}
+                location={location}
+                testId="link-nav-company"
+              />
+            </nav>
+
+            <div className="hidden lg:flex items-center gap-3">
               <button
                 onClick={() => {
                   const current = document.documentElement.classList.contains("dark") ? "dark" : "light";
@@ -413,96 +375,37 @@ export function Header() {
                   document.documentElement.classList.toggle("dark", next === "dark");
                   localStorage.setItem("theme", next);
                 }}
-                className="text-white/80 hover:text-white transition-colors outline-none focus:outline-none"
-                data-testid="button-theme-toggle-utility"
+                className="text-muted-foreground hover:text-foreground transition-colors outline-none focus:outline-none"
+                data-testid="button-theme-toggle"
               >
-                <Moon className="w-3.5 h-3.5 dark:hidden text-white" />
-                <Sun className="w-3.5 h-3.5 hidden dark:block text-white" />
+                <Moon className="w-4 h-4 dark:hidden" />
+                <Sun className="w-4 h-4 hidden dark:block" />
               </button>
               <Link href="/client-login">
-                <span className="text-xs text-white/80 hover:text-white transition-colors cursor-pointer flex items-center gap-1" data-testid="button-login">
-                  <LogIn className="w-3 h-3" />
-                  Client Login
+                <span className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer flex items-center gap-1.5" data-testid="link-login">
+                  <LogIn className="w-4 h-4" />
+                  Log In
                 </span>
               </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-border/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 lg:h-16">
-            <Link href="/" className="flex items-center flex-shrink-0" data-testid="link-home-logo">
-              <img
-                src={indexFlowLogo}
-                alt="indexFlow - AI Booking Software for Restaurants, Cafes, Bars & Hotels"
-                className="h-10 lg:h-12 w-auto"
-              />
-            </Link>
-
-            <nav className="hidden lg:flex items-center gap-0.5">
-              <NavLink href="/how-it-works" label="How It Works" location={location} testId="link-nav-how-it-works" />
-              <NavDropdown
-                label="Solutions"
-                items={solutions}
-                location={location}
-                testId="link-nav-solutions"
-                footer={{ label: "See all solutions", href: "/solutions/restaurants" }}
-              />
-              <NavDropdown
-                label="Platform"
-                items={[]}
-                location={location}
-                testId="link-nav-platform"
-                columns={[
-                  { label: "Control Center", items: platformItems },
-                  { label: "Services", items: webDesignItems },
-                  { label: "Performance", items: analyticsItems },
-                ]}
-                footer={{ label: "View pricing & plans", href: "/pricing" }}
-              />
-              <NavDropdown
-                label="Features"
-                items={[]}
-                location={location}
-                testId="link-nav-features"
-                columns={[
-                  { label: "What You Can Do", items: featureItems },
-                  { label: "Booking Tools", items: moreFeatureItems },
-                ]}
-              />
-              <NavDropdown label="Why Resto" items={comparisonNavItems} location={location} testId="link-nav-why-resto" />
-              <NavLink href="/pricing" label="Pricing" location={location} testId="link-nav-pricing" />
-              <NavLink href="/blog" label="Blog" location={location} testId="link-nav-blog" />
-            </nav>
-
-            <div className="hidden lg:flex items-center gap-2">
-              <SiteSearch />
               <Link href="/pricing">
-                <Button variant="outline" data-testid="button-get-started">Get Started</Button>
-              </Link>
-              <Link href="/book-demo">
-                <Button className="dark:text-white" data-testid="button-book-demo">Book a Demo</Button>
+                <Button data-testid="button-start-trial">Start Free Trial</Button>
               </Link>
             </div>
 
             <div className="flex items-center gap-2 lg:hidden">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="icon" variant="ghost" className="outline-none focus:outline-none focus:ring-0" data-testid="button-language">
-                    <Globe className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="border-border/50 shadow-sm">
-                  {languages.map((lang) => (
-                    <DropdownMenuItem key={lang.code} data-testid={`lang-${lang.code}`}>
-                      {lang.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <ThemeToggle />
+              <button
+                onClick={() => {
+                  const current = document.documentElement.classList.contains("dark") ? "dark" : "light";
+                  const next = current === "light" ? "dark" : "light";
+                  document.documentElement.classList.toggle("dark", next === "dark");
+                  localStorage.setItem("theme", next);
+                }}
+                className="p-2 text-muted-foreground hover:text-foreground transition-colors outline-none"
+                data-testid="button-theme-toggle-mobile"
+              >
+                <Moon className="w-4 h-4 dark:hidden" />
+                <Sun className="w-4 h-4 hidden dark:block" />
+              </button>
               <Button
                 size="icon"
                 variant="ghost"
@@ -520,42 +423,6 @@ export function Header() {
         <div className="bg-white dark:bg-gray-900 border-b border-border/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <nav className="py-3 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-0.5">
-              <Link href="/how-it-works">
-                <button
-                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
-                    location === "/how-it-works"
-                      ? "text-primary bg-primary/5"
-                      : "text-foreground/80 hover:text-foreground hover:bg-muted/50"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                  data-testid="link-mobile-how-it-works"
-                >
-                  How It Works
-                </button>
-              </Link>
-              <MobileDropdown
-                label="Solutions"
-                items={solutions}
-                location={location}
-                isOpen={openMobileDropdown === "solutions"}
-                onToggle={() => toggleMobileDropdown("solutions")}
-                onNavigate={() => setIsOpen(false)}
-                testId="link-mobile-solutions"
-              />
-              <MobileDropdown
-                label="Platform"
-                items={[]}
-                location={location}
-                isOpen={openMobileDropdown === "platform"}
-                onToggle={() => toggleMobileDropdown("platform")}
-                onNavigate={() => setIsOpen(false)}
-                testId="link-mobile-platform"
-                sections={[
-                  { label: "Control Center", items: platformItems },
-                  { label: "Services", items: webDesignItems },
-                  { label: "Performance", items: analyticsItems },
-                ]}
-              />
               <MobileDropdown
                 label="Features"
                 items={[]}
@@ -565,18 +432,18 @@ export function Header() {
                 onNavigate={() => setIsOpen(false)}
                 testId="link-mobile-features"
                 sections={[
-                  { label: "What You Can Do", items: featureItems },
-                  { label: "Booking Tools", items: moreFeatureItems },
+                  { label: "SEO Tools", items: featureItems.slice(0, 6) },
+                  { label: "Platform", items: featureItems.slice(6) },
                 ]}
               />
               <MobileDropdown
-                label="Why Resto"
-                items={comparisonNavItems}
+                label="Solutions"
+                items={solutionItems}
                 location={location}
-                isOpen={openMobileDropdown === "compare"}
-                onToggle={() => toggleMobileDropdown("compare")}
+                isOpen={openMobileDropdown === "solutions"}
+                onToggle={() => toggleMobileDropdown("solutions")}
                 onNavigate={() => setIsOpen(false)}
-                testId="link-mobile-why-resto"
+                testId="link-mobile-solutions"
               />
               <Link href="/pricing">
                 <button
@@ -591,52 +458,47 @@ export function Header() {
                   Pricing
                 </button>
               </Link>
-              <Link href="/blog">
-                <button
-                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
-                    location === "/blog"
-                      ? "text-primary bg-primary/5"
-                      : "text-foreground/80 hover:text-foreground hover:bg-muted/50"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                  data-testid="link-mobile-blog"
-                >
-                  Blog
-                </button>
-              </Link>
+              <MobileDropdown
+                label="Resources"
+                items={resourceItems}
+                location={location}
+                isOpen={openMobileDropdown === "resources"}
+                onToggle={() => toggleMobileDropdown("resources")}
+                onNavigate={() => setIsOpen(false)}
+                testId="link-mobile-resources"
+              />
+              <MobileDropdown
+                label="Company"
+                items={companyItems}
+                location={location}
+                isOpen={openMobileDropdown === "company"}
+                onToggle={() => toggleMobileDropdown("company")}
+                onNavigate={() => setIsOpen(false)}
+                testId="link-mobile-company"
+              />
 
               <div className="border-t border-border/30 my-2" />
 
               <div className="flex flex-col gap-2 px-3 py-2">
-                <Link href="/pricing">
-                  <Button
-                    variant="outline"
-                    className="w-full justify-center"
-                    onClick={() => setIsOpen(false)}
-                    data-testid="link-mobile-get-started"
-                  >
-                    Get Started
-                  </Button>
-                </Link>
-                <Link href="/book-demo">
-                  <Button
-                    className="w-full justify-center dark:text-white"
-                    onClick={() => setIsOpen(false)}
-                    data-testid="link-mobile-book-demo"
-                  >
-                    Book a Demo
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </Button>
-                </Link>
                 <Link href="/client-login">
                   <Button
                     variant="ghost"
                     className="w-full justify-center gap-2"
                     onClick={() => setIsOpen(false)}
-                    data-testid="link-mobile-client-login"
+                    data-testid="link-mobile-login"
                   >
                     <LogIn className="w-4 h-4" />
-                    Client Login
+                    Log In
+                  </Button>
+                </Link>
+                <Link href="/pricing">
+                  <Button
+                    className="w-full justify-center"
+                    onClick={() => setIsOpen(false)}
+                    data-testid="link-mobile-start-trial"
+                  >
+                    Start Free Trial
+                    <ArrowRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
               </div>
