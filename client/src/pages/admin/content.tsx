@@ -44,10 +44,16 @@ import {
   ChevronDown,
   Building2,
   HelpCircle,
+  Receipt,
+  BarChart3,
+  DollarSign,
+  TrendingUp,
+  Mail,
+  Hash,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import type { VenueBlogPost, Venue, VenueDomain } from "@shared/schema";
+import type { VenueBlogPost, Venue, VenueDomain, Invoice, InvoiceLineItem, ContentReport } from "@shared/schema";
 
 const VENUE_PAGE_SIZE = 50;
 
@@ -2564,6 +2570,440 @@ function VenueCombobox({
   );
 }
 
+function InvoicesTab({ workspaceId }: { workspaceId: string }) {
+  const { toast } = useToast();
+  const [editingInvoice, setEditingInvoice] = useState<any | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const { data: invoicesList = [], isLoading } = useQuery<Invoice[]>({
+    queryKey: ["/api/admin/invoices", workspaceId],
+    queryFn: () => adminApi("GET", `/api/admin/invoices?workspaceId=${workspaceId}`),
+    enabled: !!workspaceId,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data: any) => adminApi("POST", "/api/admin/invoices", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/invoices"] });
+      setIsCreating(false);
+      toast({ title: "Invoice created" });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: any }) => adminApi("PATCH", `/api/admin/invoices/${id}`, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/invoices"] });
+      setEditingInvoice(null);
+      toast({ title: "Invoice updated" });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => adminApi("DELETE", `/api/admin/invoices/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/invoices"] });
+      toast({ title: "Invoice deleted" });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
+    draft: "secondary",
+    sent: "outline",
+    paid: "default",
+    overdue: "destructive",
+    cancelled: "secondary",
+  };
+
+  if (isLoading) {
+    return (
+      <div className="py-12 text-center">
+        <Loader2 className="h-5 w-5 animate-spin mx-auto mb-2 text-muted-foreground" />
+        <div className="text-sm text-muted-foreground">Loading invoices...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+        <div>
+          <h2 className="text-lg font-semibold" data-testid="text-invoices-title">Invoices</h2>
+          <p className="text-sm text-muted-foreground">{invoicesList.length} total</p>
+        </div>
+        <Button onClick={() => setIsCreating(true)} data-testid="button-new-invoice">
+          <Plus className="h-4 w-4 mr-2" />
+          New Invoice
+        </Button>
+      </div>
+
+      {invoicesList.length === 0 && !isCreating ? (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Receipt className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+            <p className="font-medium mb-1">No invoices yet</p>
+            <p className="text-sm text-muted-foreground mb-4">Create an invoice for content services.</p>
+            <Button onClick={() => setIsCreating(true)} data-testid="button-new-invoice-empty">
+              <Plus className="h-4 w-4 mr-2" /> New Invoice
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-2">
+          {invoicesList.map((inv) => (
+            <Card key={inv.id} className="cursor-pointer hover-elevate" onClick={() => setEditingInvoice(inv)} data-testid={`card-invoice-${inv.id}`}>
+              <CardContent className="flex items-center justify-between gap-4 py-3 px-4">
+                <div className="min-w-0 flex-1">
+                  <div className="font-medium">{inv.invoiceNumber}</div>
+                  <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5 flex-wrap">
+                    <span>{inv.clientName}</span>
+                    {inv.issueDate && <span>{new Date(inv.issueDate).toLocaleDateString()}</span>}
+                    {inv.total && <span>${Number(inv.total).toFixed(2)}</span>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <Badge variant={statusColors[inv.status] || "secondary"} data-testid={`badge-invoice-status-${inv.id}`}>{inv.status}</Badge>
+                  <Button size="icon" variant="ghost" onClick={(e) => { e.stopPropagation(); deleteMutation.mutate(inv.id); }} data-testid={`button-delete-invoice-${inv.id}`}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      <Dialog open={isCreating || !!editingInvoice} onOpenChange={(open) => { if (!open) { setIsCreating(false); setEditingInvoice(null); } }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{editingInvoice ? "Edit Invoice" : "New Invoice"}</DialogTitle>
+          </DialogHeader>
+          <InvoiceForm
+            workspaceId={workspaceId}
+            invoice={editingInvoice}
+            onSubmit={(data) => {
+              if (editingInvoice) {
+                updateMutation.mutate({ id: editingInvoice.id, data });
+              } else {
+                createMutation.mutate(data);
+              }
+            }}
+            isPending={createMutation.isPending || updateMutation.isPending}
+          />
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function InvoiceForm({ workspaceId, invoice, onSubmit, isPending }: {
+  workspaceId: string;
+  invoice: Invoice | null;
+  onSubmit: (data: any) => void;
+  isPending: boolean;
+}) {
+  const [invoiceNumber, setInvoiceNumber] = useState(invoice?.invoiceNumber || `INV-${Date.now().toString(36).toUpperCase()}`);
+  const [clientName, setClientName] = useState(invoice?.clientName || "");
+  const [clientEmail, setClientEmail] = useState(invoice?.clientEmail || "");
+  const [status, setStatus] = useState(invoice?.status || "draft");
+  const [issueDate, setIssueDate] = useState(invoice?.issueDate || new Date().toISOString().split("T")[0]);
+  const [dueDate, setDueDate] = useState(invoice?.dueDate || "");
+  const [subtotal, setSubtotal] = useState(invoice?.subtotal || "0");
+  const [taxRate, setTaxRate] = useState(invoice?.taxRate || "0");
+  const [discount, setDiscount] = useState(invoice?.discount || "0");
+  const [notes, setNotes] = useState(invoice?.notes || "");
+
+  const sub = Number(subtotal) || 0;
+  const tax = sub * (Number(taxRate) / 100);
+  const disc = Number(discount) || 0;
+  const totalVal = sub + tax - disc;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>Invoice #</Label>
+          <Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} data-testid="input-invoice-number" />
+        </div>
+        <div>
+          <Label>Status</Label>
+          <Select value={status} onValueChange={setStatus}>
+            <SelectTrigger data-testid="select-invoice-status"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="sent">Sent</SelectItem>
+              <SelectItem value="paid">Paid</SelectItem>
+              <SelectItem value="overdue">Overdue</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>Client Name</Label>
+          <Input value={clientName} onChange={(e) => setClientName(e.target.value)} data-testid="input-invoice-client" />
+        </div>
+        <div>
+          <Label>Client Email</Label>
+          <Input value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} data-testid="input-invoice-email" />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>Issue Date</Label>
+          <Input type="date" value={issueDate} onChange={(e) => setIssueDate(e.target.value)} data-testid="input-invoice-issue-date" />
+        </div>
+        <div>
+          <Label>Due Date</Label>
+          <Input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} data-testid="input-invoice-due-date" />
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        <div>
+          <Label>Subtotal</Label>
+          <Input type="number" value={subtotal} onChange={(e) => setSubtotal(e.target.value)} data-testid="input-invoice-subtotal" />
+        </div>
+        <div>
+          <Label>Tax Rate (%)</Label>
+          <Input type="number" value={taxRate} onChange={(e) => setTaxRate(e.target.value)} data-testid="input-invoice-tax" />
+        </div>
+        <div>
+          <Label>Discount</Label>
+          <Input type="number" value={discount} onChange={(e) => setDiscount(e.target.value)} data-testid="input-invoice-discount" />
+        </div>
+      </div>
+      <div className="bg-muted/50 rounded-md p-3 text-sm">
+        <div className="flex justify-between"><span>Subtotal:</span><span>${sub.toFixed(2)}</span></div>
+        <div className="flex justify-between"><span>Tax:</span><span>${tax.toFixed(2)}</span></div>
+        {disc > 0 && <div className="flex justify-between"><span>Discount:</span><span>-${disc.toFixed(2)}</span></div>}
+        <div className="flex justify-between font-semibold border-t mt-1 pt-1"><span>Total:</span><span>${totalVal.toFixed(2)}</span></div>
+      </div>
+      <div>
+        <Label>Notes</Label>
+        <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} data-testid="input-invoice-notes" />
+      </div>
+      <DialogFooter>
+        <Button
+          onClick={() => onSubmit({
+            workspaceId,
+            invoiceNumber,
+            clientName,
+            clientEmail: clientEmail || null,
+            status,
+            issueDate: issueDate || null,
+            dueDate: dueDate || null,
+            subtotal: sub.toString(),
+            taxRate: (Number(taxRate) || 0).toString(),
+            taxAmount: tax.toString(),
+            discount: disc.toString(),
+            total: totalVal.toString(),
+            notes: notes || null,
+          })}
+          disabled={isPending || !clientName.trim()}
+          data-testid="button-save-invoice"
+        >
+          {isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+          {invoice ? "Update" : "Create"}
+        </Button>
+      </DialogFooter>
+    </div>
+  );
+}
+
+function ReportsTab({ workspaceId }: { workspaceId: string }) {
+  const { toast } = useToast();
+  const [isCreating, setIsCreating] = useState(false);
+
+  const { data: reportsList = [], isLoading } = useQuery<ContentReport[]>({
+    queryKey: ["/api/admin/content-reports", workspaceId],
+    queryFn: () => adminApi("GET", `/api/admin/content-reports?workspaceId=${workspaceId}`),
+    enabled: !!workspaceId,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data: any) => adminApi("POST", "/api/admin/content-reports", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/content-reports"] });
+      setIsCreating(false);
+      toast({ title: "Report created" });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => adminApi("DELETE", `/api/admin/content-reports/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/content-reports"] });
+      toast({ title: "Report deleted" });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const statusColors: Record<string, "default" | "secondary" | "outline"> = {
+    draft: "secondary",
+    generated: "default",
+    sent: "outline",
+  };
+
+  if (isLoading) {
+    return (
+      <div className="py-12 text-center">
+        <Loader2 className="h-5 w-5 animate-spin mx-auto mb-2 text-muted-foreground" />
+        <div className="text-sm text-muted-foreground">Loading reports...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+        <div>
+          <h2 className="text-lg font-semibold" data-testid="text-reports-title">Content Reports</h2>
+          <p className="text-sm text-muted-foreground">{reportsList.length} total</p>
+        </div>
+        <Button onClick={() => setIsCreating(true)} data-testid="button-new-report">
+          <Plus className="h-4 w-4 mr-2" />
+          New Report
+        </Button>
+      </div>
+
+      {reportsList.length === 0 && !isCreating ? (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <BarChart3 className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+            <p className="font-medium mb-1">No reports yet</p>
+            <p className="text-sm text-muted-foreground mb-4">Create a content performance report.</p>
+            <Button onClick={() => setIsCreating(true)} data-testid="button-new-report-empty">
+              <Plus className="h-4 w-4 mr-2" /> New Report
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-2">
+          {reportsList.map((report) => (
+            <Card key={report.id} className="hover-elevate" data-testid={`card-report-${report.id}`}>
+              <CardContent className="flex items-center justify-between gap-4 py-3 px-4">
+                <div className="min-w-0 flex-1">
+                  <div className="font-medium">{report.title}</div>
+                  <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5 flex-wrap">
+                    <span>{report.type}</span>
+                    {report.period && <span>{report.period}</span>}
+                    {report.postsPublished != null && <span>{report.postsPublished} posts</span>}
+                    {report.totalWords != null && <span>{report.totalWords?.toLocaleString()} words</span>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {report.trafficChange && (
+                    <Badge variant="outline" className="text-xs" data-testid={`badge-traffic-${report.id}`}>
+                      <TrendingUp className="h-3 w-3 mr-1" />
+                      {Number(report.trafficChange) > 0 ? "+" : ""}{report.trafficChange}%
+                    </Badge>
+                  )}
+                  <Badge variant={statusColors[report.status] || "secondary"} data-testid={`badge-report-status-${report.id}`}>{report.status}</Badge>
+                  <Button size="icon" variant="ghost" onClick={() => deleteMutation.mutate(report.id)} data-testid={`button-delete-report-${report.id}`}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      <Dialog open={isCreating} onOpenChange={setIsCreating}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>New Content Report</DialogTitle>
+          </DialogHeader>
+          <ReportForm
+            workspaceId={workspaceId}
+            onSubmit={(data) => createMutation.mutate(data)}
+            isPending={createMutation.isPending}
+          />
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function ReportForm({ workspaceId, onSubmit, isPending }: {
+  workspaceId: string;
+  onSubmit: (data: any) => void;
+  isPending: boolean;
+}) {
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("monthly");
+  const [period, setPeriod] = useState("");
+  const [summary, setSummary] = useState("");
+  const [postsPublished, setPostsPublished] = useState("0");
+  const [totalWords, setTotalWords] = useState("0");
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <Label>Report Title</Label>
+        <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., February 2026 Content Report" data-testid="input-report-title" />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>Type</Label>
+          <Select value={type} onValueChange={setType}>
+            <SelectTrigger data-testid="select-report-type"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="monthly">Monthly</SelectItem>
+              <SelectItem value="quarterly">Quarterly</SelectItem>
+              <SelectItem value="annual">Annual</SelectItem>
+              <SelectItem value="custom">Custom</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label>Period</Label>
+          <Input value={period} onChange={(e) => setPeriod(e.target.value)} placeholder="e.g., Feb 2026" data-testid="input-report-period" />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>Posts Published</Label>
+          <Input type="number" value={postsPublished} onChange={(e) => setPostsPublished(e.target.value)} data-testid="input-report-posts" />
+        </div>
+        <div>
+          <Label>Total Words</Label>
+          <Input type="number" value={totalWords} onChange={(e) => setTotalWords(e.target.value)} data-testid="input-report-words" />
+        </div>
+      </div>
+      <div>
+        <Label>Summary</Label>
+        <Textarea value={summary} onChange={(e) => setSummary(e.target.value)} rows={3} placeholder="Performance summary..." data-testid="input-report-summary" />
+      </div>
+      <DialogFooter>
+        <Button
+          onClick={() => onSubmit({
+            workspaceId,
+            title,
+            type,
+            status: "draft",
+            period: period || null,
+            summary: summary || null,
+            postsPublished: Number(postsPublished) || 0,
+            totalWords: Number(totalWords) || 0,
+            avgWordCount: Number(postsPublished) > 0 ? Math.round(Number(totalWords) / Number(postsPublished)) : 0,
+          })}
+          disabled={isPending || !title.trim()}
+          data-testid="button-save-report"
+        >
+          {isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+          Create Report
+        </Button>
+      </DialogFooter>
+    </div>
+  );
+}
+
 export default function AdminContent() {
   const [selectedVenueId, setSelectedVenueId] = useState("resto-platform");
   const [editingPost, setEditingPost] = useState<VenueBlogPost | null | "new">(null);
@@ -2675,6 +3115,14 @@ export default function AdminContent() {
                 <Globe className="h-4 w-4 mr-2" />
                 Domains
               </TabsTrigger>
+              <TabsTrigger value="invoices" data-testid="tab-invoices">
+                <Receipt className="h-4 w-4 mr-2" />
+                Invoices
+              </TabsTrigger>
+              <TabsTrigger value="reports" data-testid="tab-reports">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Reports
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="posts">
@@ -2701,6 +3149,14 @@ export default function AdminContent() {
 
             <TabsContent value="domains">
               <DomainManager venueId={selectedVenueId} />
+            </TabsContent>
+
+            <TabsContent value="invoices">
+              <InvoicesTab workspaceId={selectedVenueId} />
+            </TabsContent>
+
+            <TabsContent value="reports">
+              <ReportsTab workspaceId={selectedVenueId} />
             </TabsContent>
           </Tabs>
         )

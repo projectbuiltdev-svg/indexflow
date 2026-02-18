@@ -1187,3 +1187,101 @@ export const insertCrmDealSchema = createInsertSchema(crmDeals).omit({
 });
 export type InsertCrmDeal = z.infer<typeof insertCrmDealSchema>;
 export type CrmDeal = typeof crmDeals.$inferSelect;
+
+export const invoices = pgTable(
+  "invoices",
+  {
+    id: serial("id").primaryKey(),
+    workspaceId: varchar("workspace_id", { length: 36 }),
+    invoiceNumber: text("invoice_number").notNull(),
+    clientName: text("client_name").notNull(),
+    clientEmail: text("client_email"),
+    status: text("status").notNull().default("draft"),
+    issueDate: date("issue_date"),
+    dueDate: date("due_date"),
+    subtotal: decimal("subtotal", { precision: 12, scale: 2 }).default("0"),
+    taxRate: decimal("tax_rate", { precision: 5, scale: 2 }).default("0"),
+    taxAmount: decimal("tax_amount", { precision: 12, scale: 2 }).default("0"),
+    discount: decimal("discount", { precision: 12, scale: 2 }).default("0"),
+    total: decimal("total", { precision: 12, scale: 2 }).default("0"),
+    currency: text("currency").default("USD"),
+    notes: text("notes"),
+    paymentTerms: text("payment_terms"),
+    paidAt: timestamp("paid_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (t) => [
+    index("invoices_workspace_idx").on(t.workspaceId),
+    index("invoices_status_idx").on(t.status),
+    index("invoices_client_idx").on(t.clientName),
+  ]
+);
+
+export const insertInvoiceSchema = createInsertSchema(invoices).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertInvoice = z.infer<typeof insertInvoiceSchema>;
+export type Invoice = typeof invoices.$inferSelect;
+
+export const invoiceLineItems = pgTable(
+  "invoice_line_items",
+  {
+    id: serial("id").primaryKey(),
+    invoiceId: integer("invoice_id").notNull().references(() => invoices.id, { onDelete: "cascade" }),
+    description: text("description").notNull(),
+    quantity: decimal("quantity", { precision: 10, scale: 2 }).notNull().default("1"),
+    unitPrice: decimal("unit_price", { precision: 12, scale: 2 }).notNull().default("0"),
+    amount: decimal("amount", { precision: 12, scale: 2 }).notNull().default("0"),
+    sortOrder: integer("sort_order").notNull().default(0),
+  },
+  (t) => [
+    index("invoice_line_items_invoice_idx").on(t.invoiceId),
+  ]
+);
+
+export const insertInvoiceLineItemSchema = createInsertSchema(invoiceLineItems).omit({
+  id: true,
+});
+export type InsertInvoiceLineItem = z.infer<typeof insertInvoiceLineItemSchema>;
+export type InvoiceLineItem = typeof invoiceLineItems.$inferSelect;
+
+export const contentReports = pgTable(
+  "content_reports",
+  {
+    id: serial("id").primaryKey(),
+    workspaceId: varchar("workspace_id", { length: 36 }),
+    venueId: varchar("venue_id", { length: 36 }),
+    title: text("title").notNull(),
+    type: text("type").notNull().default("monthly"),
+    status: text("status").notNull().default("draft"),
+    period: text("period"),
+    metrics: jsonb("metrics"),
+    summary: text("summary"),
+    postsPublished: integer("posts_published").default(0),
+    totalWords: integer("total_words").default(0),
+    avgWordCount: integer("avg_word_count").default(0),
+    topKeywords: text("top_keywords").array(),
+    trafficChange: decimal("traffic_change", { precision: 8, scale: 2 }),
+    rankingsImproved: integer("rankings_improved").default(0),
+    generatedAt: timestamp("generated_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (t) => [
+    index("content_reports_workspace_idx").on(t.workspaceId),
+    index("content_reports_venue_idx").on(t.venueId),
+    index("content_reports_type_idx").on(t.type),
+    index("content_reports_status_idx").on(t.status),
+  ]
+);
+
+export const insertContentReportSchema = createInsertSchema(contentReports).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertContentReport = z.infer<typeof insertContentReportSchema>;
+export type ContentReport = typeof contentReports.$inferSelect;

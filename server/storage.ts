@@ -69,6 +69,12 @@ import {
   type InsertCrmPipelineStage,
   type CrmDeal,
   type InsertCrmDeal,
+  type Invoice,
+  type InsertInvoice,
+  type InvoiceLineItem,
+  type InsertInvoiceLineItem,
+  type ContentReport,
+  type InsertContentReport,
   contactMessages,
   venues,
   reservations,
@@ -107,6 +113,9 @@ import {
   crmContacts,
   crmPipelineStages,
   crmDeals,
+  invoices,
+  invoiceLineItems,
+  contentReports,
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
@@ -269,6 +278,21 @@ export interface IStorage {
   createCrmDeal(data: InsertCrmDeal): Promise<CrmDeal>;
   updateCrmDeal(id: number, data: Partial<InsertCrmDeal>): Promise<CrmDeal | undefined>;
   deleteCrmDeal(id: number): Promise<boolean>;
+  getInvoices(workspaceId?: string): Promise<Invoice[]>;
+  getInvoice(id: number): Promise<Invoice | undefined>;
+  createInvoice(data: InsertInvoice): Promise<Invoice>;
+  updateInvoice(id: number, data: Partial<InsertInvoice>): Promise<Invoice | undefined>;
+  deleteInvoice(id: number): Promise<boolean>;
+  getInvoiceLineItems(invoiceId: number): Promise<InvoiceLineItem[]>;
+  createInvoiceLineItem(data: InsertInvoiceLineItem): Promise<InvoiceLineItem>;
+  updateInvoiceLineItem(id: number, data: Partial<InsertInvoiceLineItem>): Promise<InvoiceLineItem | undefined>;
+  deleteInvoiceLineItem(id: number): Promise<boolean>;
+  deleteInvoiceLineItemsByInvoice(invoiceId: number): Promise<void>;
+  getContentReports(workspaceId?: string): Promise<ContentReport[]>;
+  getContentReport(id: number): Promise<ContentReport | undefined>;
+  createContentReport(data: InsertContentReport): Promise<ContentReport>;
+  updateContentReport(id: number, data: Partial<InsertContentReport>): Promise<ContentReport | undefined>;
+  deleteContentReport(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -1405,6 +1429,73 @@ export class MemStorage implements IStorage {
     return updated;
   }
   async deleteCrmDeal(id: number): Promise<boolean> { return this.crmDealsMap.delete(id); }
+
+  private invoicesMap: Map<number, Invoice> = new Map();
+  private invoiceIdCounter = 1;
+  private invoiceLineItemsMap: Map<number, InvoiceLineItem> = new Map();
+  private invoiceLineItemIdCounter = 1;
+  private contentReportsMap: Map<number, ContentReport> = new Map();
+  private contentReportIdCounter = 1;
+
+  async getInvoices(workspaceId?: string): Promise<Invoice[]> {
+    const all = Array.from(this.invoicesMap.values());
+    return workspaceId ? all.filter(i => i.workspaceId === workspaceId) : all;
+  }
+  async getInvoice(id: number): Promise<Invoice | undefined> { return this.invoicesMap.get(id); }
+  async createInvoice(data: InsertInvoice): Promise<Invoice> {
+    const record: Invoice = { ...data, id: this.invoiceIdCounter++, workspaceId: data.workspaceId ?? null, clientEmail: data.clientEmail ?? null, status: data.status ?? "draft", issueDate: data.issueDate ?? null, dueDate: data.dueDate ?? null, subtotal: data.subtotal ?? "0", taxRate: data.taxRate ?? "0", taxAmount: data.taxAmount ?? "0", discount: data.discount ?? "0", total: data.total ?? "0", currency: data.currency ?? "USD", notes: data.notes ?? null, paymentTerms: data.paymentTerms ?? null, paidAt: data.paidAt ?? null, createdAt: new Date(), updatedAt: new Date() };
+    this.invoicesMap.set(record.id, record);
+    return record;
+  }
+  async updateInvoice(id: number, data: Partial<InsertInvoice>): Promise<Invoice | undefined> {
+    const existing = this.invoicesMap.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...data, updatedAt: new Date() };
+    this.invoicesMap.set(id, updated);
+    return updated;
+  }
+  async deleteInvoice(id: number): Promise<boolean> { return this.invoicesMap.delete(id); }
+
+  async getInvoiceLineItems(invoiceId: number): Promise<InvoiceLineItem[]> {
+    return Array.from(this.invoiceLineItemsMap.values()).filter(i => i.invoiceId === invoiceId).sort((a, b) => a.sortOrder - b.sortOrder);
+  }
+  async createInvoiceLineItem(data: InsertInvoiceLineItem): Promise<InvoiceLineItem> {
+    const record: InvoiceLineItem = { ...data, id: this.invoiceLineItemIdCounter++ };
+    this.invoiceLineItemsMap.set(record.id, record);
+    return record;
+  }
+  async updateInvoiceLineItem(id: number, data: Partial<InsertInvoiceLineItem>): Promise<InvoiceLineItem | undefined> {
+    const existing = this.invoiceLineItemsMap.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...data };
+    this.invoiceLineItemsMap.set(id, updated);
+    return updated;
+  }
+  async deleteInvoiceLineItem(id: number): Promise<boolean> { return this.invoiceLineItemsMap.delete(id); }
+  async deleteInvoiceLineItemsByInvoice(invoiceId: number): Promise<void> {
+    for (const [id, item] of Array.from(this.invoiceLineItemsMap)) {
+      if (item.invoiceId === invoiceId) this.invoiceLineItemsMap.delete(id);
+    }
+  }
+
+  async getContentReports(workspaceId?: string): Promise<ContentReport[]> {
+    const all = Array.from(this.contentReportsMap.values());
+    return workspaceId ? all.filter(r => r.workspaceId === workspaceId) : all;
+  }
+  async getContentReport(id: number): Promise<ContentReport | undefined> { return this.contentReportsMap.get(id); }
+  async createContentReport(data: InsertContentReport): Promise<ContentReport> {
+    const record: ContentReport = { ...data, id: this.contentReportIdCounter++, workspaceId: data.workspaceId ?? null, venueId: data.venueId ?? null, type: data.type ?? "monthly", status: data.status ?? "draft", period: data.period ?? null, metrics: data.metrics ?? null, summary: data.summary ?? null, postsPublished: data.postsPublished ?? 0, totalWords: data.totalWords ?? 0, avgWordCount: data.avgWordCount ?? 0, topKeywords: data.topKeywords ?? null, trafficChange: data.trafficChange ?? null, rankingsImproved: data.rankingsImproved ?? 0, generatedAt: data.generatedAt ?? null, createdAt: new Date(), updatedAt: new Date() };
+    this.contentReportsMap.set(record.id, record);
+    return record;
+  }
+  async updateContentReport(id: number, data: Partial<InsertContentReport>): Promise<ContentReport | undefined> {
+    const existing = this.contentReportsMap.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...data, updatedAt: new Date() };
+    this.contentReportsMap.set(id, updated);
+    return updated;
+  }
+  async deleteContentReport(id: number): Promise<boolean> { return this.contentReportsMap.delete(id); }
 }
 
 export class DbStorage implements IStorage {
@@ -2283,6 +2374,67 @@ export class DbStorage implements IStorage {
   }
   async deleteCrmDeal(id: number): Promise<boolean> {
     const result = await db!.delete(crmDeals).where(eq(crmDeals.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getInvoices(workspaceId?: string): Promise<Invoice[]> {
+    if (workspaceId) return db!.select().from(invoices).where(eq(invoices.workspaceId, workspaceId)).orderBy(desc(invoices.createdAt));
+    return db!.select().from(invoices).orderBy(desc(invoices.createdAt));
+  }
+  async getInvoice(id: number): Promise<Invoice | undefined> {
+    const [row] = await db!.select().from(invoices).where(eq(invoices.id, id));
+    return row;
+  }
+  async createInvoice(data: InsertInvoice): Promise<Invoice> {
+    const [row] = await db!.insert(invoices).values(data).returning();
+    return row;
+  }
+  async updateInvoice(id: number, data: Partial<InsertInvoice>): Promise<Invoice | undefined> {
+    const [row] = await db!.update(invoices).set({ ...data, updatedAt: new Date() }).where(eq(invoices.id, id)).returning();
+    return row;
+  }
+  async deleteInvoice(id: number): Promise<boolean> {
+    const result = await db!.delete(invoices).where(eq(invoices.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getInvoiceLineItems(invoiceId: number): Promise<InvoiceLineItem[]> {
+    return db!.select().from(invoiceLineItems).where(eq(invoiceLineItems.invoiceId, invoiceId)).orderBy(asc(invoiceLineItems.sortOrder));
+  }
+  async createInvoiceLineItem(data: InsertInvoiceLineItem): Promise<InvoiceLineItem> {
+    const [row] = await db!.insert(invoiceLineItems).values(data).returning();
+    return row;
+  }
+  async updateInvoiceLineItem(id: number, data: Partial<InsertInvoiceLineItem>): Promise<InvoiceLineItem | undefined> {
+    const [row] = await db!.update(invoiceLineItems).set(data).where(eq(invoiceLineItems.id, id)).returning();
+    return row;
+  }
+  async deleteInvoiceLineItem(id: number): Promise<boolean> {
+    const result = await db!.delete(invoiceLineItems).where(eq(invoiceLineItems.id, id)).returning();
+    return result.length > 0;
+  }
+  async deleteInvoiceLineItemsByInvoice(invoiceId: number): Promise<void> {
+    await db!.delete(invoiceLineItems).where(eq(invoiceLineItems.invoiceId, invoiceId));
+  }
+
+  async getContentReports(workspaceId?: string): Promise<ContentReport[]> {
+    if (workspaceId) return db!.select().from(contentReports).where(eq(contentReports.workspaceId, workspaceId)).orderBy(desc(contentReports.createdAt));
+    return db!.select().from(contentReports).orderBy(desc(contentReports.createdAt));
+  }
+  async getContentReport(id: number): Promise<ContentReport | undefined> {
+    const [row] = await db!.select().from(contentReports).where(eq(contentReports.id, id));
+    return row;
+  }
+  async createContentReport(data: InsertContentReport): Promise<ContentReport> {
+    const [row] = await db!.insert(contentReports).values(data).returning();
+    return row;
+  }
+  async updateContentReport(id: number, data: Partial<InsertContentReport>): Promise<ContentReport | undefined> {
+    const [row] = await db!.update(contentReports).set({ ...data, updatedAt: new Date() }).where(eq(contentReports.id, id)).returning();
+    return row;
+  }
+  async deleteContentReport(id: number): Promise<boolean> {
+    const result = await db!.delete(contentReports).where(eq(contentReports.id, id)).returning();
     return result.length > 0;
   }
 }

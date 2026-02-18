@@ -33,7 +33,7 @@ Resto is a multi-tenant venue management SaaS platform for restaurants, hotels, 
 - Core entity: `venues` table with owner_id referencing `users`
 - Primary keys: venues/users use varchar(36) UUIDs, most other tables use serial integers
 - All resource tables have `venue_id` foreign key referencing venues
-- Key tables: venues, users, venue_blog_posts, venue_domains, venue_content_assets, venue_campaigns, rank_tracker_keywords, grid_keywords, grid_scan_results, contact_messages, seo_integrations, reservations, venue_menus, venue_menu_items, venue_reviews, venue_social_accounts, venue_hours, venue_amenities, venue_photos, venue_staff, staff_schedules, phone_calls, chat_conversations, chat_messages
+- Key tables: venues, users, venue_blog_posts, venue_domains, venue_content_assets, venue_campaigns, rank_tracker_keywords, grid_keywords, grid_scan_results, contact_messages, seo_integrations, reservations, venue_menus, venue_menu_items, venue_reviews, venue_social_accounts, venue_hours, venue_amenities, venue_photos, venue_staff, staff_schedules, phone_calls, chat_conversations, chat_messages, invoices, invoice_line_items, content_reports, crm_contacts, crm_pipeline_stages, crm_deals
 - CRITICAL: Do NOT run db:push - database already has correct schema from SQL import
 
 ## Routes
@@ -70,6 +70,14 @@ All prefixed with `/api/`:
 ### CRM & Reservations
 - GET/POST `/api/contact-messages`, PATCH `/api/contact-messages/:id`
 - GET/POST `/api/reservations` (query: ?venueId=), PATCH `/api/reservations/:id`
+
+### Invoices
+- GET/POST `/api/admin/invoices` (query: ?workspaceId=)
+- GET/PATCH/DELETE `/api/admin/invoices/:id`
+
+### Content Reports
+- GET/POST `/api/admin/content-reports` (query: ?workspaceId=)
+- GET/PATCH/DELETE `/api/admin/content-reports/:id`
 
 ### Advanced Endpoints (stubs)
 - POST `/api/mdx-preview` - Render MDX to HTML

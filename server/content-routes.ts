@@ -1,7 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { storage } from "./storage";
 import { compileMdxToHtml } from "./mdx-compiler";
-import { insertVenueBlogPostSchema, insertVenueDomainSchema, insertContentAssetSchema, insertContentAssetUsageSchema, blogTemplates } from "@shared/schema";
+import { insertVenueBlogPostSchema, insertVenueDomainSchema, insertContentAssetSchema, insertContentAssetUsageSchema, insertInvoiceSchema, insertInvoiceLineItemSchema, insertContentReportSchema, blogTemplates } from "@shared/schema";
 import { z } from "zod";
 import { bulkCreateDraftPosts, generateCampaignDrafts, generateSingleDraft } from "./draft-generator";
 import { randomUUID } from "crypto";
@@ -786,6 +786,137 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
         compiled_html: post.compiledHtml,
         publishedAt: post.publishedAt,
       });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/invoices", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const workspaceId = req.query.workspaceId as string | undefined;
+      const data = await storage.getInvoices(workspaceId || undefined);
+      res.json(data);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/invoices/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const invoice = await storage.getInvoice(Number(req.params.id));
+      if (!invoice) return res.status(404).json({ error: "Invoice not found" });
+      const lineItems = await storage.getInvoiceLineItems(invoice.id);
+      res.json({ ...invoice, lineItems });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/invoices", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { lineItems, ...invoiceData } = req.body;
+      const parsed = insertInvoiceSchema.parse(invoiceData);
+      const invoice = await storage.createInvoice(parsed);
+      if (lineItems && Array.isArray(lineItems)) {
+        for (let i = 0; i < lineItems.length; i++) {
+          const liData = insertInvoiceLineItemSchema.parse({ ...lineItems[i], invoiceId: invoice.id, sortOrder: i });
+          await storage.createInvoiceLineItem(liData);
+        }
+      }
+      const items = await storage.getInvoiceLineItems(invoice.id);
+      res.status(201).json({ ...invoice, lineItems: items });
+    } catch (err: any) {
+      if (err?.name === "ZodError") return res.status(400).json({ error: "Validation error", details: err.errors });
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.patch("/api/admin/invoices/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const id = Number(req.params.id);
+      const { lineItems, ...invoiceData } = req.body;
+      const updated = await storage.updateInvoice(id, invoiceData);
+      if (!updated) return res.status(404).json({ error: "Invoice not found" });
+      if (lineItems && Array.isArray(lineItems)) {
+        await storage.deleteInvoiceLineItemsByInvoice(id);
+        for (let i = 0; i < lineItems.length; i++) {
+          const liData = insertInvoiceLineItemSchema.parse({ ...lineItems[i], invoiceId: id, sortOrder: i });
+          await storage.createInvoiceLineItem(liData);
+        }
+      }
+      const items = await storage.getInvoiceLineItems(id);
+      res.json({ ...updated, lineItems: items });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.delete("/api/admin/invoices/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const ok = await storage.deleteInvoice(Number(req.params.id));
+      if (!ok) return res.status(404).json({ error: "Invoice not found" });
+      res.json({ success: true });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/content-reports", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const workspaceId = req.query.workspaceId as string | undefined;
+      const data = await storage.getContentReports(workspaceId || undefined);
+      res.json(data);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/content-reports/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const report = await storage.getContentReport(Number(req.params.id));
+      if (!report) return res.status(404).json({ error: "Report not found" });
+      res.json(report);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/content-reports", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const parsed = insertContentReportSchema.parse(req.body);
+      const report = await storage.createContentReport(parsed);
+      res.status(201).json(report);
+    } catch (err: any) {
+      if (err?.name === "ZodError") return res.status(400).json({ error: "Validation error", details: err.errors });
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.patch("/api/admin/content-reports/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const updated = await storage.updateContentReport(Number(req.params.id), req.body);
+      if (!updated) return res.status(404).json({ error: "Report not found" });
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.delete("/api/admin/content-reports/:id", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const ok = await storage.deleteContentReport(Number(req.params.id));
+      if (!ok) return res.status(404).json({ error: "Report not found" });
+      res.json({ success: true });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
     }
