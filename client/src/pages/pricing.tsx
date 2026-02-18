@@ -1,300 +1,386 @@
 import { Link } from "wouter";
-import { Check, Phone, Globe, Bot, Calendar, Clock, Users, Code, TrendingUp, Search, MapPin, Grid3X3, PenTool, FileText, Building2, ArrowRight, Megaphone } from "lucide-react";
+import { Check, ArrowRight, Users, Layers, Building2, Crown, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Layout } from "@/components/layout";
 import { PageSubNav } from "@/components/page-sub-nav";
-import indexFlowLogo from "@assets/image_1771351451425.png";
 import { SEO, seoData } from "@/components/seo";
 
 const pricingSections = [
   { id: "plans", label: "Plans" },
-  { id: "add-ons", label: "Add-Ons" },
-  { id: "questions", label: "Questions" },
+  { id: "included", label: "What's Included" },
+  { id: "compare", label: "Compare" },
+  { id: "faq", label: "FAQ" },
 ];
 
-const addOns = [
+const sharedFeatures = [
+  "40 AI-generated posts per workspace/month",
+  "Content grading on all posts",
+  "Rank Tracker (1,000 keywords/workspace)",
+  "1 free weekly rank refresh (auto-applied)",
+  "Local Search Grid (5x5, weekly scan)",
+  "Google Search Console integration",
+  "Full CRM per workspace",
+  "All 5 CMS integrations",
+  "Link Builder + Post Validator",
+  "On-Page SEO Auditor",
+  "Site Profiler",
+  "Schema Markup (20+ types, auto-detect)",
+  "AI Widget per workspace",
+  "Twilio voice & SMS per workspace",
+  "Domain mapping per workspace",
+  "Invoicing per workspace",
+  "Link Health monitoring (auto-applied)",
+  "BYOK for all providers",
+  "Multi-language support",
+];
+
+const plans = [
   {
-    title: "Custom Websites",
-    description: "Custom-designed websites built for restaurants, hotels, and businesses",
-    icon: Globe,
-    href: "/platform/hospitality-websites",
-    color: "text-blue-500",
-    bg: "bg-blue-500/10",
+    name: "Solo",
+    price: "$99",
+    annualPrice: "$83",
+    description: "For solo founders, freelancers, and consultants",
+    users: "1 user",
+    workspaces: "1 workspace",
+    highlight: false,
+    features: [
+      "1 user",
+      "1 workspace",
+      "40 AI posts/month",
+      "All core SEO tools",
+      "Full CRM",
+      "All 5 CMS integrations",
+      "AI Widget",
+      "Twilio integration",
+      "BYOK for all providers",
+      "Email support",
+    ],
+    cta: "Get Started",
+    icon: Users,
   },
   {
-    title: "SEO",
-    description: "Search engine optimization to drive organic traffic and visibility",
-    icon: Search,
-    href: "/platform/seo",
-    color: "text-green-500",
-    bg: "bg-green-500/10",
+    name: "Professional",
+    price: "$299",
+    annualPrice: "$249",
+    description: "For growing agencies and teams",
+    users: "3 users",
+    workspaces: "3 workspaces (up to 50)",
+    highlight: true,
+    features: [
+      "3 users",
+      "3 workspaces (buy up to 50)",
+      "40 AI posts/workspace/month",
+      "Bulk content campaigns",
+      "Team roles & permissions",
+      "All core SEO tools",
+      "Full CRM per workspace",
+      "All 5 CMS integrations",
+      "Advanced reports with snapshots",
+      "Email + ticket support",
+    ],
+    cta: "Get Started",
+    icon: Layers,
   },
   {
-    title: "Content Marketing",
-    description: "Strategic content creation to engage customers and build authority",
-    icon: PenTool,
-    href: "/platform/content-marketing",
-    color: "text-purple-500",
-    bg: "bg-purple-500/10",
-  },
-  {
-    title: "Local Citations",
-    description: "Build local search presence via trusted partners Whitespark and BrightLocal",
-    icon: MapPin,
-    href: "/services/local-citations",
-    color: "text-orange-500",
-    bg: "bg-orange-500/10",
-  },
-  {
-    title: "Multiple Location Pages",
-    description: "Dedicated pages and dashboards for each of your business locations",
+    name: "White Label Agency",
+    price: "$499",
+    annualPrice: "$416",
+    description: "For agencies reselling under their own brand",
+    users: "6 users",
+    workspaces: "100 workspaces",
+    highlight: false,
+    features: [
+      "6 users",
+      "100 workspaces",
+      "Full white label branding",
+      "Custom domain",
+      "Content moderation tools",
+      "Bulk content campaigns",
+      "All core SEO tools",
+      "Dedicated account manager",
+      "Advanced reports with snapshots",
+      "Email + tickets + chat support",
+    ],
+    cta: "Get Started",
     icon: Building2,
-    href: "/solutions/multi-location",
-    color: "text-indigo-500",
-    bg: "bg-indigo-500/10",
   },
   {
-    title: "Built-in SEO Tools",
-    description: "Rank Tracker, Local Search Grid, and Google Search Console — built into every plan",
-    icon: TrendingUp,
-    href: "/platform/seo-tools",
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
-    badge: "Free",
+    name: "Enterprise",
+    price: "Custom",
+    annualPrice: "Custom",
+    description: "For large agencies and reseller networks",
+    users: "Unlimited users",
+    workspaces: "Unlimited workspaces",
+    highlight: false,
+    features: [
+      "Unlimited users & workspaces",
+      "Super Admin Dashboard",
+      "Multi-tenant reseller mode",
+      "API access",
+      "Custom feature flags",
+      "SSO / SAML authentication",
+      "Dedicated infrastructure",
+      "SLA with uptime guarantee",
+      "Onboarding & training",
+      "Full support (email, tickets, chat, phone)",
+    ],
+    cta: "Contact Sales",
+    icon: Crown,
   },
 ];
 
-const fullServiceFeatures = [
-  { icon: Globe, text: "Custom-designed website" },
-  { icon: Calendar, text: "Website & Twilio RSVP" },
-  { icon: Calendar, text: "Automated booking system" },
-  { icon: Bot, text: <>AI Assistant 24/7</> },
-  { icon: Phone, text: <>Twilio integration <span className="text-sm italic text-muted-foreground">(customer service #)</span></> },
-  { icon: Clock, text: "Real-time availability sync" },
-  { icon: Users, text: "Client dashboard access" },
-  { icon: Calendar, text: "Pre-paid Reservations" },
-  { icon: TrendingUp, text: <>Rank Tracker <span className="text-sm italic text-muted-foreground">(1,000 keywords, free weekly scans)</span></> },
-  { icon: Search, text: <>Search Console <span className="text-sm italic text-muted-foreground">(auto tracked)</span></> },
-  { icon: Grid3X3, text: <>Local Search Grid <span className="text-sm italic text-muted-foreground">(weekly scans, 25 keywords)</span></> },
-  { icon: Globe, text: "Website Changes" },
+const compareRows = [
+  { feature: "Users", solo: "1", pro: "3", whiteLabel: "6", enterprise: "Unlimited" },
+  { feature: "Workspaces", solo: "1", pro: "3 (up to 50)", whiteLabel: "100", enterprise: "Unlimited" },
+  { feature: "White label", solo: false, pro: false, whiteLabel: true, enterprise: true },
+  { feature: "Custom domain", solo: false, pro: false, whiteLabel: true, enterprise: true },
+  { feature: "Super Admin Dashboard", solo: false, pro: false, whiteLabel: false, enterprise: true },
+  { feature: "Multi-tenant reseller", solo: false, pro: false, whiteLabel: false, enterprise: true },
+  { feature: "Team roles", solo: false, pro: true, whiteLabel: true, enterprise: true },
+  { feature: "Bulk campaigns", solo: false, pro: true, whiteLabel: true, enterprise: true },
+  { feature: "Content moderation", solo: false, pro: false, whiteLabel: true, enterprise: true },
+  { feature: "API access", solo: false, pro: false, whiteLabel: false, enterprise: true },
+  { feature: "SSO / SAML", solo: false, pro: false, whiteLabel: false, enterprise: true },
+  { feature: "Dedicated infrastructure", solo: false, pro: false, whiteLabel: false, enterprise: true },
+  { feature: "SLA guarantee", solo: false, pro: false, whiteLabel: false, enterprise: true },
 ];
 
-const widgetFeatures = [
-  { icon: Calendar, text: "Website Reservation Widget" },
-  { icon: Calendar, text: "Automated booking system" },
-  { icon: Bot, text: "AI Assistant" },
-  { icon: Clock, text: "Real-time availability sync" },
-  { icon: Users, text: "Client dashboard access" },
-  { icon: Calendar, text: "Pre-paid Reservations" },
-  { icon: TrendingUp, text: <>Rank Tracker <span className="text-sm italic text-muted-foreground">(1,000 keywords, free weekly scans)</span></> },
-  { icon: Search, text: <>Search Console <span className="text-sm italic text-muted-foreground">(auto tracked)</span></> },
-  { icon: Grid3X3, text: <>Local Search Grid <span className="text-sm italic text-muted-foreground">(weekly scans, 25 keywords)</span></> },
-  { icon: Globe, text: "Website Changes" },
+const faqs = [
+  {
+    q: "What's the same across all plans?",
+    a: "Every plan includes 40 AI posts per workspace per month, Rank Tracker (1,000 keywords), Local Search Grid (5x5), Google Search Console, full CRM, all 5 CMS integrations, Link Builder, Post Validator, On-Page Auditor, Site Profiler, Schema Markup, AI Widget, Twilio, domain mapping, invoicing, Link Health monitoring, BYOK, and multi-language support.",
+  },
+  {
+    q: "Can I buy additional workspaces?",
+    a: "Yes. On the Professional plan, you can purchase additional workspaces up to 50 total. White Label supports up to 100. Enterprise is unlimited.",
+  },
+  {
+    q: "How do Rank Tracker credits work?",
+    a: "Every workspace gets 1 free keyword refresh per calendar week, auto-applied every Monday. Need instant refreshes? Buy credits: 5 for $10 or 25 for $35.",
+  },
+  {
+    q: "How does the Local Search Grid work?",
+    a: "Each workspace gets 1 free weekly 5x5 grid scan, auto-applied. Buy instant scan credits: 5 for $10 or 25 for $35.",
+  },
+  {
+    q: "What does white label include?",
+    a: "Upload your logo, set your brand name, pick brand colors, configure a custom domain, and set your support email. Your clients see your brand everywhere - IndexFlow branding is completely hidden.",
+  },
+  {
+    q: "What is BYOK?",
+    a: "Bring Your Own Key. Connect your own API keys for AI providers (OpenAI, Anthropic, Google AI, Grok, Mistral, Cohere, Perplexity), image banks (Unsplash, Pexels, Pixabay), payment processors (Stripe, PayPal), and Twilio. All keys encrypted with AES-256-GCM.",
+  },
+  {
+    q: "Is there annual pricing?",
+    a: "Yes. Pay annually and get 2 months free (pay for 10, get 12). Solo drops to $83/mo, Professional to $249/mo, and White Label to $416/mo.",
+  },
+  {
+    q: "Can I cancel anytime?",
+    a: "Yes. No contracts, no lock-in. Cancel your subscription at any time.",
+  },
 ];
-
 
 export default function Pricing() {
   return (
     <Layout>
       <SEO {...seoData.pricing} />
-    <PageSubNav sections={pricingSections} />
-    <div className="min-h-screen">
-      <section id="plans" className="py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]" data-testid="badge-pricing">
-              Simple Pricing
-            </Badge>
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4" data-testid="text-pricing-title">
-              Everything You Need, One Price
-            </h1>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4 sm:px-0 text-center" data-testid="text-pricing-subtitle">
-              No hidden fees. No per-booking charges. No contracts. Done for you setup.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start">
-            <Card className="relative overflow-visible" data-testid="card-pricing-full">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Badge className="bg-yellow-500 text-black border-0 shadow-[0_0_20px_rgba(234,179,8,0.5)]" data-testid="badge-popular">
-                  Most Popular
-                </Badge>
-              </div>
-              <CardHeader className="text-center pt-8">
-                <img src={indexFlowLogo} alt="indexFlow Restaurant Booking Platform" className="h-8 mx-auto mb-2" />
-                <CardTitle className="text-2xl" data-testid="text-plan-name-full">Complete Solution</CardTitle>
-                <CardDescription className="text-xs" data-testid="text-payment-note">$499 one-time setup</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="text-center">
-                  <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent" data-testid="text-monthly-price-full">$299</span>
-                    <span className="text-muted-foreground text-sm">/month</span>
-                  </div>
-                  <Link href="/contact" className="inline-block mt-3">
-                    <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-yellow-400/20 via-orange-400/20 to-yellow-400/20 border border-yellow-500/40 shadow-[0_0_12px_rgba(234,179,8,0.3)]">
-                      <span className="text-sm font-bold bg-gradient-to-r from-yellow-600 via-orange-500 to-yellow-600 bg-clip-text text-transparent dark:from-yellow-300 dark:via-orange-300 dark:to-yellow-300">I Want This!</span>
-                    </div>
-                  </Link>
-                </div>
-
-                <div className="pt-2">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px flex-1 bg-gradient-to-r from-primary/40 to-transparent" />
-                    <span className="text-xs font-semibold uppercase tracking-widest text-primary">Everything included</span>
-                    <div className="h-px flex-1 bg-gradient-to-l from-primary/40 to-transparent" />
-                  </div>
-                  <ul className="space-y-3">
-                    {fullServiceFeatures.map((feature, index) => (
-                      <li key={index} className="flex items-center gap-3" data-testid={`feature-full-${index}`}>
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <feature.icon className="w-4 h-4 text-primary" />
-                        </div>
-                        <span>{feature.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="border-t pt-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Clock className="w-4 h-4 text-muted-foreground" />
-                    <span className="font-medium">5-20 business days website turn-around</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Bring Your Own Keys (BYOK) AI for Twilio - you control your costs. We host your website and assign browser SSL FREE, <Link href="/contact" className="text-primary hover:underline">Contact our sales team</Link>.
-                  </p>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Link href="/contact" className="w-full">
-                  <Button className="w-full" size="lg" data-testid="button-get-started-full">
-                    Book a Discovery Call
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
-
-            <Card className="relative overflow-visible" data-testid="card-pricing-widget">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Badge className="bg-blue-500 text-white border-0 shadow-[0_0_20px_rgba(59,130,246,0.5)]" data-testid="badge-ai-assistant">
-                  AI Assistant
-                </Badge>
-              </div>
-              <CardHeader className="text-center pt-8">
-                <img src={indexFlowLogo} alt="indexFlow Restaurant Booking Platform" className="h-8 mx-auto mb-2" />
-                <CardTitle className="text-2xl" data-testid="text-plan-name-widget">Widget Only</CardTitle>
-                <CardDescription className="text-xs" data-testid="text-widget-note">No setup fee required</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="text-center">
-                  <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent" data-testid="text-monthly-price-widget">$149</span>
-                    <span className="text-muted-foreground text-sm">/month</span>
-                  </div>
-                  <div className="mt-3 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-green-500/10 border border-green-500/30 shadow-[0_0_12px_rgba(34,197,94,0.2)]" data-testid="text-widget-trial">
-                    <span className="text-sm font-bold text-green-600 dark:text-green-400">7 Day Trial</span>
-                    <span className="text-sm font-bold text-green-700 dark:text-green-300">$1</span>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px flex-1 bg-gradient-to-r from-blue-500/40 to-transparent" />
-                    <span className="text-xs font-semibold uppercase tracking-widest text-blue-500">What's included</span>
-                    <div className="h-px flex-1 bg-gradient-to-l from-blue-500/40 to-transparent" />
-                  </div>
-                  <ul className="space-y-3">
-                    {widgetFeatures.map((feature, index) => (
-                      <li key={index} className="flex items-center gap-3" data-testid={`feature-widget-${index}`}>
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center">
-                          <feature.icon className="w-4 h-4 text-blue-500" />
-                        </div>
-                        <span>{feature.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="border-t pt-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Code className="w-4 h-4 text-muted-foreground" />
-                    <span className="font-medium">Single line of code integration</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Add our booking widget to your existing website instantly
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-3">
-                    Bring Your Own Keys (BYOK) AI for Twilio (optional) - you control your costs
-                  </p>
-                </div>
-              </CardContent>
-              <CardFooter className="pb-6">
-                <Link href="/contact" className="w-full">
-                  <Button className="w-full bg-gray-500 hover:bg-gray-600 text-white" size="lg" data-testid="button-get-started-widget">
-                    Book a Discovery Call
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
-          </div>
-
-          <div id="add-ons" className="mt-16 max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <Badge variant="outline" className="mb-4" data-testid="badge-add-ons">
-                Add-Ons
+      <PageSubNav sections={pricingSections} />
+      <div className="min-h-screen">
+        <section id="plans" className="py-16 lg:py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]" data-testid="badge-pricing">
+                Pricing
               </Badge>
-              <h2 className="text-2xl sm:text-3xl font-bold mb-2" data-testid="text-addons-title">
-                Grow Your Online Presence
-              </h2>
-              <p className="text-muted-foreground">
-                Available with any plan. Managed by our team.
+              <h1 className="text-4xl lg:text-5xl font-bold mb-4" data-testid="text-pricing-title">
+                One Platform, Transparent Pricing
+              </h1>
+              <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto" data-testid="text-pricing-subtitle">
+                Every plan includes the full SEO and content toolkit. Pick the tier that matches your team size and client count.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Annual billing: 2 months free (pay for 10, get 12)
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {addOns.map((addon) => (
-                <Link key={addon.title} href={addon.href}>
-                  <Card className="h-full hover-elevate cursor-pointer" data-testid={`card-addon-${addon.title.toLowerCase().replace(/\s+/g, '-')}`}>
-                    <CardContent className="p-5 space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-9 h-9 rounded-full ${addon.bg} flex items-center justify-center shrink-0`}>
-                          <addon.icon className={`w-4 h-4 ${addon.color}`} />
-                        </div>
-                        <CardTitle className="text-base">{addon.title}</CardTitle>
-                        {"badge" in addon && addon.badge && (
-                          <Badge className="bg-green-500 text-white border-0 text-xs ml-auto shrink-0">{addon.badge}</Badge>
-                        )}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto items-start">
+              {plans.map((plan) => (
+                <Card
+                  key={plan.name}
+                  className={`relative overflow-visible ${plan.highlight ? "shadow-[0_0_30px_rgba(59,130,246,0.25)]" : ""}`}
+                  data-testid={`card-pricing-${plan.name.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {plan.highlight && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <Badge className="bg-yellow-500 text-black border-0 shadow-[0_0_20px_rgba(234,179,8,0.5)]" data-testid="badge-popular">
+                        Most Popular
+                      </Badge>
+                    </div>
+                  )}
+                  <CardHeader className="text-center pt-8 pb-2">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                      <plan.icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <CardTitle className="text-xl" data-testid={`text-plan-name-${plan.name.toLowerCase().replace(/\s+/g, "-")}`}>
+                      {plan.name}
+                    </CardTitle>
+                    <CardDescription className="text-xs">{plan.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="text-center">
+                      <div className="flex items-baseline justify-center gap-1">
+                        <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent" data-testid={`text-price-${plan.name.toLowerCase().replace(/\s+/g, "-")}`}>
+                          {plan.price}
+                        </span>
+                        {plan.price !== "Custom" && <span className="text-muted-foreground text-sm">/mo</span>}
                       </div>
-                      <p className="text-sm text-muted-foreground">{addon.description}</p>
-                      <div className="flex items-center gap-1 text-sm font-medium text-primary">
-                        Learn more <ArrowRight className="w-3 h-3" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                      {plan.annualPrice !== "Custom" && (
+                        <p className="text-xs text-muted-foreground mt-1">{plan.annualPrice}/mo billed annually</p>
+                      )}
+                    </div>
+
+                    <ul className="space-y-2">
+                      {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-start gap-2 text-sm" data-testid={`feature-${plan.name.toLowerCase().replace(/\s+/g, "-")}-${index}`}>
+                          <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter className="pb-6">
+                    <Link href="/contact" className="w-full">
+                      <Button
+                        className="w-full"
+                        size="default"
+                        variant={plan.highlight ? "default" : "outline"}
+                        data-testid={`button-get-started-${plan.name.toLowerCase().replace(/\s+/g, "-")}`}
+                      >
+                        {plan.cta} <ArrowRight className="w-4 h-4 ml-1" />
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
               ))}
             </div>
           </div>
+        </section>
 
-          <div id="questions" className="mt-16 text-center">
-            <h2 className="text-2xl font-bold mb-4" data-testid="text-questions-title">
-              Have Questions?
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Schedule a call with our team to discuss your specific needs.
-            </p>
-            <Link href="/contact">
-              <Button variant="outline" size="lg" data-testid="button-contact">
-                Contact Us
-              </Button>
-            </Link>
+        <section id="included" className="py-16 lg:py-24 bg-accent/40">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <Badge variant="outline" className="mb-4" data-testid="badge-included">
+                Every Plan
+              </Badge>
+              <h2 className="text-3xl font-bold mb-2" data-testid="text-included-title">
+                What's Included in Every Tier
+              </h2>
+              <p className="text-muted-foreground">
+                The full toolkit, no matter which plan you choose.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {sharedFeatures.map((feature, index) => (
+                <div key={index} className="flex items-center gap-2" data-testid={`shared-feature-${index}`}>
+                  <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                  <span className="text-sm">{feature}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 p-4 rounded-lg bg-card border">
+              <div className="flex items-start gap-3">
+                <Zap className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-sm">Rank Tracker & Grid Credits</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Every workspace gets 1 free weekly rank refresh and 1 free weekly grid scan, auto-applied.
+                    Need more? Buy instant credits: 5 for $10 or 25 for $35.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+
+        <section id="compare" className="py-16 lg:py-24">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <Badge variant="outline" className="mb-4" data-testid="badge-compare">
+                Compare Plans
+              </Badge>
+              <h2 className="text-3xl font-bold mb-2" data-testid="text-compare-title">
+                What Changes Between Tiers
+              </h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm" data-testid="table-compare">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-3 px-2 font-medium">Feature</th>
+                    <th className="text-center py-3 px-2 font-medium">Solo</th>
+                    <th className="text-center py-3 px-2 font-medium">Professional</th>
+                    <th className="text-center py-3 px-2 font-medium">White Label</th>
+                    <th className="text-center py-3 px-2 font-medium">Enterprise</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {compareRows.map((row, i) => (
+                    <tr key={i} className="border-b last:border-0">
+                      <td className="py-3 px-2 font-medium">{row.feature}</td>
+                      {(["solo", "pro", "whiteLabel", "enterprise"] as const).map((tier) => (
+                        <td key={tier} className="text-center py-3 px-2">
+                          {typeof row[tier] === "boolean" ? (
+                            row[tier] ? (
+                              <Check className="w-4 h-4 text-primary mx-auto" />
+                            ) : (
+                              <span className="text-muted-foreground">-</span>
+                            )
+                          ) : (
+                            <span>{row[tier]}</span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="py-16 lg:py-24 bg-accent/40">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <Badge variant="outline" className="mb-4" data-testid="badge-faq">
+                FAQ
+              </Badge>
+              <h2 className="text-3xl font-bold mb-2" data-testid="text-faq-title">
+                Common Questions
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {faqs.map((faq, i) => (
+                <Card key={i} data-testid={`card-faq-${i}`}>
+                  <CardContent className="p-5">
+                    <h3 className="font-semibold mb-2">{faq.q}</h3>
+                    <p className="text-sm text-muted-foreground">{faq.a}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <div className="text-center mt-10">
+              <p className="text-muted-foreground mb-4">Still have questions?</p>
+              <Link href="/contact">
+                <Button variant="outline" size="default" data-testid="button-contact-pricing">
+                  Contact Us <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
     </Layout>
   );
 }

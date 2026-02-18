@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 
 export type BlogCategory =
-  | "Booking Systems"
+  | "Agency Growth"
   | "AI & Automation"
   | "Voice & SMS"
   | "Website & Design"
@@ -18,16 +18,16 @@ export type BlogCategory =
   | "Operations & Management";
 
 export const blogCategories: { label: BlogCategory; slug: string; description: string }[] = [
-  { label: "Booking Systems", slug: "booking-systems", description: "Reservation platforms, booking software, and system reviews for all businesses." },
-  { label: "AI & Automation", slug: "ai-automation", description: "How AI and automation are transforming restaurant, cafe, bar, and hotel bookings." },
-  { label: "Voice & SMS", slug: "voice-sms", description: "Voice booking, SMS confirmations, reminders, and communication automation." },
-  { label: "Website & Design", slug: "website-design", description: "Restaurant website design, builders, templates, and online presence tips." },
-  { label: "Payments & Deposits", slug: "payments-deposits", description: "Prepaid reservations, deposit systems, and payment integration for your business." },
-  { label: "Comparisons", slug: "comparisons", description: "Side-by-side comparisons, alternatives, and reviews of booking platforms." },
-  { label: "Pricing & Cost", slug: "pricing-cost", description: "Cost breakdowns, pricing guides, and ROI analysis for booking solutions." },
-  { label: "Industry Guides", slug: "industry-guides", description: "In-depth guides for restaurants, cafes, bars, hotels, and multi-location businesses." },
-  { label: "Local Guides", slug: "local-guides", description: "City-specific booking and business technology guides." },
-  { label: "Operations & Management", slug: "operations-management", description: "Booking management, table management, and operational efficiency." },
+  { label: "Agency Growth", slug: "agency-growth", description: "Strategies, playbooks, and case studies for scaling your SEO or content agency." },
+  { label: "AI & Automation", slug: "ai-automation", description: "AI-powered content generation, automation workflows, and leveraging LLMs for SEO at scale." },
+  { label: "Voice & SMS", slug: "voice-sms", description: "Twilio integration for agencies — voice AI, SMS notifications, and client communication automation." },
+  { label: "Website & Design", slug: "website-design", description: "Agency website design, white-label branding, and client-facing portal best practices." },
+  { label: "Payments & Deposits", slug: "payments-deposits", description: "Client invoicing, payment collection, and subscription billing for agencies." },
+  { label: "Comparisons", slug: "comparisons", description: "Side-by-side comparisons of SEO platforms, content tools, and agency software." },
+  { label: "Pricing & Cost", slug: "pricing-cost", description: "Cost breakdowns, pricing strategies, and ROI analysis for agency tools and services." },
+  { label: "Industry Guides", slug: "industry-guides", description: "In-depth guides for SEO agencies, content agencies, freelancers, and digital marketing firms." },
+  { label: "Local Guides", slug: "local-guides", description: "Local SEO strategies, citation building, and geo-targeted ranking guides." },
+  { label: "Operations & Management", slug: "operations-management", description: "Client management, project workflows, and operational efficiency for agencies." },
 ];
 
 const SLUG_TO_LABEL: Record<string, BlogCategory> = {};
@@ -88,7 +88,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   "Pricing & Cost": "text-amber-600 dark:text-amber-400",
   "Website & Design": "text-sky-600 dark:text-sky-400",
   "Industry Guides": "text-emerald-600 dark:text-emerald-400",
-  "Booking Systems": "text-indigo-600 dark:text-indigo-400",
+  "Agency Growth": "text-indigo-600 dark:text-indigo-400",
   "Local Guides": "text-teal-600 dark:text-teal-400",
   "AI & Automation": "text-fuchsia-600 dark:text-fuchsia-400",
   "Payments & Deposits": "text-orange-600 dark:text-orange-400",
@@ -215,7 +215,7 @@ function MagazineStyle({ posts, activeCategory }: { posts: BlogPost[]; activeCat
       <section className="bg-zinc-900 dark:bg-zinc-950 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between gap-4">
           <h1 className="text-lg font-bold tracking-tight" data-testid="text-blog-heading">indexFlow / Insights</h1>
-          <span className="text-xs opacity-50 uppercase tracking-widest">Hospitality Intelligence</span>
+          <span className="text-xs opacity-50 uppercase tracking-widest">Agency Intelligence</span>
         </div>
       </section>
 
@@ -276,7 +276,7 @@ function MinimalStyle({ posts, activeCategory }: { posts: BlogPost[]; activeCate
       <section className="py-16 lg:py-24">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl lg:text-4xl font-light tracking-tight mb-3" data-testid="text-blog-heading">Writing</h1>
-          <p className="text-muted-foreground text-sm">Ideas and analysis on booking systems and SEO</p>
+          <p className="text-muted-foreground text-sm">Ideas and analysis on SEO, content strategy, and agency growth</p>
         </div>
       </section>
 
@@ -455,7 +455,7 @@ function BrutalistStyle({ posts, activeCategory }: { posts: BlogPost[]; activeCa
     <div className="bg-yellow-50/40 dark:bg-zinc-950 min-h-[60vh]">
       <section className="border-b-4 border-foreground">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl lg:text-4xl font-black uppercase tracking-tight leading-none" data-testid="text-blog-heading">RESTO//BLOG</h1>
+          <h1 className="text-3xl lg:text-4xl font-black uppercase tracking-tight leading-none" data-testid="text-blog-heading">INDEX//BLOG</h1>
         </div>
       </section>
 

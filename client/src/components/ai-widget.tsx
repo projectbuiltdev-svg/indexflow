@@ -296,7 +296,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
     }
   };
 
-  const handleQuickReservation = () => {
+  const handleScheduleConsultation = () => {
     setShowQuickActions(false);
     const userMessage: Message = {
       id: Date.now(),
@@ -319,7 +319,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
     }, 1500);
   };
 
-  const handlePrepaidReservation = () => {
+  const handleGetStarted = () => {
     setShowQuickActions(false);
     const userMessage: Message = {
       id: Date.now(),
@@ -399,7 +399,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                 ) : (
                   <img 
                     src={indexFlowLogo} 
-                    alt="indexFlow AI Virtual Concierge for Restaurant Bookings" 
+                    alt="indexFlow AI Widget" 
                     className="h-10 w-auto"
                   />
                 )}
@@ -501,7 +501,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
               {showQuickActions && !isTyping && (
                 <div className="flex flex-col items-center gap-3 w-full px-4">
                   <Button
-                    onClick={handleQuickReservation}
+                    onClick={handleScheduleConsultation}
                     className="gap-2 bg-white hover:bg-gray-100 text-white w-48 ring-1 ring-black/10"
                     data-testid="button-quick-consultation"
                   >
@@ -518,7 +518,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                   </Button>
                   <div className="flex flex-col items-center">
                     <Button
-                      onClick={handlePrepaidReservation}
+                      onClick={handleGetStarted}
                       className="gap-2 bg-blue-500 hover:bg-blue-600 text-white w-48"
                       data-testid="button-get-started"
                     >
@@ -602,7 +602,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
             <button
               onClick={() => {
                 setIsOpen(true);
-                setTimeout(() => handleQuickReservation(), 100);
+                setTimeout(() => handleScheduleConsultation(), 100);
               }}
               className="text-sm font-medium hover:bg-gray-100 transition-all flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-xl ring-1 ring-black/10"
               data-testid="button-closed-consultation"

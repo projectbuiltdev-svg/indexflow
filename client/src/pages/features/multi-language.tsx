@@ -16,29 +16,29 @@ const features = [
   },
   {
     icon: Languages,
-    title: "Translated Forms",
+    title: "Translated Forms & UI",
     description: "Every field, label, and instruction is professionally translated for a seamless client experience.",
     color: "text-teal-500",
     bgColor: "bg-teal-500/10",
   },
   {
     icon: MessageSquare,
-    title: "Multilingual SMS Confirmations",
-    description: "Appointment confirmations and reminders are sent in the client's language automatically.",
+    title: "Multilingual SMS Notifications",
+    description: "Client notifications and reminders are sent in the recipient's language automatically.",
     color: "text-emerald-500",
     bgColor: "bg-emerald-500/10",
   },
   {
     icon: Phone,
-    title: "International Phone Support",
-    description: "AI phone assistant can converse in multiple languages to assist international callers.",
+    title: "International Voice Support",
+    description: "AI voice assistant can converse in multiple languages to assist international callers.",
     color: "text-cyan-500",
     bgColor: "bg-cyan-500/10",
   },
   {
     icon: LayoutIcon,
-    title: "Translated Website Widget",
-    description: "Your embedded chat widget adapts to your website's language settings and visitor preferences.",
+    title: "Localized Client Portal",
+    description: "Your white-label client portal adapts to visitor language settings and preferences.",
     color: "text-lime-500",
     bgColor: "bg-lime-500/10",
   },
@@ -52,9 +52,9 @@ const features = [
 ];
 
 const benefits = [
-  "Reach international clients and global markets effortlessly",
+  "Serve international agency clients and global markets effortlessly",
   "Reduce friction for non-English-speaking clients",
-  "Serve diverse communities with localized experiences",
+  "Expand your agency's reach to diverse communities worldwide",
   "Support 20+ languages including Spanish, French, Arabic, Chinese, and more",
 ];
 
@@ -69,7 +69,7 @@ export default function MultiLanguageFeature() {
               <Globe className="w-3 h-3 mr-1" />
               Multi-Language
             </Badge>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" data-testid="heading-multi-language">
               Serve Clients in{" "}
               <span className="bg-gradient-to-r from-green-500 to-teal-500 bg-clip-text text-transparent">
                 20+ Languages
@@ -77,7 +77,7 @@ export default function MultiLanguageFeature() {
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
               Break language barriers for international clients. Your platform automatically
-              adapts to each visitor's language, from forms to SMS confirmations.
+              adapts to each visitor's language, from forms to SMS notifications.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
@@ -100,7 +100,7 @@ export default function MultiLanguageFeature() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Speak Your Client's Language</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Every touchpoint is localized so international clients feel welcome from the first click.
+              Every touchpoint is localized so international clients feel welcome from the first interaction.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -110,7 +110,7 @@ export default function MultiLanguageFeature() {
                   <div className={`w-14 h-14 rounded-full ${feature.bgColor} flex items-center justify-center mx-auto mb-4`}>
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
-                  <h3 className="font-semibold mb-2">{feature.title}</h3>
+                  <h3 className="font-semibold mb-2" data-testid={`text-feature-${feature.title.toLowerCase().replace(/\s+/g, "-")}`}>{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
@@ -138,19 +138,19 @@ export default function MultiLanguageFeature() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">20+</div>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-multilang-languages">20+</div>
                 <p className="text-sm text-muted-foreground">Languages Supported</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">RTL</div>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-multilang-rtl">RTL</div>
                 <p className="text-sm text-muted-foreground">Layout Support</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">Auto</div>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-multilang-auto">Auto</div>
                 <p className="text-sm text-muted-foreground">Language Detection</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">SMS</div>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-multilang-sms">SMS</div>
                 <p className="text-sm text-muted-foreground">Localized Messages</p>
               </Card>
             </div>

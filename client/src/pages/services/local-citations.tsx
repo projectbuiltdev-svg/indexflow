@@ -31,21 +31,21 @@ const whyItMatters = [
   {
     icon: Globe,
     title: "Industry-Specific Listings",
-    description: "Hospitality directories like OpenTable, Resy, Zomato, The Fork, HotelsCombined, and regional guides.",
+    description: "Business directories like Google My Business, Yelp, Apple Maps, Bing Places, and industry-specific listings.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
   {
     icon: Star,
     title: "Review Monitoring",
-    description: "Track reviews across platforms and respond quickly to build reputation and trust with potential guests.",
+    description: "Track reviews across platforms and respond quickly to build reputation and trust with potential clients.",
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
   },
   {
     icon: ListChecks,
     title: "Ongoing Monitoring",
-    description: "Monthly citation health reports tracking accuracy, duplicates, and new opportunities for your venues.",
+    description: "Monthly citation health reports tracking accuracy, duplicates, and new opportunities for your clients.",
     color: "text-cyan-500",
     bgColor: "bg-cyan-500/10",
   },
@@ -246,7 +246,7 @@ export default function LocalCitationsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Need Help Choosing?</h2>
           <p className="text-muted-foreground mb-8">
-            Not sure which citation service is right for your venues? Our team can walk you through the options and help you get started.
+            Not sure which citation service is right for your clients? Our team can walk you through the options and help you get started.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-citations-bottom-cta">

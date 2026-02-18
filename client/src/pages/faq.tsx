@@ -10,44 +10,40 @@ import { SEO, seoData, faqSchema } from "@/components/seo";
 
 const faqs = [
   {
-    question: "What's included in the Complete Solution?",
-    answer: "The Complete Solution includes a custom-designed website, AI-powered booking system, phone assistant with Twilio integration, real-time availability sync, client dashboard access, and ongoing support. We handle everything from design to deployment.",
+    question: "What is IndexFlow?",
+    answer: "IndexFlow is a white-label SEO, content, and client management SaaS built for agencies. It combines a Content Engine, rank tracker, local search grid, CRM, invoicing, and white-label delivery into one platform — so you can replace your entire MarTech stack.",
   },
   {
-    question: "How long does setup take?",
-    answer: "Typical setup takes 5-20 business days depending on your requirements. We build your custom website and booking system, configure your AI phone assistant, and ensure everything is working perfectly before going live.",
+    question: "How does pricing work?",
+    answer: "Four tiers: Solo at $99/mo (1 user, 1 workspace), Professional at $299/mo (3 users, 3 workspaces), White Label Agency at $499/mo (6 users, 100 workspaces, full white-label branding), and Enterprise (custom pricing, unlimited everything). All plans are month-to-month with no long-term contracts. Pay annually and get 2 months free.",
+  },
+  {
+    question: "What's included in every plan?",
+    answer: "Every plan includes the Content Engine for AI-powered article generation, rank tracking, on-page SEO audit, schema markup, link builder, CRM pipeline, and access to the AI widget. Higher plans unlock white-label branding, additional workspaces, and priority support.",
+  },
+  {
+    question: "How does white label work?",
+    answer: "On the White Label Agency plan ($499/mo) and Enterprise, you can apply your own branding, logo, colors, and custom domain to the entire platform. Your clients see your brand — not IndexFlow. You can also white-label reports and invoices.",
   },
   {
     question: "What is BYOK (Bring Your Own Key)?",
-    answer: "BYOK means you use your own API keys for services like Twilio and OpenAI. This gives you full control over usage costs and ensures transparent billing directly from the service providers.",
+    answer: "BYOK means you use your own API keys for AI providers (OpenAI, Anthropic, Google, etc.) and Twilio. This gives you full control over usage costs with no markups. You pay the providers directly at their rates.",
   },
   {
-    question: "Can I use the Widget Only without a custom website?",
-    answer: "Yes! The Widget Only plan at $149/month is perfect if you already have a website. We provide the booking widget that integrates seamlessly with your existing site, plus the AI phone assistant.",
+    question: "How do rank tracker credits work?",
+    answer: "Each plan includes a monthly allocation of rank tracker credits. One credit equals one keyword check for one location. You can track keywords daily, weekly, or on-demand. Additional credits can be purchased if needed.",
   },
   {
-    question: "What types of venues do you work with?",
-    answer: "We work with restaurants, cafes, bars, guest houses, hotels, and other businesses that need booking and SEO solutions. Our system is designed for any business that needs online booking and visibility.",
+    question: "Can I cancel anytime?",
+    answer: "Yes. All plans are month-to-month with no cancellation fees. You can downgrade or cancel at any time from your dashboard. Your data is retained for 30 days after cancellation.",
   },
   {
-    question: "How does the AI phone assistant work?",
-    answer: "Our AI assistant answers calls 24/7, handles booking requests, answers common questions about your business, and can send confirmation texts. It's powered by advanced AI and integrates with your booking system in real-time.",
+    question: "What CMS platforms do you support?",
+    answer: "IndexFlow integrates with WordPress, Wix, Squarespace, Shopify, Webflow, Drupal, Magento, BigCommerce, Joomla, and any custom CMS via our REST API. Content is published directly from the platform.",
   },
   {
-    question: "What happens if I need changes after launch?",
-    answer: "We provide ongoing support as part of your monthly subscription. Minor updates and adjustments are included. For larger changes, we'll discuss scope and timeline with you.",
-  },
-  {
-    question: "Is there a contract or commitment?",
-    answer: "After your initial setup, the subscription is month-to-month. You can cancel anytime, though we're confident you'll love the results once you see how many bookings you're capturing.",
-  },
-  {
-    question: "How do pre-paid reservations work?",
-    answer: "You can require deposits or full payment at booking time to reduce no-shows. Payments are processed securely and funds go directly to your account. Simply add your Stripe or PayPal ID in your client dashboard.",
-  },
-  {
-    question: "What's the optional SEO package?",
-    answer: "Our one-time SEO package ($499 flat fee, zero recurring charges) helps improve your business's visibility in search results. It includes keyword optimization, local SEO setup, Google Business Profile optimization, and schema mark-up. Get 100% visibility on Google and all search engines. Contact our sales team for details.",
+    question: "How does the Content Engine work?",
+    answer: "The Content Engine uses your BYOK AI provider to generate SEO-optimized articles in bulk. You set the topic, keywords, tone, and length — then the engine drafts, applies quality gates, and publishes to your connected CMS. It supports campaigns, scheduling, and multi-language output.",
   },
 ];
 

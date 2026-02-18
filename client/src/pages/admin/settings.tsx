@@ -71,11 +71,11 @@ export default function AdminSettings() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="widget-setup">Virtual Concierge - Setup Fee</Label>
+                  <Label htmlFor="widget-setup">AI Widget - Setup Fee</Label>
                   <Input id="widget-setup" defaultValue="$0" data-testid="input-widget-setup" />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="widget-monthly">Virtual Concierge - Monthly</Label>
+                  <Label htmlFor="widget-monthly">AI Widget - Monthly</Label>
                   <Input id="widget-monthly" defaultValue="$149" data-testid="input-widget-monthly" />
                 </div>
               </div>

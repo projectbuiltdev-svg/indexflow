@@ -14,12 +14,12 @@ const twilioStats = [
 
 const clientTwilioStatus = [
   { id: 1, name: "Acme Digital", connected: true, phoneNumber: "+1 (555) 123-4567", voiceCalls: 156, smsSent: 423, aiProvider: "OpenAI", plan: "Complete Solution" },
-  { id: 2, name: "Dragon Media", connected: true, phoneNumber: "+1 (555) 234-5678", voiceCalls: 98, smsSent: 287, aiProvider: "Anthropic", plan: "Virtual Concierge" },
+  { id: 2, name: "Dragon Media", connected: true, phoneNumber: "+1 (555) 234-5678", voiceCalls: 98, smsSent: 287, aiProvider: "Anthropic", plan: "Professional" },
   { id: 3, name: "Coastal SEO", connected: false, phoneNumber: "-", voiceCalls: 0, smsSent: 0, aiProvider: "None", plan: "Complete Solution" },
   { id: 4, name: "Summit Marketing", connected: true, phoneNumber: "+1 (555) 345-6789", voiceCalls: 134, smsSent: 398, aiProvider: "OpenAI", plan: "Complete Solution" },
-  { id: 5, name: "Metro Creative", connected: true, phoneNumber: "+1 (555) 456-7890", voiceCalls: 67, smsSent: 189, aiProvider: "Google AI", plan: "Virtual Concierge" },
+  { id: 5, name: "Metro Creative", connected: true, phoneNumber: "+1 (555) 456-7890", voiceCalls: 67, smsSent: 189, aiProvider: "Google AI", plan: "Professional" },
   { id: 6, name: "Sakura Digital", connected: true, phoneNumber: "+1 (555) 567-8901", voiceCalls: 45, smsSent: 134, aiProvider: "OpenAI", plan: "Complete Solution" },
-  { id: 7, name: "Rustic Creative", connected: false, phoneNumber: "-", voiceCalls: 0, smsSent: 0, aiProvider: "None", plan: "Virtual Concierge" },
+  { id: 7, name: "Rustic Creative", connected: false, phoneNumber: "-", voiceCalls: 0, smsSent: 0, aiProvider: "None", plan: "Professional" },
 ];
 
 const recentSms = [
@@ -179,9 +179,9 @@ export default function AdminTwilio() {
                 SMS Features
               </h3>
               <ul className="space-y-1.5 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Project confirmations</li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Appointment reminders</li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Cancellation notices</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Lead confirmations</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Follow-up reminders</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Notification messages</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Client self-service (CONFIRM/CANCEL/STATUS)</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Custom SMS templates</li>
               </ul>

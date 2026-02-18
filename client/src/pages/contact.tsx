@@ -43,11 +43,11 @@ const inquiryTypes = [
 ];
 
 const businessTypes = [
-  { value: "restaurant", label: "Restaurant" },
-  { value: "cafe", label: "Cafe" },
-  { value: "bar", label: "Bar" },
-  { value: "hotel", label: "Hotel" },
-  { value: "multiple", label: "Multiple Locations" },
+  { value: "seo-agency", label: "SEO Agency" },
+  { value: "content-agency", label: "Content Agency" },
+  { value: "digital-marketing", label: "Digital Marketing Agency" },
+  { value: "freelancer", label: "Freelancer/Consultant" },
+  { value: "enterprise", label: "Enterprise" },
   { value: "other", label: "Other" },
 ];
 
@@ -164,10 +164,10 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">Get In Touch</Badge>
           <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-            Let's Build Your <span className="text-primary">Booking Website</span>
+            Let's Grow Your <span className="text-primary">SEO Platform</span>
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Ready to transform your business's online presence? Schedule a demo or ask us anything about our services. We've made this simple and easy.
+            Ready to scale your agency with indexFlow? Schedule a demo or ask us anything about our platform. We've made this simple and easy.
           </p>
         </div>
       </section>
@@ -224,10 +224,10 @@ export default function Contact() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="company">Venue/Company Name</Label>
+                        <Label htmlFor="company">Company Name</Label>
                         <Input
                           id="company"
-                          placeholder="Your Restaurant Name"
+                          placeholder="Your Agency Name"
                           value={formData.company}
                           onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                           data-testid="input-contact-company"
@@ -424,7 +424,7 @@ export default function Contact() {
                           onClick={handleBookingSubmit}
                           data-testid="button-confirm-booking"
                         >
-                          Confirm Booking
+                          Schedule Demo
                         </Button>
                       </div>
                     )}
@@ -457,7 +457,7 @@ export default function Contact() {
                     <h3 className="font-semibold">Stay in the Loop</h3>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Get insights on booking systems and SEO tips delivered to your inbox.
+                    Get insights on agency growth and SEO tips delivered to your inbox.
                   </p>
                   <div className="space-y-2">
                     <Input 

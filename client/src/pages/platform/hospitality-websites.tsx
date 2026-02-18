@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Globe, Smartphone, Search, MessageSquare, UtensilsCrossed, Image, MapPin, Zap, Link2, CheckCircle, ArrowRight, Palette } from "lucide-react";
+import { Globe, FileCode, Code, Image, Tag, Layers, CheckCircle, ArrowRight, Send, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,68 +8,54 @@ import { SEO, seoData } from "@/components/seo";
 
 const features = [
   {
-    icon: Smartphone,
-    title: "Mobile-First Responsive Design",
-    description: "Every website is built mobile-first, ensuring a flawless experience on phones, tablets, and desktops.",
+    icon: Send,
+    title: "One-Click Publishing",
+    description: "Publish content directly to WordPress, Webflow, Shopify, Ghost, and Wix with a single click from your dashboard.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
-    icon: Search,
-    title: "SEO Optimized",
-    description: "Built with structured data, fast load times, and keyword-rich content to rank higher on Google.",
+    icon: Tag,
+    title: "Formatted Metadata",
+    description: "Title tags, meta descriptions, Open Graph tags, and canonical URLs are automatically formatted and attached to every published post.",
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
   {
-    icon: MessageSquare,
-    title: "Integrated Booking Widget",
-    description: "Our AI booking widget is built right into your site, letting guests book without leaving the page.",
+    icon: Image,
+    title: "Image Handling",
+    description: "Featured images, alt text, and captions are included with every publish. Images are optimized and uploaded to the target CMS.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
   {
-    icon: UtensilsCrossed,
-    title: "Menu & Room Displays",
-    description: "Beautiful, easy-to-update menu pages for restaurants or room galleries for hotels and B&Bs.",
+    icon: Code,
+    title: "Schema Markup Injection",
+    description: "Automatically inject Article, FAQ, HowTo, and other schema markup types into published content for rich search results.",
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
   },
   {
-    icon: Image,
-    title: "Photo Galleries",
-    description: "Showcase your business with stunning, optimized photo galleries that load fast and look incredible.",
+    icon: Layers,
+    title: "Multi-CMS Management",
+    description: "Manage content across multiple client CMS platforms from one central dashboard. No logging into separate admin panels.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
   {
-    icon: MapPin,
-    title: "Google Maps Integration",
-    description: "Embedded maps with directions, helping guests find your business effortlessly.",
+    icon: FileCode,
+    title: "Platform-Specific Formatting",
+    description: "Content is automatically formatted for each CMS — Gutenberg blocks for WordPress, rich text for Webflow, Liquid for Shopify.",
     color: "text-teal-500",
     bgColor: "bg-teal-500/10",
-  },
-  {
-    icon: Zap,
-    title: "Fast Loading Speed",
-    description: "Optimized images, lazy loading, and modern frameworks deliver sub-second page loads.",
-    color: "text-amber-500",
-    bgColor: "bg-amber-500/10",
-  },
-  {
-    icon: Link2,
-    title: "Custom Domain",
-    description: "Your website on your own domain — professionally branded and fully managed by our team.",
-    color: "text-indigo-500",
-    bgColor: "bg-indigo-500/10",
   },
 ];
 
 const benefits = [
-  "Professional online presence that reflects your brand identity",
-  "Built to convert visitors into paying guests with clear CTAs",
-  "Fully managed for you — we handle hosting, updates, and security",
-  "Regular updates via change requests — just tell us what you need",
+  "Publish to 5+ CMS platforms without leaving IndexFlow",
+  "Metadata and schema markup applied automatically every time",
+  "Manage all client websites from a single workspace",
+  "No manual copy-pasting between tools — fully automated workflow",
 ];
 
 export default function HospitalityWebsitesPage() {
@@ -80,28 +66,28 @@ export default function HospitalityWebsitesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4">
-              <Palette className="w-3 h-3 mr-1" />
-              Custom Websites
+              <Globe className="w-3 h-3 mr-1" />
+              CMS Integration
             </Badge>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Bespoke Websites{" "}
+              Publish to Any CMS{" "}
               <span className="bg-gradient-to-r from-teal-500 to-emerald-500 bg-clip-text text-transparent">
-                Built to Convert
+                in One Click
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Custom-designed websites that drive reservations.
-              Beautiful, fast, and SEO-optimized — with integrated AI booking built in.
+              Connect WordPress, Webflow, Shopify, Ghost, and Wix.
+              Publish content with metadata, images, and schema markup — all from one dashboard.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link href="/templates">
-                <Button size="lg" className="gap-2" data-testid="button-websites-templates">
-                  View Templates <ArrowRight className="w-4 h-4" />
+              <Link href="/contact">
+                <Button size="lg" className="gap-2" data-testid="button-cms-demo">
+                  Book a Demo <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link href="/contact">
-                <Button size="lg" variant="outline" data-testid="button-websites-demo">
-                  Book a Demo
+              <Link href="/pricing">
+                <Button size="lg" variant="outline" data-testid="button-cms-pricing">
+                  View Pricing
                 </Button>
               </Link>
             </div>
@@ -112,12 +98,12 @@ export default function HospitalityWebsitesPage() {
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Built for the Hospitality Industry</h2>
+            <h2 className="text-3xl font-bold mb-4">Seamless CMS Publishing</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Every feature is designed to help venues look professional and convert visitors.
+              Every feature designed to eliminate manual publishing work across client websites.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature) => (
               <Card key={feature.title} className="hover-elevate">
                 <CardContent className="p-6 text-center">
@@ -138,11 +124,11 @@ export default function HospitalityWebsitesPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <Badge variant="outline" className="mb-4">
-                <Globe className="w-3 h-3 mr-1" />
-                Why Choose Us
+                <Zap className="w-3 h-3 mr-1" />
+                Why Agencies Love It
               </Badge>
               <h2 className="text-3xl font-bold mb-6">
-                More Than Just a Website
+                One Dashboard, Every Client CMS
               </h2>
               <ul className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -155,20 +141,20 @@ export default function HospitalityWebsitesPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">100+</div>
-                <p className="text-sm text-muted-foreground">Websites Launched</p>
+                <div className="text-4xl font-bold text-primary mb-2">5+</div>
+                <p className="text-sm text-muted-foreground">CMS Platforms</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">99.9%</div>
-                <p className="text-sm text-muted-foreground">Uptime Guarantee</p>
+                <div className="text-4xl font-bold text-primary mb-2">1-Click</div>
+                <p className="text-sm text-muted-foreground">Publishing</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">&lt;2s</div>
-                <p className="text-sm text-muted-foreground">Page Load Time</p>
+                <div className="text-4xl font-bold text-primary mb-2">Auto</div>
+                <p className="text-sm text-muted-foreground">Schema Markup</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">SSL</div>
-                <p className="text-sm text-muted-foreground">Secure by Default</p>
+                <div className="text-4xl font-bold text-primary mb-2">SEO</div>
+                <p className="text-sm text-muted-foreground">Metadata Built In</p>
               </Card>
             </div>
           </div>
@@ -177,22 +163,15 @@ export default function HospitalityWebsitesPage() {
 
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready for a Website That Works as Hard as You Do?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Streamline Content Publishing?</h2>
           <p className="text-muted-foreground mb-8">
-            Get a bespoke website designed and built specifically for your business.
+            See how IndexFlow connects to your clients' CMS platforms and automates publishing.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link href="/templates">
-              <Button size="lg" className="gap-2" data-testid="button-websites-bottom-templates">
-                View Templates <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline" data-testid="button-websites-bottom-demo">
-                Book a Demo
-              </Button>
-            </Link>
-          </div>
+          <Link href="/contact">
+            <Button size="lg" className="gap-2" data-testid="button-cms-bottom-cta">
+              Book a Demo <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </section>
     </Layout>

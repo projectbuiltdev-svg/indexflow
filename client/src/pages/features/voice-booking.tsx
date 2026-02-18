@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Phone, Bot, Calendar, UserCheck, FileText, Settings, Key, CheckCircle, ArrowRight } from "lucide-react";
+import { Phone, Bot, Mic, UserCheck, FileText, Settings, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,53 +9,53 @@ import { SEO, seoData } from "@/components/seo";
 const features = [
   {
     icon: Phone,
-    title: "24/7 AI Phone Answering",
-    description: "Your AI assistant answers every call, day or night, ensuring no client opportunity is ever missed.",
+    title: "Per-Workspace Phone Numbers",
+    description: "Each workspace gets its own dedicated Twilio phone number for client calls and AI-powered answering.",
     color: "text-indigo-500",
     bgColor: "bg-indigo-500/10",
   },
   {
     icon: Bot,
-    title: "Natural Conversation",
-    description: "Advanced AI engages callers in natural, human-like conversation to gather appointment details effortlessly.",
+    title: "AI-Powered Call Handling",
+    description: "Your AI assistant answers calls 24/7, handles inquiries, gathers information, and routes calls based on workspace rules.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
-    icon: Calendar,
-    title: "Automatic Appointment Creation",
-    description: "Appointments are created in real-time during the call and synced to your calendar instantly.",
+    icon: Mic,
+    title: "Speech-to-Text & Text-to-Speech",
+    description: "Real-time STT transcription and natural TTS responses powered by Twilio and your preferred AI provider.",
     color: "text-violet-500",
     bgColor: "bg-violet-500/10",
   },
   {
     icon: UserCheck,
-    title: "Caller ID Matching",
-    description: "Recognize returning clients by their phone number and personalize the consultation experience.",
+    title: "Caller Identification",
+    description: "Match incoming callers to existing CRM contacts and personalize the AI conversation with their account details.",
     color: "text-sky-500",
     bgColor: "bg-sky-500/10",
   },
   {
     icon: FileText,
-    title: "Call Transcripts & Recordings",
-    description: "Every call is transcribed and recorded for quality assurance and staff training purposes.",
+    title: "Call Logging & Transcripts",
+    description: "Every call is logged with full transcripts, duration, caller info, and AI conversation summaries for review.",
     color: "text-indigo-600",
     bgColor: "bg-indigo-600/10",
   },
   {
     icon: Settings,
-    title: "Configurable Greetings",
-    description: "Customize your AI's greeting, personality, and responses to match your business's brand and tone.",
+    title: "Configurable AI Persona",
+    description: "Customize greetings, personality, knowledge base, and call handling rules to match your agency's brand.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
 ];
 
 const benefits = [
-  "Capture after-hours appointments that would otherwise be lost",
-  "Reduce staff interruptions during busy service periods",
-  "Maintain a professional phone presence around the clock",
-  "BYOK: Bring your own AI provider (OpenAI, Anthropic, and more)",
+  "Never miss a client call with 24/7 AI-powered answering",
+  "Twilio integration for reliable, enterprise-grade voice service",
+  "BYOK: Use your own OpenAI, Anthropic, or Google AI keys",
+  "Full call transcripts and recordings for quality assurance",
 ];
 
 export default function VoiceBookingFeature() {
@@ -69,15 +69,15 @@ export default function VoiceBookingFeature() {
               <Phone className="w-3 h-3 mr-1" />
               AI Voice Assistant
             </Badge>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" data-testid="heading-voice-assistant">
               AI-Powered Voice{" "}
               <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
-                Phone Service
+                Assistant
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Never miss another client call. Your AI phone assistant answers 24/7, schedules appointments
-              naturally, and syncs everything to your calendar - powered by Twilio.
+              Twilio-powered AI voice assistant for your agency. Dedicated phone numbers per workspace,
+              real-time STT/TTS, intelligent call handling, and complete call logging.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
@@ -98,9 +98,9 @@ export default function VoiceBookingFeature() {
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Your AI Phone Assistant</h2>
+            <h2 className="text-3xl font-bold mb-4">Your AI Voice Assistant</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              From greeting to confirmed appointment, your AI handles it all with natural conversation.
+              From greeting to call summary, your AI handles every call with natural conversation and full logging.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -110,7 +110,7 @@ export default function VoiceBookingFeature() {
                   <div className={`w-14 h-14 rounded-full ${feature.bgColor} flex items-center justify-center mx-auto mb-4`}>
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
-                  <h3 className="font-semibold mb-2">{feature.title}</h3>
+                  <h3 className="font-semibold mb-2" data-testid={`text-feature-${feature.title.toLowerCase().replace(/\s+/g, "-")}`}>{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
@@ -138,19 +138,19 @@ export default function VoiceBookingFeature() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">24/7</div>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-voice-availability">24/7</div>
                 <p className="text-sm text-muted-foreground">Always Available</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">100%</div>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-voice-calls">100%</div>
                 <p className="text-sm text-muted-foreground">Calls Answered</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">AI</div>
-                <p className="text-sm text-muted-foreground">Natural Language</p>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-voice-stt">STT</div>
+                <p className="text-sm text-muted-foreground">Real-Time Transcription</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">BYOK</div>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-voice-byok">BYOK</div>
                 <p className="text-sm text-muted-foreground">Your AI Provider</p>
               </Card>
             </div>
@@ -162,7 +162,7 @@ export default function VoiceBookingFeature() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Let AI Answer Your Phones?</h2>
           <p className="text-muted-foreground mb-8">
-            See how AI voice assistance can capture more clients and free your staff from the phone.
+            See how AI voice assistance can handle client calls and free your team to focus on delivering results.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-voice-bottom-cta">

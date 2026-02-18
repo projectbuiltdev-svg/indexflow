@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { MessageSquare, Clock, Calendar, Mic, Paintbrush, BookOpen, MousePointerClick, CheckCircle, ArrowRight, Bot, Zap } from "lucide-react";
+import { MessageSquare, Mic, BookOpen, Paintbrush, Volume2, Globe, CheckCircle, ArrowRight, Bot, Zap, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,60 +9,53 @@ import { SEO, seoData } from "@/components/seo";
 const features = [
   {
     icon: MessageSquare,
-    title: "Natural Language Conversation",
-    description: "Clients chat naturally to find availability, ask questions, and schedule appointments without navigating complex forms.",
+    title: "Embeddable Chat Widget",
+    description: "Deploy a fully branded AI chat widget on any client website. Answers visitor questions instantly using the client's knowledge base.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
-    icon: Clock,
-    title: "Real-Time Availability",
-    description: "The widget checks your live calendar and shows clients exactly which slots are open, preventing double appointments.",
-    color: "text-green-500",
-    bgColor: "bg-green-500/10",
-  },
-  {
-    icon: Calendar,
-    title: "Appointment from Chat",
-    description: "Clients complete their appointment entirely within the chat widget — no redirects, no friction, just a confirmed engagement.",
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
-  },
-  {
-    icon: MousePointerClick,
-    title: "Quick Action Buttons",
-    description: "One-tap buttons for Book, Hours, Services, and Contact let clients jump straight to what they need.",
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
-  },
-  {
     icon: Mic,
-    title: "Voice Input Support",
-    description: "Built-in Web Speech API integration lets clients speak their requests instead of typing on mobile devices.",
+    title: "Voice Mode (STT/TTS)",
+    description: "Built-in speech-to-text and text-to-speech powered by Web Speech API. Visitors can speak their questions instead of typing.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
   {
-    icon: Paintbrush,
-    title: "Customizable Appearance",
-    description: "Match the widget's colors, position, and greeting to your brand. It looks native on any website.",
-    color: "text-teal-500",
-    bgColor: "bg-teal-500/10",
-  },
-  {
     icon: BookOpen,
     title: "Knowledge Base Training",
-    description: "Train the AI on your services, policies, and FAQs so it gives accurate, business-specific answers every time.",
+    description: "Train the AI on each client's services, FAQs, policies, and content. The widget gives accurate, business-specific answers every time.",
     color: "text-indigo-500",
     bgColor: "bg-indigo-500/10",
+  },
+  {
+    icon: Globe,
+    title: "Deploy on Any Website",
+    description: "Works on WordPress, Webflow, Shopify, Wix, or any custom site. Just paste a single script tag and the widget is live.",
+    color: "text-green-500",
+    bgColor: "bg-green-500/10",
+  },
+  {
+    icon: Settings,
+    title: "Configurable Per Workspace",
+    description: "Each workspace gets its own widget configuration — colors, greeting, position, AI model, and knowledge base are fully independent.",
+    color: "text-orange-500",
+    bgColor: "bg-orange-500/10",
+  },
+  {
+    icon: Paintbrush,
+    title: "White-Label Branding",
+    description: "Match the widget's colors, logo, and greeting to each client's brand. It looks native on every website it's deployed on.",
+    color: "text-teal-500",
+    bgColor: "bg-teal-500/10",
   },
 ];
 
 const benefits = [
   "24/7 lead capture — never miss an after-hours inquiry",
-  "Reduce phone calls by up to 60% with instant self-service",
-  "Improve conversion rates with frictionless chat-to-convert flow",
-  "Works on any website — WordPress, Squarespace, custom builds",
+  "Reduce support tickets by up to 60% with instant AI self-service",
+  "Improve conversion rates with frictionless chat-to-action flow",
+  "Voice mode lets visitors speak naturally on mobile devices",
 ];
 
 export default function AiConciergePage() {
@@ -74,27 +67,27 @@ export default function AiConciergePage() {
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4">
               <Bot className="w-3 h-3 mr-1" />
-              Virtual Assistant
+              AI Widget & Voice
             </Badge>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              AI Assistant Widget{" "}
+              AI-Powered Chat Widget{" "}
               <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                for Your Website
+                with Voice Mode
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Let visitors connect instantly through an intelligent chat widget.
-              Natural language conversations that convert visitors into confirmed clients — 24/7.
+              Deploy an intelligent chat widget on every client website.
+              Trained on their knowledge base, configurable per workspace, with built-in voice support.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link href="/contact">
-                <Button size="lg" className="gap-2" data-testid="button-assistant-demo">
+                <Button size="lg" className="gap-2" data-testid="button-widget-demo">
                   Book a Demo <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link href="/widget-demo">
-                <Button size="lg" variant="outline" data-testid="button-assistant-try">
-                  Try the Widget
+              <Link href="/pricing">
+                <Button size="lg" variant="outline" data-testid="button-widget-pricing">
+                  View Pricing
                 </Button>
               </Link>
             </div>
@@ -105,9 +98,9 @@ export default function AiConciergePage() {
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Powerful Features</h2>
+            <h2 className="text-3xl font-bold mb-4">Widget Features</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              An AI assistant that understands your clients and handles every engagement detail.
+              An AI assistant that understands each client's business and handles visitor inquiries around the clock.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -135,7 +128,7 @@ export default function AiConciergePage() {
                 Why It Works
               </Badge>
               <h2 className="text-3xl font-bold mb-6">
-                Turn Website Visitors into Confirmed Clients
+                Turn Website Visitors into Qualified Leads
               </h2>
               <ul className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -149,15 +142,17 @@ export default function AiConciergePage() {
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">60%</div>
-                <p className="text-sm text-muted-foreground">Fewer Phone Calls</p>
+                <p className="text-sm text-muted-foreground">Fewer Support Tickets</p>
               </Card>
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">24/7</div>
-                <p className="text-sm text-muted-foreground">Booking Availability</p>
+                <p className="text-sm text-muted-foreground">Always Available</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">3x</div>
-                <p className="text-sm text-muted-foreground">Conversion Rate</p>
+                <div className="text-4xl font-bold text-primary mb-2">
+                  <Volume2 className="w-8 h-8 mx-auto" />
+                </div>
+                <p className="text-sm text-muted-foreground">Voice + Text</p>
               </Card>
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">&lt;5s</div>
@@ -170,12 +165,12 @@ export default function AiConciergePage() {
 
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Add AI Assistant to Your Site?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Deploy AI Widgets for Your Clients?</h2>
           <p className="text-muted-foreground mb-8">
-            Get a live demo of the AI assistant widget customized for your business.
+            See how the AI Widget works with a live demo configured for your agency.
           </p>
           <Link href="/contact">
-            <Button size="lg" className="gap-2" data-testid="button-assistant-bottom-cta">
+            <Button size="lg" className="gap-2" data-testid="button-widget-bottom-cta">
               Book a Demo <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>

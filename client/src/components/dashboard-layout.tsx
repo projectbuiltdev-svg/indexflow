@@ -23,11 +23,11 @@ const navSections = [
     ],
   },
   {
-    label: "Rooms & Bookings",
+    label: "Projects",
     items: [
-      { label: "Room Types", href: "/dashboard/room-types", icon: Building2 },
-      { label: "Rooms", href: "/dashboard/rooms", icon: Bed },
-      { label: "Room Bookings", href: "/dashboard/room-bookings", icon: BookOpen },
+      { label: "Project Types", href: "/dashboard/room-types", icon: Building2 },
+      { label: "Projects", href: "/dashboard/rooms", icon: Bed },
+      { label: "Project Details", href: "/dashboard/room-bookings", icon: BookOpen },
     ],
   },
   {

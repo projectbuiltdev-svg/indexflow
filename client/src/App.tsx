@@ -258,26 +258,44 @@ function Router() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/how-it-works" component={About} />
+        <Route path="/solutions/seo-agencies" component={SolutionsRestaurants} />
+        <Route path="/solutions/content-agencies" component={SolutionsCafes} />
+        <Route path="/solutions/marketing-agencies" component={SolutionsBars} />
+        <Route path="/solutions/freelancers" component={SolutionsHotels} />
+        <Route path="/solutions/enterprise" component={SolutionsMultiLocation} />
         <Route path="/solutions/restaurants" component={SolutionsRestaurants} />
         <Route path="/solutions/cafes" component={SolutionsCafes} />
         <Route path="/solutions/bars" component={SolutionsBars} />
         <Route path="/solutions/hotels" component={SolutionsHotels} />
         <Route path="/solutions/multi-location" component={SolutionsMultiLocation} />
 
+        <Route path="/platform/ai-widget-voice" component={PlatformAiConcierge} />
+        <Route path="/platform/ai-widget" component={PlatformAiConcierge} />
         <Route path="/platform/ai-concierge" component={PlatformAiConcierge} />
         <Route path="/platform/byok" component={PlatformByok} />
+        <Route path="/platform/content-engine" component={PlatformContentMarketing} />
         <Route path="/platform/content-marketing" component={PlatformContentMarketing} />
         <Route path="/platform/dashboard" component={PlatformDashboard} />
+        <Route path="/platform/cms-integration" component={PlatformHospitalityWebsites} />
         <Route path="/platform/hospitality-websites" component={PlatformHospitalityWebsites} />
+        <Route path="/platform/crm-pipeline" component={PlatformIntegrations} />
         <Route path="/platform/integrations" component={PlatformIntegrations} />
         <Route path="/platform/local-search-grid" component={PlatformLocalSearchGrid} />
         <Route path="/platform/rank-tracking" component={PlatformRankTracking} />
         <Route path="/platform/search-console" component={PlatformSearchConsole} />
         <Route path="/platform/seo" component={PlatformSeo} />
         <Route path="/platform/seo-tools" component={PlatformSeoTools} />
+        <Route path="/platform/seo-audit" component={PlatformSeoTools} />
+        <Route path="/platform/schema-markup" component={PlatformSeo} />
+        <Route path="/platform/link-builder" component={PlatformSeoTools} />
+        <Route path="/platform/white-label" component={PlatformByok} />
+        <Route path="/platform/invoices-reports" component={PlatformDashboard} />
 
         <Route path="/services/local-citations" component={LocalCitations} />
 
+        <Route path="/comparisons/semrush" component={ComparisonOpenTable} />
+        <Route path="/comparisons/ahrefs" component={ComparisonResy} />
+        <Route path="/comparisons/best-seo-platforms" component={ComparisonBestBooking} />
         <Route path="/comparisons/opentable" component={ComparisonOpenTable} />
         <Route path="/comparisons/resy" component={ComparisonResy} />
         <Route path="/comparisons/best-booking-systems" component={ComparisonBestBooking} />

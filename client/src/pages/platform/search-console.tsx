@@ -10,64 +10,64 @@ const features = [
   {
     icon: Search,
     title: "Search Query Data",
-    description: "See exactly what queries bring visitors to your restaurant's website from Google.",
+    description: "See exactly what queries bring visitors to each client's website from Google search results.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
     icon: MousePointerClick,
     title: "Click-Through Rates",
-    description: "Understand how often people click your listing vs just seeing it in results.",
+    description: "Understand how often people click each listing versus just seeing it in search results.",
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
   {
     icon: Eye,
     title: "Impressions Tracking",
-    description: "Monitor how many times your restaurant appears in Google search results.",
+    description: "Monitor how many times client pages appear in Google search results across all queries.",
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
   },
   {
     icon: BarChart3,
     title: "Average Position",
-    description: "Track your average ranking position across all search queries over time.",
+    description: "Track average ranking position across all search queries over time for each workspace.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
   {
     icon: FileText,
     title: "Page Performance",
-    description: "See which pages on your site perform best in search and which need work.",
+    description: "See which pages perform best in search and which need optimization work.",
     color: "text-red-500",
     bgColor: "bg-red-500/10",
   },
   {
     icon: Smartphone,
     title: "Device Breakdown",
-    description: "Understand how your search traffic splits between mobile, desktop, and tablet.",
+    description: "Understand how search traffic splits between mobile, desktop, and tablet devices.",
     color: "text-cyan-500",
     bgColor: "bg-cyan-500/10",
   },
   {
     icon: Settings,
     title: "Easy GSC Credential Setup",
-    description: "Connect your Google Search Console account in minutes with our guided setup.",
+    description: "Connect Google Search Console accounts in minutes with a guided setup flow per workspace.",
     color: "text-indigo-500",
     bgColor: "bg-indigo-500/10",
   },
   {
     icon: CalendarDays,
     title: "Date Range Filtering",
-    description: "Analyze performance across custom date ranges to spot trends and seasonality.",
+    description: "Analyze performance across custom date ranges to spot trends and measure campaign impact.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
 ];
 
 const benefits = [
-  "No switching between tools -- everything in one dashboard",
-  "Actionable search insights tailored to your business",
+  "No switching between tools — everything in one dashboard",
+  "Actionable search insights for every client workspace",
   "Track SEO improvements with clear before/after data",
 ];
 
@@ -89,8 +89,8 @@ export default function SearchConsolePage() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              See your search performance data right inside your dashboard.
-              No more switching tabs -- clicks, impressions, and rankings all in one place.
+              Pull in GSC data for clicks, impressions, CTR, and position analysis
+              right inside each client's workspace. No more switching tabs.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
@@ -113,7 +113,7 @@ export default function SearchConsolePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">All Your Search Data in One Place</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Everything Google Search Console offers, surfaced right in your indexFlow dashboard.
+              Everything Google Search Console offers, surfaced right in your IndexFlow dashboard for every client.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -173,9 +173,9 @@ export default function SearchConsolePage() {
 
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to See Your Search Data?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to See Your Clients' Search Data?</h2>
           <p className="text-muted-foreground mb-8">
-            Connect Google Search Console and start making smarter SEO decisions.
+            Connect Google Search Console and start making smarter SEO decisions for every workspace.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-search-console-bottom-cta">

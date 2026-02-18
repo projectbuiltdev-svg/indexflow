@@ -13,7 +13,7 @@ const aboutSections = [
   { id: "explainer", label: "Watch" },
   { id: "process", label: "The Process" },
   { id: "whats-included", label: "What's Included" },
-  { id: "why-resto", label: "Why indexFlow" },
+  { id: "why-indexflow", label: "Why indexFlow" },
   { id: "pricing-overview", label: "Pricing" },
   { id: "get-started", label: "Get Started" },
   { id: "faq", label: "FAQ" },
@@ -22,32 +22,32 @@ const aboutSections = [
 const steps = [
   {
     number: "1",
-    title: "You Pay to Start",
-    description: <>Pay <strong>$299</strong> (first month) to kick off the process and we start building immediately.</>,
+    title: "Sign Up & Create Workspace",
+    description: "Create your indexFlow account and set up your first agency workspace in minutes.",
     icon: DollarSign,
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
   {
     number: "2",
-    title: "We Build Everything",
-    description: "Custom website, booking system, AI phone assistant — all tailored to your business.",
+    title: "Connect Your Tools",
+    description: "Link your AI provider (BYOK), CMS, image bank, and domain for white-label branding.",
     icon: Globe,
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
     number: "3",
-    title: "You Review & Approve",
-    description: "We deliver in 5-20 business days. You review and request any changes.",
+    title: "Create & Publish Content",
+    description: "Use the Content Engine to generate SEO-optimized articles, then publish directly to your CMS.",
     icon: Clock,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
   },
   {
     number: "4",
-    title: "Go Live & Grow",
-    description: "After sign-off, your site goes live and subscription begins. Never miss a booking again.",
+    title: "Track Rankings & Manage Clients",
+    description: "Monitor keyword rankings, manage your client pipeline, and deliver white-label reports.",
     icon: Zap,
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
@@ -55,48 +55,48 @@ const steps = [
 ];
 
 const included = [
-  { icon: Globe, title: "Custom Website", description: "Mobile-first design with your menu, photos, and branding", color: "text-blue-500", bgColor: "bg-blue-500/10", shadow: "shadow-[0_0_20px_rgba(59,130,246,0.4)]" },
-  { icon: Calendar, title: "Booking System", description: "24/7 online reservations synced to your operations", color: "text-green-500", bgColor: "bg-green-500/10", shadow: "shadow-[0_0_20px_rgba(34,197,94,0.4)]" },
-  { icon: Bot, title: "AI Phone Assistant", description: "Handles calls and texts automatically, books tables 24/7", color: "text-purple-500", bgColor: "bg-purple-500/10", shadow: "shadow-[0_0_20px_rgba(168,85,247,0.4)]" },
-  { icon: Phone, title: "Twilio Integration", description: "Voice and SMS powered by Twilio — you control costs with BYOK", color: "text-cyan-500", bgColor: "bg-cyan-500/10", shadow: "shadow-[0_0_20px_rgba(6,182,212,0.4)]" },
+  { icon: Globe, title: "Content Engine", description: "AI-powered bulk content generation with quality gates and CMS publishing", color: "text-blue-500", bgColor: "bg-blue-500/10", shadow: "shadow-[0_0_20px_rgba(59,130,246,0.4)]" },
+  { icon: Calendar, title: "SEO Tools", description: "Rank tracker, local search grid, on-page audit, schema markup, and link builder", color: "text-green-500", bgColor: "bg-green-500/10", shadow: "shadow-[0_0_20px_rgba(34,197,94,0.4)]" },
+  { icon: Bot, title: "CRM & Pipeline", description: "Manage leads, deals, invoices, and client reporting from one dashboard", color: "text-purple-500", bgColor: "bg-purple-500/10", shadow: "shadow-[0_0_20px_rgba(168,85,247,0.4)]" },
+  { icon: Phone, title: "White Label", description: "Custom branding, your domain, BYOK support — deliver as your own platform", color: "text-cyan-500", bgColor: "bg-cyan-500/10", shadow: "shadow-[0_0_20px_rgba(6,182,212,0.4)]" },
 ];
 
 const benefits = [
   {
     icon: Users,
-    title: "Done-For-You",
-    description: "No tech skills needed. We handle design, development, and deployment. You just approve.",
+    title: "Built for Agencies",
+    description: "Multi-client workspace management, team seats, and white-label delivery out of the box.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
   {
     icon: Bot,
-    title: "Full Automation",
-    description: "AI answers calls, takes bookings, sends confirmations — 24/7, no staff required.",
+    title: "AI-Powered Content",
+    description: "Generate SEO-optimized articles at scale with the Content Engine. Publish directly to any CMS.",
     color: "text-violet-500",
     bgColor: "bg-violet-500/10",
   },
   {
     icon: DollarSign,
-    title: "Dramatic Cost Savings",
-    description: "Replace expensive phone staff. Our AI costs a fraction of a full-time receptionist.",
+    title: "Transparent Pricing",
+    description: "Starting at $99/mo. No hidden fees. BYOK means you control AI and Twilio costs directly.",
     color: "text-emerald-500",
     bgColor: "bg-emerald-500/10",
   },
   {
     icon: Clock,
-    title: "Booking Recovery",
-    description: "No more missed calls. No more after-hours losses. Every inquiry gets handled.",
+    title: "10x Productivity",
+    description: "Replace your entire MarTech stack. Content, SEO, CRM, and reporting in one platform.",
     color: "text-amber-500",
     bgColor: "bg-amber-500/10",
   },
 ];
 
 const pricing = [
-  { label: "One-Time Setup", value: "$499", note: "Website, booking, AI configuration", icon: Zap, color: "text-primary", bgColor: "bg-primary/10", shadow: "shadow-[0_0_20px_rgba(234,179,8,0.4)]" },
-  { label: "Monthly Subscription", value: "$299", valueSuffix: "/mo", note: "Hosting, support, maintenance", icon: Calendar, color: "text-blue-500", bgColor: "bg-blue-500/10", shadow: "shadow-[0_0_20px_rgba(59,130,246,0.4)]" },
-  { label: "AI Assistant Widget", value: "$149", valueSuffix: "/mo", note: "For clients with existing websites", icon: Bot, color: "text-purple-500", bgColor: "bg-purple-500/10", shadow: "shadow-[0_0_20px_rgba(168,85,247,0.4)]" },
-  { label: "Optional SEO", value: "$499", note: "Boost your search visibility", icon: Globe, color: "text-green-500", bgColor: "bg-green-500/10", shadow: "shadow-[0_0_20px_rgba(34,197,94,0.4)]" },
+  { label: "Solo", value: "$99", valueSuffix: "/mo", note: "1 user, 1 workspace, all core tools", icon: Zap, color: "text-primary", bgColor: "bg-primary/10", shadow: "shadow-[0_0_20px_rgba(234,179,8,0.4)]" },
+  { label: "Professional", value: "$299", valueSuffix: "/mo", note: "3 users, 3 workspaces, bulk campaigns", icon: Calendar, color: "text-blue-500", bgColor: "bg-blue-500/10", shadow: "shadow-[0_0_20px_rgba(59,130,246,0.4)]" },
+  { label: "White Label", value: "$499", valueSuffix: "/mo", note: "6 users, 100 workspaces, full branding", icon: Bot, color: "text-purple-500", bgColor: "bg-purple-500/10", shadow: "shadow-[0_0_20px_rgba(168,85,247,0.4)]" },
+  { label: "Enterprise", value: "Custom", note: "Custom integrations, SLA, dedicated support", icon: Globe, color: "text-green-500", bgColor: "bg-green-500/10", shadow: "shadow-[0_0_20px_rgba(34,197,94,0.4)]" },
 ];
 
 export default function About() {
@@ -139,13 +139,13 @@ export default function About() {
                       <h3 className="text-xl font-bold">Your AI Assistant, Always On 24/7</h3>
                     </div>
                     <p className="text-muted-foreground leading-relaxed text-justify">
-                      The AI assistant handles live chat inquiries on your website, and it also receives phone calls via your Twilio customer service number.
+                      The AI widget handles live chat on your client sites, answering visitor questions and capturing leads around the clock.
                     </p>
                     <p className="text-muted-foreground leading-relaxed text-justify">
-                      It answers, replies and books pre-paid reservations; your guests receive instant SMS confirmations + email reminders.
+                      It also powers voice calls via Twilio, so prospects can speak to an AI assistant that qualifies leads and schedules demos.
                     </p>
                     <p className="text-muted-foreground leading-relaxed text-justify">
-                      Your workspace gets alerted to an RSVP confirmation, and your front desk immediately processes the booking.
+                      Every interaction feeds into your CRM pipeline, so your agency never misses an opportunity.
                     </p>
                   </div>
                   <div className="flex items-center justify-center">
@@ -159,12 +159,12 @@ export default function About() {
                         <Bot className="w-16 h-16 mx-auto text-primary relative animate-[bounce_4s_ease-in-out_infinite]" />
                       </div>
                       <p className="text-lg lg:text-xl font-bold leading-snug animate-[pulse_5s_ease-in-out_infinite]">
-                        <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent">AI Assistant never sleeps,</span><br />
+                        <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent">AI Widget never sleeps,</span><br />
                         <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-primary bg-clip-text text-transparent">never gets tired &</span><br />
-                        <span className="bg-gradient-to-r from-purple-500 via-primary to-blue-500 bg-clip-text text-transparent">never misses a booking!</span>
+                        <span className="bg-gradient-to-r from-purple-500 via-primary to-blue-500 bg-clip-text text-transparent">never misses a lead!</span>
                       </p>
                       <p className="mt-4 text-sm font-semibold text-muted-foreground tracking-wide uppercase animate-[pulse_5s_ease-in-out_infinite]" style={{ animationDelay: "1s" }}>
-                        Even when your front desk is closed.
+                        Even when your team is offline.
                       </p>
                     </div>
                   </div>
@@ -209,7 +209,7 @@ export default function About() {
             <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">What's Included</Badge>
             <h2 className="text-3xl font-bold mb-4">Your Complete System</h2>
             <p className="text-muted-foreground">
-              Focus on Hospitality. We Handle the Rest.
+              Everything you need to run your agency, in one platform.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -228,13 +228,13 @@ export default function About() {
         </div>
       </section>
 
-      <section id="why-resto" className="py-16 lg:py-20">
+      <section id="why-indexflow" className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">Why Choose indexFlow</Badge>
             <h2 className="text-3xl font-bold mb-4">The Smart Choice</h2>
             <p className="text-muted-foreground">
-              Zero Tech Stress. Maximum Bookings.
+              The all-in-one platform agencies trust to scale.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -294,8 +294,8 @@ export default function About() {
                 <div className="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4 mt-4">
                   <Phone className="w-7 h-7 text-green-500" />
                 </div>
-                <h3 className="font-semibold mb-2">Contact us</h3>
-                <p className="text-sm text-muted-foreground">Tell us about your business</p>
+                <h3 className="font-semibold mb-2">Sign up free</h3>
+                <p className="text-sm text-muted-foreground">Create your account in seconds</p>
               </CardContent>
             </Card>
             <Card className="hover-elevate relative">
@@ -304,8 +304,8 @@ export default function About() {
                 <div className="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center mx-auto mb-4 mt-4">
                   <DollarSign className="w-7 h-7 text-blue-500" />
                 </div>
-                <h3 className="font-semibold mb-2">Pay first month ($299)</h3>
-                <p className="text-sm text-muted-foreground">This triggers our build process</p>
+                <h3 className="font-semibold mb-2">Choose your plan ($99/mo+)</h3>
+                <p className="text-sm text-muted-foreground">Pick the plan that fits your agency</p>
               </CardContent>
             </Card>
             <Card className="hover-elevate relative">
@@ -314,8 +314,8 @@ export default function About() {
                 <div className="w-14 h-14 rounded-full bg-orange-500/10 flex items-center justify-center mx-auto mb-4 mt-4">
                   <CheckCircle className="w-7 h-7 text-orange-500" />
                 </div>
-                <h3 className="font-semibold mb-2">Review & approve (5-20 days)</h3>
-                <p className="text-sm text-muted-foreground">We build, you review content</p>
+                <h3 className="font-semibold mb-2">Connect your tools</h3>
+                <p className="text-sm text-muted-foreground">Link your AI keys, CMS, and domain</p>
               </CardContent>
             </Card>
             <Card className="hover-elevate relative">
@@ -324,8 +324,8 @@ export default function About() {
                 <div className="w-14 h-14 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-4 mt-4">
                   <Zap className="w-7 h-7 text-purple-500" />
                 </div>
-                <h3 className="font-semibold mb-2">Go live!</h3>
-                <p className="text-sm text-muted-foreground">Subscription starts after sign-off</p>
+                <h3 className="font-semibold mb-2">Start delivering!</h3>
+                <p className="text-sm text-muted-foreground">Create content, track rankings, manage clients</p>
               </CardContent>
             </Card>
           </div>
@@ -349,7 +349,7 @@ export default function About() {
             <div className="text-left space-y-6">
               <div className="p-4 bg-card rounded-lg border">
                 <p className="font-semibold mb-2">How long does setup take?</p>
-                <p className="text-sm text-muted-foreground">5-20 business days from payment to sign-off, depending on your business's complexity.</p>
+                <p className="text-sm text-muted-foreground">Most agencies are fully onboarded within a day. Connect your AI keys, CMS, and domain, and you're ready to go.</p>
               </div>
               <div className="p-4 bg-card rounded-lg border">
                 <p className="font-semibold mb-2">What is BYOK?</p>
@@ -360,8 +360,8 @@ export default function About() {
                 <p className="text-sm text-muted-foreground">Yes. Monthly subscription with no long-term contracts. Cancel whenever you need to.</p>
               </div>
               <div className="p-4 bg-card rounded-lg border">
-                <p className="font-semibold mb-2">What if I need changes after launch?</p>
-                <p className="text-sm text-muted-foreground">Your subscription includes ongoing maintenance and support. We handle updates for you.</p>
+                <p className="font-semibold mb-2">What if I need help after onboarding?</p>
+                <p className="text-sm text-muted-foreground">Every plan includes access to our support team. White Label and Enterprise plans include priority support and onboarding assistance.</p>
               </div>
             </div>
           </div>

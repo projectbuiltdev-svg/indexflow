@@ -7,31 +7,32 @@ import { Layout } from "@/components/layout";
 import { SEO, seoData } from "@/components/seo";
 
 const comparisonRows = [
-  { feature: "AI Phone Assistant", indexflow: "Yes", competitor: "No", indexflowWins: true },
-  { feature: "Custom Website", indexflow: "Included", competitor: "No", indexflowWins: true },
-  { feature: "SMS Automation", indexflow: "Included", competitor: "Limited", indexflowWins: true },
-  { feature: "BYOK AI", indexflow: "Yes", competitor: "No", indexflowWins: true },
-  { feature: "Rank Tracking", indexflow: "Yes", competitor: "No", indexflowWins: true },
-  { feature: "Pricing", indexflow: "Transparent", competitor: "Contact sales", indexflowWins: true },
-  { feature: "Setup", indexflow: "Done for you", competitor: "Self-service", indexflowWins: true },
+  { feature: "Rank Tracking", indexflow: "Included", competitor: "Included", indexflowWins: false },
+  { feature: "Site Audit", indexflow: "SEO Health Checks", competitor: "Included", indexflowWins: false },
+  { feature: "AI Content Creation", indexflow: "Built-in", competitor: "No", indexflowWins: true },
+  { feature: "CMS Integration", indexflow: "WordPress, Webflow, Ghost", competitor: "No", indexflowWins: true },
+  { feature: "CRM & Pipeline", indexflow: "Included", competitor: "No", indexflowWins: true },
+  { feature: "White-Label Branding", indexflow: "Yes", competitor: "No", indexflowWins: true },
+  { feature: "Client Invoicing", indexflow: "Included", competitor: "No", indexflowWins: true },
+  { feature: "Monthly Price", indexflow: "$99 flat", competitor: "$99 - $999", indexflowWins: true },
 ];
 
 const advantages = [
   {
-    title: "Bring Your Own Key (BYOK)",
-    description: "Use your own OpenAI, Anthropic, or Google AI keys. Full control over your AI stack with no vendor lock-in.",
+    title: "Beyond Backlink Analysis",
+    description: "Ahrefs excels at backlink research and site audits, but agencies need more. indexFlow adds content creation, CMS publishing, CRM, and invoicing on top of rank tracking.",
   },
   {
-    title: "Built-In Rank Tracking",
-    description: "Monitor up to 1,000 keywords and integrate Google Search Console. Premium SEO platforms offer no comparable tools.",
+    title: "Built-In CMS Publishing",
+    description: "Create SEO content and publish directly to WordPress, Webflow, or Ghost. Ahrefs can analyze content but can't create or publish it for you.",
   },
   {
-    title: "Transparent Pricing",
-    description: "Clear flat-rate pricing published on our website. No 'contact sales' runaround -- you know exactly what you pay.",
+    title: "White-Label Everything",
+    description: "Brand the entire platform with your agency's logo, colors, and domain. Ahrefs offers no white-label capabilities for agency client portals.",
   },
   {
-    title: "Fully Managed Service",
-    description: "We build your website, configure your AI, and handle ongoing optimization. Premium SEO platforms leave setup to you.",
+    title: "One Tool, One Invoice",
+    description: "Stop paying $99/mo for Ahrefs, $50/mo for a CRM, $30/mo for invoicing, and $100/mo for content tools. indexFlow replaces them all for $99/mo.",
   },
 ];
 
@@ -44,26 +45,26 @@ export default function ResyComparison() {
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4">
               <Repeat className="w-3 h-3 mr-1" />
-              Resy Alternative
+              Ahrefs Alternative
             </Badge>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              indexFlow vs Resy{" "}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" data-testid="heading-ahrefs-comparison">
+              indexFlow vs Ahrefs{" "}
               <span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
                 Side-by-Side
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              More features, transparent pricing, and AI-powered automation.
+              Rank tracking and site audits plus content creation, CMS publishing, CRM, and white-label branding.
               Compare every capability head-to-head.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
-                <Button size="lg" className="gap-2" data-testid="button-resy-switch">
+                <Button size="lg" className="gap-2" data-testid="button-ahrefs-switch">
                   Switch to indexFlow <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/pricing">
-                <Button size="lg" variant="outline" data-testid="button-resy-pricing">
+                <Button size="lg" variant="outline" data-testid="button-ahrefs-pricing">
                   View Pricing
                 </Button>
               </Link>
@@ -77,18 +78,18 @@ export default function ResyComparison() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Feature Comparison</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              See how indexFlow stacks up against premium SEO platforms across key capabilities.
+              See how indexFlow stacks up against Ahrefs across key capabilities for agencies.
             </p>
           </div>
           <Card>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
-                <table className="w-full" data-testid="table-resy-comparison">
+                <table className="w-full" data-testid="table-ahrefs-comparison">
                   <thead>
                     <tr className="border-b">
                       <th className="text-left p-4 font-semibold">Feature</th>
                       <th className="text-center p-4 font-semibold text-primary">indexFlow</th>
-                      <th className="text-center p-4 font-semibold text-muted-foreground">Premium SEO Platforms</th>
+                      <th className="text-center p-4 font-semibold text-muted-foreground">Ahrefs</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -120,7 +121,7 @@ export default function ResyComparison() {
             {advantages.map((adv) => (
               <Card key={adv.title} className="hover-elevate">
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg mb-2">{adv.title}</h3>
+                  <h3 className="font-semibold text-lg mb-2" data-testid={`text-advantage-${adv.title.toLowerCase().replace(/\s+/g, "-")}`}>{adv.title}</h3>
                   <p className="text-sm text-muted-foreground">{adv.description}</p>
                 </CardContent>
               </Card>
@@ -133,10 +134,10 @@ export default function ResyComparison() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready for More Features at a Better Price?</h2>
           <p className="text-muted-foreground mb-8">
-            Move from premium SEO platforms to indexFlow and get AI, SEO tools, and a custom website included.
+            Move from Ahrefs to indexFlow and get content creation, CMS publishing, CRM, and white-label included.
           </p>
           <Link href="/contact">
-            <Button size="lg" className="gap-2" data-testid="button-resy-bottom-cta">
+            <Button size="lg" className="gap-2" data-testid="button-ahrefs-bottom-cta">
               Switch to indexFlow <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>

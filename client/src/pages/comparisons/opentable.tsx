@@ -7,31 +7,31 @@ import { Layout } from "@/components/layout";
 import { SEO, seoData } from "@/components/seo";
 
 const comparisonRows = [
-  { feature: "Per-Lead Fees", indexflow: "No", competitor: "$1 - $7.50", indexflowWins: true },
-  { feature: "Monthly Cost", indexflow: "$299 flat", competitor: "Variable", indexflowWins: true },
-  { feature: "AI Phone Answering", indexflow: "Yes", competitor: "No", indexflowWins: true },
-  { feature: "Custom Website", indexflow: "Yes", competitor: "No", indexflowWins: true },
-  { feature: "SMS Confirmations", indexflow: "Included", competitor: "Add-on", indexflowWins: true },
-  { feature: "Setup", indexflow: "Done for you", competitor: "Self-service", indexflowWins: true },
-  { feature: "SEO Tools", indexflow: "Yes", competitor: "No", indexflowWins: true },
+  { feature: "Rank Tracking", indexflow: "Included", competitor: "$129+/mo add-on", indexflowWins: true },
+  { feature: "AI Content Engine", indexflow: "Built-in", competitor: "No", indexflowWins: true },
+  { feature: "CMS Publishing", indexflow: "WordPress, Webflow, Ghost", competitor: "No", indexflowWins: true },
+  { feature: "CRM & Pipeline", indexflow: "Included", competitor: "No", indexflowWins: true },
+  { feature: "Client Invoicing", indexflow: "Included", competitor: "No", indexflowWins: true },
+  { feature: "White-Label Reports", indexflow: "Yes", competitor: "Limited", indexflowWins: true },
+  { feature: "Monthly Price", indexflow: "$99 flat", competitor: "$129 - $499", indexflowWins: true },
 ];
 
 const reasons = [
   {
-    title: "No Per-Lead Fees",
-    description: "Traditional SEO tools charge $1 to $7.50 per lead generated. indexFlow charges a flat monthly rate -- no matter how many clients you serve.",
+    title: "All-in-One Platform",
+    description: "SEMrush is great at keyword research and rank tracking, but agencies still need separate tools for CMS publishing, CRM, invoicing, and reporting. indexFlow bundles everything.",
   },
   {
-    title: "AI-Powered Everything",
-    description: "From phone answering to live chat, indexFlow's AI assistant handles client inquiries 24/7. Traditional SEO tools don't offer this.",
+    title: "AI-Powered Content Engine",
+    description: "Generate SEO-optimized articles, publish directly to client CMS platforms, and track rankings -- all from one dashboard. SEMrush has no content creation workflow.",
   },
   {
-    title: "Custom Website Included",
-    description: "Every indexFlow plan includes a professionally designed, SEO-optimized website. Traditional SEO tools give you a generic profile page.",
+    title: "Built-In CRM & Invoicing",
+    description: "Manage your agency's client pipeline, send invoices, and track payments without juggling HubSpot, FreshBooks, or spreadsheets alongside SEMrush.",
   },
   {
-    title: "Done-for-You Setup",
-    description: "Our team builds and configures everything for you. No DIY setup, no learning curve, no wasted time.",
+    title: "Fraction of the Cost",
+    description: "SEMrush's Guru plan starts at $249/mo for one user. indexFlow gives you rank tracking, content, CRM, and invoicing for $99/mo -- saving agencies thousands annually.",
   },
 ];
 
@@ -44,26 +44,26 @@ export default function OpenTableComparison() {
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4">
               <Shield className="w-3 h-3 mr-1" />
-              OpenTable Alternative
+              SEMrush Alternative
             </Badge>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Why Businesses Switch{" "}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" data-testid="heading-semrush-comparison">
+              Why Agencies Switch{" "}
               <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-                from OpenTable
+                from SEMrush
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              No per-lead fees, AI-powered automation, and fully managed setup.
-              See why agencies and businesses are making the switch.
+              Rank tracking plus content engine, CMS publishing, CRM, and invoicing -- all in one platform.
+              See why agencies are consolidating their tool stack with indexFlow.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
-                <Button size="lg" className="gap-2" data-testid="button-opentable-switch">
+                <Button size="lg" className="gap-2" data-testid="button-semrush-switch">
                   Switch to indexFlow <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/pricing">
-                <Button size="lg" variant="outline" data-testid="button-opentable-pricing">
+                <Button size="lg" variant="outline" data-testid="button-semrush-pricing">
                   View Pricing
                 </Button>
               </Link>
@@ -75,20 +75,20 @@ export default function OpenTableComparison() {
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">indexFlow vs Traditional SEO Tools</h2>
+            <h2 className="text-3xl font-bold mb-4">indexFlow vs SEMrush</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              A head-to-head comparison across the features that matter most.
+              A head-to-head comparison across the features that matter most to agencies.
             </p>
           </div>
           <Card>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
-                <table className="w-full" data-testid="table-opentable-comparison">
+                <table className="w-full" data-testid="table-semrush-comparison">
                   <thead>
                     <tr className="border-b">
                       <th className="text-left p-4 font-semibold">Feature</th>
                       <th className="text-center p-4 font-semibold text-primary">indexFlow</th>
-                      <th className="text-center p-4 font-semibold text-muted-foreground">Traditional SEO Tools</th>
+                      <th className="text-center p-4 font-semibold text-muted-foreground">SEMrush</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -120,7 +120,7 @@ export default function OpenTableComparison() {
             {reasons.map((reason) => (
               <Card key={reason.title} className="hover-elevate">
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg mb-2">{reason.title}</h3>
+                  <h3 className="font-semibold text-lg mb-2" data-testid={`text-reason-${reason.title.toLowerCase().replace(/\s+/g, "-")}`}>{reason.title}</h3>
                   <p className="text-sm text-muted-foreground">{reason.description}</p>
                 </CardContent>
               </Card>
@@ -131,12 +131,12 @@ export default function OpenTableComparison() {
 
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Drop Per-Lead Fees?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Replace Your SEO Tool Stack?</h2>
           <p className="text-muted-foreground mb-8">
-            Switch from traditional SEO tools to indexFlow and keep more of your revenue.
+            Switch from SEMrush to indexFlow and get rank tracking, content, CRM, and invoicing in one platform.
           </p>
           <Link href="/contact">
-            <Button size="lg" className="gap-2" data-testid="button-opentable-bottom-cta">
+            <Button size="lg" className="gap-2" data-testid="button-semrush-bottom-cta">
               Switch to indexFlow <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>

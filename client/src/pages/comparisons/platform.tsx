@@ -11,28 +11,28 @@ type Support = boolean | "limited";
 interface FeatureRow {
   feature: string;
   indexflow: Support;
-  opentable: Support;
-  resy: Support;
-  sevenrooms: Support;
+  semrush: Support;
+  ahrefs: Support;
+  hubspot: Support;
 }
 
 const featureMatrix: FeatureRow[] = [
-  { feature: "Online Scheduling Widget", indexflow: true, opentable: true, resy: true, sevenrooms: true },
-  { feature: "AI Phone Answering", indexflow: true, opentable: false, resy: false, sevenrooms: false },
-  { feature: "AI Live Chat Assistant", indexflow: true, opentable: false, resy: false, sevenrooms: false },
-  { feature: "SMS Confirmations", indexflow: true, opentable: "limited", resy: "limited", sevenrooms: true },
-  { feature: "Custom Website", indexflow: true, opentable: false, resy: false, sevenrooms: false },
-  { feature: "Analytics Dashboard", indexflow: true, opentable: true, resy: true, sevenrooms: true },
-  { feature: "Rank Tracking (1,000 KWs)", indexflow: true, opentable: false, resy: false, sevenrooms: false },
-  { feature: "BYOK AI (Bring Your Own Key)", indexflow: true, opentable: false, resy: false, sevenrooms: false },
-  { feature: "Multi-Language Support", indexflow: true, opentable: "limited", resy: false, sevenrooms: "limited" },
-  { feature: "Client Waitlist Management", indexflow: true, opentable: true, resy: true, sevenrooms: true },
-  { feature: "Prepaid Services", indexflow: true, opentable: "limited", resy: true, sevenrooms: true },
-  { feature: "Content Marketing Tools", indexflow: true, opentable: false, resy: false, sevenrooms: false },
-  { feature: "SEO Optimization", indexflow: true, opentable: false, resy: false, sevenrooms: false },
-  { feature: "Google Search Console", indexflow: true, opentable: false, resy: false, sevenrooms: false },
-  { feature: "Mobile App for Teams", indexflow: true, opentable: true, resy: true, sevenrooms: true },
-  { feature: "API Access", indexflow: true, opentable: true, resy: "limited", sevenrooms: true },
+  { feature: "Rank Tracking", indexflow: true, semrush: true, ahrefs: true, hubspot: false },
+  { feature: "AI Content Engine", indexflow: true, semrush: false, ahrefs: false, hubspot: false },
+  { feature: "CMS Publishing (WordPress, Webflow)", indexflow: true, semrush: false, ahrefs: false, hubspot: "limited" },
+  { feature: "CRM & Client Pipeline", indexflow: true, semrush: false, ahrefs: false, hubspot: true },
+  { feature: "Client Invoicing & Billing", indexflow: true, semrush: false, ahrefs: false, hubspot: false },
+  { feature: "White-Label Branding", indexflow: true, semrush: "limited", ahrefs: false, hubspot: "limited" },
+  { feature: "AI Voice Assistant (Twilio)", indexflow: true, semrush: false, ahrefs: false, hubspot: false },
+  { feature: "SMS Notifications", indexflow: true, semrush: false, ahrefs: false, hubspot: "limited" },
+  { feature: "Google Search Console Integration", indexflow: true, semrush: true, ahrefs: true, hubspot: false },
+  { feature: "Local Search Grid", indexflow: true, semrush: "limited", ahrefs: false, hubspot: false },
+  { feature: "Site Audit / SEO Health", indexflow: true, semrush: true, ahrefs: true, hubspot: "limited" },
+  { feature: "Content Campaign Management", indexflow: true, semrush: "limited", ahrefs: false, hubspot: true },
+  { feature: "Team & Permissions Management", indexflow: true, semrush: true, ahrefs: "limited", hubspot: true },
+  { feature: "Multi-Language Support", indexflow: true, semrush: "limited", ahrefs: "limited", hubspot: true },
+  { feature: "Analytics Dashboard", indexflow: true, semrush: true, ahrefs: true, hubspot: true },
+  { feature: "API Access", indexflow: true, semrush: true, ahrefs: true, hubspot: true },
 ];
 
 function FeatureIcon({ value }: { value: Support }) {
@@ -56,15 +56,15 @@ export default function PlatformComparison() {
               <LayoutGrid className="w-3 h-3 mr-1" />
               Platform Comparison
             </Badge>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" data-testid="heading-platform-comparison">
               Feature-by-Feature{" "}
               <span className="bg-gradient-to-r from-sky-500 to-blue-500 bg-clip-text text-transparent">
                 Capability Matrix
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Every feature compared across platforms. See exactly what you get
-              with indexFlow vs the competition.
+              Every feature compared across leading SEO platforms. See exactly what you get
+              with indexFlow vs SEMrush, Ahrefs, and HubSpot.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
@@ -87,7 +87,7 @@ export default function PlatformComparison() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Complete Feature Matrix</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              16 capabilities compared across the four leading marketing platforms.
+              16 capabilities compared across the leading SEO and agency platforms.
             </p>
           </div>
           <Card>
@@ -98,9 +98,9 @@ export default function PlatformComparison() {
                     <tr className="border-b">
                       <th className="text-left p-4 font-semibold min-w-[180px]">Feature</th>
                       <th className="text-center p-4 font-semibold text-primary min-w-[100px]">indexFlow</th>
-                      <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">OpenTable</th>
-                      <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">Resy</th>
-                      <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">SevenRooms</th>
+                      <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">SEMrush</th>
+                      <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">Ahrefs</th>
+                      <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">HubSpot</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -108,9 +108,9 @@ export default function PlatformComparison() {
                       <tr key={row.feature} className={index % 2 === 0 ? "bg-accent/30" : ""}>
                         <td className="p-4 font-medium">{row.feature}</td>
                         <td className="p-4 text-center"><FeatureIcon value={row.indexflow} /></td>
-                        <td className="p-4 text-center"><FeatureIcon value={row.opentable} /></td>
-                        <td className="p-4 text-center"><FeatureIcon value={row.resy} /></td>
-                        <td className="p-4 text-center"><FeatureIcon value={row.sevenrooms} /></td>
+                        <td className="p-4 text-center"><FeatureIcon value={row.semrush} /></td>
+                        <td className="p-4 text-center"><FeatureIcon value={row.ahrefs} /></td>
+                        <td className="p-4 text-center"><FeatureIcon value={row.hubspot} /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -129,26 +129,26 @@ export default function PlatformComparison() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="hover-elevate">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">16</div>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-platform-features">16</div>
                 <p className="text-sm text-muted-foreground">Features where indexFlow leads</p>
               </CardContent>
             </Card>
             <Card className="hover-elevate">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">AI</div>
-                <p className="text-sm text-muted-foreground">Phone + Chat included</p>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-platform-cms">CMS</div>
+                <p className="text-sm text-muted-foreground">Direct publishing included</p>
               </CardContent>
             </Card>
             <Card className="hover-elevate">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">SEO</div>
-                <p className="text-sm text-muted-foreground">Built-in optimization</p>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-platform-crm">CRM</div>
+                <p className="text-sm text-muted-foreground">Client pipeline built-in</p>
               </CardContent>
             </Card>
             <Card className="hover-elevate">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">$0</div>
-                <p className="text-sm text-muted-foreground">Per-lead fees</p>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-platform-price">$99</div>
+                <p className="text-sm text-muted-foreground">Flat monthly price</p>
               </CardContent>
             </Card>
           </div>

@@ -1,47 +1,56 @@
 import { Link } from "wouter";
-import { Key, Shield, Settings, Cpu, Sparkles, Brain, Zap, CheckCircle, ArrowRight, Lock, CircuitBoard, Boxes, Globe, Star, Gem, Eye } from "lucide-react";
+import { Key, Shield, Settings, Cpu, Sparkles, Brain, Zap, CheckCircle, ArrowRight, Lock, CircuitBoard, Globe, Star, Gem, Eye, Image, CreditCard, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Layout } from "@/components/layout";
 import { SEO, seoData } from "@/components/seo";
 
-const providers = [
+const aiProviders = [
   { name: "OpenAI", description: "GPT-4o & GPT-4o-mini", icon: Brain, color: "text-green-500", bgColor: "bg-green-500/10" },
   { name: "Anthropic", description: "Claude 3.5 Sonnet & Haiku", icon: Sparkles, color: "text-orange-500", bgColor: "bg-orange-500/10" },
-  { name: "Google", description: "Gemini Pro & Flash", icon: Globe, color: "text-blue-500", bgColor: "bg-blue-500/10" },
+  { name: "Google AI", description: "Gemini Pro & Flash", icon: Globe, color: "text-blue-500", bgColor: "bg-blue-500/10" },
   { name: "Grok", description: "xAI Grok models", icon: Zap, color: "text-purple-500", bgColor: "bg-purple-500/10" },
   { name: "Mistral", description: "Mistral Large & Medium", icon: Star, color: "text-cyan-500", bgColor: "bg-cyan-500/10" },
   { name: "Cohere", description: "Command R & R+", icon: Gem, color: "text-pink-500", bgColor: "bg-pink-500/10" },
   { name: "Perplexity", description: "Sonar models", icon: Eye, color: "text-indigo-500", bgColor: "bg-indigo-500/10" },
 ];
 
+const otherIntegrations = [
+  { name: "Unsplash", description: "Stock image bank", icon: Image, color: "text-teal-500", bgColor: "bg-teal-500/10" },
+  { name: "Pexels", description: "Stock image bank", icon: Image, color: "text-emerald-500", bgColor: "bg-emerald-500/10" },
+  { name: "Pixabay", description: "Stock image bank", icon: Image, color: "text-lime-500", bgColor: "bg-lime-500/10" },
+  { name: "Stripe", description: "Payment processing", icon: CreditCard, color: "text-violet-500", bgColor: "bg-violet-500/10" },
+  { name: "PayPal", description: "Payment processing", icon: CreditCard, color: "text-blue-500", bgColor: "bg-blue-500/10" },
+  { name: "Twilio", description: "Voice & SMS", icon: Phone, color: "text-red-500", bgColor: "bg-red-500/10" },
+];
+
 const features = [
   {
     icon: Key,
     title: "Easy Key Management",
-    description: "Add, rotate, and manage your API keys from the dashboard. Keys are encrypted at rest and in transit.",
+    description: "Add, rotate, and manage API keys from the dashboard. Keys are encrypted with AES-256-GCM at rest and in transit.",
     color: "text-amber-500",
     bgColor: "bg-amber-500/10",
   },
   {
     icon: Settings,
-    title: "Per-Venue Configuration",
-    description: "Assign different AI providers and models to each of your venues for maximum flexibility.",
+    title: "Per-Workspace Configuration",
+    description: "Assign different AI providers, image banks, and payment processors to each workspace for maximum flexibility.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
     icon: Cpu,
     title: "Provider-Specific Optimizations",
-    description: "Prompts and settings are fine-tuned for each provider to deliver the best possible results.",
+    description: "Prompts and settings are fine-tuned for each AI provider to deliver the best possible content and responses.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
   {
     icon: CircuitBoard,
     title: "Automatic Failover",
-    description: "If your primary provider goes down, the system can fall back to a secondary provider seamlessly.",
+    description: "If your primary AI provider goes down, the system falls back to a secondary provider seamlessly.",
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
@@ -51,7 +60,7 @@ const benefits = [
   "Control your AI costs — pay your provider directly at their rates",
   "Choose your preferred model for each workspace and use case",
   "No vendor lock-in — switch providers any time without data loss",
-  "Enterprise-grade security with encrypted key storage",
+  "AES-256-GCM encryption for all stored API keys",
 ];
 
 export default function ByokPage() {
@@ -68,12 +77,12 @@ export default function ByokPage() {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
               Bring Your Own{" "}
               <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
-                AI Keys
+                API Keys
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Use your preferred AI provider for maximum control over costs, performance, and data privacy.
-              Plug in your own API keys and choose the model that fits your needs.
+              Connect your own API keys for AI providers, image banks, payments, and Twilio.
+              Full control over costs, usage, and data privacy with AES-256-GCM encryption.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link href="/contact">
@@ -100,7 +109,7 @@ export default function ByokPage() {
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {providers.map((provider) => (
+            {aiProviders.map((provider) => (
               <Card key={provider.name} className="hover-elevate">
                 <CardContent className="p-6 text-center">
                   <div className={`w-14 h-14 rounded-full ${provider.bgColor} flex items-center justify-center mx-auto mb-4`}>
@@ -116,6 +125,30 @@ export default function ByokPage() {
       </section>
 
       <section className="py-16 lg:py-20 bg-accent/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Image Banks, Payments & Twilio</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Connect your own keys for stock images, payment processing, and communications.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {otherIntegrations.map((item) => (
+              <Card key={item.name} className="hover-elevate">
+                <CardContent className="p-6 text-center">
+                  <div className={`w-14 h-14 rounded-full ${item.bgColor} flex items-center justify-center mx-auto mb-4`}>
+                    <item.icon className={`w-7 h-7 ${item.color}`} />
+                  </div>
+                  <h3 className="font-semibold mb-1">{item.name}</h3>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">How BYOK Works</h2>
@@ -139,7 +172,7 @@ export default function ByokPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
+      <section className="py-16 lg:py-20 bg-accent/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -161,16 +194,16 @@ export default function ByokPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">7</div>
-                <p className="text-sm text-muted-foreground">AI Providers</p>
+                <div className="text-4xl font-bold text-primary mb-2">13</div>
+                <p className="text-sm text-muted-foreground">Supported Services</p>
               </Card>
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">AES</div>
-                <p className="text-sm text-muted-foreground">256-bit Encryption</p>
+                <p className="text-sm text-muted-foreground">256-GCM Encryption</p>
               </Card>
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">0</div>
-                <p className="text-sm text-muted-foreground">AI Markup Fees</p>
+                <p className="text-sm text-muted-foreground">Markup Fees</p>
               </Card>
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">
@@ -183,11 +216,11 @@ export default function ByokPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20 bg-accent/40">
+      <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Use Your Own AI Keys?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Use Your Own API Keys?</h2>
           <p className="text-muted-foreground mb-8">
-            Get started with BYOK and take full control of your AI infrastructure.
+            Get started with BYOK and take full control of your AI, images, payments, and communications infrastructure.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-byok-bottom-cta">

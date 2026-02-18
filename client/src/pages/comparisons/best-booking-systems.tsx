@@ -9,97 +9,81 @@ import { SEO, seoData } from "@/components/seo";
 const platforms = [
   {
     name: "indexFlow",
-    tagline: "Best Value with AI + Managed Service",
+    tagline: "The All-in-One Agency SEO Platform",
     highlight: true,
     pros: [
-      "AI phone answering & live chat assistant",
-      "Custom website included with every plan",
-      "Flat $299/month with no per-lead fees",
-      "Done-for-you setup and ongoing management",
-      "Built-in rank tracking and SEO tools",
+      "Rank tracking, content engine, CMS publishing in one tool",
+      "Built-in CRM, invoicing, and client management",
+      "White-label branding for agency client portals",
+      "AI voice assistant and SMS notifications included",
+      "Flat $99/month with no per-seat fees",
     ],
     cons: [
-      "Newer platform, growing marketing network",
+      "Newer platform, growing feature set",
     ],
   },
   {
-    name: "OpenTable",
-    tagline: "Largest Client Network",
+    name: "SEMrush",
+    tagline: "Keyword Research & Competitive Analysis",
     highlight: false,
     pros: [
-      "Massive consumer-facing marketplace",
-      "Well-known brand with broad reach",
-      "Integrates with many business systems",
+      "Industry-leading keyword research database",
+      "Comprehensive competitive analysis tools",
+      "PPC and advertising insights",
     ],
     cons: [
-      "Per-lead fees of $1 to $7.50 per client",
-      "No AI phone answering or chat",
-      "No custom website included",
-      "Self-service setup",
+      "No content creation or CMS publishing",
+      "No CRM, invoicing, or client management",
+      "Starts at $129/mo, Guru plan $249/mo",
+      "Per-seat pricing adds up for teams",
     ],
   },
   {
-    name: "Resy",
-    tagline: "Popular with Premium Businesses",
+    name: "Ahrefs",
+    tagline: "Backlink Analysis & Site Audit Leader",
     highlight: false,
     pros: [
-      "Clean, modern client-facing experience",
-      "Good brand recognition with clients",
-      "CRM and client profiles",
+      "Best-in-class backlink index and analysis",
+      "Powerful site audit and technical SEO tools",
+      "Reliable rank tracking",
     ],
     cons: [
-      "Opaque pricing -- must contact sales",
-      "No AI assistant or phone answering",
-      "No custom website or SEO tools",
-      "Self-service setup",
+      "No content creation or CMS integration",
+      "No CRM or invoicing features",
+      "No white-label branding options",
+      "Starts at $99/mo, scales to $999/mo",
     ],
   },
   {
-    name: "SevenRooms",
-    tagline: "Enterprise CRM Focus",
+    name: "SurferSEO",
+    tagline: "On-Page SEO & Content Optimization",
     highlight: false,
     pros: [
-      "Strong CRM and marketing automation",
-      "Good for multi-location businesses",
-      "Client data ownership emphasis",
+      "Strong on-page content optimization scoring",
+      "Content editor with real-time SEO suggestions",
+      "SERP analyzer for competitive insights",
     ],
     cons: [
-      "High price point for small businesses",
-      "Complex onboarding process",
-      "No AI phone answering",
-      "No included website",
+      "No rank tracking or site audit tools",
+      "No CRM, invoicing, or client management",
+      "Limited to content optimization only",
+      "Requires additional tools for a full SEO workflow",
     ],
   },
   {
-    name: "Yelp Business",
-    tagline: "Yelp-Integrated Marketing",
+    name: "HubSpot",
+    tagline: "Marketing & CRM Suite",
     highlight: false,
     pros: [
-      "Leverages Yelp's massive user base",
-      "Simple setup for existing Yelp pages",
-      "No per-lead fees on basic plan",
+      "Excellent CRM and marketing automation",
+      "Email marketing and lead nurturing workflows",
+      "Strong reporting and analytics",
     ],
     cons: [
-      "Limited features compared to full platforms",
-      "Tied to the Yelp ecosystem",
-      "No AI or automation features",
-      "Basic website/profile only",
-    ],
-  },
-  {
-    name: "TheFork",
-    tagline: "Popular in Europe",
-    highlight: false,
-    pros: [
-      "Strong presence in European markets",
-      "Client promotions and offers system",
-      "Part of the Tripadvisor network",
-    ],
-    cons: [
-      "Limited presence in the US market",
-      "Commission-based pricing model",
-      "No AI features",
-      "No custom website included",
+      "Very limited SEO tools, no rank tracking",
+      "No AI content engine or CMS publishing",
+      "Expensive at scale -- Marketing Hub starts at $800/mo",
+      "Not built for SEO agencies specifically",
     ],
   },
 ];
@@ -115,24 +99,24 @@ export default function BestBookingSystems() {
               <Award className="w-3 h-3 mr-1" />
               2026 Guide
             </Badge>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              2026 SEO & Marketing{" "}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" data-testid="heading-best-seo-platforms">
+              Best SEO Platforms{" "}
               <span className="bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
-                Platform Guide
+                for Agencies
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Compare the top SEO and marketing platforms.
-              Find the right fit for your business's size, budget, and goals.
+              Compare the top SEO platforms for agencies. Find the right fit
+              for your team's size, budget, and workflow needs.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
-                <Button size="lg" className="gap-2" data-testid="button-best-booking-try">
+                <Button size="lg" className="gap-2" data-testid="button-best-seo-try">
                   Try indexFlow <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/comparisons/pricing">
-                <Button size="lg" variant="outline" data-testid="button-best-booking-pricing">
+                <Button size="lg" variant="outline" data-testid="button-best-seo-pricing">
                   Pricing Comparison
                 </Button>
               </Link>
@@ -144,9 +128,9 @@ export default function BestBookingSystems() {
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Top Marketing Platforms Compared</h2>
+            <h2 className="text-3xl font-bold mb-4">Top Agency SEO Platforms Compared</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              An honest look at each platform's strengths and weaknesses.
+              An honest look at each platform's strengths and weaknesses for agency use.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -198,13 +182,13 @@ export default function BestBookingSystems() {
 
       <section className="py-16 lg:py-20 bg-accent/40">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Choose the Best Platform?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Consolidate Your Agency Tool Stack?</h2>
           <p className="text-muted-foreground mb-8">
-            indexFlow combines AI automation, a custom website, and flat-rate pricing.
-            Book a demo and see why businesses are switching.
+            indexFlow combines rank tracking, content creation, CMS publishing, CRM, and invoicing in one platform.
+            Book a demo and see why agencies are switching.
           </p>
           <Link href="/contact">
-            <Button size="lg" className="gap-2" data-testid="button-best-booking-bottom-cta">
+            <Button size="lg" className="gap-2" data-testid="button-best-seo-bottom-cta">
               Try indexFlow <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>

@@ -10,16 +10,15 @@ import {
   Quote,
   ChevronDown,
   ChevronUp,
-  Utensils,
-  Hotel,
-  Coffee,
-  Wine,
+  Search,
+  FileText,
+  BarChart3,
+  Layers,
   Zap,
-  Phone,
   Globe,
   Target,
-  BarChart3,
   CheckCircle2,
+  DollarSign,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,7 +29,7 @@ import { SEO } from "@/components/seo";
 interface CaseStudy {
   slug: string;
   business: string;
-  category: "Restaurant" | "Hotel" | "Cafe" | "Bar";
+  category: "SEO Agency" | "Content Agency" | "Marketing Agency" | "White-Label Reseller";
   location: string;
   heroStat: string;
   heroLabel: string;
@@ -47,160 +46,104 @@ interface CaseStudy {
 }
 
 const categoryConfig = {
-  Restaurant: { icon: Utensils, gradient: "from-orange-500 to-red-500", bg: "bg-orange-500/10 dark:bg-orange-500/20", text: "text-orange-600 dark:text-orange-400", ring: "ring-orange-500/20" },
-  Hotel: { icon: Hotel, gradient: "from-blue-500 to-indigo-500", bg: "bg-blue-500/10 dark:bg-blue-500/20", text: "text-blue-600 dark:text-blue-400", ring: "ring-blue-500/20" },
-  Cafe: { icon: Coffee, gradient: "from-amber-500 to-yellow-600", bg: "bg-amber-500/10 dark:bg-amber-500/20", text: "text-amber-600 dark:text-amber-400", ring: "ring-amber-500/20" },
-  Bar: { icon: Wine, gradient: "from-purple-500 to-pink-500", bg: "bg-purple-500/10 dark:bg-purple-500/20", text: "text-purple-600 dark:text-purple-400", ring: "ring-purple-500/20" },
+  "SEO Agency": { icon: Search, gradient: "from-orange-500 to-red-500", bg: "bg-orange-500/10 dark:bg-orange-500/20", text: "text-orange-600 dark:text-orange-400", ring: "ring-orange-500/20" },
+  "Content Agency": { icon: FileText, gradient: "from-green-500 to-emerald-500", bg: "bg-green-500/10 dark:bg-green-500/20", text: "text-green-600 dark:text-green-400", ring: "ring-green-500/20" },
+  "Marketing Agency": { icon: BarChart3, gradient: "from-blue-500 to-indigo-500", bg: "bg-blue-500/10 dark:bg-blue-500/20", text: "text-blue-600 dark:text-blue-400", ring: "ring-blue-500/20" },
+  "White-Label Reseller": { icon: Layers, gradient: "from-purple-500 to-pink-500", bg: "bg-purple-500/10 dark:bg-purple-500/20", text: "text-purple-600 dark:text-purple-400", ring: "ring-purple-500/20" },
 };
 
 const caseStudies: CaseStudy[] = [
   {
-    slug: "la-bella-italia",
-    business: "La Bella Italia",
-    category: "Restaurant",
-    location: "New York, NY",
-    heroStat: "+40%",
-    heroLabel: "Revenue Increase",
-    summary: "A family-run Italian restaurant in Manhattan turned missed after-hours calls into booked tables with indexFlow's AI phone assistant and online booking system.",
-    challenge: "La Bella Italia was losing an estimated 15-20 reservation calls per week outside business hours. Their paper-based booking system led to frequent double bookings, and staff spent over 2 hours daily managing phone enquiries instead of serving guests.",
-    solution: "indexFlow deployed the Complete Solution package including a custom website, AI-powered phone assistant, and online booking widget.",
+    slug: "apex-digital-marketing",
+    business: "Apex Digital Marketing",
+    category: "SEO Agency",
+    location: "Austin, TX",
+    heroStat: "2x",
+    heroLabel: "Team Output",
+    summary: "A mid-size SEO agency consolidated 8 separate tools into IndexFlow, doubling their team's output and cutting software costs by 60%.",
+    challenge: "Apex Digital was juggling 8 different subscriptions for rank tracking, content generation, CRM, reporting, and local SEO. Data lived in silos, team members wasted hours exporting and importing between platforms, and monthly software costs had ballooned to over $4,000.",
+    solution: "IndexFlow replaced their entire tool stack with a single platform covering rank tracking, content engine, CRM pipeline, SEO audits, and client reporting.",
     solutionBullets: [
-      "AI phone assistant handles calls 24/7 in English and Italian",
-      "Prepaid reservation feature reduced weekend no-shows",
-      "Custom website with integrated booking widget",
-      "SMS confirmations and automated reminders",
+      "Migrated rank tracking for 200+ client keywords into IndexFlow",
+      "CRM pipeline replaced Trello, HubSpot, and spreadsheets",
+      "Automated client reporting eliminated 10 hours of manual work per week",
+      "Content Engine replaced their separate AI writing tool subscription",
     ],
     results: [
-      { label: "Revenue Growth", value: "+40%", icon: TrendingUp },
-      { label: "After-Hours Bookings", value: "85/mo", icon: Phone },
-      { label: "No-Show Rate", value: "-75%", icon: Target },
-      { label: "Staff Hours Saved", value: "14h/wk", icon: Clock },
+      { label: "Team Output", value: "2x", icon: TrendingUp },
+      { label: "Tools Replaced", value: "8", icon: Zap },
+      { label: "Cost Savings", value: "60%", icon: DollarSign },
+      { label: "Hours Saved/Week", value: "25+", icon: Clock },
     ],
-    quote: "We stopped missing after-hours calls. The AI books tables while we sleep. Revenue is up 40%.",
-    quotePerson: "Maria Santos",
-    quoteRole: "Owner, La Bella Italia",
-    timeline: "5 days",
-    productsUsed: ["AI Phone", "Website", "Booking Widget", "SMS"],
-  },
-  {
-    slug: "sakura-grand-hotel",
-    business: "Sakura Grand Hotel",
-    category: "Hotel",
-    location: "Tokyo, Japan",
-    heroStat: "+35%",
-    heroLabel: "Direct Bookings",
-    summary: "A 45-room boutique business in Shibuya increased direct leads by 35% and reduced third-party platform dependency by building a modern website with real-time availability and an AI assistant.",
-    challenge: "Sakura Grand was paying 15-22% commission on over 80% of bookings through third-party platforms. Their outdated website had no real-time availability and phone staff couldn't handle enquiries in both Japanese and English during peak tourist season.",
-    solution: "indexFlow built a bilingual website with real-time availability, integrated an AI phone assistant, and implemented SEO targeting tourist search terms.",
-    solutionBullets: [
-      "Bilingual website with real-time availability",
-      "AI phone assistant fluent in Japanese and English",
-      "SEO targeting tourist search terms",
-      "Rank tracker monitoring 200+ keywords weekly",
-    ],
-    results: [
-      { label: "Direct Bookings", value: "+35%", icon: TrendingUp },
-      { label: "Commission Saved", value: "$4.2K/mo", icon: BarChart3 },
-      { label: "Phone Coverage", value: "24/7", icon: Phone },
-      { label: "Google Rankings", value: "12 Page 1", icon: Globe },
-    ],
-    quote: "Our direct leads increased by 35%, reducing our reliance on third-party platforms. The AI assistant answers in Japanese and English flawlessly.",
-    quotePerson: "Yuki Tanaka",
-    quoteRole: "Hotel Manager, Sakura Grand",
-    timeline: "8 days",
-    productsUsed: ["AI Assistant", "Availability", "SEO", "Rank Tracker"],
-  },
-  {
-    slug: "spice-route",
-    business: "Spice Route",
-    category: "Restaurant",
-    location: "Dubai, UAE",
-    heroStat: "+70%",
-    heroLabel: "Booking Efficiency",
-    summary: "A multi-location restaurant group across Dubai unified booking management and AI phone handling across three venues, improving efficiency by 70%.",
-    challenge: "Managing reservations across three locations with separate systems was chaotic. Staff at each location spent hours coordinating, and guests calling the wrong location were often lost entirely. The brand had no unified online presence.",
-    solution: "indexFlow's multi-location setup gave Spice Route a single dashboard managing all three locations with intelligent call routing.",
-    solutionBullets: [
-      "Single dashboard managing all three locations",
-      "AI phone system routes calls to correct location",
-      "Arabic and English language support",
-      "Individual location pages driving bookings to each workspace",
-    ],
-    results: [
-      { label: "Booking Efficiency", value: "+70%", icon: Zap },
-      { label: "Lost Calls", value: "-90%", icon: Phone },
-      { label: "Venues Managed", value: "3 in 1", icon: Building },
-      { label: "Languages", value: "AR + EN", icon: Globe },
-    ],
-    quote: "One dashboard to manage all venues, separate analytics for each, and the AI phone system handles Arabic and English.",
-    quotePerson: "Fatima Al-Rashid",
-    quoteRole: "Managing Director, Spice Route",
-    timeline: "10 days",
-    productsUsed: ["Multi-Location", "AI Phone", "Website", "Analytics"],
-  },
-  {
-    slug: "rooftop-social",
-    business: "Rooftop Social",
-    category: "Bar",
-    location: "Sydney, Australia",
-    heroStat: "0%",
-    heroLabel: "No-Show Rate",
-    summary: "A premium rooftop bar eliminated no-shows entirely with prepaid bookings and resource-based capacity management for different zones.",
-    challenge: "Rooftop Social lost an estimated $3,000 per month from no-shows on premium terrace tables. Their booking system couldn't handle different capacity zones (indoor bar, covered terrace, open rooftop) or weather-dependent availability changes.",
-    solution: "indexFlow configured resource management for three distinct zones with independent capacities and prepaid booking for premium areas.",
-    solutionBullets: [
-      "Three distinct zones with independent capacities",
-      "Prepaid bookings for premium terrace tables",
-      "AI phone system with real-time zone availability",
-      "Weather-dependent availability management",
-    ],
-    results: [
-      { label: "No-Show Rate", value: "0%", icon: Target },
-      { label: "Revenue Recovered", value: "$3K/mo", icon: TrendingUp },
-      { label: "Zones Managed", value: "3", icon: Building },
-      { label: "Weekend Bookings", value: "+45%", icon: BarChart3 },
-    ],
-    quote: "The prepaid booking feature for our premium terrace tables eliminated no-shows completely. Game changer.",
-    quotePerson: "Ben Walker",
-    quoteRole: "Co-Owner, Rooftop Social",
-    timeline: "4 days",
-    productsUsed: ["Prepaid Booking", "Resource Mgmt", "AI Phone", "SMS"],
-  },
-  {
-    slug: "fika-stockholm",
-    business: "Fika Stockholm",
-    category: "Cafe",
-    location: "Singapore",
-    heroStat: "~0%",
-    heroLabel: "No-Show Rate",
-    summary: "A specialty Scandinavian caf\u00e9 with limited seating transformed morning rush operations with pre-orders and SMS confirmations, reducing no-shows to near zero.",
-    challenge: "With only 24 seats, every empty reserved table cost Fika real revenue. Morning rushes were chaotic with phone orders mixed with walk-ins, and the single staff member couldn't answer calls while making coffee.",
-    solution: "indexFlow's widget enabled online pre-ordering for pickup alongside table reservations with smart SMS-based attendance management.",
-    solutionBullets: [
-      "Online pre-ordering for pickup alongside reservations",
-      "SMS confirmations and automated reminders",
-      "AI phone assistant during busy periods",
-      "Waitlist management for walk-ins",
-    ],
-    results: [
-      { label: "No-Shows", value: "~0%", icon: Target },
-      { label: "Pre-Orders", value: "40+/day", icon: Zap },
-      { label: "Phone Interruptions", value: "-95%", icon: Phone },
-      { label: "Morning Revenue", value: "+25%", icon: TrendingUp },
-    ],
-    quote: "Having the AI handle calls and bookings has been life-changing. SMS confirmations reduced no-shows to nearly zero.",
-    quotePerson: "Lisa Andersson",
-    quoteRole: "Owner, Fika Stockholm",
+    quote: "We replaced 8 tools with IndexFlow and our team immediately became twice as productive. The all-in-one approach just works.",
+    quotePerson: "Sarah Mitchell",
+    quoteRole: "Founder, Apex Digital Marketing",
     timeline: "3 days",
-    productsUsed: ["Booking Widget", "SMS", "AI Phone", "Waitlist"],
+    productsUsed: ["Rank Tracker", "Content Engine", "CRM", "SEO Audits", "Reports"],
+  },
+  {
+    slug: "greenline-agency",
+    business: "Greenline Agency",
+    category: "White-Label Reseller",
+    location: "Toronto, Canada",
+    heroStat: "1 week",
+    heroLabel: "Platform Launch",
+    summary: "A digital marketing agency used IndexFlow's white-label features to launch their own branded SEO platform in under a week, creating a new revenue stream.",
+    challenge: "Greenline Agency wanted to offer SEO tools under their own brand but building a custom platform was quoted at $150K+ and 6 months of development. Meanwhile, clients were asking for self-serve dashboards to monitor their SEO performance.",
+    solution: "IndexFlow's white-label configuration let Greenline apply their own branding, domain, and client portals — launching a fully branded SEO platform without writing a line of code.",
+    solutionBullets: [
+      "Custom branding with Greenline's logo, colors, and domain",
+      "Client portals with self-serve rank tracking and reports",
+      "White-label reports generated automatically for each client",
+      "Credit-based pricing model let them mark up and resell at their own margins",
+    ],
+    results: [
+      { label: "Time to Launch", value: "1 week", icon: Clock },
+      { label: "Dev Cost Saved", value: "$150K+", icon: DollarSign },
+      { label: "New Revenue Stream", value: "Active", icon: TrendingUp },
+      { label: "Client Portals", value: "35+", icon: Users },
+    ],
+    quote: "We launched our own branded SEO platform in a week. Our clients think we built it ourselves. The white-label features are incredible.",
+    quotePerson: "David Park",
+    quoteRole: "CEO, Greenline Agency",
+    timeline: "5 days",
+    productsUsed: ["White Label", "Client Portals", "Reports", "Rank Tracker"],
+  },
+  {
+    slug: "brightpath-media",
+    business: "BrightPath Media",
+    category: "Content Agency",
+    location: "London, UK",
+    heroStat: "5x",
+    heroLabel: "Content Output",
+    summary: "A content-focused agency scaled from 10 blog posts per week to 50 using IndexFlow's Content Engine, without adding any new team members.",
+    challenge: "BrightPath Media's content team of 4 was maxed out at 10 posts per week across all clients. Quality reviews, SEO optimization, and publishing workflows were manual and fragmented. They were turning away new clients because they couldn't scale production.",
+    solution: "IndexFlow's Content Engine with AI-assisted drafting, SEO scoring, and bulk publishing transformed their entire content workflow.",
+    solutionBullets: [
+      "AI-assisted bulk content generation with brand voice controls",
+      "Built-in SEO scoring ensures every post is optimized before publishing",
+      "Campaign manager groups content by client and topic cluster",
+      "Scheduled publishing queue eliminated manual posting across platforms",
+    ],
+    results: [
+      { label: "Weekly Posts", value: "10 → 50", icon: TrendingUp },
+      { label: "Team Size", value: "Same 4", icon: Users },
+      { label: "Client Capacity", value: "3x", icon: Target },
+      { label: "Revenue Growth", value: "+180%", icon: BarChart3 },
+    ],
+    quote: "Bulk content generation changed everything. We went from 10 posts a week to 50 without hiring anyone. Our revenue nearly tripled.",
+    quotePerson: "Rachel Torres",
+    quoteRole: "Content Director, BrightPath Media",
+    timeline: "4 days",
+    productsUsed: ["Content Engine", "SEO Scoring", "Campaign Manager", "Publishing Queue"],
   },
 ];
 
 const heroStats = [
-  { value: "40%", label: "Avg. Revenue Increase" },
-  { value: "5", label: "Industries Served" },
-  { value: "3-10", label: "Days to Go Live" },
-  { value: "0%", label: "Best No-Show Rate" },
+  { value: "2x", label: "Avg. Productivity Gain" },
+  { value: "60%", label: "Avg. Cost Reduction" },
+  { value: "3-5", label: "Days to Go Live" },
+  { value: "5x", label: "Best Content Scale" },
 ];
 
 function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
@@ -228,8 +171,8 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
                 <div className="flex items-start justify-between gap-3 flex-wrap">
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h2 className="text-lg sm:text-xl font-bold">{study.business}</h2>
-                      <Badge variant="secondary">{study.category}</Badge>
+                      <h2 className="text-lg sm:text-xl font-bold" data-testid={`text-study-name-${index}`}>{study.business}</h2>
+                      <Badge variant="secondary" data-testid={`badge-study-category-${index}`}>{study.category}</Badge>
                     </div>
                     <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground flex-wrap">
                       <span className="flex items-center gap-1">
@@ -245,7 +188,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <div className={`text-2xl sm:text-3xl font-black bg-gradient-to-r ${config.gradient} bg-clip-text text-transparent`}>
+                      <div className={`text-2xl sm:text-3xl font-black bg-gradient-to-r ${config.gradient} bg-clip-text text-transparent`} data-testid={`text-study-stat-${index}`}>
                         {study.heroStat}
                       </div>
                       <div className="text-xs text-muted-foreground">{study.heroLabel}</div>
@@ -256,7 +199,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
                   </div>
                 </div>
 
-                <p className="text-sm text-foreground/70 mt-3 leading-relaxed">{study.summary}</p>
+                <p className="text-sm text-foreground/70 mt-3 leading-relaxed" data-testid={`text-study-summary-${index}`}>{study.summary}</p>
               </div>
             </div>
           </div>
@@ -276,6 +219,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
                 <div
                   key={i}
                   className={`p-4 sm:p-5 text-center ${i < study.results.length - 1 ? "sm:border-r" : ""} ${i < study.results.length - 1 ? "border-b sm:border-b-0" : ""}`}
+                  data-testid={`stat-result-${index}-${i}`}
                 >
                   <ResultIcon className={`w-5 h-5 mx-auto mb-2 ${config.text}`} />
                   <div className="text-xl sm:text-2xl font-bold">{r.value}</div>
@@ -293,7 +237,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
                 </div>
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">The Challenge</h3>
               </div>
-              <p className="text-sm text-foreground/80 leading-relaxed pl-7">{study.challenge}</p>
+              <p className="text-sm text-foreground/80 leading-relaxed pl-7" data-testid={`text-study-challenge-${index}`}>{study.challenge}</p>
             </div>
 
             <div>
@@ -303,7 +247,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
                 </div>
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">The Solution</h3>
               </div>
-              <p className="text-sm text-foreground/80 leading-relaxed pl-7 mb-3">{study.solution}</p>
+              <p className="text-sm text-foreground/80 leading-relaxed pl-7 mb-3" data-testid={`text-study-solution-${index}`}>{study.solution}</p>
               <ul className="space-y-2 pl-7">
                 {study.solutionBullets.map((bullet, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-foreground/70">
@@ -317,7 +261,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
           <div className="mx-5 sm:mx-6 mb-5 sm:mb-6 rounded-md bg-muted/50 p-5 relative">
             <Quote className={`w-8 h-8 absolute -top-3 -left-1 ${config.text} opacity-30`} />
-            <blockquote className="text-sm sm:text-base italic text-foreground/80 leading-relaxed pl-4">
+            <blockquote className="text-sm sm:text-base italic text-foreground/80 leading-relaxed pl-4" data-testid={`text-study-quote-${index}`}>
               "{study.quote}"
             </blockquote>
             <div className="flex items-center gap-3 mt-4 pl-4">
@@ -325,7 +269,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
                 {study.quotePerson.split(" ").map(n => n[0]).join("")}
               </div>
               <div>
-                <div className="text-sm font-semibold">{study.quotePerson}</div>
+                <div className="text-sm font-semibold" data-testid={`text-study-quote-person-${index}`}>{study.quotePerson}</div>
                 <div className="text-xs text-muted-foreground">{study.quoteRole}</div>
               </div>
             </div>
@@ -335,7 +279,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs text-muted-foreground mr-1">Products used:</span>
               {study.productsUsed.map((product) => (
-                <Badge key={product} variant="outline" className="text-xs">
+                <Badge key={product} variant="outline" className="text-xs" data-testid={`badge-product-${index}-${product.toLowerCase().replace(/\s+/g, '-')}`}>
                   {product}
                 </Badge>
               ))}
@@ -351,8 +295,8 @@ export default function CaseStudies() {
   return (
     <Layout>
       <SEO
-        title="Case Studies | indexFlow"
-        description="In-depth success stories from restaurants, cafes, bars, and hotels using indexFlow. See the real numbers behind our clients' growth."
+        title="Case Studies | IndexFlow"
+        description="In-depth success stories from SEO agencies, content teams, and marketing firms using IndexFlow. See the real numbers behind our clients' growth."
         canonicalUrl="/case-studies"
       />
 
@@ -373,12 +317,12 @@ export default function CaseStudies() {
             >
               Real Results.{" "}
               <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                Real Businesses.
+                Real Agencies.
               </span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              See how businesses around the world transformed their operations,
-              increased revenue, and eliminated no-shows with indexFlow.
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed" data-testid="text-page-subtitle">
+              See how agencies and consultants around the world consolidated their tools,
+              scaled their output, and grew revenue with IndexFlow.
             </p>
           </div>
 
@@ -386,7 +330,7 @@ export default function CaseStudies() {
             {heroStats.map((stat, i) => (
               <Card key={i}>
                 <CardContent className="p-4 sm:p-5 text-center">
-                  <div className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                  <div className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent" data-testid={`text-hero-stat-${i}`}>
                     {stat.value}
                   </div>
                   <div className="text-xs sm:text-sm text-muted-foreground mt-1">{stat.label}</div>
@@ -403,14 +347,14 @@ export default function CaseStudies() {
             <div className="flex items-center gap-2">
               <Building className="w-5 h-5 text-muted-foreground" />
               <span className="text-sm font-medium text-muted-foreground">
-                {caseStudies.length} case studies across {Object.keys(categoryConfig).length} industries
+                {caseStudies.length} case studies across {Object.keys(categoryConfig).length} agency types
               </span>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               {Object.entries(categoryConfig).map(([cat, cfg]) => {
                 const Icon = cfg.icon;
                 return (
-                  <Badge key={cat} variant="outline" className="gap-1">
+                  <Badge key={cat} variant="outline" className="gap-1" data-testid={`badge-category-filter-${cat.toLowerCase().replace(/\s+/g, '-')}`}>
                     <Icon className={`w-3 h-3 ${cfg.text}`} />
                     {cat}
                   </Badge>
@@ -431,11 +375,11 @@ export default function CaseStudies() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card>
             <CardContent className="p-8 sm:p-12 text-center">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3" data-testid="text-cta-title">
                 Ready to become our next success story?
               </h2>
-              <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-                Join hundreds of businesses already growing with indexFlow.
+              <p className="text-muted-foreground mb-6 max-w-lg mx-auto" data-testid="text-cta-desc">
+                Join hundreds of agencies already scaling with IndexFlow.
                 Your first consultation is free.
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">

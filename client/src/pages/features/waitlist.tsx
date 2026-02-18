@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ListOrdered, MessageSquare, Clock, Gauge, Star, Footprints, CheckCircle, ArrowRight } from "lucide-react";
+import { Users, Shield, UserPlus, Lock, Settings, Building2, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,54 +8,54 @@ import { SEO, seoData } from "@/components/seo";
 
 const features = [
   {
-    icon: ListOrdered,
-    title: "Real-Time Queue Position",
-    description: "Prospects see their live position in the queue and estimated wait from their device.",
+    icon: Users,
+    title: "Role-Based Access Control",
+    description: "Assign Admin, Editor, or Viewer roles to team members. Each role has granular permissions scoped to workspace features.",
     color: "text-teal-500",
     bgColor: "bg-teal-500/10",
   },
   {
-    icon: MessageSquare,
-    title: "SMS Slot-Ready Alerts",
-    description: "Automatically notify leads via SMS the moment a slot is available and ready for them.",
+    icon: UserPlus,
+    title: "Team Invitations",
+    description: "Invite team members via email with role pre-assignment. New users onboard directly into their assigned workspace.",
     color: "text-cyan-500",
     bgColor: "bg-cyan-500/10",
   },
   {
-    icon: Clock,
-    title: "Estimated Wait Times",
-    description: "AI-powered wait time predictions based on current pipeline velocity and capacity.",
+    icon: Lock,
+    title: "Workspace-Level Access Control",
+    description: "Each workspace is fully isolated. Team members only see the workspaces and clients they are assigned to.",
     color: "text-emerald-500",
     bgColor: "bg-emerald-500/10",
   },
   {
-    icon: Gauge,
-    title: "Capacity Management",
-    description: "Monitor real-time workload and manage service capacity across all teams and departments.",
+    icon: Shield,
+    title: "Permission Granularity",
+    description: "Control access to SEO tools, content publishing, CRM, invoicing, and settings independently per role.",
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
   {
-    icon: Star,
-    title: "Priority Leads",
-    description: "Flag VIP clients, enterprise prospects, and high-value leads for priority service and personalized attention.",
+    icon: Building2,
+    title: "Multi-Workspace Teams",
+    description: "Assign team members across multiple client workspaces with different roles per workspace as needed.",
     color: "text-teal-600",
     bgColor: "bg-teal-600/10",
   },
   {
-    icon: Footprints,
-    title: "Inbound Lead Tracking",
-    description: "Log and manage inbound leads alongside scheduled appointments for a complete view of your pipeline.",
+    icon: Settings,
+    title: "Team Management Dashboard",
+    description: "View all team members, their roles, workspace assignments, and last activity from a central dashboard.",
     color: "text-cyan-600",
     bgColor: "bg-cyan-600/10",
   },
 ];
 
 const benefits = [
-  "Fill cancellation gaps quickly by notifying waitlisted prospects",
-  "Improve the onboarding experience with transparent wait times",
-  "Maximize team throughput and overall service efficiency",
-  "Keep leads engaged while they wait with real-time updates",
+  "Protect client data with workspace-level isolation",
+  "Onboard new team members quickly with role-based invitations",
+  "Scale your agency without losing control over permissions",
+  "Audit team activity across workspaces from one dashboard",
 ];
 
 export default function WaitlistFeature() {
@@ -66,27 +66,27 @@ export default function WaitlistFeature() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4">
-              <ListOrdered className="w-3 h-3 mr-1" />
-              Client Waitlist
+              <Users className="w-3 h-3 mr-1" />
+              Team & Permissions
             </Badge>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Smart Queue &{" "}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" data-testid="heading-team-permissions">
+              Team Management &{" "}
               <span className="bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent">
-                Capacity Control
+                Access Control
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Manage inbound leads and client waitlists seamlessly. Give prospects real-time updates,
-              optimize team throughput, and never lose a lead to long wait times.
+              Manage your agency team with role-based permissions. Invite members, assign roles,
+              and control access at the workspace level to keep client data secure.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
-                <Button size="lg" className="gap-2" data-testid="button-waitlist-cta">
+                <Button size="lg" className="gap-2" data-testid="button-team-cta">
                   Book a Demo <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/pricing">
-                <Button size="lg" variant="outline" data-testid="button-waitlist-pricing">
+                <Button size="lg" variant="outline" data-testid="button-team-pricing">
                   View Pricing
                 </Button>
               </Link>
@@ -98,9 +98,9 @@ export default function WaitlistFeature() {
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Effortless Queue Management</h2>
+            <h2 className="text-3xl font-bold mb-4">Complete Team Management</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              From initial inquiry to active client, every step is tracked and communicated automatically.
+              From invitations to permissions, every aspect of team access is controlled and auditable.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -110,7 +110,7 @@ export default function WaitlistFeature() {
                   <div className={`w-14 h-14 rounded-full ${feature.bgColor} flex items-center justify-center mx-auto mb-4`}>
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
-                  <h3 className="font-semibold mb-2">{feature.title}</h3>
+                  <h3 className="font-semibold mb-2" data-testid={`text-feature-${feature.title.toLowerCase().replace(/\s+/g, "-")}`}>{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
@@ -125,7 +125,7 @@ export default function WaitlistFeature() {
             <div>
               <Badge variant="outline" className="mb-4">What's Included</Badge>
               <h2 className="text-3xl font-bold mb-6">
-                Maximize Every Slot, Every Day
+                Scale Your Team with Confidence
               </h2>
               <ul className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -138,20 +138,20 @@ export default function WaitlistFeature() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">Live</div>
-                <p className="text-sm text-muted-foreground">Queue Updates</p>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-team-roles">3</div>
+                <p className="text-sm text-muted-foreground">Built-In Roles</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">SMS</div>
-                <p className="text-sm text-muted-foreground">Slot-Ready Alerts</p>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-team-invite">Email</div>
+                <p className="text-sm text-muted-foreground">Team Invitations</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">VIP</div>
-                <p className="text-sm text-muted-foreground">Priority Service</p>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-team-isolation">100%</div>
+                <p className="text-sm text-muted-foreground">Workspace Isolation</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">AI</div>
-                <p className="text-sm text-muted-foreground">Wait Predictions</p>
+                <div className="text-4xl font-bold text-primary mb-2" data-testid="text-team-audit">Audit</div>
+                <p className="text-sm text-muted-foreground">Activity Logging</p>
               </Card>
             </div>
           </div>
@@ -160,12 +160,12 @@ export default function WaitlistFeature() {
 
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Optimize Your Client Waitlist?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Organize Your Agency Team?</h2>
           <p className="text-muted-foreground mb-8">
-            Turn prospects into loyal clients with a seamless, modern waitlist experience.
+            Set up roles, invite your team, and control access across all client workspaces.
           </p>
           <Link href="/contact">
-            <Button size="lg" className="gap-2" data-testid="button-waitlist-bottom-cta">
+            <Button size="lg" className="gap-2" data-testid="button-team-bottom-cta">
               Book a Demo <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>

@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { FileText, Code, MapPin, Zap, Smartphone, Search, ClipboardCheck, BarChart3, CheckCircle, ArrowRight, Globe } from "lucide-react";
+import { TrendingUp, Grid3X3, FileText, Link2, Code, Search, ClipboardCheck, BarChart3, CheckCircle, ArrowRight, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,68 +8,61 @@ import { SEO, seoData } from "@/components/seo";
 
 const features = [
   {
-    icon: FileText,
-    title: "On-Page Optimization",
-    description: "We optimize every page on your site for maximum search visibility and relevance.",
+    icon: TrendingUp,
+    title: "Rank Tracker",
+    description: "Monitor up to 1,000 keywords per workspace with weekly auto-refresh. Track positions on Google and buy instant credits for on-demand checks.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
-    icon: Code,
-    title: "Meta Tags & Structured Data",
-    description: "Proper title tags, meta descriptions, and schema markup for rich search results.",
+    icon: Grid3X3,
+    title: "Local Search Grid",
+    description: "Visualize local rankings across a 5x5 geographic grid powered by DataForSEO. See exactly where each client ranks street by street.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
   {
-    icon: MapPin,
-    title: "Local SEO (Google Business)",
-    description: "Optimize your Google Business Profile to dominate local search and map results.",
-    color: "text-red-500",
-    bgColor: "bg-red-500/10",
-  },
-  {
-    icon: Zap,
-    title: "Page Speed Optimization",
-    description: "Fast-loading pages that rank better and keep guests from bouncing.",
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500/10",
-  },
-  {
-    icon: Smartphone,
-    title: "Mobile-First Indexing",
-    description: "Every page built and optimized for Google's mobile-first indexing approach.",
+    icon: FileText,
+    title: "On-Page Auditor",
+    description: "Analyze any page for SEO issues — title tags, meta descriptions, heading structure, image alt text, internal links, and content length.",
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
   {
-    icon: Search,
-    title: "Keyword Research",
-    description: "We identify the highest-value keywords for your restaurant and local market.",
+    icon: ClipboardCheck,
+    title: "Post-Processing Validator",
+    description: "Automatically validate published content against quality rules: word count, heading count, FAQ sections, schema markup, and internal linking.",
+    color: "text-orange-500",
+    bgColor: "bg-orange-500/10",
+  },
+  {
+    icon: Link2,
+    title: "Cross-Post Link Builder",
+    description: "Automatically identify and insert internal links between articles across a workspace. Build topical authority with intelligent cross-linking.",
+    color: "text-pink-500",
+    bgColor: "bg-pink-500/10",
+  },
+  {
+    icon: Code,
+    title: "Schema Markup Auto-Detection",
+    description: "Auto-detect and inject 20+ schema types including Article, FAQ, HowTo, LocalBusiness, Product, Review, and Organization markup.",
     color: "text-cyan-500",
     bgColor: "bg-cyan-500/10",
   },
   {
-    icon: ClipboardCheck,
-    title: "Technical SEO Audits",
-    description: "Regular audits to catch and fix crawl errors, broken links, and indexing issues.",
+    icon: Search,
+    title: "Site Profiler",
+    description: "Get a full SEO health overview for any domain — authority metrics, backlink profile, top pages, and technical issues at a glance.",
     color: "text-indigo-500",
     bgColor: "bg-indigo-500/10",
-  },
-  {
-    icon: BarChart3,
-    title: "Monthly Reporting",
-    description: "Clear, easy-to-understand monthly reports showing your SEO progress and results.",
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
   },
 ];
 
 const benefits = [
-  "Higher Google rankings for your restaurant",
-  "More organic traffic from search engines",
-  "More bookings driven by search visibility",
-  "Transparent reporting so you see what we do",
+  "Complete SEO toolkit built into every workspace",
+  "Automated weekly rank tracking and local grid scans",
+  "20+ schema markup types auto-detected and injected",
+  "Cross-post link building for topical authority at scale",
 ];
 
 export default function SeoPage() {
@@ -81,17 +74,16 @@ export default function SeoPage() {
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4">
               <Globe className="w-3 h-3 mr-1" />
-              SEO Services
+              SEO Tools
             </Badge>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Search Engine Optimization{" "}
+              Full-Suite{" "}
               <span className="bg-gradient-to-r from-purple-500 to-violet-500 bg-clip-text text-transparent">
-                Done for You
+                SEO Tools
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              We handle your SEO so you can focus on your business. From keyword research
-              to technical audits, our team drives your search rankings higher every month.
+              Rank Tracker, Local Search Grid, On-Page Auditor, Schema Markup, Link Builder, and Site Profiler — all built into every workspace for your agency clients.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
@@ -112,9 +104,9 @@ export default function SeoPage() {
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Full-Service SEO for Hospitality</h2>
+            <h2 className="text-3xl font-bold mb-4">Everything Your Agency Needs for SEO</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Every aspect of search optimization, managed by our expert team.
+              A complete SEO toolkit designed for agencies managing multiple client workspaces.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -137,9 +129,12 @@ export default function SeoPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge variant="outline" className="mb-4">Benefits</Badge>
+              <Badge variant="outline" className="mb-4">
+                <BarChart3 className="w-3 h-3 mr-1" />
+                Benefits
+              </Badge>
               <h2 className="text-3xl font-bold mb-6">
-                Why Restaurants Trust Our SEO
+                SEO at Agency Scale
               </h2>
               <ul className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -152,20 +147,20 @@ export default function SeoPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">100+</div>
-                <p className="text-sm text-muted-foreground">SEO Factors Optimized</p>
+                <div className="text-4xl font-bold text-primary mb-2">7</div>
+                <p className="text-sm text-muted-foreground">SEO Tools Built In</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">Local</div>
-                <p className="text-sm text-muted-foreground">SEO Focus</p>
+                <div className="text-4xl font-bold text-primary mb-2">1,000</div>
+                <p className="text-sm text-muted-foreground">Keywords / Workspace</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">Monthly</div>
-                <p className="text-sm text-muted-foreground">Reports Included</p>
+                <div className="text-4xl font-bold text-primary mb-2">20+</div>
+                <p className="text-sm text-muted-foreground">Schema Types</p>
               </Card>
               <Card className="p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">Done</div>
-                <p className="text-sm text-muted-foreground">For You Service</p>
+                <div className="text-4xl font-bold text-primary mb-2">5x5</div>
+                <p className="text-sm text-muted-foreground">Local Grid</p>
               </Card>
             </div>
           </div>
@@ -174,9 +169,9 @@ export default function SeoPage() {
 
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Rank Higher on Google?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Power Your Agency's SEO?</h2>
           <p className="text-muted-foreground mb-8">
-            Let our SEO team put your restaurant in front of more hungry guests.
+            See how IndexFlow's SEO tools help agencies deliver measurable results for every client.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-seo-bottom-cta">

@@ -33,7 +33,7 @@ const stats = [
 
 const recentClients = [
   { name: "Acme Digital", plan: "Complete Solution", status: "Active", date: "Jan 28, 2026" },
-  { name: "Dragon Media", plan: "Virtual Concierge", status: "Active", date: "Jan 25, 2026" },
+  { name: "Dragon Media", plan: "Professional", status: "Active", date: "Jan 25, 2026" },
   { name: "Coastal SEO", plan: "Complete Solution", status: "Pending Setup", date: "Jan 24, 2026" },
   { name: "Summit Marketing", plan: "Complete Solution", status: "Active", date: "Jan 20, 2026" },
 ];

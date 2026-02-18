@@ -1,7 +1,7 @@
-# indexFlow - Multi-Tenant Workspace Management SaaS
+# indexFlow - White-Label SEO & Content Management SaaS
 
 ## Overview
-indexFlow is a multi-tenant hospitality booking SaaS platform for restaurants, hotels, and bars. It features a marketing landing page, a Super Admin Dashboard, and a Client Dashboard with modules for content engine (blog), keyword rank tracker, 5x5 local search grid visualization, reservations, contact messages/CRM, and SEO settings. All data is workspace-scoped with a workspace selector in the sidebar.
+indexFlow is a white-label SEO, content management, and client management SaaS platform for agencies, freelancers, and enterprises. It features a marketing landing page, a Super Admin Dashboard, and a Client Dashboard with 13 core modules: Content Engine (AI bulk drafts, quality gates), CMS Integration (WordPress/Webflow/Shopify/Ghost/Wix), SEO Tools (Rank Tracker, Local Search Grid, On-Page Auditor, Schema Markup), CRM & Pipeline, Invoicing, Reports, AI Widget, Twilio, and White Label branding. Four pricing tiers: Solo ($99/mo), Professional ($299/mo), White Label Agency ($499/mo), and Enterprise (custom). All data is workspace-scoped with a workspace selector in the sidebar.
 
 ## Architecture
 - **Frontend**: React + Vite + TailwindCSS + shadcn/ui components
@@ -168,12 +168,22 @@ All prefixed with `/api/`:
 - Verify changes via curl, logs, and manual inspection only.
 
 ## Recent Changes (Feb 2026)
+- **Full platform rebrand**: Removed ALL hospitality/restaurant/booking references across 50+ files
+- Rewrote home page: agency pain points, SEO tool replacement, 4-tier pricing preview, agency testimonials, content lifecycle
+- Rewrote pricing page: Solo ($99), Professional ($299), White Label ($499), Enterprise (custom) with comparison table and FAQ
+- Rewrote 5 solution pages: SEO Agencies, Content Agencies, Digital Marketing, Freelancers, White-Label Resellers
+- Rewrote 11 platform feature pages: Content Engine, CMS Integration, SEO Tools, CRM & Pipeline, AI Widget, BYOK, Rank Tracker, Local Search Grid, Search Console, Post-Processing, Client Dashboard
+- Rewrote comparison pages: indexFlow vs SEMrush, vs Ahrefs, Best SEO Platforms, Pricing Comparison, Platform Comparison
+- Rewrote feature pages: Invoicing & Billing, AI Voice Assistant, SMS & Notifications, Team & Permissions
+- Rewrote about page, contact page, FAQ page, blog categories, templates, testimonials, case studies
+- Updated header navigation with new solution/platform paths
+- Updated site search index with new page names
+- Updated SEO metadata across all pages
+- Added route aliases in App.tsx for new paths (e.g., /solutions/seo-agencies, /platform/content-engine)
+- Cleaned admin dashboard pages: Virtual Concierge → Professional/AI Widget
+- Cleaned AI widget: booking references → consultation/demo scheduling
 - Complete global rename: venue → workspace across codebase (60+ files, 600+ occurrences)
-- Rebuilt Super Admin sidebar with 8 collapsible sections (Dashboard, Agencies, Content, Platform SEO, Billing, System, Users, Support, Settings)
-- Rebuilt Client Dashboard sidebar with 11 collapsible sections (Dashboard, Content Engine, SEO, Twilio, Widget, CRM, Analytics, Connections, AI Training, Settings, Support)
+- Rebuilt Super Admin sidebar with 8 collapsible sections
+- Rebuilt Client Dashboard sidebar with 11 collapsible sections
 - Created UserAvatarDropdown component with theme toggle, account, sign out
-- Updated both AdminLayout and ClientLayout headers with avatar dropdown
-- Created 23 Super Admin stub pages and 30 Client Dashboard stub pages
-- Updated App.tsx with 100+ routes including all new admin/client dashboard routes
-- Fixed all localStorage keys: resto_* → indexflow_*
 - Logo asset: @assets/image_1771351451425.png (indexFlow logo)
