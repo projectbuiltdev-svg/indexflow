@@ -1108,13 +1108,14 @@ function CmsTab({ workspaceId }: { workspaceId: string }) {
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
-  const plugins = [
-    { id: "wordpress", name: "WordPress", desc: "PHP plugin with Gutenberg blocks", action: "Download" },
-    { id: "webflow", name: "Webflow", desc: "REST API integration", action: "API Only" },
-    { id: "shopify", name: "Shopify", desc: "Blog API integration", action: "API Only" },
-    { id: "ghost", name: "Ghost", desc: "Admin API integration", action: "API Only" },
-    { id: "wix", name: "Wix", desc: "REST API integration", action: "API Only" },
+  const plugins: { id: string; name: string; desc: string; status: "available" | "coming_soon" | "api_only"; steps?: string[] }[] = [
+    { id: "wordpress", name: "WordPress", desc: "Auto-publish posts via REST API. Generate an API key above, then add your WordPress site URL and credentials in Settings.", status: "available", steps: ["Generate an API key above", "Go to WordPress > Settings > REST API", "Add your indexFlow API key", "Enable auto-sync in CMS settings"] },
+    { id: "webflow", name: "Webflow", desc: "Push content to Webflow CMS collections via their REST API. Requires a Webflow API token.", status: "api_only", steps: ["Generate an API key above", "Get your Webflow API token from webflow.com", "Add both keys in your connection settings"] },
+    { id: "shopify", name: "Shopify", desc: "Sync blog posts to your Shopify store blog. Uses Shopify Admin API.", status: "api_only", steps: ["Generate an API key above", "Create a Shopify private app with Blog access", "Add your Shopify API credentials in settings"] },
+    { id: "ghost", name: "Ghost", desc: "Publish directly to Ghost CMS via the Admin API. Requires a Ghost Admin API key.", status: "api_only", steps: ["Generate an API key above", "Go to Ghost Admin > Integrations > Custom", "Copy your Admin API key", "Add it in your connection settings"] },
+    { id: "wix", name: "Wix", desc: "Push content to Wix blog via their REST API. Requires a Wix API key.", status: "api_only", steps: ["Generate an API key above", "Get your Wix API key from dev.wix.com", "Add both keys in your connection settings"] },
   ];
+  const [expandedPlugin, setExpandedPlugin] = useState<string | null>(null);
 
   return (
     <div>
@@ -1181,20 +1182,47 @@ function CmsTab({ workspaceId }: { workspaceId: string }) {
 
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="text-base" data-testid="text-download-plugins">Download Plugins</CardTitle>
+          <CardTitle className="text-base" data-testid="text-download-plugins">CMS Connectors</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="space-y-3">
             {plugins.map((p) => (
-              <div key={p.id} className="flex items-center justify-between p-3 border rounded-md" data-testid={`plugin-${p.id}`}>
-                <div>
-                  <p className="font-medium text-sm">{p.name}</p>
-                  <p className="text-xs text-muted-foreground">{p.desc}</p>
+              <div key={p.id} className="border rounded-md" data-testid={`plugin-${p.id}`}>
+                <div className="flex items-center justify-between p-3">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-sm">{p.name}</p>
+                      {p.status === "available" ? (
+                        <Badge variant="default" className="text-[10px]">Ready</Badge>
+                      ) : (
+                        <Badge variant="secondary" className="text-[10px]">API Setup</Badge>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">{p.desc}</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setExpandedPlugin(expandedPlugin === p.id ? null : p.id)}
+                    data-testid={`button-plugin-${p.id}`}
+                  >
+                    {expandedPlugin === p.id ? <X className="h-3 w-3 mr-1" /> : <HelpCircle className="h-3 w-3 mr-1" />}
+                    {expandedPlugin === p.id ? "Close" : "Setup Guide"}
+                  </Button>
                 </div>
-                <Button variant="outline" size="sm" data-testid={`button-plugin-${p.id}`}>
-                  <Download className="h-3 w-3 mr-1" />
-                  {p.action}
-                </Button>
+                {expandedPlugin === p.id && p.steps && (
+                  <div className="px-3 pb-3 border-t pt-3">
+                    <p className="text-xs font-medium mb-2">Setup Steps:</p>
+                    <ol className="space-y-1.5">
+                      {p.steps.map((step, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
+                          <span className="pt-0.5">{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
               </div>
             ))}
           </div>
