@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Settings, RefreshCw, Eye, RotateCcw, Plug, Unplug } from "lucide-react";
+import { Settings, RefreshCw, Eye, RotateCcw, Plug, Unplug, HelpCircle, X, ExternalLink } from "lucide-react";
 
 const initialCmsProviders = [
   { id: "wordpress", name: "WordPress", connected: true, lastSync: "2026-02-18 09:30", postsSynced: 45 },
@@ -24,9 +24,43 @@ const initialSyncLogs = [
   { id: 4, date: "2026-02-15 08:00", cms: "WordPress", postsSynced: 0, status: "Failed", errors: 3 },
 ];
 
+const cmsSetupSteps: Record<string, { step: string; link?: string }[]> = {
+  wordpress: [
+    { step: "Install WordPress REST API plugin" },
+    { step: "Go to Settings > General and copy your Site URL" },
+    { step: "Navigate to Users > Profile and generate an Application Password" },
+    { step: "Enter your site URL and Application Password in the Configure dialog" },
+  ],
+  webflow: [
+    { step: "Log into Webflow and go to Site Settings > Integrations" },
+    { step: "Generate a new API token with CMS access" },
+    { step: "Copy the API token" },
+    { step: "Enter it in the Configure dialog along with your Webflow site URL" },
+  ],
+  shopify: [
+    { step: "Log into Shopify Admin" },
+    { step: "Go to Settings > Apps and sales channels > Develop apps" },
+    { step: "Create a new app and configure with Blog read/write scope" },
+    { step: "Copy the Admin API access token and enter it in Configure" },
+  ],
+  ghost: [
+    { step: "Log into Ghost Admin and go to Settings > Integrations" },
+    { step: "Click 'Add custom integration'" },
+    { step: "Copy the Admin API Key" },
+    { step: "Enter it in the Configure dialog along with your Ghost admin URL" },
+  ],
+  wix: [
+    { step: "Log into Wix and go to the Wix Developers area", link: "https://dev.wix.com" },
+    { step: "Create a new API key with Blog access permissions" },
+    { step: "Copy the API key" },
+    { step: "Enter it in the Configure dialog" },
+  ],
+};
+
 export default function SeoCms() {
   const { toast } = useToast();
   const [cmsProviders, setCmsProviders] = useState(initialCmsProviders);
+  const [expandedGuide, setExpandedGuide] = useState<string | null>(null);
   const [syncLogs, setSyncLogs] = useState(initialSyncLogs);
 
   const [configureOpen, setConfigureOpen] = useState(false);
@@ -138,6 +172,34 @@ export default function SeoCms() {
                   </Button>
                 )}
               </div>
+              {cmsSetupSteps[cms.id] && (
+                <div className="pt-2 border-t">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <span className="text-xs font-semibold">Setup Guide</span>
+                    <Button variant="outline" size="sm" onClick={() => setExpandedGuide(expandedGuide === cms.id ? null : cms.id)} data-testid={`button-toggle-guide-${cms.id}`}>
+                      {expandedGuide === cms.id ? <X className="h-3 w-3 mr-1" /> : <HelpCircle className="h-3 w-3 mr-1" />}
+                      {expandedGuide === cms.id ? "Close" : "Show Steps"}
+                    </Button>
+                  </div>
+                  {expandedGuide === cms.id && (
+                    <ol className="mt-2 space-y-1.5">
+                      {cmsSetupSteps[cms.id].map((s, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs">
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-muted text-foreground flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
+                          <div className="pt-0.5">
+                            <span className="text-muted-foreground">{s.step}</span>
+                            {s.link && (
+                              <a href={s.link} target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-flex items-center text-muted-foreground text-xs underline hover:text-foreground">
+                                Open <ExternalLink className="w-3 h-3 ml-0.5" />
+                              </a>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}

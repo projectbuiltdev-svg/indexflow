@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { CreditCard, CheckCircle, Building2 } from "lucide-react";
+import { CreditCard, CheckCircle, Building2, HelpCircle, X, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const paymentFeatures = [
@@ -18,6 +18,27 @@ const paymentFeatures = [
   "Multi-currency support",
 ];
 
+const stripeSteps = [
+  { step: "Go to dashboard.stripe.com and create an account", link: "https://dashboard.stripe.com/register" },
+  { step: "Complete identity verification and business details" },
+  { step: "Navigate to Developers > API Keys in your Stripe dashboard", link: "https://dashboard.stripe.com/apikeys" },
+  { step: "Copy your Publishable Key (starts with pk_live_)" },
+  { step: "Click 'Reveal live key' to copy your Secret Key (starts with sk_live_)" },
+  { step: "Go to Developers > Webhooks to create a webhook endpoint", link: "https://dashboard.stripe.com/webhooks" },
+  { step: "Set the endpoint URL to your indexFlow webhook URL and copy the Signing Secret (starts with whsec_)" },
+  { step: "Paste all three keys in the fields above and click Connect" },
+];
+
+const paypalSteps = [
+  { step: "Go to developer.paypal.com and log in with your PayPal account", link: "https://developer.paypal.com/" },
+  { step: "Navigate to Apps & Credentials" },
+  { step: "Click 'Create App' under the Live section" },
+  { step: "Name your app and click Create" },
+  { step: "Copy the Client ID from the app details" },
+  { step: "Click 'Show' next to Secret to reveal and copy it" },
+  { step: "Paste both values in the fields above and click Connect" },
+];
+
 export default function ConnectionsPayments() {
   const { toast } = useToast();
   const [stripePublishable, setStripePublishable] = useState("");
@@ -25,6 +46,8 @@ export default function ConnectionsPayments() {
   const [stripeWebhook, setStripeWebhook] = useState("");
   const [paypalClientId, setPaypalClientId] = useState("");
   const [paypalSecret, setPaypalSecret] = useState("");
+  const [showStripeGuide, setShowStripeGuide] = useState(false);
+  const [showPaypalGuide, setShowPaypalGuide] = useState(false);
 
   const handleConnectStripe = () => {
     toast({ title: "Stripe Connected", description: "Your Stripe account has been connected successfully." });
@@ -62,41 +85,50 @@ export default function ConnectionsPayments() {
                 <div className="space-y-3">
                   <div className="space-y-2">
                     <Label htmlFor="stripe-publishable">Publishable Key</Label>
-                    <Input
-                      id="stripe-publishable"
-                      placeholder="pk_live_..."
-                      value={stripePublishable}
-                      onChange={(e) => setStripePublishable(e.target.value)}
-                      data-testid="input-stripe-publishable"
-                    />
+                    <Input id="stripe-publishable" placeholder="pk_live_..." value={stripePublishable} onChange={(e) => setStripePublishable(e.target.value)} data-testid="input-stripe-publishable" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="stripe-secret">Secret Key</Label>
-                    <Input
-                      id="stripe-secret"
-                      type="password"
-                      placeholder="sk_live_..."
-                      value={stripeSecret}
-                      onChange={(e) => setStripeSecret(e.target.value)}
-                      data-testid="input-stripe-secret"
-                    />
+                    <Input id="stripe-secret" type="password" placeholder="sk_live_..." value={stripeSecret} onChange={(e) => setStripeSecret(e.target.value)} data-testid="input-stripe-secret" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="stripe-webhook">Webhook Secret</Label>
-                    <Input
-                      id="stripe-webhook"
-                      type="password"
-                      placeholder="whsec_..."
-                      value={stripeWebhook}
-                      onChange={(e) => setStripeWebhook(e.target.value)}
-                      data-testid="input-stripe-webhook"
-                    />
+                    <Input id="stripe-webhook" type="password" placeholder="whsec_..." value={stripeWebhook} onChange={(e) => setStripeWebhook(e.target.value)} data-testid="input-stripe-webhook" />
                   </div>
                 </div>
 
                 <Button className="w-full" onClick={handleConnectStripe} data-testid="button-connect-stripe">
                   Connect Stripe Account
                 </Button>
+              </CardContent>
+            </Card>
+
+            <Card data-testid="card-stripe-guide">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <h3 className="font-semibold text-sm">Stripe Setup Guide</h3>
+                  <Button variant="outline" size="sm" onClick={() => setShowStripeGuide(!showStripeGuide)} data-testid="button-stripe-guide">
+                    {showStripeGuide ? <X className="h-3 w-3 mr-1" /> : <HelpCircle className="h-3 w-3 mr-1" />}
+                    {showStripeGuide ? "Close" : "Show Steps"}
+                  </Button>
+                </div>
+                {showStripeGuide && (
+                  <ol className="mt-3 space-y-2">
+                    {stripeSteps.map((s, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs">
+                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-muted text-foreground flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
+                        <div className="pt-0.5">
+                          <span className="text-muted-foreground">{s.step}</span>
+                          {s.link && (
+                            <a href={s.link} target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-flex items-center text-muted-foreground text-xs underline hover:text-foreground">
+                              Open <ExternalLink className="w-3 h-3 ml-0.5" />
+                            </a>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -115,30 +147,46 @@ export default function ConnectionsPayments() {
                 <div className="space-y-3">
                   <div className="space-y-2">
                     <Label htmlFor="paypal-client-id">Client ID</Label>
-                    <Input
-                      id="paypal-client-id"
-                      placeholder="Enter PayPal Client ID"
-                      value={paypalClientId}
-                      onChange={(e) => setPaypalClientId(e.target.value)}
-                      data-testid="input-paypal-client-id"
-                    />
+                    <Input id="paypal-client-id" placeholder="Enter PayPal Client ID" value={paypalClientId} onChange={(e) => setPaypalClientId(e.target.value)} data-testid="input-paypal-client-id" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="paypal-secret">Secret</Label>
-                    <Input
-                      id="paypal-secret"
-                      type="password"
-                      placeholder="Enter PayPal Secret"
-                      value={paypalSecret}
-                      onChange={(e) => setPaypalSecret(e.target.value)}
-                      data-testid="input-paypal-secret"
-                    />
+                    <Input id="paypal-secret" type="password" placeholder="Enter PayPal Secret" value={paypalSecret} onChange={(e) => setPaypalSecret(e.target.value)} data-testid="input-paypal-secret" />
                   </div>
                 </div>
 
                 <Button className="w-full" onClick={handleConnectPaypal} data-testid="button-connect-paypal">
                   Connect PayPal Account
                 </Button>
+              </CardContent>
+            </Card>
+
+            <Card data-testid="card-paypal-guide">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <h3 className="font-semibold text-sm">PayPal Setup Guide</h3>
+                  <Button variant="outline" size="sm" onClick={() => setShowPaypalGuide(!showPaypalGuide)} data-testid="button-paypal-guide">
+                    {showPaypalGuide ? <X className="h-3 w-3 mr-1" /> : <HelpCircle className="h-3 w-3 mr-1" />}
+                    {showPaypalGuide ? "Close" : "Show Steps"}
+                  </Button>
+                </div>
+                {showPaypalGuide && (
+                  <ol className="mt-3 space-y-2">
+                    {paypalSteps.map((s, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs">
+                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-muted text-foreground flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
+                        <div className="pt-0.5">
+                          <span className="text-muted-foreground">{s.step}</span>
+                          {s.link && (
+                            <a href={s.link} target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-flex items-center text-muted-foreground text-xs underline hover:text-foreground">
+                              Open <ExternalLink className="w-3 h-3 ml-0.5" />
+                            </a>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Bot, CheckCircle, AlertCircle } from "lucide-react";
+import { Bot, CheckCircle, AlertCircle, HelpCircle, X, ExternalLink } from "lucide-react";
 
 interface AiProviderSettings {
   id: number;
@@ -25,6 +25,15 @@ export default function ByokPerplexity() {
   const { toast } = useToast();
   const [apiKey, setApiKey] = useState("");
   const [isConnected, setIsConnected] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+
+  const setupSteps = [
+    { step: "Go to perplexity.ai/settings/api and sign in", link: "https://www.perplexity.ai/settings/api" },
+    { step: "Click 'Generate' to create a new API key" },
+    { step: "Copy the key (starts with pplx-)" },
+    { step: "Paste it in the API Key field above and click Save" },
+    { step: "Add credits under API Settings", link: "https://www.perplexity.ai/settings/api" },
+  ];
 
   useEffect(() => {
     document.title = "Perplexity Integration | indexFlow Dashboard";
@@ -94,6 +103,35 @@ export default function ByokPerplexity() {
             <Button className="w-full" data-testid="button-save-perplexity" onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
               {saveMutation.isPending ? "Saving..." : "Save Perplexity Credentials"}
             </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <h3 className="font-semibold text-sm">Setup Guide</h3>
+              <Button variant="outline" size="sm" onClick={() => setShowGuide(!showGuide)} data-testid="button-toggle-guide">
+                {showGuide ? <X className="h-3 w-3 mr-1" /> : <HelpCircle className="h-3 w-3 mr-1" />}
+                {showGuide ? "Close" : "Show Steps"}
+              </Button>
+            </div>
+            {showGuide && (
+              <ol className="mt-3 space-y-2">
+                {setupSteps.map((s: any, i: number) => (
+                  <li key={i} className="flex items-start gap-2 text-xs">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-muted text-foreground flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
+                    <div className="pt-0.5">
+                      <span className="text-muted-foreground">{s.step}</span>
+                      {s.link && (
+                        <a href={s.link} target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-flex items-center text-muted-foreground text-xs underline hover:text-foreground">
+                          Open <ExternalLink className="w-3 h-3 ml-0.5" />
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            )}
           </CardContent>
         </Card>
 

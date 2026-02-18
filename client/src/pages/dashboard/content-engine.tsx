@@ -1216,7 +1216,7 @@ function CmsTab({ workspaceId }: { workspaceId: string }) {
                     <ol className="space-y-1.5">
                       {p.steps.map((step, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
-                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-muted text-foreground flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
                           <span className="pt-0.5">{step}</span>
                         </li>
                       ))}

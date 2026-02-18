@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bot, CheckCircle, Key } from "lucide-react";
+import { Bot, CheckCircle, Key, HelpCircle, X, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const openaiFeatures = [
@@ -17,10 +17,20 @@ const openaiFeatures = [
   "Automated email drafts",
 ];
 
+const setupSteps = [
+  { step: "Go to platform.openai.com and sign up or log in", link: "https://platform.openai.com/signup" },
+  { step: "Navigate to API Keys in your OpenAI dashboard", link: "https://platform.openai.com/api-keys" },
+  { step: "Click 'Create new secret key' and copy it immediately (it won't be shown again)" },
+  { step: "Paste the key in the API Key field above and click Save" },
+  { step: "(Optional) Find your Organization ID under Settings > Organization if you have multiple orgs", link: "https://platform.openai.com/account/organization" },
+  { step: "Add billing to your OpenAI account to ensure API calls work", link: "https://platform.openai.com/account/billing" },
+];
+
 export default function ConnectionsAi() {
   const { toast } = useToast();
   const [apiKey, setApiKey] = useState("");
   const [orgId, setOrgId] = useState("");
+  const [showGuide, setShowGuide] = useState(false);
 
   const handleSave = () => {
     toast({ title: "Credentials Saved", description: "Your OpenAI credentials have been saved securely." });
@@ -72,6 +82,35 @@ export default function ConnectionsAi() {
               <Key className="w-4 h-4 mr-2" />
               Save OpenAI Credentials
             </Button>
+          </CardContent>
+        </Card>
+
+        <Card data-testid="card-setup-guide">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <h3 className="font-semibold">Setup Guide</h3>
+              <Button variant="outline" size="sm" onClick={() => setShowGuide(!showGuide)} data-testid="button-toggle-guide">
+                {showGuide ? <X className="h-3 w-3 mr-1" /> : <HelpCircle className="h-3 w-3 mr-1" />}
+                {showGuide ? "Close" : "Show Steps"}
+              </Button>
+            </div>
+            {showGuide && (
+              <ol className="mt-4 space-y-2.5">
+                {setupSteps.map((s, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-foreground flex items-center justify-center text-xs font-medium">{i + 1}</span>
+                    <div className="pt-0.5">
+                      <span className="text-muted-foreground">{s.step}</span>
+                      {s.link && (
+                        <a href={s.link} target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-flex items-center text-muted-foreground text-xs underline hover:text-foreground">
+                          Open <ExternalLink className="w-3 h-3 ml-0.5" />
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            )}
           </CardContent>
         </Card>
 
