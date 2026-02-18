@@ -18,7 +18,8 @@ export default function AdminContentCampaigns() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">All Campaigns</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Campaigns</h1>
+        <p className="text-sm text-muted-foreground">Content campaigns across all clients</p>
       </div>
 
       <div className="flex items-center gap-3 flex-wrap mb-6">

@@ -129,11 +129,11 @@ export default function AdminSupport() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2">
+            <h1 className="text-2xl font-serif italic font-semibold flex items-center gap-2" data-testid="text-page-title">
               <Headset className="w-6 h-6" />
               Support Tickets
             </h1>
-            <p className="text-muted-foreground">Manage client support requests</p>
+            <p className="text-sm text-muted-foreground">Manage client support requests</p>
           </div>
         </div>
 

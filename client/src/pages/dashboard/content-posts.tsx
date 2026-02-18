@@ -237,7 +237,7 @@ export default function ContentPosts() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Posts</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Posts</h1>
         <div className="flex items-center gap-2 flex-wrap">
           <Button data-testid="button-new-post" onClick={() => setNewPostOpen(true)}>
             <Plus className="w-4 h-4 mr-2" />

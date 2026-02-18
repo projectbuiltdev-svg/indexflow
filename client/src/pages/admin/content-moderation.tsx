@@ -25,7 +25,10 @@ export default function AdminContentModeration() {
   return (
     <AdminLayout>
       <div className="flex items-center gap-3 flex-wrap mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Content Moderation</h1>
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Content Moderation</h1>
+          <p className="text-sm text-muted-foreground">Review flagged content and abuse reports</p>
+        </div>
         <Badge variant="destructive" data-testid="badge-flagged-count">12 flagged</Badge>
       </div>
 

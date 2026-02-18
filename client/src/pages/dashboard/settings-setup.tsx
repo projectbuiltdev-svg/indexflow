@@ -28,7 +28,7 @@ export default function SettingsSetup() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold" data-testid="text-page-title">Setup Guide</h1>
+      <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Setup Guide</h1>
 
       <Card>
         <CardContent className="p-4 space-y-2">

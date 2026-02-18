@@ -24,8 +24,8 @@ export default function AdminNotifications() {
     <AdminLayout>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Notifications</h1>
-          <p className="text-muted-foreground">System alerts and updates</p>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Notifications</h1>
+          <p className="text-sm text-muted-foreground">System alerts and updates</p>
         </div>
         <Button variant="outline" data-testid="button-mark-all-read">
           <Check className="h-4 w-4 mr-2" />

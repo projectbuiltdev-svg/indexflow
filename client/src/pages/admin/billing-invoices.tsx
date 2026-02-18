@@ -18,7 +18,10 @@ export default function AdminBillingInvoices() {
   return (
     <AdminLayout>
       <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Platform Invoices</h1>
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Invoices</h1>
+          <p className="text-sm text-muted-foreground">All platform invoices</p>
+        </div>
         <Button data-testid="button-create-invoice">Create Invoice</Button>
       </div>
 

@@ -19,8 +19,8 @@ export default function AdminCalls() {
     <AdminLayout>
       <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
         <div>
-          <h1 className="text-2xl font-bold" data-testid="text-admin-calls-title">Call & SMS Logs</h1>
-          <p className="text-muted-foreground">AI voice call and SMS history across all clients</p>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Call & SMS Logs</h1>
+          <p className="text-sm text-muted-foreground">AI voice call and SMS history across all clients</p>
         </div>
         <Button variant="outline" data-testid="button-export-calls">
           <Download className="h-4 w-4 mr-2" />

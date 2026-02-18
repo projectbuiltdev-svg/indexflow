@@ -8,7 +8,8 @@ export default function AdminSettingsBranding() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">IndexFlow Branding</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Branding</h1>
+        <p className="text-sm text-muted-foreground">White-label platform appearance</p>
       </div>
 
       <Card>

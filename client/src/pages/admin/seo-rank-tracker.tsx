@@ -76,11 +76,9 @@ export default function AdminRankTracker() {
   return (
     <AdminLayout>
     <div className="p-6 space-y-6">
-      <div className="flex items-center gap-2">
-        <Search className="h-6 w-6" />
-        <h1 className="text-2xl font-semibold" data-testid="page-title-rank-tracker">
-          Rank Tracker
-        </h1>
+      <div>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Rank Tracker</h1>
+        <p className="text-sm text-muted-foreground">Keyword position tracking</p>
       </div>
 
       {!selectedWorkspace ? (

@@ -176,7 +176,7 @@ export default function CrmContacts() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3 flex-wrap">
-          <h1 className="text-2xl font-bold" data-testid="text-page-title">Contacts</h1>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Contacts</h1>
           <Badge variant="secondary" data-testid="badge-contact-count">{contacts.length} contacts</Badge>
         </div>
         <Button data-testid="button-add-contact" onClick={handleAddOpen}>

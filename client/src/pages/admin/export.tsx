@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, Database, Building2, CalendarCheck, MessageSquare, LifeBuoy } from "lucide-react";
+import { AdminLayout } from "@/components/admin-layout";
 
 function downloadCSV(filename: string, headers: string[], rows: string[][]) {
   const csvContent = [
@@ -85,35 +86,37 @@ export default function AdminExport() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-2">
-        <Database className="h-6 w-6" />
-        <h1 className="text-2xl font-semibold" data-testid="page-title-export">Export Data</h1>
-      </div>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Export Data</h1>
+          <p className="text-sm text-muted-foreground">Download platform data and reports</p>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {exportCategories.map((category) => (
-          <Card key={category.name} data-testid={`card-export-${category.name.toLowerCase().replace(/\s+/g, "-")}`}>
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-2">
-                <category.icon className="h-5 w-5 text-muted-foreground" />
-                <CardTitle className="text-base">{category.name}</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Button
-                variant="outline"
-                onClick={() => handleExport(category)}
-                disabled={loadingCategory === category.name}
-                data-testid={`button-export-${category.name.toLowerCase().replace(/\s+/g, "-")}`}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                {loadingCategory === category.name ? "Exporting..." : "Download CSV"}
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {exportCategories.map((category) => (
+            <Card key={category.name} data-testid={`card-export-${category.name.toLowerCase().replace(/\s+/g, "-")}`}>
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-2">
+                  <category.icon className="h-5 w-5 text-muted-foreground" />
+                  <CardTitle className="text-base">{category.name}</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  variant="outline"
+                  onClick={() => handleExport(category)}
+                  disabled={loadingCategory === category.name}
+                  data-testid={`button-export-${category.name.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  {loadingCategory === category.name ? "Exporting..." : "Download CSV"}
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

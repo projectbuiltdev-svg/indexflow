@@ -29,7 +29,10 @@ export default function AdminSupportAnnouncements() {
   return (
     <AdminLayout>
       <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">System Announcements</h1>
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Notifications</h1>
+          <p className="text-sm text-muted-foreground">System announcements and alerts</p>
+        </div>
         <Button data-testid="button-new-announcement">New Announcement</Button>
       </div>
 

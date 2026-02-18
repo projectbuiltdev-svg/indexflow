@@ -22,7 +22,8 @@ export default function AdminBillingPayouts() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">White Label Payouts</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Payouts</h1>
+        <p className="text-sm text-muted-foreground">Payment processor payouts</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 mb-6">

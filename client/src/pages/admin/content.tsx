@@ -3215,7 +3215,7 @@ export default function AdminContent() {
     <AdminLayout>
       <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold" data-testid="text-content-title">Content Engine</h1>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Content Engine</h1>
           <p className="text-sm text-muted-foreground">White-label blog management for client workspaces</p>
         </div>
         <Button

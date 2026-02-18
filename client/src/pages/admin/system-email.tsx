@@ -15,7 +15,8 @@ export default function AdminSystemEmail() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Email Configuration</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Email Configuration</h1>
+        <p className="text-sm text-muted-foreground">SMTP settings and email templates</p>
       </div>
 
       <Card className="mb-6">

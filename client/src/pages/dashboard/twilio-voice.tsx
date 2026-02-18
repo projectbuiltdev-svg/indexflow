@@ -28,7 +28,7 @@ export default function TwilioVoice() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold" data-testid="text-page-title">Voice Settings</h1>
+      <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Voice Settings</h1>
 
       <Card>
         <CardHeader>

@@ -1,105 +1,195 @@
 import { AdminLayout } from "@/components/admin-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Building2, TrendingUp } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Search, TrendingUp, Globe, MapPin, Settings, Bot, BarChart3, Eye } from "lucide-react";
 
 const stats = [
-  { label: "Total Keywords Tracked", value: "1,234", icon: Search },
-  { label: "Active Agencies Using SEO", value: "38", icon: Building2 },
-  { label: "Keywords Added This Month", value: "156", icon: TrendingUp },
+  { label: "Total Keywords Tracked", value: "342", subtitle: "across all clients", icon: Search },
+  { label: "Avg. Position", value: "14.3", subtitle: "-2.1 from last week", subtitleColor: "text-emerald-600", icon: TrendingUp },
+  { label: "GSC Connected", value: "24", subtitle: "of 47 clients", icon: Globe },
+  { label: "Domains Monitored", value: "38", subtitle: "active tracking", icon: Eye },
 ];
 
-const chartData = [
-  { agency: "Blue Digital", keywords: 89 },
-  { agency: "Northstar", keywords: 76 },
-  { agency: "Cascade", keywords: 68 },
-  { agency: "Vertex", keywords: 62 },
-  { agency: "Lunar Labs", keywords: 55 },
-  { agency: "Spark Digital", keywords: 48 },
-  { agency: "Summit Co.", keywords: 42 },
-  { agency: "Peak Media", keywords: 38 },
-  { agency: "Nova Group", keywords: 34 },
-  { agency: "Atlas SEO", keywords: 29 },
+const clientRankings = [
+  { client: "Bella Cucina", keywords: 45, avgPos: 8.2, topKeyword: "italian restaurant downtown", change: "+3", gsc: true },
+  { client: "Grand Meridian", keywords: 38, avgPos: 12.5, topKeyword: "luxury hotel spa", change: "+1", gsc: true },
+  { client: "Sakura Dining", keywords: 32, avgPos: 15.8, topKeyword: "japanese sushi bar", change: "-2", gsc: true },
+  { client: "Coastal Breeze", keywords: 28, avgPos: 18.3, topKeyword: "beachfront cafe", change: "+5", gsc: false },
+  { client: "The Blue Lagoon", keywords: 22, avgPos: 22.1, topKeyword: "cocktail bar lounge", change: "+2", gsc: true },
 ];
 
-const keywordTable = [
-  { agency: "Blue Digital Agency", workspace: "Marketing Hub", keywords: 89, lastRefresh: "2 hours ago", credits: 450 },
-  { agency: "Northstar Media", workspace: "SEO Portal", keywords: 76, lastRefresh: "4 hours ago", credits: 320 },
-  { agency: "Cascade Creative", workspace: "Content Studio", keywords: 68, lastRefresh: "1 day ago", credits: 280 },
-  { agency: "Vertex Solutions", workspace: "Growth Engine", keywords: 62, lastRefresh: "6 hours ago", credits: 200 },
-  { agency: "Lunar Labs", workspace: "Rank Tracker", keywords: 55, lastRefresh: "12 hours ago", credits: 150 },
+const localGridClients = [
+  { client: "Bella Cucina", gridScore: "87%", coverage: "12/15 zones", topPosition: "#2", lastScan: "2 hrs ago" },
+  { client: "Grand Meridian", gridScore: "74%", coverage: "9/12 zones", topPosition: "#4", lastScan: "4 hrs ago" },
+  { client: "Sakura Dining", gridScore: "65%", coverage: "7/10 zones", topPosition: "#6", lastScan: "1 day ago" },
+];
+
+const seoConfigColumns = [
+  { title: "Rank Tracking", icon: BarChart3, items: ["Daily position updates", "SERP feature detection", "Competitor tracking", "Mobile vs desktop", "Local pack monitoring"] },
+  { title: "Search Console", icon: Globe, items: ["Impression tracking", "Click-through rates", "Query analysis", "Page performance", "Index coverage"] },
+  { title: "AI Visibility", icon: Bot, items: ["ChatGPT mentions", "Perplexity citations", "AI Overview tracking", "Brand sentiment", "Source attribution"] },
+  { title: "Local SEO", icon: MapPin, items: ["Grid rank tracking", "GMB optimization", "Citation monitoring", "Review tracking", "NAP consistency"] },
 ];
 
 export default function AdminPlatformSeoKeywords() {
   return (
     <AdminLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Platform Keyword Usage</h1>
-      </div>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">SEO & Rankings</h1>
+          <p className="text-sm text-muted-foreground" data-testid="text-page-subtitle">Monitor keyword rankings, Google Search Console, and AI search visibility across all clients</p>
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-3 mb-6">
-        {stats.map((stat) => (
-          <Card key={stat.label} data-testid={`stat-card-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>
-            <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.label}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat) => (
+            <Card key={stat.label} data-testid={`stat-card-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <stat.icon className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="mt-2">
+                  <span className="text-2xl font-bold" data-testid={`stat-value-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>{stat.value}</span>
+                </div>
+                <p className={`text-xs mt-1 ${stat.subtitleColor || "text-muted-foreground"}`}>{stat.subtitle}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Client Rankings Overview</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Client</TableHead>
+                      <TableHead className="text-right">Keywords</TableHead>
+                      <TableHead className="text-right">Avg. Pos</TableHead>
+                      <TableHead>Top Keyword</TableHead>
+                      <TableHead className="text-right">Change</TableHead>
+                      <TableHead>GSC</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {clientRankings.map((row, i) => (
+                      <TableRow key={i} data-testid={`row-ranking-${i}`}>
+                        <TableCell className="font-medium">{row.client}</TableCell>
+                        <TableCell className="text-right">{row.keywords}</TableCell>
+                        <TableCell className="text-right">{row.avgPos}</TableCell>
+                        <TableCell className="text-muted-foreground text-sm">{row.topKeyword}</TableCell>
+                        <TableCell className={`text-right ${row.change.startsWith("+") ? "text-emerald-600" : "text-red-500"}`}>{row.change}</TableCell>
+                        <TableCell>
+                          <Badge
+                            variant="outline"
+                            className={row.gsc ? "text-emerald-600 border-emerald-500/30 text-xs" : "text-muted-foreground text-xs"}
+                          >
+                            {row.gsc ? "Connected" : "Not Set Up"}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">AI Search Visibility</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold" data-testid={`stat-value-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>{stat.value}</div>
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">ChatGPT Mentions</p>
+                  <p className="text-xl font-bold">23</p>
+                  <p className="text-xs text-emerald-600">+5 this week</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Perplexity Citations</p>
+                  <p className="text-xl font-bold">15</p>
+                  <p className="text-xs text-emerald-600">+3 this week</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">AI Overview Appearances</p>
+                  <p className="text-xl font-bold">8</p>
+                  <p className="text-xs text-emerald-600">+2 this week</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
-        ))}
-      </div>
+        </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Keywords Per Agency (Top 10)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-80" data-testid="chart-keywords-per-agency">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis dataKey="agency" className="text-xs fill-muted-foreground" />
-                <YAxis className="text-xs fill-muted-foreground" />
-                <Tooltip />
-                <Bar dataKey="keywords" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+        <div>
+          <h2 className="text-lg font-semibold" data-testid="text-section-local-grid">Local Search Grid</h2>
+          <p className="text-sm text-muted-foreground mb-4">Track local pack rankings across geographic zones</p>
+          <Card>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Client</TableHead>
+                    <TableHead>Grid Score</TableHead>
+                    <TableHead>Coverage</TableHead>
+                    <TableHead>Top Position</TableHead>
+                    <TableHead>Last Scan</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {localGridClients.map((row, i) => (
+                    <TableRow key={i} data-testid={`row-local-grid-${i}`}>
+                      <TableCell className="font-medium">{row.client}</TableCell>
+                      <TableCell className="font-medium">{row.gridScore}</TableCell>
+                      <TableCell className="text-muted-foreground">{row.coverage}</TableCell>
+                      <TableCell className="text-muted-foreground">{row.topPosition}</TableCell>
+                      <TableCell className="text-muted-foreground">{row.lastScan}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-4" data-testid="text-section-seo-config">Platform SEO Configuration</h2>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {seoConfigColumns.map((col) => (
+              <Card key={col.title}>
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <col.icon className="h-4 w-4 text-muted-foreground" />
+                    <CardTitle className="text-base">{col.title}</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {col.items.map((item, i) => (
+                      <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Keyword Usage by Agency</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Agency</TableHead>
-                <TableHead>Workspace</TableHead>
-                <TableHead>Keywords Tracked</TableHead>
-                <TableHead>Last Refresh</TableHead>
-                <TableHead>Credits Remaining</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {keywordTable.map((row) => (
-                <TableRow key={row.agency} data-testid={`row-keyword-${row.agency.toLowerCase().replace(/\s+/g, "-")}`}>
-                  <TableCell className="font-medium">{row.agency}</TableCell>
-                  <TableCell>{row.workspace}</TableCell>
-                  <TableCell>{row.keywords}</TableCell>
-                  <TableCell className="text-muted-foreground">{row.lastRefresh}</TableCell>
-                  <TableCell>{row.credits}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </AdminLayout>
   );
 }

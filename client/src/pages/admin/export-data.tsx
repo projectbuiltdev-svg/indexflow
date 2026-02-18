@@ -185,8 +185,8 @@ export default function AdminExportData() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-admin-export-title">Export Data</h1>
-        <p className="text-muted-foreground">Download platform-wide data for reporting and analysis</p>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Export Data</h1>
+        <p className="text-sm text-muted-foreground">Download platform data and reports</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3 mb-6">

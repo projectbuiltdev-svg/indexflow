@@ -20,7 +20,7 @@ export default function AiTrainingChannels() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold" data-testid="text-page-title">AI Channels</h1>
+      <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">AI Channels</h1>
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card data-testid="card-channel-widget">

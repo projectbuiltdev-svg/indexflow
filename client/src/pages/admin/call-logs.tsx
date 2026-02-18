@@ -32,9 +32,9 @@ export default function AdminCallLogs() {
     <AdminLayout>
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <PhoneCall className="h-6 w-6" />
-          <h1 className="text-2xl font-semibold" data-testid="page-title-call-logs">Call Logs</h1>
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Call Logs</h1>
+          <p className="text-sm text-muted-foreground">AI voice call history</p>
         </div>
         <Select value={filterWorkspaceId} onValueChange={setFilterWorkspaceId}>
           <SelectTrigger className="w-[200px]" data-testid="select-filter-workspace">

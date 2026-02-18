@@ -17,8 +17,8 @@ export default function AdminWidgets() {
     <AdminLayout>
       <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
         <div>
-          <h1 className="text-2xl font-bold" data-testid="text-admin-widgets-title">Widget Configuration</h1>
-          <p className="text-muted-foreground">Manage AI widgets with voice and chat capabilities for all clients</p>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Widgets</h1>
+          <p className="text-sm text-muted-foreground">Manage AI widgets with voice and chat capabilities</p>
         </div>
       </div>
 

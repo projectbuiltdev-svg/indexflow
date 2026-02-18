@@ -17,7 +17,8 @@ export default function AdminSystemApiKeys() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Platform API Keys</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">API Keys</h1>
+        <p className="text-sm text-muted-foreground">Third-party service credentials</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">

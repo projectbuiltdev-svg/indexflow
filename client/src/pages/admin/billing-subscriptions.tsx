@@ -10,104 +10,97 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, DollarSign, TrendingUp, TrendingDown, Users } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Download } from "lucide-react";
 
 const stats = [
-  { label: "MRR", value: "$14,750", icon: DollarSign, description: "Monthly Recurring Revenue" },
-  { label: "ARR", value: "$177,000", icon: TrendingUp, description: "Annual Recurring Revenue" },
-  { label: "Churn Rate", value: "2.3%", icon: TrendingDown, description: "Monthly churn" },
-  { label: "ARPU", value: "$313.83", icon: Users, description: "Avg revenue per user" },
+  { label: "Monthly Revenue", value: "$12,857", change: "+12%", subtitle: "from last month", icon: DollarSign },
+  { label: "Active Subscriptions", value: "43", change: "+3", subtitle: "from last month", icon: Users },
+  { label: "Avg. Revenue/Client", value: "$299", change: "+5%", subtitle: "from last month", icon: TrendingUp },
 ];
 
-const subscriptions = [
-  { id: 1, agency: "Blue Digital Agency", plan: "Enterprise", amount: "$499/mo", cycle: "Monthly", status: "Active", nextBilling: "Mar 1, 2026" },
-  { id: 2, agency: "Peak SEO Group", plan: "Pro", amount: "$199/mo", cycle: "Monthly", status: "Active", nextBilling: "Mar 5, 2026" },
-  { id: 3, agency: "Horizon Marketing Co", plan: "White Label", amount: "$3,588/yr", cycle: "Annual", status: "Active", nextBilling: "Jan 15, 2027" },
-  { id: 4, agency: "Spark Content Studio", plan: "Solo", amount: "$49/mo", cycle: "Monthly", status: "Past Due", nextBilling: "Feb 15, 2026" },
-  { id: 5, agency: "Evergreen Digital", plan: "Pro", amount: "$199/mo", cycle: "Monthly", status: "Cancelled", nextBilling: "-" },
+const transactions = [
+  { id: 1, client: "Bella Cucina", amount: "$299.00", type: "Subscription", status: "Paid", date: "Feb 15, 2026" },
+  { id: 2, client: "Grand Meridian Hotel", amount: "$499.00", type: "Subscription", status: "Paid", date: "Feb 14, 2026" },
+  { id: 3, client: "Sakura Dining", amount: "$149.00", type: "Add-on", status: "Paid", date: "Feb 14, 2026" },
+  { id: 4, client: "Coastal Breeze Cafe", amount: "$299.00", type: "Subscription", status: "Failed", date: "Feb 13, 2026" },
+  { id: 5, client: "The Blue Lagoon", amount: "$199.00", type: "Subscription", status: "Paid", date: "Feb 12, 2026" },
+  { id: 6, client: "Metro Bistro", amount: "$299.00", type: "Subscription", status: "Paid", date: "Feb 11, 2026" },
 ];
-
-const statusVariant = (status: string) => {
-  if (status === "Active") return "default" as const;
-  if (status === "Past Due") return "destructive" as const;
-  return "secondary" as const;
-};
 
 export default function AdminBillingSubscriptions() {
   return (
     <AdminLayout>
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold" data-testid="text-page-title">Subscriptions</h1>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Billing</h1>
+            <p className="text-sm text-muted-foreground" data-testid="text-page-subtitle">Revenue and payment management</p>
+          </div>
+          <Button variant="outline" data-testid="button-export-report">
+            <Download className="h-4 w-4 mr-2" />
+            Export Report
+          </Button>
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.label}>
-            <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.label}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold" data-testid={`text-stat-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-1">{stat.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {stats.map((stat) => (
+            <Card key={stat.label} data-testid={`stat-card-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <stat.icon className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="mt-2">
+                  <span className="text-2xl font-bold" data-testid={`stat-value-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>{stat.value}</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  <span className="text-emerald-600">{stat.change}</span> {stat.subtitle}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Agency</TableHead>
-                <TableHead>Plan</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Billing Cycle</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Next Billing</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {subscriptions.map((sub) => (
-                <TableRow key={sub.id} data-testid={`row-subscription-${sub.id}`}>
-                  <TableCell className="font-medium">{sub.agency}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" data-testid={`badge-plan-${sub.id}`}>{sub.plan}</Badge>
-                  </TableCell>
-                  <TableCell>{sub.amount}</TableCell>
-                  <TableCell className="text-muted-foreground">{sub.cycle}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusVariant(sub.status)} data-testid={`badge-status-${sub.id}`}>{sub.status}</Badge>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{sub.nextBilling}</TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" data-testid={`button-actions-sub-${sub.id}`}>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem data-testid={`action-view-sub-${sub.id}`}>View</DropdownMenuItem>
-                        <DropdownMenuItem data-testid={`action-change-plan-${sub.id}`}>Change Plan</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive" data-testid={`action-cancel-sub-${sub.id}`}>Cancel</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+        <div>
+          <h2 className="text-lg font-semibold" data-testid="text-section-transactions">Recent Transactions</h2>
+          <p className="text-sm text-muted-foreground">Latest billing activity across all clients</p>
+        </div>
+
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Client</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Date</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
+              </TableHeader>
+              <TableBody>
+                {transactions.map((tx) => (
+                  <TableRow key={tx.id} data-testid={`row-transaction-${tx.id}`}>
+                    <TableCell className="font-medium">{tx.client}</TableCell>
+                    <TableCell>{tx.amount}</TableCell>
+                    <TableCell className="text-muted-foreground">{tx.type}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="outline"
+                        className={tx.status === "Paid" ? "text-emerald-600 border-emerald-500/30" : "text-red-500 border-red-500/30"}
+                        data-testid={`badge-status-${tx.id}`}
+                      >
+                        {tx.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{tx.date}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </AdminLayout>
   );
 }

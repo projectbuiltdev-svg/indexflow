@@ -139,7 +139,7 @@ export default function CrmPipeline() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Sales Pipeline</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Sales Pipeline</h1>
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center border rounded-md">
             <Button

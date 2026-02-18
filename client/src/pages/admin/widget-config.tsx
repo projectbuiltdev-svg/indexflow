@@ -1,107 +1,98 @@
-import { useQuery } from "@tanstack/react-query";
-import { useWorkspace } from "@/lib/workspace-context";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { MessageCircle } from "lucide-react";
-import type { Workspace } from "@shared/schema";
 import { AdminLayout } from "@/components/admin-layout";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Settings, Code } from "lucide-react";
 
-interface WidgetSetting {
-  id: number;
-  workspaceId: string;
-  isEnabled: boolean | null;
-  primaryColor: string | null;
-  position: string | null;
-  voiceEnabled: boolean | null;
-  welcomeMessage: string | null;
-}
+const widgets = [
+  { id: 1, client: "Bella Cucina", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 14, 2026" },
+  { id: 2, client: "Grand Meridian Hotel", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 12, 2026" },
+  { id: 3, client: "Sakura Dining", type: "Chat Only", status: "Active", voice: false, chat: true, voiceLastConfig: "-" },
+  { id: 4, client: "Coastal Breeze Cafe", type: "Chat + Voice", status: "Pending", voice: true, chat: true, voiceLastConfig: "Feb 10, 2026" },
+  { id: 5, client: "The Blue Lagoon", type: "Chat Only", status: "Active", voice: false, chat: true, voiceLastConfig: "-" },
+  { id: 6, client: "Metro Bistro", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 8, 2026" },
+];
 
 export default function AdminWidgetConfig() {
-  useWorkspace();
-
-  const { data: workspaces = [], isLoading: workspacesLoading } = useQuery<Workspace[]>({
-    queryKey: ["/api/workspaces"],
-  });
-
-  const { data: allWidgetSettings = [], isLoading: widgetLoading } = useQuery<WidgetSetting[]>({
-    queryKey: ["/api/widget-settings"],
-  });
-
-  const isLoading = workspacesLoading || widgetLoading;
-  const workspaceMap = new Map(workspaces.map((v) => [v.id, v]));
-
   return (
     <AdminLayout>
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-2">
-        <MessageCircle className="h-6 w-6" />
-        <h1 className="text-2xl font-semibold" data-testid="page-title-widget-config">
-          Widget Configuration
-        </h1>
-      </div>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="page-title-widget-config">Widget Configuration</h1>
+          <p className="text-sm text-muted-foreground" data-testid="text-page-subtitle">Manage AI widgets with voice and chat capabilities for all clients</p>
+        </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Widget Settings by Workspace</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="space-y-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-10 w-full" />
-              ))}
-            </div>
-          ) : allWidgetSettings.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8" data-testid="empty-state-widget-config">
-              No widget settings found.
-            </p>
-          ) : (
+        <div>
+          <h2 className="text-lg font-semibold" data-testid="text-section-active-widgets">Active Widgets</h2>
+          <p className="text-sm text-muted-foreground">Configure and monitor client AI widgets including voice interactions</p>
+        </div>
+
+        <Card>
+          <CardContent className="p-0">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Workspace</TableHead>
-                  <TableHead>Enabled</TableHead>
-                  <TableHead>Color</TableHead>
-                  <TableHead>Position</TableHead>
-                  <TableHead>Voice Enabled</TableHead>
+                  <TableHead>Client</TableHead>
+                  <TableHead>Widget Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Voice</TableHead>
+                  <TableHead>Chat</TableHead>
+                  <TableHead>Voice Last Config</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {allWidgetSettings.map((ws) => (
-                  <TableRow key={ws.id} data-testid={`row-widget-${ws.id}`}>
-                    <TableCell className="font-medium">
-                      {workspaceMap.get(ws.workspaceId)?.name || ws.workspaceId}
-                    </TableCell>
+                {widgets.map((widget) => (
+                  <TableRow key={widget.id} data-testid={`row-widget-${widget.id}`}>
+                    <TableCell className="font-medium">{widget.client}</TableCell>
+                    <TableCell className="text-muted-foreground">{widget.type}</TableCell>
                     <TableCell>
-                      <Badge variant={ws.isEnabled ? "default" : "outline"}>
-                        {ws.isEnabled ? "Enabled" : "Disabled"}
+                      <Badge
+                        variant="outline"
+                        className={widget.status === "Active" ? "text-emerald-600 border-emerald-500/30" : "text-amber-500 border-amber-500/30"}
+                        data-testid={`badge-status-${widget.id}`}
+                      >
+                        {widget.status}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <div
-                          className="h-4 w-4 rounded-sm border"
-                          style={{ backgroundColor: ws.primaryColor || "#000" }}
-                        />
-                        <span className="text-muted-foreground text-sm">{ws.primaryColor || "-"}</span>
+                        <span className={`h-2 w-2 rounded-full ${widget.voice ? "bg-emerald-500" : "bg-muted-foreground/40"}`} />
+                        <span className="text-sm">{widget.voice ? "Enabled" : "Off"}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-muted-foreground">{ws.position || "-"}</TableCell>
                     <TableCell>
-                      <Badge variant={ws.voiceEnabled ? "default" : "outline"}>
-                        {ws.voiceEnabled ? "Yes" : "No"}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <span className={`h-2 w-2 rounded-full ${widget.chat ? "bg-emerald-500" : "bg-muted-foreground/40"}`} />
+                        <span className="text-sm">{widget.chat ? "Enabled" : "Off"}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{widget.voiceLastConfig}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button variant="ghost" size="icon" data-testid={`button-settings-${widget.id}`}>
+                          <Settings className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" data-testid={`button-code-${widget.id}`}>
+                          <Code className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </div>
     </AdminLayout>
   );
 }

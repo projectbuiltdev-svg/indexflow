@@ -136,8 +136,8 @@ export default function AdminUsers() {
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <h1 className="text-2xl font-bold" data-testid="text-users-title">Team & Permissions</h1>
-            <p className="text-muted-foreground">Manage staff accounts, departments, and role-based access</p>
+            <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Team & Permissions</h1>
+            <p className="text-sm text-muted-foreground">Manage staff accounts, departments, and role-based access</p>
           </div>
           <Dialog>
             <DialogTrigger asChild>

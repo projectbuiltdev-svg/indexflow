@@ -117,8 +117,8 @@ export default function AdminWebsiteChanges() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-admin-website-changes-title">Website Changes</h1>
-        <p className="text-muted-foreground">Manage website change requests from all clients</p>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Website Changes</h1>
+        <p className="text-sm text-muted-foreground">Review and approve pending website modifications</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">

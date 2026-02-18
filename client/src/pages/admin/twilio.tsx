@@ -34,8 +34,8 @@ export default function AdminTwilio() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-admin-twilio-title">Twilio Management</h1>
-        <p className="text-muted-foreground">Monitor voice calls, SMS messaging, and Twilio connections across all clients</p>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Twilio Management</h1>
+        <p className="text-sm text-muted-foreground">Monitor voice calls, SMS messaging, and Twilio connections</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">

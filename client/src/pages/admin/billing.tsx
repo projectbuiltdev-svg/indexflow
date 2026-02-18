@@ -23,8 +23,8 @@ export default function AdminBilling() {
     <AdminLayout>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Billing</h1>
-          <p className="text-muted-foreground">Revenue and payment management</p>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Billing</h1>
+          <p className="text-sm text-muted-foreground">Revenue and payment management</p>
         </div>
         <Button variant="outline" data-testid="button-export">
           <Download className="h-4 w-4 mr-2" />

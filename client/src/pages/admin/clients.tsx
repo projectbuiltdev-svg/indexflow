@@ -19,8 +19,8 @@ export default function AdminClients() {
     <AdminLayout>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Clients</h1>
-          <p className="text-muted-foreground">Manage all client accounts</p>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Clients</h1>
+          <p className="text-sm text-muted-foreground">Manage all client accounts</p>
         </div>
         <Button data-testid="button-add-client">
           <Plus className="h-4 w-4 mr-2" />

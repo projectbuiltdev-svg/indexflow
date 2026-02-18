@@ -57,10 +57,13 @@ export default function AdminAgencies() {
     <AdminLayout>
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">All Agencies</h1>
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Clients</h1>
+          <p className="text-sm text-muted-foreground">Manage all client workspaces</p>
+        </div>
         <Button data-testid="button-add-agency">
           <Plus className="mr-2 h-4 w-4" />
-          Add Agency
+          Add New Client
         </Button>
       </div>
 

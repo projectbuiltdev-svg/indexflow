@@ -16,7 +16,7 @@ export default function AdminWebsites() {
     <AdminLayout>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Websites</h1>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Websites</h1>
           <p className="text-muted-foreground">Manage client websites and domains</p>
         </div>
         <Button data-testid="button-create-website">

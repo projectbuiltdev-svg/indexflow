@@ -98,7 +98,7 @@ export default function SeoCms() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">CMS Integration</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">CMS Integration</h1>
       </div>
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

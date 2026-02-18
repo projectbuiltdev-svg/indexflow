@@ -41,7 +41,7 @@ export default function WidgetMonitoring() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold" data-testid="text-page-title">Widget Monitoring</h1>
+      <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Widget Monitoring</h1>
 
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <Card>

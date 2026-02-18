@@ -47,7 +47,8 @@ export default function AdminBillingRevenue() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Revenue</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Revenue</h1>
+        <p className="text-sm text-muted-foreground">Revenue tracking and forecasting</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">

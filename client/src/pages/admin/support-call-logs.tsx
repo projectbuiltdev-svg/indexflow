@@ -18,7 +18,8 @@ export default function AdminSupportCallLogs() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Platform Call Logs</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Call Logs</h1>
+        <p className="text-sm text-muted-foreground">AI voice call history across all clients</p>
       </div>
 
       <div className="flex items-center gap-3 flex-wrap mb-6">

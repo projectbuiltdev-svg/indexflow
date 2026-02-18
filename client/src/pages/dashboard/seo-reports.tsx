@@ -81,7 +81,7 @@ export default function SeoReports() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Reports</h1>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Reports</h1>
         <div className="flex items-center gap-2 flex-wrap">
           <Button variant="outline" onClick={handleExport} data-testid="button-export-report">
             <Download className="w-4 h-4 mr-2" />

@@ -16,7 +16,10 @@ export default function AdminAgenciesPending() {
   return (
     <AdminLayout>
       <div className="flex items-center gap-3 flex-wrap mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-page-title">Pending Approvals</h1>
+        <div>
+          <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Pending Approvals</h1>
+          <p className="text-sm text-muted-foreground">Review and approve new client applications</p>
+        </div>
         <Badge data-testid="badge-pending-count">8</Badge>
       </div>
 

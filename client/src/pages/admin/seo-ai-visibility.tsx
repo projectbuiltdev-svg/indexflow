@@ -9,11 +9,9 @@ export default function AdminAIVisibility() {
   return (
     <AdminLayout>
     <div className="p-6 space-y-6">
-      <div className="flex items-center gap-2">
-        <Bot className="h-6 w-6" />
-        <h1 className="text-2xl font-semibold" data-testid="page-title-ai-visibility">
-          AI Visibility
-        </h1>
+      <div>
+        <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">AI Visibility</h1>
+        <p className="text-sm text-muted-foreground">AI search engine visibility tracking</p>
       </div>
 
       <Card>

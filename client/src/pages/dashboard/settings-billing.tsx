@@ -68,7 +68,7 @@ export default function SettingsBilling() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold" data-testid="text-page-title">Billing & Usage</h1>
+      <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Billing & Usage</h1>
 
       <Card data-testid="card-current-plan">
         <CardHeader>
