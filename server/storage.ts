@@ -75,6 +75,14 @@ import {
   type InsertInvoiceLineItem,
   type ContentReport,
   type InsertContentReport,
+  type VenueSiteProfile,
+  type InsertVenueSiteProfile,
+  type VenueSitePage,
+  type InsertVenueSitePage,
+  type PostKeywordIndex,
+  type InsertPostKeywordIndex,
+  type PostValidationResult,
+  type InsertPostValidationResult,
   contactMessages,
   venues,
   reservations,
@@ -116,6 +124,10 @@ import {
   invoices,
   invoiceLineItems,
   contentReports,
+  venueSiteProfiles,
+  venueSitePages,
+  postKeywordIndex,
+  postValidationResults,
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
@@ -293,6 +305,25 @@ export interface IStorage {
   createContentReport(data: InsertContentReport): Promise<ContentReport>;
   updateContentReport(id: number, data: Partial<InsertContentReport>): Promise<ContentReport | undefined>;
   deleteContentReport(id: number): Promise<boolean>;
+  getSiteProfile(venueId: string): Promise<VenueSiteProfile | undefined>;
+  upsertSiteProfile(data: InsertVenueSiteProfile): Promise<VenueSiteProfile>;
+  getSitePages(venueId: string): Promise<VenueSitePage[]>;
+  getSitePage(id: number): Promise<VenueSitePage | undefined>;
+  createSitePage(data: InsertVenueSitePage): Promise<VenueSitePage>;
+  updateSitePage(id: number, data: Partial<InsertVenueSitePage>): Promise<VenueSitePage | undefined>;
+  deleteSitePage(id: number): Promise<boolean>;
+  getPostKeywordIndex(venueId: string): Promise<PostKeywordIndex[]>;
+  getPostKeywordIndexByPost(postId: string): Promise<PostKeywordIndex[]>;
+  getPostKeywordIndexByKeyword(venueId: string, keyword: string): Promise<PostKeywordIndex[]>;
+  upsertPostKeywordIndex(data: InsertPostKeywordIndex): Promise<PostKeywordIndex>;
+  bulkUpsertPostKeywordIndex(items: InsertPostKeywordIndex[]): Promise<PostKeywordIndex[]>;
+  deletePostKeywordIndexByPost(postId: string): Promise<void>;
+  getPostValidationResults(postId: string): Promise<PostValidationResult[]>;
+  getPostValidationResultsByVenue(venueId: string): Promise<PostValidationResult[]>;
+  createPostValidationResult(data: InsertPostValidationResult): Promise<PostValidationResult>;
+  bulkCreatePostValidationResults(items: InsertPostValidationResult[]): Promise<PostValidationResult[]>;
+  deletePostValidationResultsByPost(postId: string): Promise<void>;
+  updatePostValidationResult(id: number, data: Partial<InsertPostValidationResult>): Promise<PostValidationResult | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -2436,6 +2467,87 @@ export class DbStorage implements IStorage {
   async deleteContentReport(id: number): Promise<boolean> {
     const result = await db!.delete(contentReports).where(eq(contentReports.id, id)).returning();
     return result.length > 0;
+  }
+
+  async getSiteProfile(venueId: string): Promise<VenueSiteProfile | undefined> {
+    const [row] = await db!.select().from(venueSiteProfiles).where(eq(venueSiteProfiles.venueId, venueId));
+    return row;
+  }
+  async upsertSiteProfile(data: InsertVenueSiteProfile): Promise<VenueSiteProfile> {
+    if (data.venueId) {
+      const existing = await this.getSiteProfile(data.venueId);
+      if (existing) {
+        const [row] = await db!.update(venueSiteProfiles).set({ ...data, updatedAt: new Date() }).where(eq(venueSiteProfiles.id, existing.id)).returning();
+        return row;
+      }
+    }
+    const [row] = await db!.insert(venueSiteProfiles).values(data).returning();
+    return row;
+  }
+
+  async getSitePages(venueId: string): Promise<VenueSitePage[]> {
+    return db!.select().from(venueSitePages).where(eq(venueSitePages.venueId, venueId)).orderBy(asc(venueSitePages.sortOrder));
+  }
+  async getSitePage(id: number): Promise<VenueSitePage | undefined> {
+    const [row] = await db!.select().from(venueSitePages).where(eq(venueSitePages.id, id));
+    return row;
+  }
+  async createSitePage(data: InsertVenueSitePage): Promise<VenueSitePage> {
+    const [row] = await db!.insert(venueSitePages).values(data).returning();
+    return row;
+  }
+  async updateSitePage(id: number, data: Partial<InsertVenueSitePage>): Promise<VenueSitePage | undefined> {
+    const [row] = await db!.update(venueSitePages).set({ ...data, updatedAt: new Date() }).where(eq(venueSitePages.id, id)).returning();
+    return row;
+  }
+  async deleteSitePage(id: number): Promise<boolean> {
+    const result = await db!.delete(venueSitePages).where(eq(venueSitePages.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getPostKeywordIndex(venueId: string): Promise<PostKeywordIndex[]> {
+    return db!.select().from(postKeywordIndex).where(eq(postKeywordIndex.venueId, venueId)).orderBy(desc(postKeywordIndex.frequency));
+  }
+  async getPostKeywordIndexByPost(postId: string): Promise<PostKeywordIndex[]> {
+    return db!.select().from(postKeywordIndex).where(eq(postKeywordIndex.postId, postId));
+  }
+  async getPostKeywordIndexByKeyword(venueId: string, keyword: string): Promise<PostKeywordIndex[]> {
+    return db!.select().from(postKeywordIndex).where(and(eq(postKeywordIndex.venueId, venueId), eq(postKeywordIndex.keyword, keyword)));
+  }
+  async upsertPostKeywordIndex(data: InsertPostKeywordIndex): Promise<PostKeywordIndex> {
+    const [row] = await db!.insert(postKeywordIndex).values(data).returning();
+    return row;
+  }
+  async bulkUpsertPostKeywordIndex(items: InsertPostKeywordIndex[]): Promise<PostKeywordIndex[]> {
+    if (items.length === 0) return [];
+    const rows = await db!.insert(postKeywordIndex).values(items).returning();
+    return rows;
+  }
+  async deletePostKeywordIndexByPost(postId: string): Promise<void> {
+    await db!.delete(postKeywordIndex).where(eq(postKeywordIndex.postId, postId));
+  }
+
+  async getPostValidationResults(postId: string): Promise<PostValidationResult[]> {
+    return db!.select().from(postValidationResults).where(eq(postValidationResults.postId, postId)).orderBy(desc(postValidationResults.createdAt));
+  }
+  async getPostValidationResultsByVenue(venueId: string): Promise<PostValidationResult[]> {
+    return db!.select().from(postValidationResults).where(eq(postValidationResults.venueId, venueId)).orderBy(desc(postValidationResults.createdAt));
+  }
+  async createPostValidationResult(data: InsertPostValidationResult): Promise<PostValidationResult> {
+    const [row] = await db!.insert(postValidationResults).values(data).returning();
+    return row;
+  }
+  async bulkCreatePostValidationResults(items: InsertPostValidationResult[]): Promise<PostValidationResult[]> {
+    if (items.length === 0) return [];
+    const rows = await db!.insert(postValidationResults).values(items).returning();
+    return rows;
+  }
+  async deletePostValidationResultsByPost(postId: string): Promise<void> {
+    await db!.delete(postValidationResults).where(eq(postValidationResults.postId, postId));
+  }
+  async updatePostValidationResult(id: number, data: Partial<InsertPostValidationResult>): Promise<PostValidationResult | undefined> {
+    const [row] = await db!.update(postValidationResults).set(data).where(eq(postValidationResults.id, id)).returning();
+    return row;
   }
 }
 

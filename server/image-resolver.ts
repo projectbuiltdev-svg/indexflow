@@ -253,3 +253,114 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
   console.log(`[ImageResolver] Done: ${resolved} resolved, ${failed} failed for "${post.title}"`);
   return { resolved, failed };
 }
+
+export interface ImageSuggestion {
+  keyword: string;
+  query: string;
+  placement: "hero" | "inline" | "infographic";
+  alt: string;
+  context: string;
+}
+
+export interface KeywordImageResult {
+  postId: string;
+  keyword: string;
+  suggestions: ImageSuggestion[];
+  resolved: StockResult[];
+}
+
+function extractHeadings(html: string): { level: number; text: string }[] {
+  const headingRegex = /<h([1-6])[^>]*>([\s\S]*?)<\/h[1-6]>/gi;
+  const headings: { level: number; text: string }[] = [];
+  let match;
+  while ((match = headingRegex.exec(html)) !== null) {
+    headings.push({
+      level: parseInt(match[1]),
+      text: match[2].replace(/<[^>]*>/g, "").trim(),
+    });
+  }
+  return headings;
+}
+
+export function analyzePostForImageSuggestions(post: any): ImageSuggestion[] {
+  const html = post.compiledHtml || post.mdxContent || "";
+  const suggestions: ImageSuggestion[] = [];
+  const primaryKeyword = post.primaryKeyword || post.title;
+
+  suggestions.push({
+    keyword: primaryKeyword,
+    query: `${primaryKeyword} ${(post.category || "").split("-").join(" ")}`.trim(),
+    placement: "hero",
+    alt: `${post.title} - featured image`,
+    context: post.title,
+  });
+
+  const headings = extractHeadings(html);
+  const h2Headings = headings.filter((h) => h.level === 2);
+
+  for (const heading of h2Headings.slice(0, 4)) {
+    suggestions.push({
+      keyword: heading.text.toLowerCase(),
+      query: `${primaryKeyword} ${heading.text}`.split(" ").slice(0, 5).join(" "),
+      placement: "inline",
+      alt: heading.text.length > 10 ? heading.text : `${primaryKeyword} - ${heading.text}`,
+      context: heading.text,
+    });
+  }
+
+  const tags = post.tags || [];
+  if (tags.length > 0 && post.category) {
+    suggestions.push({
+      keyword: post.category,
+      query: `${post.category} ${tags[0]} infographic`,
+      placement: "infographic",
+      alt: `${post.category} overview - ${tags[0]}`,
+      context: `${post.category}: ${tags.join(", ")}`,
+    });
+  }
+
+  return suggestions;
+}
+
+export async function resolveKeywordImages(
+  post: any,
+  source: string = "pexels",
+  count: number = 3
+): Promise<KeywordImageResult> {
+  const suggestions = analyzePostForImageSuggestions(post);
+  const primaryKeyword = post.primaryKeyword || post.title;
+  const heroSuggestion = suggestions.find((s) => s.placement === "hero");
+  const query = heroSuggestion?.query || primaryKeyword;
+
+  const resolved = await searchStockImages(query, source, 1);
+
+  return {
+    postId: post.id,
+    keyword: primaryKeyword,
+    suggestions,
+    resolved: resolved.slice(0, count),
+  };
+}
+
+export async function resolveAllSourceImages(
+  post: any,
+  count: number = 2
+): Promise<KeywordImageResult> {
+  const suggestions = analyzePostForImageSuggestions(post);
+  const primaryKeyword = post.primaryKeyword || post.title;
+  const heroSuggestion = suggestions.find((s) => s.placement === "hero");
+  const query = heroSuggestion?.query || primaryKeyword;
+
+  const [pexels, unsplash, pixabay] = await Promise.all([
+    searchStockImages(query, "pexels", 1),
+    searchStockImages(query, "unsplash", 1),
+    searchStockImages(query, "pixabay", 1),
+  ]);
+
+  return {
+    postId: post.id,
+    keyword: primaryKeyword,
+    suggestions,
+    resolved: [...pexels.slice(0, count), ...unsplash.slice(0, count), ...pixabay.slice(0, count)],
+  };
+}

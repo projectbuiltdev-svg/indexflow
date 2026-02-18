@@ -1288,3 +1288,156 @@ export const insertContentReportSchema = createInsertSchema(contentReports).omit
 });
 export type InsertContentReport = z.infer<typeof insertContentReportSchema>;
 export type ContentReport = typeof contentReports.$inferSelect;
+
+export const venueSiteProfiles = pgTable(
+  "venue_site_profiles",
+  {
+    id: serial("id").primaryKey(),
+    workspaceId: varchar("workspace_id", { length: 36 }),
+    venueId: varchar("venue_id", { length: 36 })
+      .references(() => venues.id, { onDelete: "cascade" }),
+    siteName: text("site_name"),
+    siteUrl: text("site_url"),
+    logoUrl: text("logo_url"),
+    faviconUrl: text("favicon_url"),
+    primaryColor: text("primary_color"),
+    secondaryColor: text("secondary_color"),
+    fontFamily: text("font_family"),
+    headerHtml: text("header_html"),
+    footerHtml: text("footer_html"),
+    customCss: text("custom_css"),
+    customJs: text("custom_js"),
+    analyticsId: text("analytics_id"),
+    socialLinks: jsonb("social_links").$type<Record<string, string>>(),
+    metaDefaults: jsonb("meta_defaults").$type<Record<string, string>>(),
+    robotsTxt: text("robots_txt"),
+    sitemapEnabled: boolean("sitemap_enabled").default(true),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (t) => [
+    index("venue_site_profiles_workspace_idx").on(t.workspaceId),
+    index("venue_site_profiles_venue_idx").on(t.venueId),
+  ]
+);
+
+export const insertVenueSiteProfileSchema = createInsertSchema(venueSiteProfiles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertVenueSiteProfile = z.infer<typeof insertVenueSiteProfileSchema>;
+export type VenueSiteProfile = typeof venueSiteProfiles.$inferSelect;
+
+export const venueSitePages = pgTable(
+  "venue_site_pages",
+  {
+    id: serial("id").primaryKey(),
+    workspaceId: varchar("workspace_id", { length: 36 }),
+    venueId: varchar("venue_id", { length: 36 })
+      .references(() => venues.id, { onDelete: "cascade" }),
+    slug: text("slug").notNull(),
+    title: text("title").notNull(),
+    description: text("description"),
+    content: text("content"),
+    template: text("template").default("default"),
+    parentId: integer("parent_id"),
+    sortOrder: integer("sort_order").default(0),
+    isPublished: boolean("is_published").default(false),
+    metaTitle: text("meta_title"),
+    metaDescription: text("meta_description"),
+    ogImage: text("og_image"),
+    canonicalUrl: text("canonical_url"),
+    noIndex: boolean("no_index").default(false),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (t) => [
+    index("venue_site_pages_workspace_idx").on(t.workspaceId),
+    index("venue_site_pages_venue_idx").on(t.venueId),
+    index("venue_site_pages_slug_idx").on(t.slug),
+  ]
+);
+
+export const insertVenueSitePageSchema = createInsertSchema(venueSitePages).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertVenueSitePage = z.infer<typeof insertVenueSitePageSchema>;
+export type VenueSitePage = typeof venueSitePages.$inferSelect;
+
+export const postKeywordIndex = pgTable(
+  "post_keyword_index",
+  {
+    id: serial("id").primaryKey(),
+    workspaceId: varchar("workspace_id", { length: 36 }),
+    venueId: varchar("venue_id", { length: 36 })
+      .references(() => venues.id, { onDelete: "cascade" }),
+    postId: varchar("post_id", { length: 36 })
+      .notNull()
+      .references(() => venueBlogPosts.id, { onDelete: "cascade" }),
+    keyword: text("keyword").notNull(),
+    slug: text("slug").notNull(),
+    title: text("title").notNull(),
+    frequency: integer("frequency").default(1),
+    inTitle: boolean("in_title").default(false),
+    inDescription: boolean("in_description").default(false),
+    inH1: boolean("in_h1").default(false),
+    inH2: boolean("in_h2").default(false),
+    position: integer("position"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    index("post_keyword_index_workspace_idx").on(t.workspaceId),
+    index("post_keyword_index_venue_idx").on(t.venueId),
+    index("post_keyword_index_post_idx").on(t.postId),
+    index("post_keyword_index_keyword_idx").on(t.keyword),
+  ]
+);
+
+export const insertPostKeywordIndexSchema = createInsertSchema(postKeywordIndex).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertPostKeywordIndex = z.infer<typeof insertPostKeywordIndexSchema>;
+export type PostKeywordIndex = typeof postKeywordIndex.$inferSelect;
+
+export const validationSeverities = ["error", "warning", "info"] as const;
+export type ValidationSeverity = typeof validationSeverities[number];
+
+export const postValidationResults = pgTable(
+  "post_validation_results",
+  {
+    id: serial("id").primaryKey(),
+    workspaceId: varchar("workspace_id", { length: 36 }),
+    venueId: varchar("venue_id", { length: 36 })
+      .references(() => venues.id, { onDelete: "cascade" }),
+    postId: varchar("post_id", { length: 36 })
+      .notNull()
+      .references(() => venueBlogPosts.id, { onDelete: "cascade" }),
+    rule: text("rule").notNull(),
+    severity: text("severity").notNull().default("warning"),
+    message: text("message").notNull(),
+    details: jsonb("details").$type<Record<string, any>>(),
+    autoFixable: boolean("auto_fixable").default(false),
+    fixed: boolean("fixed").default(false),
+    fixedAt: timestamp("fixed_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    index("post_validation_results_workspace_idx").on(t.workspaceId),
+    index("post_validation_results_venue_idx").on(t.venueId),
+    index("post_validation_results_post_idx").on(t.postId),
+    index("post_validation_results_rule_idx").on(t.rule),
+    index("post_validation_results_severity_idx").on(t.severity),
+  ]
+)
+
+export const insertPostValidationResultSchema = createInsertSchema(postValidationResults).omit({
+  id: true,
+  fixedAt: true,
+  createdAt: true,
+});
+export type InsertPostValidationResult = z.infer<typeof insertPostValidationResultSchema>;
+export type PostValidationResult = typeof postValidationResults.$inferSelect;

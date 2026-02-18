@@ -8,6 +8,9 @@ import { randomUUID } from "crypto";
 import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
+import { validatePost, issuesToInsertRecords } from "./post-processor";
+import { indexPostKeywords, keywordEntriesToInsertRecords, generateLinkSuggestions, applyLink, bulkAutoLink, generateOrphanReport, checkLinkHealth } from "./link-builder";
+import { analyzePostForImageSuggestions, resolveKeywordImages, resolveAllSourceImages } from "./image-resolver";
 
 const VALID_CATEGORIES = [
   "general", "booking-systems", "ai-automation", "voice-sms", "website-design",
@@ -1382,6 +1385,270 @@ Return ONLY valid JSON, no markdown.`;
       const ok = await storage.deleteContentReport(Number(req.params.id));
       if (!ok) return res.status(404).json({ error: "Report not found" });
       res.json({ success: true });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/validate", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const report = validatePost(post);
+
+      await storage.deletePostValidationResultsByPost(post.id);
+      const records = issuesToInsertRecords(report, req.body.workspaceId);
+      if (records.length > 0) {
+        await storage.bulkCreatePostValidationResults(records);
+      }
+
+      res.json(report);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/validate-all", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { venueId, workspaceId } = req.body;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+
+      const posts = await storage.getVenueBlogPosts(venueId);
+      const reports = [];
+
+      for (const post of posts) {
+        const report = validatePost(post);
+        await storage.deletePostValidationResultsByPost(post.id);
+        const records = issuesToInsertRecords(report, workspaceId);
+        if (records.length > 0) {
+          await storage.bulkCreatePostValidationResults(records);
+        }
+        reports.push({
+          postId: report.postId,
+          title: post.title,
+          score: report.score,
+          issues: report.issues.length,
+          errors: report.issues.filter((i) => i.severity === "error").length,
+          warnings: report.issues.filter((i) => i.severity === "warning").length,
+        });
+      }
+
+      res.json({
+        validated: reports.length,
+        avgScore: reports.length > 0 ? Math.round(reports.reduce((sum, r) => sum + r.score, 0) / reports.length) : 0,
+        reports,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/posts/:id/validation", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const results = await storage.getPostValidationResults(req.params.id);
+      res.json(results);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/index-keywords", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const entries = indexPostKeywords(post);
+
+      await storage.deletePostKeywordIndexByPost(post.id);
+      const records = keywordEntriesToInsertRecords(entries, post.venueId, req.body.workspaceId);
+      if (records.length > 0) {
+        await storage.bulkUpsertPostKeywordIndex(records);
+      }
+
+      res.json({
+        postId: post.id,
+        indexed: entries.length,
+        topKeywords: entries.slice(0, 10).map((e) => ({
+          keyword: e.keyword,
+          frequency: e.frequency,
+          inTitle: e.inTitle,
+          inH1: e.inH1,
+          inH2: e.inH2,
+        })),
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/index-all-keywords", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { venueId, workspaceId } = req.body;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+
+      const posts = await storage.getVenueBlogPosts(venueId);
+      let totalIndexed = 0;
+
+      for (const post of posts) {
+        const entries = indexPostKeywords(post);
+        await storage.deletePostKeywordIndexByPost(post.id);
+        const records = keywordEntriesToInsertRecords(entries, post.venueId, workspaceId);
+        if (records.length > 0) {
+          await storage.bulkUpsertPostKeywordIndex(records);
+        }
+        totalIndexed += entries.length;
+      }
+
+      res.json({ postsProcessed: posts.length, totalKeywordsIndexed: totalIndexed });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/link-suggestions", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const venueId = req.query.venueId as string;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+
+      const posts = await storage.getVenueBlogPosts(venueId);
+      const suggestions = generateLinkSuggestions(posts);
+
+      res.json({ total: suggestions.length, suggestions });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/apply-link", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const { keyword, targetSlug, maxOccurrences } = req.body;
+      if (!keyword || !targetSlug) {
+        return res.status(400).json({ error: "keyword and targetSlug required" });
+      }
+
+      const html = post.compiledHtml || post.mdxContent || "";
+      const { html: updatedHtml, applied } = applyLink(html, keyword, targetSlug, maxOccurrences || 1);
+
+      if (applied > 0) {
+        await storage.updateVenueBlogPost(post.id, { compiledHtml: updatedHtml });
+      }
+
+      res.json({ postId: post.id, keyword, targetSlug, linksApplied: applied });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/bulk-auto-link", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { venueId, maxLinksPerPost } = req.body;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+
+      const posts = await storage.getVenueBlogPosts(venueId);
+      const suggestions = generateLinkSuggestions(posts);
+      const results = bulkAutoLink(posts, suggestions, maxLinksPerPost || 3);
+
+      for (const result of results) {
+        await storage.updateVenueBlogPost(result.postId, { compiledHtml: result.updatedHtml });
+      }
+
+      res.json({
+        postsUpdated: results.length,
+        totalLinksAdded: results.reduce((sum, r) => sum + r.linksAdded, 0),
+        details: results.map((r) => ({
+          postId: r.postId,
+          linksAdded: r.linksAdded,
+        })),
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/orphan-report", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const venueId = req.query.venueId as string;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+
+      const posts = await storage.getVenueBlogPosts(venueId);
+      const orphans = generateOrphanReport(posts);
+
+      res.json({
+        totalPosts: posts.length,
+        orphanCount: orphans.length,
+        orphans,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/admin/blog/link-health", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const venueId = req.query.venueId as string;
+      if (!venueId) return res.status(400).json({ error: "venueId required" });
+
+      const posts = await storage.getVenueBlogPosts(venueId);
+      const results = await checkLinkHealth(posts);
+
+      const broken = results.filter((r) => r.status === "broken").length;
+      const redirects = results.filter((r) => r.status === "redirect").length;
+      const ok = results.filter((r) => r.status === "ok").length;
+      const errors = results.filter((r) => r.status === "error" || r.status === "timeout").length;
+
+      res.json({
+        totalChecked: results.length,
+        summary: { ok, broken, redirects, errors },
+        results,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/image-suggestions", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const suggestions = analyzePostForImageSuggestions(post);
+      res.json({ postId: post.id, suggestions });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/resolve-images", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const post = await storage.getVenueBlogPost(req.params.id);
+      if (!post) return res.status(404).json({ error: "Post not found" });
+
+      const { source, count, allSources } = req.body;
+
+      let result;
+      if (allSources) {
+        result = await resolveAllSourceImages(post, count || 2);
+      } else {
+        result = await resolveKeywordImages(post, source || "pexels", count || 3);
+      }
+
+      res.json(result);
     } catch (err: any) {
       res.status(500).json({ error: err.message });
     }
