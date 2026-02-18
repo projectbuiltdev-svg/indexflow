@@ -253,7 +253,7 @@ export default function SettingsTrainWidget() {
 
   const textCategories = [
     { id: "business", label: "Business Info", icon: Building2, placeholder: "Describe your business, history, atmosphere, unique selling points..." },
-    { id: "menu", label: "Menu & Services", icon: Utensils, placeholder: "List your menu items, prices, dietary options, special dishes..." },
+    { id: "menu", label: "Services & Offerings", icon: Utensils, placeholder: "List your services, pricing, packages, and special offerings..." },
     { id: "faq", label: "FAQs", icon: HelpCircle, placeholder: "Common questions and answers about your workspace..." },
     { id: "policies", label: "Policies", icon: FileText, placeholder: "Scheduling policies, cancellation rules, dress code, etc..." },
     { id: "hours", label: "Special Hours", icon: Clock, placeholder: "Holiday hours, special events, seasonal changes..." },
@@ -450,7 +450,7 @@ export default function SettingsTrainWidget() {
                         <div className="flex gap-2">
                           <div className="flex-1">
                             <Input
-                              placeholder="https://your-restaurant.com"
+                              placeholder="https://your-website.com"
                               value={websiteUrl}
                               onChange={(e) => setWebsiteUrl(e.target.value)}
                               data-testid="input-website-url"
@@ -465,7 +465,7 @@ export default function SettingsTrainWidget() {
                           </Button>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          We'll scan your homepage, menu pages, about page, and contact information.
+                          We'll scan your homepage, services pages, about page, and contact information.
                         </p>
                       </CardContent>
                     </Card>
@@ -711,9 +711,9 @@ export default function SettingsTrainWidget() {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => { setTestInput("What's on your menu?"); }}
+                        onClick={() => { setTestInput("What services do you offer?"); }}
                       >
-                        Menu
+                        Services
                       </Button>
                       <Button
                         size="sm"
@@ -740,7 +740,7 @@ export default function SettingsTrainWidget() {
                   <CardContent className="space-y-3 text-sm text-muted-foreground">
                     <div className="flex gap-2">
                       <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <p>Add your complete menu with prices for accurate responses</p>
+                      <p>Add your complete service list with pricing for accurate responses</p>
                     </div>
                     <div className="flex gap-2">
                       <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />

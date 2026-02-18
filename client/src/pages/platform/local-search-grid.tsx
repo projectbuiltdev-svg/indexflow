@@ -94,7 +94,7 @@ const features = [
   },
   {
     icon: Crosshair,
-    title: "25 Keywords per Venue",
+    title: "25 Keywords per Workspace",
     description: "Track up to 25 high-impact keywords across your entire grid. CSV bulk upload supported for quick setup.",
     color: "text-cyan-500",
     bgColor: "bg-cyan-500/10",
@@ -126,7 +126,7 @@ const faqs = [
   },
   {
     question: "How does this compare to BrightLocal or Whitespark?",
-    answer: "BrightLocal charges $39-79/month and geo-grid scans consume credits — heavy users burn through their allowance fast. Whitespark charges $14-140/month for rank tracking, and their geo-grid product is sold separately starting at $10/month. Both have keyword limits that push you into higher tiers. With indexFlow, geo-grid tracking is built into every plan with simple pay-as-you-go credits at $10 for 5 scans — plus every new account gets a $5 starter credit. And you get a full booking system, AI phone answering, and website management that neither platform offers.",
+    answer: "BrightLocal charges $39-79/month and geo-grid scans consume credits — heavy users burn through their allowance fast. Whitespark charges $14-140/month for rank tracking, and their geo-grid product is sold separately starting at $10/month. Both have keyword limits that push you into higher tiers. With indexFlow, geo-grid tracking is built into every plan with simple pay-as-you-go credits at $10 for 5 scans — plus every new account gets a $5 starter credit. And you get a full lead management system, AI phone answering, and website management that neither platform offers.",
   },
   {
     question: "How much does Local Search Grid cost?",
@@ -365,13 +365,13 @@ export default function LocalSearchGridPage() {
                         {step.number === 4 && (
                           <div className="w-full space-y-3">
                             {[
-                              { name: "Your Venue", rank: 1, color: "text-green-500" },
+                              { name: "Your Business", rank: 1, color: "text-green-500" },
                               { name: "Mario's Pizza", rank: 3, color: "text-green-500" },
                               { name: "Olive Garden", rank: 5, color: "text-yellow-500" },
                               { name: "Luigi's Trattoria", rank: 8, color: "text-orange-500" },
                             ].map((comp) => (
                               <div key={comp.name} className="flex items-center justify-between p-2 rounded-lg bg-background border text-sm">
-                                <span className={comp.name === "Your Venue" ? "font-semibold" : ""}>{comp.name}</span>
+                                <span className={comp.name === "Your Business" ? "font-semibold" : ""}>{comp.name}</span>
                                 <span className={`font-bold ${comp.color}`}>#{comp.rank}</span>
                               </div>
                             ))}
@@ -529,7 +529,7 @@ export default function LocalSearchGridPage() {
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2" data-testid="text-grid-keywords">25</div>
-                <p className="text-sm text-muted-foreground">Keywords per Venue</p>
+                <p className="text-sm text-muted-foreground">Keywords per Workspace</p>
               </Card>
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2" data-testid="text-grid-points">49</div>
@@ -691,7 +691,7 @@ export default function LocalSearchGridPage() {
 
           <div className="text-center mt-8">
             <p className="text-sm text-muted-foreground mb-4">
-              Stop paying for expensive monthly SEO subscriptions. Get geo-grid tracking, rank tracking, citations, and a complete booking platform.<br /><strong>Pay only for the scans you need — every account starts with a $5 credit.</strong>
+              Stop paying for expensive monthly SEO subscriptions. Get geo-grid tracking, rank tracking, citations, and a complete business platform.<br /><strong>Pay only for the scans you need — every account starts with a $5 credit.</strong>
             </p>
             <Link href="/contact">
               <Button size="lg" className="gap-2" data-testid="button-grid-compare-demo">
@@ -714,7 +714,7 @@ export default function LocalSearchGridPage() {
                 <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
                   <MapPin className="w-6 h-6 text-blue-500" />
                 </div>
-                <h3 className="font-semibold mb-2">Single-Location Venues</h3>
+                <h3 className="font-semibold mb-2">Single-Location Businesses</h3>
                 <p className="text-sm text-muted-foreground">
                   Understand your real neighborhood reach. See exactly which streets and areas you dominate — and which ones your competitors own.
                 </p>
@@ -727,7 +727,7 @@ export default function LocalSearchGridPage() {
                 </div>
                 <h3 className="font-semibold mb-2">Multi-Location Brands</h3>
                 <p className="text-sm text-muted-foreground">
-                  Compare grid performance across all your locations. Identify which venues need attention and allocate marketing spend where it matters most.
+                  Compare grid performance across all your locations. Identify which locations need attention and allocate marketing spend where it matters most.
                 </p>
               </CardContent>
             </Card>

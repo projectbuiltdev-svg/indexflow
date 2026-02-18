@@ -319,15 +319,15 @@ export default function SettingsTwilioSetup() {
                   <li className="flex items-start gap-3">
                     <Users className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                     <div>
-                      <span className="font-medium">Phone Reservations</span>
-                      <p className="text-muted-foreground">AI creates bookings directly from phone conversations</p>
+                      <span className="font-medium">Phone Scheduling</span>
+                      <p className="text-muted-foreground">AI creates appointments directly from phone conversations</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <MessageCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                     <div>
-                      <span className="font-medium">Guest Self-Service</span>
-                      <p className="text-muted-foreground">Guests can text CONFIRM, CANCEL, or STATUS to manage bookings</p>
+                      <span className="font-medium">Client Self-Service</span>
+                      <p className="text-muted-foreground">Clients can text CONFIRM, CANCEL, or STATUS to manage appointments</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">

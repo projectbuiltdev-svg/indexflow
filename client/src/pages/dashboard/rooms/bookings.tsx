@@ -18,11 +18,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, BedDouble } from "lucide-react";
 
 const bookingFormSchema = z.object({
-  guestName: z.string().min(1, "Guest name is required"),
+  guestName: z.string().min(1, "Client name is required"),
   guestEmail: z.string().email().optional().or(z.literal("")),
-  roomId: z.string().min(1, "Room is required"),
-  checkIn: z.string().min(1, "Check-in date is required"),
-  checkOut: z.string().min(1, "Check-out date is required"),
+  roomId: z.string().min(1, "Project is required"),
+  checkIn: z.string().min(1, "Start date is required"),
+  checkOut: z.string().min(1, "End date is required"),
   totalAmount: z.string().optional(),
 });
 
@@ -75,7 +75,7 @@ export default function RoomBookings() {
       queryClient.invalidateQueries({ queryKey: [`/api/room-bookings?workspaceId=${workspaceId}`] });
       setDialogOpen(false);
       form.reset();
-      toast({ title: "Booking created" });
+      toast({ title: "Engagement created" });
     },
     onError: (err: Error) => {
       toast({ title: "Error", description: err.message, variant: "destructive" });
@@ -88,7 +88,7 @@ export default function RoomBookings() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/room-bookings?workspaceId=${workspaceId}`] });
-      toast({ title: "Booking status updated" });
+      toast({ title: "Engagement status updated" });
     },
     onError: (err: Error) => {
       toast({ title: "Error", description: err.message, variant: "destructive" });
@@ -96,64 +96,64 @@ export default function RoomBookings() {
   });
 
   if (!workspaceId) {
-    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a workspace from the sidebar to manage room bookings.</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a workspace from the sidebar to manage project engagements.</div>;
   }
 
   if (isLoading) {
     return (
       <div className="p-6 space-y-6">
-        <h1 className="text-2xl font-semibold">Room Bookings</h1>
+        <h1 className="text-2xl font-semibold">Project Engagements</h1>
         <Card><CardContent className="p-6"><Skeleton className="h-48 w-full" /></CardContent></Card>
       </div>
     );
   }
 
-  const getRoomName = (roomId: string) => {
+  const getProjectName = (roomId: string) => {
     const r = rooms.find((rm: any) => rm.id === roomId || String(rm.id) === roomId);
-    return r?.roomNumber || roomId;
+    return r?.roomNumber ? `Project ${r.roomNumber}` : `Project ${roomId}`;
   };
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <h1 className="text-2xl font-semibold" data-testid="page-title">Room Bookings</h1>
+        <h1 className="text-2xl font-semibold" data-testid="page-title">Project Engagements</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button data-testid="button-add-booking"><Plus className="h-4 w-4 mr-2" />Add Booking</Button>
+            <Button data-testid="button-add-booking"><Plus className="h-4 w-4 mr-2" />Add Engagement</Button>
           </DialogTrigger>
           <DialogContent>
-            <DialogHeader><DialogTitle>New Room Booking</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>New Project Engagement</DialogTitle></DialogHeader>
             <Form {...form}>
               <form onSubmit={form.handleSubmit((v) => createMutation.mutate(v))} className="space-y-4">
                 <FormField control={form.control} name="guestName" render={({ field }) => (
-                  <FormItem><FormLabel>Guest Name</FormLabel><FormControl><Input data-testid="input-booking-guest" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Client Name</FormLabel><FormControl><Input data-testid="input-booking-guest" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="guestEmail" render={({ field }) => (
-                  <FormItem><FormLabel>Guest Email</FormLabel><FormControl><Input data-testid="input-booking-email" type="email" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Client Email</FormLabel><FormControl><Input data-testid="input-booking-email" type="email" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="roomId" render={({ field }) => (
-                  <FormItem><FormLabel>Room</FormLabel><FormControl>
+                  <FormItem><FormLabel>Project</FormLabel><FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger data-testid="select-booking-room"><SelectValue placeholder="Select room" /></SelectTrigger>
+                      <SelectTrigger data-testid="select-booking-room"><SelectValue placeholder="Select project" /></SelectTrigger>
                       <SelectContent>
                         {rooms.map((r: any) => (
-                          <SelectItem key={r.id} value={String(r.id)}>{r.roomNumber}</SelectItem>
+                          <SelectItem key={r.id} value={String(r.id)}>Project {r.roomNumber}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="checkIn" render={({ field }) => (
-                  <FormItem><FormLabel>Check In</FormLabel><FormControl><Input data-testid="input-booking-checkin" type="date" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Start Date</FormLabel><FormControl><Input data-testid="input-booking-checkin" type="date" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="checkOut" render={({ field }) => (
-                  <FormItem><FormLabel>Check Out</FormLabel><FormControl><Input data-testid="input-booking-checkout" type="date" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>End Date</FormLabel><FormControl><Input data-testid="input-booking-checkout" type="date" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="totalAmount" render={({ field }) => (
                   <FormItem><FormLabel>Total Amount</FormLabel><FormControl><Input data-testid="input-booking-total" type="number" min="0" step="0.01" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <Button type="submit" className="w-full" disabled={createMutation.isPending} data-testid="button-submit-booking">
-                  {createMutation.isPending ? "Creating..." : "Create Booking"}
+                  {createMutation.isPending ? "Creating..." : "Create Engagement"}
                 </Button>
               </form>
             </Form>
@@ -163,19 +163,19 @@ export default function RoomBookings() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><BedDouble className="h-5 w-5" />Bookings</CardTitle>
+          <CardTitle className="flex items-center gap-2"><BedDouble className="h-5 w-5" />Engagements</CardTitle>
         </CardHeader>
         <CardContent>
           {bookings.length === 0 ? (
-            <p className="text-muted-foreground" data-testid="empty-state">No room bookings yet.</p>
+            <p className="text-muted-foreground" data-testid="empty-state">No project engagements yet.</p>
           ) : (
             <Table data-testid="room-bookings-table">
               <TableHeader>
                 <TableRow>
-                  <TableHead>Guest</TableHead>
-                  <TableHead>Room</TableHead>
-                  <TableHead>Check In</TableHead>
-                  <TableHead>Check Out</TableHead>
+                  <TableHead>Client</TableHead>
+                  <TableHead>Project</TableHead>
+                  <TableHead>Start Date</TableHead>
+                  <TableHead>End Date</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Total</TableHead>
                   <TableHead>Actions</TableHead>
@@ -185,12 +185,12 @@ export default function RoomBookings() {
                 {bookings.map((b: any) => (
                   <TableRow key={b.id} data-testid={`room-booking-row-${b.id}`}>
                     <TableCell>{b.guestName}</TableCell>
-                    <TableCell>{getRoomName(b.roomId)}</TableCell>
+                    <TableCell>{getProjectName(b.roomId)}</TableCell>
                     <TableCell>{b.checkIn}</TableCell>
                     <TableCell>{b.checkOut}</TableCell>
                     <TableCell>
                       <Badge variant={bookingStatusVariant(b.status || "")} data-testid={`room-booking-status-${b.id}`}>
-                        {b.status || "pending"}
+                        {b.status === "checked_in" ? "In Progress" : b.status === "checked_out" ? "Completed" : (b.status || "pending")}
                       </Badge>
                     </TableCell>
                     <TableCell>{b.totalAmount ? `$${b.totalAmount}` : "-"}</TableCell>
@@ -204,8 +204,8 @@ export default function RoomBookings() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="confirmed">Confirmed</SelectItem>
-                          <SelectItem value="checked_in">Checked In</SelectItem>
-                          <SelectItem value="checked_out">Checked Out</SelectItem>
+                          <SelectItem value="checked_in">In Progress</SelectItem>
+                          <SelectItem value="checked_out">Completed</SelectItem>
                           <SelectItem value="cancelled">Cancelled</SelectItem>
                         </SelectContent>
                       </Select>

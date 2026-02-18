@@ -23,7 +23,7 @@ const portfolioItems = [
   {
     title: "Electric Nights",
     tagline: "Where the Party Starts",
-    description: "High-energy design for modern bars and nightlife venues.",
+    description: "High-energy design for modern bars and nightlife spots.",
     style: "Vibrant",
     image: barVibrant,
     previewUrl: "/preview/bar-vibrant",
@@ -49,22 +49,22 @@ const portfolioItems = [
 const features = [
   {
     icon: Calendar,
-    title: "Table & Booth Reservations",
-    description: "VIP tables, booths, and group bookings with deposit collection for busy nights.",
+    title: "Table & Booth Scheduling",
+    description: "VIP tables, booths, and group events with deposit collection for busy nights.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
   {
     icon: Bot,
     title: "AI Night Owl",
-    description: "24/7 phone and chat support that knows your drink menu and event schedule.",
+    description: "24/7 phone and chat support that knows your offerings and event schedule.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
   {
     icon: Music,
     title: "Event Management",
-    description: "Promote live music, DJ nights, and special events with integrated booking.",
+    description: "Promote live music, DJ nights, and special events with integrated scheduling.",
     color: "text-cyan-500",
     bgColor: "bg-cyan-500/10",
   },
@@ -78,11 +78,11 @@ const features = [
 ];
 
 const benefits = [
-  "Sleek website showcasing your vibe and cocktail menu",
-  "VIP and bottle service reservations",
-  "Pre-paid deposits for group bookings",
+  "Sleek website showcasing your vibe and offerings",
+  "VIP and bottle service scheduling",
+  "Pre-paid deposits for group events",
   "Event calendar with ticket sales integration",
-  "Age verification and guest list management",
+  "Client verification and access management",
   "Late-night hours support",
 ];
 
@@ -104,8 +104,8 @@ export default function BarsSolution() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              From craft cocktail bars to high-energy nightclubs, manage reservations, 
-              events, and VIP experiences effortlessly. Our AI handles bookings while 
+              From craft cocktail bars to high-energy nightclubs, manage scheduling, 
+              events, and VIP experiences effortlessly. Our AI handles appointments while 
               you keep the drinks flowing.
             </p>
             <div className="flex items-center justify-center gap-4">
@@ -168,11 +168,11 @@ export default function BarsSolution() {
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">50%</div>
-                <p className="text-sm text-muted-foreground">More VIP Bookings</p>
+                <p className="text-sm text-muted-foreground">More VIP Inquiries</p>
               </Card>
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">24/7</div>
-                <p className="text-sm text-muted-foreground">Reservation Support</p>
+                <p className="text-sm text-muted-foreground">Scheduling Support</p>
               </Card>
               <Card className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">100%</div>

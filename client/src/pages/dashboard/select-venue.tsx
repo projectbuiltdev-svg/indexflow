@@ -66,11 +66,11 @@ export default function SelectVenue() {
 
   const getVenueTypeLabel = (type: string) => {
     const types: Record<string, string> = {
-      restaurant: "Restaurant",
-      cafe: "Cafe",
-      bar: "Bar",
-      hotel: "Hotel",
-      other: "Venue",
+      restaurant: "Agency",
+      cafe: "Freelancer",
+      bar: "Enterprise",
+      hotel: "Multi-Location",
+      other: "Workspace",
     };
     return types[type] || type;
   };

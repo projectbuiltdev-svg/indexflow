@@ -15,7 +15,7 @@ export default function DemoSmsConfirmation() {
             <img src={indexFlowLogo} alt="indexFlow" className="h-12" />
             <div>
               <p className="text-primary-foreground font-semibold text-lg">SMS Confirmation</p>
-              <p className="text-primary-foreground/70 text-sm">Automated booking notification</p>
+              <p className="text-primary-foreground/70 text-sm">Automated appointment notification</p>
             </div>
           </div>
           
@@ -25,8 +25,8 @@ export default function DemoSmsConfirmation() {
                 <CheckCircle2 className="w-5 h-5 text-primary" />
               </div>
               <div className="flex-1 bg-gray-100 rounded-2xl rounded-tl-sm p-4">
-                <p className="font-semibold mb-2 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent">Booking Confirmed!</p>
-                <p className="text-sm text-gray-600 mb-3">Hi John, your reservation is confirmed:</p>
+                <p className="font-semibold mb-2 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent">Appointment Confirmed!</p>
+                <p className="text-sm text-gray-600 mb-3">Hi John, your appointment is confirmed:</p>
                 
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2 text-gray-700">
@@ -39,11 +39,11 @@ export default function DemoSmsConfirmation() {
                   </div>
                   <div className="flex items-center gap-2 text-gray-700">
                     <Users className="w-4 h-4 text-gray-400" />
-                    <span>4 guests</span>
+                    <span>4 attendees</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-700">
                     <MapPin className="w-4 h-4 text-gray-400" />
-                    <span>The Italian Kitchen</span>
+                    <span>indexFlow Office</span>
                   </div>
                 </div>
                 

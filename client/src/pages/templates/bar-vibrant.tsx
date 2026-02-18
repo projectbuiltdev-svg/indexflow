@@ -84,7 +84,7 @@ export default function BarVibrant() {
               <div className="w-14 h-14 bg-rose-500 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Zap className="w-7 h-7 text-white" />
               </div>
-              <h3 className="font-bold mb-2">Guest List</h3>
+              <h3 className="font-bold mb-2">VIP List</h3>
               <p className="text-zinc-400 text-sm">Skip the line, join online</p>
             </div>
           </div>
@@ -174,9 +174,9 @@ export default function BarVibrant() {
       <section className="py-20 px-6 bg-gradient-to-r from-orange-600 to-pink-600">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black mb-4">THIS WEEKEND</h2>
-          <p className="text-white/90 mb-8 text-lg">DJ MARCO • Saturday 10PM • Limited guest list spots available</p>
+          <p className="text-white/90 mb-8 text-lg">DJ MARCO • Saturday 10PM • Limited spots available</p>
           <Button size="lg" className="bg-white text-pink-600 hover:bg-zinc-100 font-bold px-8">
-            Get on the Guest List
+            Get on the VIP List
           </Button>
         </div>
       </section>

@@ -210,7 +210,7 @@ export default function SettingsTwilioVoice() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> AI-powered voice calls for reservations</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> AI-powered voice calls for client inquiries</li>
                   <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> 24/7 automated call handling</li>
                   <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Custom voice persona and greeting</li>
                   <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Voicemail when needed</li>

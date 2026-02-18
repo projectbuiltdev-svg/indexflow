@@ -7,10 +7,10 @@ import { Layout, Plus, Globe, FileText } from "lucide-react";
 const mockPages = [
   { id: 1, title: "Home", slug: "/", status: "published", lastUpdated: "2026-02-14" },
   { id: 2, title: "About Us", slug: "/about", status: "published", lastUpdated: "2026-02-10" },
-  { id: 3, title: "Menu", slug: "/menu", status: "published", lastUpdated: "2026-02-08" },
+  { id: 3, title: "Services", slug: "/services", status: "published", lastUpdated: "2026-02-08" },
   { id: 4, title: "Contact", slug: "/contact", status: "published", lastUpdated: "2026-02-05" },
-  { id: 5, title: "Events", slug: "/events", status: "draft", lastUpdated: "2026-02-16" },
-  { id: 6, title: "Private Dining", slug: "/private-dining", status: "draft", lastUpdated: "2026-02-17" },
+  { id: 5, title: "Case Studies", slug: "/case-studies", status: "draft", lastUpdated: "2026-02-16" },
+  { id: 6, title: "Pricing", slug: "/pricing", status: "draft", lastUpdated: "2026-02-17" },
 ];
 
 export default function ContentPages() {

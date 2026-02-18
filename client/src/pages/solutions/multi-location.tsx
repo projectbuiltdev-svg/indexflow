@@ -10,14 +10,14 @@ const features = [
   {
     icon: Layers,
     title: "Centralized Dashboard",
-    description: "Manage every location from a single login. View bookings, analytics, and settings across all venues.",
+    description: "Manage every location from a single login. View projects, analytics, and settings across all locations.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
     icon: BarChart3,
     title: "Cross-Location Analytics",
-    description: "Compare performance across venues. Identify trends, peak hours, and revenue opportunities at a glance.",
+    description: "Compare performance across locations. Identify trends, peak hours, and revenue opportunities at a glance.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
@@ -42,7 +42,7 @@ const benefits = [
   "Per-location websites with shared brand guidelines",
   "Consolidated billing across all locations",
   "AI phone assistant configured per location",
-  "Cross-location booking transfer and guest recognition",
+  "Cross-location project transfer and client recognition",
   "Group-level reporting with individual location drill-down",
   "Bulk settings management with per-location overrides",
   "Dedicated account manager for multi-location clients",
@@ -51,13 +51,13 @@ const benefits = [
 const useCases = [
   {
     icon: Globe,
-    title: "Restaurant Groups",
-    description: "Manage 2 to 200+ restaurant locations from one place. Each gets its own website, phone number, and booking system.",
+    title: "Business Groups",
+    description: "Manage 2 to 200+ business locations from one place. Each gets its own website, phone number, and scheduling system.",
   },
   {
     icon: Building,
-    title: "Hotel Chains",
-    description: "Centralized room management with location-specific availability, rates, and guest communications.",
+    title: "Enterprise Chains",
+    description: "Centralized project management with location-specific availability, rates, and client communications.",
   },
   {
     icon: Users,
@@ -66,8 +66,8 @@ const useCases = [
   },
   {
     icon: Shield,
-    title: "Hospitality Groups",
-    description: "Mix of restaurants, bars, and cafes? No problem. Manage diverse business types under one umbrella.",
+    title: "Service Groups",
+    description: "Mix of different business types? No problem. Manage diverse operations under one umbrella.",
   },
 ];
 
@@ -76,7 +76,7 @@ export default function MultiLocationSolution() {
     <Layout>
       <SEO
         title="Multi-Location Management | indexFlow"
-        description="Manage all your locations from one centralized dashboard. Cross-location analytics, unified settings, and consistent branding for restaurant groups, hotel chains, and franchise operations."
+        description="Manage all your locations from one centralized dashboard. Cross-location analytics, unified settings, and consistent branding for business groups, enterprise chains, and franchise operations."
       />
       <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -92,7 +92,7 @@ export default function MultiLocationSolution() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-6">
-              Managing multiple venues shouldn't mean multiple headaches. 
+              Managing multiple locations shouldn't mean multiple headaches. 
               Our centralized platform gives you full visibility and control 
               across every location, from a single login.
             </p>

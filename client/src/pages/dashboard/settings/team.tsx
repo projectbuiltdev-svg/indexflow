@@ -102,7 +102,7 @@ export default function SettingsTeam() {
                 <Label>Email Address</Label>
                 <Input
                   type="email"
-                  placeholder="colleague@restaurant.com"
+                  placeholder="colleague@company.com"
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
                   data-testid="input-invite-email"
@@ -202,11 +202,11 @@ export default function SettingsTeam() {
               </div>
               <div className="flex items-start gap-3">
                 <Badge className={roleColors.manager}>Manager</Badge>
-                <p className="text-muted-foreground">Can manage bookings, view analytics, and update hours/closures.</p>
+                <p className="text-muted-foreground">Can manage content, view analytics, and update settings.</p>
               </div>
               <div className="flex items-start gap-3">
                 <Badge className={roleColors.staff}>Staff</Badge>
-                <p className="text-muted-foreground">Can view and manage today's bookings only.</p>
+                <p className="text-muted-foreground">Can view and manage daily tasks only.</p>
               </div>
             </div>
           </CardContent>

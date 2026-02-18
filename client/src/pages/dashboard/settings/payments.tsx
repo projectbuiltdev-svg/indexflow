@@ -97,7 +97,7 @@ export default function SettingsPayments() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold">Payment Integration</h1>
-          <p className="text-muted-foreground">Connect your payment provider for pre-paid reservations</p>
+          <p className="text-muted-foreground">Connect your payment provider for pre-paid services</p>
         </div>
 
         <Tabs defaultValue="stripe" className="w-full">
@@ -246,9 +246,9 @@ export default function SettingsPayments() {
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Pre-paid reservations</li>
-              <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Deposit collection for bookings</li>
-              <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> No-show protection</li>
+              <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Pre-paid services</li>
+              <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Deposit collection for appointments</li>
+              <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Cancellation protection</li>
               <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Automatic refunds for cancellations</li>
               <li className="flex items-center gap-2"><Shield className="w-4 h-4 text-green-500" /> PCI-compliant payment handling</li>
               <li className="flex items-center gap-2"><DollarSign className="w-4 h-4 text-green-500" /> Direct deposits to your bank account</li>

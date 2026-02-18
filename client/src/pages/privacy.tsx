@@ -13,7 +13,7 @@ const sections = [
       "Company and business information to understand your needs and provide tailored solutions",
       "Communication history when you interact with our sales and support teams",
       "Usage data from client dashboards to improve our platform and services",
-      "Technical data necessary to deploy and maintain your business's website and booking system",
+      "Technical data necessary to deploy and maintain your business's website and scheduling system",
     ],
   },
   {
@@ -21,7 +21,7 @@ const sections = [
     title: "How We Use Your Information",
     content: [
       "Responding to inquiries and providing demos of our platform",
-      "Setting up and managing your business's website and booking infrastructure",
+      "Setting up and managing your business's website and business infrastructure",
       "Providing technical support and maintenance for your systems",
       "Sending updates about new features, improvements, and relevant industry news",
       "Improving our services based on aggregated usage patterns and feedback",
@@ -35,7 +35,7 @@ const sections = [
       "Client business data is stored securely with access controls and regular backups",
       "We implement strict access controls - only authorized team members access client data",
       "Regular security audits and vulnerability assessments are conducted",
-      "We never sell your business information or your guests' data to third parties",
+      "We never sell your business information or your clients' data to third parties",
     ],
   },
   {
@@ -53,7 +53,7 @@ const sections = [
 
 export default function Privacy() {
   useEffect(() => {
-    document.title = "Privacy Policy | indexFlow - Hospitality Booking Platform";
+    document.title = "Privacy Policy | indexFlow - SEO & Agency Platform";
   }, []);
 
   return (
@@ -80,7 +80,7 @@ export default function Privacy() {
                 <h3 className="font-semibold mb-1">Summary</h3>
                 <p className="text-sm text-muted-foreground">
                   indexFlow collects information necessary to provide our website building 
-                  and booking management services. We protect your business data with industry-standard 
+                  and business management services. We protect your business data with industry-standard 
                   security and never sell your information to third parties.
                 </p>
               </div>
@@ -119,21 +119,21 @@ export default function Privacy() {
                   <FileText className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold mb-4">Guest Data Processing</h2>
+                  <h2 className="text-xl font-semibold mb-4">Client Data Processing</h2>
                   <div className="space-y-3 text-sm text-muted-foreground">
                     <p>
-                      When we build and manage booking systems for your business, guest reservation data 
+                      When we build and manage scheduling systems for your business, client appointment data 
                       is collected and processed on your behalf. You remain the data controller for 
-                      your guests' information, and we act as a data processor.
+                      your clients' information, and we act as a data processor.
                     </p>
                     <p>
-                      <strong className="text-foreground">Your responsibilities:</strong> Ensure your business's privacy policy informs guests about data collection
+                      <strong className="text-foreground">Your responsibilities:</strong> Ensure your business's privacy policy informs clients about data collection
                     </p>
                     <p>
-                      <strong className="text-foreground">Our responsibilities:</strong> Securely store and process guest data only as instructed by you
+                      <strong className="text-foreground">Our responsibilities:</strong> Securely store and process client data only as instructed by you
                     </p>
                     <p>
-                      <strong className="text-foreground">Data retention:</strong> Guest data is retained according to your preferences and applicable regulations
+                      <strong className="text-foreground">Data retention:</strong> Client data is retained according to your preferences and applicable regulations
                     </p>
                   </div>
                 </div>

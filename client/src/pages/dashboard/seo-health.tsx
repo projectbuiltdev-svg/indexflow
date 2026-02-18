@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Activity, CheckCircle, AlertTriangle, XCircle, RefreshCw } from "lucide-react";
 
 const mockIssues = [
-  { id: 1, page: "/menu", issue: "Missing meta description", severity: "warning", category: "Meta Tags" },
+  { id: 1, page: "/services", issue: "Missing meta description", severity: "warning", category: "Meta Tags" },
   { id: 2, page: "/about", issue: "Images missing alt text (3 images)", severity: "warning", category: "Accessibility" },
-  { id: 3, page: "/events", issue: "Page load time exceeds 3s", severity: "error", category: "Performance" },
-  { id: 4, page: "/blog/spring-menu", issue: "Duplicate H1 tag", severity: "error", category: "Content" },
+  { id: 3, page: "/case-studies", issue: "Page load time exceeds 3s", severity: "error", category: "Performance" },
+  { id: 4, page: "/blog/seo-guide", issue: "Duplicate H1 tag", severity: "error", category: "Content" },
   { id: 5, page: "/contact", issue: "No structured data found", severity: "info", category: "Schema" },
 ];
 

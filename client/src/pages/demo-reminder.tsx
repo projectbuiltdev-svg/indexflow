@@ -14,8 +14,8 @@ export default function DemoReminder() {
           <div className="bg-primary p-5 flex items-center gap-4">
             <img src={indexFlowLogo} alt="indexFlow" className="h-12" />
             <div>
-              <p className="text-primary-foreground font-semibold text-lg">Booking Reminder</p>
-              <p className="text-primary-foreground/70 text-sm">Automated reminder notification</p>
+              <p className="text-primary-foreground font-semibold text-lg">Appointment Reminder</p>
+              <p className="text-primary-foreground/70 text-sm">Automated appointment reminder</p>
             </div>
           </div>
           
@@ -25,7 +25,7 @@ export default function DemoReminder() {
                 <Bell className="w-5 h-5 text-primary" />
               </div>
               <div className="flex-1 bg-gray-100 rounded-2xl rounded-tl-sm p-4">
-                <p className="font-semibold mb-2 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent">Reminder: Booking Tomorrow!</p>
+                <p className="font-semibold mb-2 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent">Reminder: Appointment Tomorrow!</p>
                 <p className="text-sm text-gray-600 mb-3">Hi John, just a friendly reminder:</p>
                 
                 <div className="space-y-2 text-sm">
@@ -39,11 +39,11 @@ export default function DemoReminder() {
                   </div>
                   <div className="flex items-center gap-2 text-gray-700">
                     <Users className="w-4 h-4 text-gray-400" />
-                    <span>4 guests</span>
+                    <span>4 attendees</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-700">
                     <MapPin className="w-4 h-4 text-gray-400" />
-                    <span>The Italian Kitchen</span>
+                    <span>indexFlow Office</span>
                   </div>
                 </div>
                 
@@ -65,7 +65,7 @@ export default function DemoReminder() {
               </div>
               <div className="flex-1 bg-gray-100 rounded-2xl rounded-tl-sm p-4">
                 <p className="text-sm text-gray-700">
-                  Great! Your reservation is confirmed. We look forward to seeing you tomorrow at 7:00 PM!
+                  Great! Your appointment is confirmed. We look forward to seeing you tomorrow at 7:00 PM!
                 </p>
               </div>
             </div>

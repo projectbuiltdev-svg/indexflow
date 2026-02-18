@@ -9,36 +9,36 @@ import { SEO, seoData } from "@/components/seo";
 const features = [
   {
     icon: LayoutDashboard,
-    title: "Today's Bookings at a Glance",
-    description: "See all of today's reservations, upcoming arrivals, and guest counts in one clean overview.",
+    title: "Today's Tasks at a Glance",
+    description: "See all of today's scheduled tasks, upcoming deadlines, and client counts in one clean overview.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
   {
     icon: Calendar,
     title: "Calendar View",
-    description: "Weekly and monthly calendar views with drag-and-drop booking management and resource allocation.",
+    description: "Weekly and monthly calendar views with drag-and-drop task management and resource allocation.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
   {
     icon: Phone,
     title: "Call Logs with AI Transcripts",
-    description: "Every AI phone call is logged with full transcripts, sentiment analysis, and booking outcomes.",
+    description: "Every AI phone call is logged with full transcripts, sentiment analysis, and lead outcomes.",
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
   {
     icon: BarChart3,
     title: "Analytics Dashboard",
-    description: "Track booking trends, revenue, call volumes, and conversion rates with real-time charts.",
+    description: "Track engagement trends, revenue, call volumes, and conversion rates with real-time charts.",
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
   },
   {
     icon: Users,
     title: "Team Management",
-    description: "Add team members, assign roles, and control who can view or modify bookings and settings.",
+    description: "Add team members, assign roles, and control who can view or modify tasks and settings.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
@@ -52,14 +52,14 @@ const features = [
   {
     icon: Boxes,
     title: "Resource Management",
-    description: "Manage tables, rooms, and seating areas. Set capacity limits and booking rules per resource.",
+    description: "Manage projects, campaigns, and service areas. Set capacity limits and assignment rules per resource.",
     color: "text-indigo-500",
     bgColor: "bg-indigo-500/10",
   },
   {
     icon: Download,
     title: "Export Data",
-    description: "Export bookings, call logs, and analytics to CSV or PDF for reporting and accounting.",
+    description: "Export tasks, call logs, and analytics to CSV or PDF for reporting and accounting.",
     color: "text-amber-500",
     bgColor: "bg-amber-500/10",
   },
@@ -67,7 +67,7 @@ const features = [
 
 const benefits = [
   "Everything in one place — no switching between tools",
-  "Real-time updates — bookings appear instantly as they're made",
+  "Real-time updates — tasks appear instantly as they're created",
   "Mobile responsive — manage your workspace from any device",
   "Role-based access — control what each team member can see",
 ];
@@ -86,12 +86,12 @@ export default function DashboardPage() {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
               Manage Your{" "}
               <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
-                Venue Operations
+                Business Operations
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              One dashboard to control bookings, calls, analytics & settings.
-              Everything your team needs to run the front-of-house, in one place.
+              One dashboard to control tasks, calls, analytics & settings.
+              Everything your team needs to run your business, in one place.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link href="/contact">
@@ -112,7 +112,7 @@ export default function DashboardPage() {
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Everything You Need to Run Your Venue</h2>
+            <h2 className="text-3xl font-bold mb-4">Everything You Need to Run Your Business</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               A powerful yet intuitive dashboard designed for your team.
             </p>
@@ -142,7 +142,7 @@ export default function DashboardPage() {
                 Built for Teams
               </Badge>
               <h2 className="text-3xl font-bold mb-6">
-                Your Command Center for Hospitality
+                Your Command Center for Growth
               </h2>
               <ul className="space-y-4">
                 {benefits.map((benefit, index) => (

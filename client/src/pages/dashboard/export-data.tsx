@@ -143,11 +143,11 @@ export default function ExportData() {
     const date = new Date().toISOString().slice(0, 10);
     switch (typeId) {
       case "bookings":
-        return { endpoint: `/api/workspaces/${workspaceId}/reservations`, filename: `bookings_${date}.csv` };
+        return { endpoint: `/api/workspaces/${workspaceId}/reservations`, filename: `client_reports_${date}.csv` };
       case "calls":
         return { endpoint: `/api/workspaces/${workspaceId}/calls`, filename: `call_logs_${date}.csv` };
       case "rooms":
-        return { endpoint: `/api/workspaces/${workspaceId}/room-bookings`, filename: `room_bookings_${date}.csv` };
+        return { endpoint: `/api/workspaces/${workspaceId}/room-bookings`, filename: `projects_${date}.csv` };
       case "analytics":
         return { endpoint: `/api/workspaces/${workspaceId}/reservations`, filename: `analytics_${date}.csv` };
       case "rank-tracker":
