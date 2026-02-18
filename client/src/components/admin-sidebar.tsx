@@ -1,5 +1,4 @@
 import { Link, useLocation } from "wouter";
-import logoImage from "@assets/indexFlow_cloud_LOGO_1771386094646.png";
 import {
   LayoutDashboard,
   Building2,
@@ -149,11 +148,11 @@ export function AdminSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex flex-col gap-1.5 px-2 py-1">
-          <img src={logoImage} alt="indexFlow" className="w-full max-w-[140px] h-auto object-contain object-left" />
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider" data-testid="text-admin-title">
-            Super Admin
+        <div className="flex items-center gap-2 px-2 py-1">
+          <span className="text-sm font-semibold" data-testid="text-admin-title">
+            indexFlow
           </span>
+          <span className="text-xs text-muted-foreground">Super Admin</span>
         </div>
         <Select
           value={selectedWorkspace?.id ?? ""}
