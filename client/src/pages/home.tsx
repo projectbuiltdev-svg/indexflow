@@ -259,7 +259,7 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
-            <p className="mt-6 text-[13px] sm:text-sm text-white/70 drop-shadow-lg">
+            <p className="mt-6 text-[13px] sm:text-sm font-medium bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent drop-shadow-lg">
               IndexFlow handles infrastructure & agencies handle client relationships.
             </p>
           </div>
