@@ -19,17 +19,17 @@ const stats = [
 ];
 
 const clientRankings = [
-  { client: "Bella Cucina", keywords: 45, avgPos: 8.2, topKeyword: "italian restaurant downtown", change: "+3", gsc: true },
-  { client: "Grand Meridian", keywords: 38, avgPos: 12.5, topKeyword: "luxury hotel spa", change: "+1", gsc: true },
-  { client: "Sakura Dining", keywords: 32, avgPos: 15.8, topKeyword: "japanese sushi bar", change: "-2", gsc: true },
-  { client: "Coastal Breeze", keywords: 28, avgPos: 18.3, topKeyword: "beachfront cafe", change: "+5", gsc: false },
-  { client: "The Blue Lagoon", keywords: 22, avgPos: 22.1, topKeyword: "cocktail bar lounge", change: "+2", gsc: true },
+  { client: "Apex Digital Agency", keywords: 45, avgPos: 8.2, topKeyword: "best seo agency austin", change: "+3", gsc: true },
+  { client: "Jake Morrison SEO", keywords: 38, avgPos: 12.5, topKeyword: "freelance seo consultant", change: "+1", gsc: true },
+  { client: "Greenfield Law Firm", keywords: 32, avgPos: 15.8, topKeyword: "personal injury lawyer miami", change: "-2", gsc: true },
+  { client: "Meridian Hotels Group", keywords: 28, avgPos: 18.3, topKeyword: "luxury hotel booking", change: "+5", gsc: false },
+  { client: "BrightPath Marketing", keywords: 22, avgPos: 22.1, topKeyword: "digital marketing agency", change: "+2", gsc: true },
 ];
 
 const localGridClients = [
-  { client: "Bella Cucina", gridScore: "87%", coverage: "12/15 zones", topPosition: "#2", lastScan: "2 hrs ago" },
-  { client: "Grand Meridian", gridScore: "74%", coverage: "9/12 zones", topPosition: "#4", lastScan: "4 hrs ago" },
-  { client: "Sakura Dining", gridScore: "65%", coverage: "7/10 zones", topPosition: "#6", lastScan: "1 day ago" },
+  { client: "Apex Digital Agency", gridScore: "87%", coverage: "12/15 zones", topPosition: "#2", lastScan: "2 hrs ago" },
+  { client: "Greenfield Law Firm", gridScore: "74%", coverage: "9/12 zones", topPosition: "#4", lastScan: "4 hrs ago" },
+  { client: "Jake Morrison SEO", gridScore: "65%", coverage: "7/10 zones", topPosition: "#6", lastScan: "1 day ago" },
 ];
 
 const seoConfigColumns = [

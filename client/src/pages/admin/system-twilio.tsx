@@ -19,18 +19,18 @@ const stats = [
 ];
 
 const clientStatus = [
-  { client: "Bella Cucina", status: "Connected", phone: "+1 (212) 555-0142", calls: 156, sms: 423, ai: true },
-  { client: "Grand Meridian", status: "Connected", phone: "+1 (415) 555-0198", calls: 134, sms: 398, ai: true },
-  { client: "Sakura Dining", status: "Connected", phone: "+1 (646) 555-0234", calls: 98, sms: 287, ai: true },
-  { client: "Coastal Breeze", status: "Not Connected", phone: "-", calls: 0, sms: 0, ai: false },
-  { client: "The Blue Lagoon", status: "Connected", phone: "+1 (310) 555-0167", calls: 45, sms: 134, ai: true },
+  { client: "Apex Digital Agency", status: "Connected", phone: "+1 (212) 555-0142", calls: 156, sms: 423, ai: true },
+  { client: "Greenfield Law Firm", status: "Connected", phone: "+1 (415) 555-0198", calls: 134, sms: 398, ai: true },
+  { client: "Jake Morrison SEO", status: "Connected", phone: "+1 (646) 555-0234", calls: 98, sms: 287, ai: true },
+  { client: "BrightPath Marketing", status: "Not Connected", phone: "-", calls: 0, sms: 0, ai: false },
+  { client: "Meridian Hotels Group", status: "Connected", phone: "+1 (310) 555-0167", calls: 45, sms: 134, ai: true },
 ];
 
 const recentSms = [
-  { from: "Bella Cucina", message: "Your reservation for 2 at 7:30 PM has been confirmed.", time: "2 min ago" },
-  { from: "Grand Meridian", message: "Reminder: Check-in tomorrow at 3:00 PM. Reply HELP for assistance.", time: "15 min ago" },
-  { from: "Sakura Dining", message: "Thank you for your booking! We look forward to seeing you.", time: "1 hr ago" },
-  { from: "The Blue Lagoon", message: "Your table is ready! Please arrive within 15 minutes.", time: "2 hrs ago" },
+  { from: "Apex Digital Agency", message: "Your SEO consultation for 2:30 PM has been confirmed.", time: "2 min ago" },
+  { from: "Greenfield Law Firm", message: "Reminder: Strategy call tomorrow at 3:00 PM. Reply HELP for assistance.", time: "15 min ago" },
+  { from: "Jake Morrison SEO", message: "Thank you for scheduling! We look forward to your audit review.", time: "1 hr ago" },
+  { from: "Meridian Hotels Group", message: "Your onboarding session is ready! Please join within 15 minutes.", time: "2 hrs ago" },
 ];
 
 const voiceFeatures = ["Inbound call handling", "AI voice assistant", "Call recording", "Voicemail transcription", "Call forwarding"];

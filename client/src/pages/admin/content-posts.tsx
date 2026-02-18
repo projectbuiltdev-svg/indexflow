@@ -30,9 +30,9 @@ export default function AdminContentPosts() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Workspaces</SelectItem>
-              <SelectItem value="bella-cucina">Bella Cucina</SelectItem>
-              <SelectItem value="grand-meridian">Grand Meridian Hotel</SelectItem>
-              <SelectItem value="sakura-dining">Sakura Dining</SelectItem>
+              <SelectItem value="apex-digital">Apex Digital Agency</SelectItem>
+              <SelectItem value="jake-morrison">Jake Morrison SEO</SelectItem>
+              <SelectItem value="greenfield-law">Greenfield Law Firm</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -19,12 +19,12 @@ const stats = [
 ];
 
 const transactions = [
-  { id: 1, client: "Bella Cucina", amount: "$299.00", type: "Subscription", status: "Paid", date: "Feb 15, 2026" },
-  { id: 2, client: "Grand Meridian Hotel", amount: "$499.00", type: "Subscription", status: "Paid", date: "Feb 14, 2026" },
-  { id: 3, client: "Sakura Dining", amount: "$149.00", type: "Add-on", status: "Paid", date: "Feb 14, 2026" },
-  { id: 4, client: "Coastal Breeze Cafe", amount: "$299.00", type: "Subscription", status: "Failed", date: "Feb 13, 2026" },
-  { id: 5, client: "The Blue Lagoon", amount: "$199.00", type: "Subscription", status: "Paid", date: "Feb 12, 2026" },
-  { id: 6, client: "Metro Bistro", amount: "$299.00", type: "Subscription", status: "Paid", date: "Feb 11, 2026" },
+  { id: 1, client: "Apex Digital Agency", amount: "$299.00", type: "Subscription", status: "Paid", date: "Feb 15, 2026" },
+  { id: 2, client: "Greenfield Law Firm", amount: "$499.00", type: "Subscription", status: "Paid", date: "Feb 14, 2026" },
+  { id: 3, client: "Jake Morrison SEO", amount: "$149.00", type: "Add-on", status: "Paid", date: "Feb 14, 2026" },
+  { id: 4, client: "BrightPath Marketing", amount: "$299.00", type: "Subscription", status: "Failed", date: "Feb 13, 2026" },
+  { id: 5, client: "Meridian Hotels Group", amount: "$199.00", type: "Subscription", status: "Paid", date: "Feb 12, 2026" },
+  { id: 6, client: "Summit Growth Partners", amount: "$299.00", type: "Subscription", status: "Paid", date: "Feb 11, 2026" },
 ];
 
 export default function AdminBillingSubscriptions() {

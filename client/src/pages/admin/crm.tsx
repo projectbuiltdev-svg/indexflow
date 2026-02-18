@@ -437,7 +437,7 @@ export default function AdminCrm() {
                   <Input
                     value={newDeal.businessName}
                     onChange={(e) => setNewDeal(prev => ({ ...prev, businessName: e.target.value }))}
-                    placeholder="e.g. The Blue Lagoon"
+                    placeholder="e.g. Meridian Hotels Group"
                     data-testid="input-deal-business"
                   />
                 </div>

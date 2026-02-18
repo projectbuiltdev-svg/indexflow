@@ -13,12 +13,12 @@ import {
 import { Settings, Code } from "lucide-react";
 
 const widgets = [
-  { id: 1, client: "Bella Cucina", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 14, 2026" },
-  { id: 2, client: "Grand Meridian Hotel", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 12, 2026" },
-  { id: 3, client: "Sakura Dining", type: "Chat Only", status: "Active", voice: false, chat: true, voiceLastConfig: "-" },
-  { id: 4, client: "Coastal Breeze Cafe", type: "Chat + Voice", status: "Pending", voice: true, chat: true, voiceLastConfig: "Feb 10, 2026" },
-  { id: 5, client: "The Blue Lagoon", type: "Chat Only", status: "Active", voice: false, chat: true, voiceLastConfig: "-" },
-  { id: 6, client: "Metro Bistro", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 8, 2026" },
+  { id: 1, client: "Apex Digital Agency", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 14, 2026" },
+  { id: 2, client: "Greenfield Law Firm", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 12, 2026" },
+  { id: 3, client: "Jake Morrison SEO", type: "Chat Only", status: "Active", voice: false, chat: true, voiceLastConfig: "-" },
+  { id: 4, client: "BrightPath Marketing", type: "Chat + Voice", status: "Pending", voice: true, chat: true, voiceLastConfig: "Feb 10, 2026" },
+  { id: 5, client: "Meridian Hotels Group", type: "Chat Only", status: "Active", voice: false, chat: true, voiceLastConfig: "-" },
+  { id: 6, client: "Summit Growth Partners", type: "Chat + Voice", status: "Active", voice: true, chat: true, voiceLastConfig: "Feb 8, 2026" },
 ];
 
 export default function AdminWidgetConfig() {

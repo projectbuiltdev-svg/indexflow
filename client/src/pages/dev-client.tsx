@@ -9,8 +9,8 @@ export default function DevClient() {
     localStorage.setItem("indexflow_session", JSON.stringify({
       email: "client@demo.com",
       workspaces: [
-        { id: "venue-golden-fork", name: "The Golden Fork" },
-        { id: "venue-skyline-bar", name: "Skyline Rooftop Bar" },
+        { id: "venue-golden-fork", name: "Apex Digital Agency" },
+        { id: "venue-skyline-bar", name: "Jake Morrison SEO" },
       ]
     }));
     
