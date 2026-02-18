@@ -12,11 +12,11 @@ const stats = [
 ];
 
 const campaigns = [
-  { name: "Spring Menu Launch", agency: "Hospitality Group NYC", type: "Email + Social", status: "Active", startDate: "Mar 1, 2026", engagement: "5.1%" },
-  { name: "Valentine's Promo", agency: "Coastal Dining Co.", type: "Email", status: "Completed", startDate: "Feb 1, 2026", engagement: "6.8%" },
-  { name: "Hotel Weekend Deals", agency: "Alpine Hotels Ltd.", type: "Social + SMS", status: "Active", startDate: "Feb 10, 2026", engagement: "3.9%" },
-  { name: "New Year Celebrations", agency: "Metro Bistro Group", type: "Email + Social", status: "Completed", startDate: "Dec 15, 2025", engagement: "7.2%" },
-  { name: "Loyalty Program Push", agency: "Pacific Venues Inc.", type: "Email", status: "Scheduled", startDate: "Mar 15, 2026", engagement: "--" },
+  { name: "Spring SEO Campaign", agency: "Digital Growth NYC", type: "Email + Social", status: "Active", startDate: "Mar 1, 2026", engagement: "5.1%" },
+  { name: "Content Marketing Blitz", agency: "Coastal Marketing Co.", type: "Email", status: "Completed", startDate: "Feb 1, 2026", engagement: "6.8%" },
+  { name: "Link Building Outreach", agency: "Alpine Digital Ltd.", type: "Social + SMS", status: "Active", startDate: "Feb 10, 2026", engagement: "3.9%" },
+  { name: "Year-End SEO Review", agency: "Metro Creative Group", type: "Email + Social", status: "Completed", startDate: "Dec 15, 2025", engagement: "7.2%" },
+  { name: "Client Onboarding Push", agency: "Pacific Media Inc.", type: "Email", status: "Scheduled", startDate: "Mar 15, 2026", engagement: "--" },
 ];
 
 export default function AdminContentCampaigns() {

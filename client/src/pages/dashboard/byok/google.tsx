@@ -27,7 +27,7 @@ export default function ByokGoogle() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    document.title = "Google AI Integration | Resto Dashboard";
+    document.title = "Google AI Integration | indexFlow Dashboard";
   }, []);
 
   const { data: allProviders = [] } = useQuery<AiProviderSettings[]>({

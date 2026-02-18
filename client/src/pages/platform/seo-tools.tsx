@@ -24,7 +24,7 @@ const tools = [
   {
     icon: Grid3X3,
     title: "Local Search Grid",
-    description: "See exactly where you rank across a 5x5 geographic grid around your venue. Visualize your local dominance and identify weak spots in your coverage.",
+    description: "See exactly where you rank across a 5x5 geographic grid around your business. Visualize your local dominance and identify weak spots in your coverage.",
     href: "/platform/local-search-grid",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
@@ -38,7 +38,7 @@ const tools = [
   {
     icon: Search,
     title: "Google Search Console",
-    description: "Connect your Google Search Console directly to your dashboard. See real impressions, clicks, CTR, and average position — all without leaving Resto.",
+    description: "Connect your Google Search Console directly to your dashboard. See real impressions, clicks, CTR, and average position — all without leaving indexFlow.",
     href: "/platform/search-console",
     color: "text-green-500",
     bgColor: "bg-green-500/10",
@@ -70,7 +70,7 @@ const highlights = [
   {
     icon: MapPin,
     title: "Local Focus",
-    description: "Built specifically for hospitality businesses that rely on local customers finding them online.",
+    description: "Built specifically for businesses that rely on local customers finding them online.",
   },
 ];
 
@@ -78,8 +78,8 @@ export default function SeoToolsPage() {
   return (
     <Layout>
       <SEO
-        title="Built-in SEO Tools — Included With Every Plan | Resto.Restaurant"
-        description="Rank Tracker, Local Search Grid, and Google Search Console — built into every Resto plan. Monitor your search visibility from one simple dashboard."
+        title="Built-in SEO Tools — Included With Every Plan | indexFlow"
+        description="Rank Tracker, Local Search Grid, and Google Search Console — built into every indexFlow plan. Monitor your search visibility from one simple dashboard."
         canonicalUrl="/platform/seo-tools"
       />
       <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-emerald-500/10 via-green-500/5 to-transparent">
@@ -118,7 +118,7 @@ export default function SeoToolsPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4" data-testid="text-tools-heading">Three Powerful Tools, Zero Extra Cost</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to understand how customers find you online — built right into your Resto dashboard.
+              Everything you need to understand how customers find you online — built right into your indexFlow dashboard.
             </p>
           </div>
 
@@ -171,7 +171,7 @@ export default function SeoToolsPage() {
             </Badge>
             <h2 className="text-3xl font-bold mb-4">Manage Everything From One Place</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Your Resto client dashboard puts all your SEO data at your fingertips — simple, clear, and designed for business owners.
+              Your indexFlow client dashboard puts all your SEO data at your fingertips — simple, clear, and designed for business owners.
             </p>
           </div>
 
@@ -195,7 +195,7 @@ export default function SeoToolsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4" data-testid="text-seo-tools-bottom-heading">Start Tracking Your Rankings Today</h2>
           <p className="text-muted-foreground mb-8">
-            Every Resto plan includes Rank Tracker, Local Search Grid, and Google Search Console at no extra charge. See how your venue performs in search from day one.
+            Every indexFlow plan includes Rank Tracker, Local Search Grid, and Google Search Console at no extra charge. See how your business performs in search from day one.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link href="/contact">

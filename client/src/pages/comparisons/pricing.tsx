@@ -52,7 +52,7 @@ export default function PricingComparison() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              See how Resto compares on price. No per-cover fees, no hidden costs,
+              See how indexFlow compares on price. No per-cover fees, no hidden costs,
               no surprises on your monthly bill.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -86,7 +86,7 @@ export default function PricingComparison() {
                   <thead>
                     <tr className="border-b">
                       <th className="text-left p-4 font-semibold min-w-[140px]">Cost</th>
-                      <th className="text-center p-4 font-semibold text-primary min-w-[120px]">Resto</th>
+                      <th className="text-center p-4 font-semibold text-primary min-w-[120px]">indexFlow</th>
                       <th className="text-center p-4 font-semibold text-muted-foreground min-w-[120px]">OpenTable</th>
                       <th className="text-center p-4 font-semibold text-muted-foreground min-w-[120px]">Resy</th>
                       <th className="text-center p-4 font-semibold text-muted-foreground min-w-[120px]">SevenRooms</th>
@@ -113,7 +113,7 @@ export default function PricingComparison() {
       <section className="py-16 lg:py-20 bg-accent/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">The Resto Pricing Advantage</h2>
+            <h2 className="text-3xl font-bold mb-4">The indexFlow Pricing Advantage</h2>
           </div>
           <div className="grid sm:grid-cols-3 gap-6">
             {highlights.map((item) => (

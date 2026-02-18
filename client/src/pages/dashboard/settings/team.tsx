@@ -41,7 +41,7 @@ export default function SettingsTeam() {
   const { toast } = useToast();
 
   useEffect(() => {
-    document.title = "Team - Resto Dashboard";
+    document.title = "Team - indexFlow Dashboard";
   }, []);
 
   const { data: team = [], isLoading } = useQuery<TeamMember[]>({
@@ -93,7 +93,7 @@ export default function SettingsTeam() {
               Invite Team Member
             </CardTitle>
             <CardDescription>
-              Send an invitation to join your venue dashboard.
+              Send an invitation to join your workspace dashboard.
             </CardDescription>
           </CardHeader>
           <CardContent>

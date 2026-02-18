@@ -4,7 +4,7 @@ import indexFlowLogo from "@assets/image_1771351451425.png";
 
 export default function DemoReminder() {
   useEffect(() => {
-    document.title = "Reminder Message Demo - Resto";
+    document.title = "Reminder Message Demo - indexFlow";
   }, []);
 
   return (
@@ -72,7 +72,7 @@ export default function DemoReminder() {
           </div>
           
           <div className="px-6 pb-4">
-            <p className="text-xs text-center text-gray-400">powered by <span className="underline">Resto.</span></p>
+            <p className="text-xs text-center text-gray-400">powered by <span className="underline">indexFlow</span></p>
           </div>
         </div>
       </div>

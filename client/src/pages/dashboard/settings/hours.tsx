@@ -42,7 +42,7 @@ export default function SettingsHours() {
   });
 
   useEffect(() => {
-    document.title = "Business Hours - Resto Dashboard";
+    document.title = "Business Hours - indexFlow Dashboard";
   }, []);
 
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function SettingsHours() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl sm:text-2xl font-bold">Business Hours</h1>
-            <p className="text-sm text-muted-foreground">Set when your venue accepts bookings</p>
+            <p className="text-sm text-muted-foreground">Set your business hours</p>
           </div>
           <Button
             className="gap-2 w-full sm:w-auto"
@@ -122,7 +122,7 @@ export default function SettingsHours() {
               Operating Hours
             </CardTitle>
             <CardDescription>
-              The AI assistant and booking widget will only accept reservations during these hours.
+              The AI assistant will only accept inquiries during these hours.
             </CardDescription>
           </CardHeader>
           <CardContent>

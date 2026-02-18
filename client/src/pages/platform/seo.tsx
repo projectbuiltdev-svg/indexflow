@@ -90,7 +90,7 @@ export default function SeoPage() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              We handle your SEO so you can focus on hospitality. From keyword research
+              We handle your SEO so you can focus on your business. From keyword research
               to technical audits, our team drives your search rankings higher every month.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">

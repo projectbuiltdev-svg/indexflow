@@ -14,7 +14,7 @@ const searchablePages = [
   { title: "Portfolio", path: "/portfolio", keywords: "portfolio gallery templates" },
   { title: "FAQ", path: "/faq", keywords: "faq questions help" },
   { title: "Restaurants", path: "/solutions/restaurants", keywords: "restaurant dining" },
-  { title: "Hotels", path: "/solutions/hotels", keywords: "hotel rooms booking" },
+  { title: "Hotels", path: "/solutions/hotels", keywords: "hotel digital marketing" },
   { title: "Cafes", path: "/solutions/cafes", keywords: "cafe coffee" },
   { title: "Bars", path: "/solutions/bars", keywords: "bar lounge nightlife" },
   { title: "AI Concierge", path: "/platform/ai-concierge", keywords: "ai chatbot widget" },

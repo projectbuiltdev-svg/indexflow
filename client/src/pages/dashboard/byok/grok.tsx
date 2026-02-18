@@ -27,7 +27,7 @@ export default function ByokGrok() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    document.title = "Grok Integration | Resto Dashboard";
+    document.title = "Grok Integration | indexFlow Dashboard";
   }, []);
 
   const { data: allProviders = [] } = useQuery<AiProviderSettings[]>({

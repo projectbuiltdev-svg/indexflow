@@ -14,7 +14,7 @@ const featureItems = [
   { href: "/platform/cms-integration", label: "CMS Integration", icon: Layout, desc: "Connect your existing CMS" },
   { href: "/platform/crm-pipeline", label: "CRM & Pipeline", icon: Users, desc: "Manage leads and deals" },
   { href: "/platform/invoices-reports", label: "Invoices & Reports", icon: Receipt, desc: "Billing and performance reports" },
-  { href: "/platform/ai-widget-voice", label: "AI Widget & Voice", icon: Bot, desc: "AI concierge & voice booking" },
+  { href: "/platform/ai-widget-voice", label: "AI Widget & Voice", icon: Bot, desc: "AI widget & voice assistant" },
   { href: "/platform/white-label", label: "White Label", icon: Palette, desc: "Your brand, your platform" },
 ];
 

@@ -19,15 +19,15 @@ const comparisonRows = [
 const reasons = [
   {
     title: "No Per-Cover Fees",
-    description: "OpenTable charges $1 to $7.50 per seated diner. Resto charges a flat monthly rate -- no matter how many covers you do.",
+    description: "OpenTable charges $1 to $7.50 per seated diner. indexFlow charges a flat monthly rate -- no matter how many covers you do.",
   },
   {
     title: "AI-Powered Everything",
-    description: "From phone answering to live chat, Resto's AI concierge handles guest inquiries 24/7. OpenTable doesn't offer this.",
+    description: "From phone answering to live chat, indexFlow's AI concierge handles client inquiries 24/7. OpenTable doesn't offer this.",
   },
   {
     title: "Custom Website Included",
-    description: "Every Resto plan includes a professionally designed, SEO-optimized website. OpenTable gives you a generic profile page.",
+    description: "Every indexFlow plan includes a professionally designed, SEO-optimized website. OpenTable gives you a generic profile page.",
   },
   {
     title: "Done-for-You Setup",
@@ -59,7 +59,7 @@ export default function OpenTableComparison() {
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
                 <Button size="lg" className="gap-2" data-testid="button-opentable-switch">
-                  Switch to Resto <ArrowRight className="w-4 h-4" />
+                  Switch to indexFlow <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/pricing">
@@ -75,7 +75,7 @@ export default function OpenTableComparison() {
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Resto vs OpenTable</h2>
+            <h2 className="text-3xl font-bold mb-4">indexFlow vs OpenTable</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               A head-to-head comparison across the features that matter most.
             </p>
@@ -87,7 +87,7 @@ export default function OpenTableComparison() {
                   <thead>
                     <tr className="border-b">
                       <th className="text-left p-4 font-semibold">Feature</th>
-                      <th className="text-center p-4 font-semibold text-primary">Resto</th>
+                      <th className="text-center p-4 font-semibold text-primary">indexFlow</th>
                       <th className="text-center p-4 font-semibold text-muted-foreground">OpenTable</th>
                     </tr>
                   </thead>
@@ -114,7 +114,7 @@ export default function OpenTableComparison() {
       <section className="py-16 lg:py-20 bg-accent/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Restaurants Choose Resto</h2>
+            <h2 className="text-3xl font-bold mb-4">Why Restaurants Choose indexFlow</h2>
           </div>
           <div className="grid sm:grid-cols-2 gap-6">
             {reasons.map((reason) => (
@@ -133,11 +133,11 @@ export default function OpenTableComparison() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Drop Per-Cover Fees?</h2>
           <p className="text-muted-foreground mb-8">
-            Switch from OpenTable to Resto and keep more of your revenue.
+            Switch from OpenTable to indexFlow and keep more of your revenue.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-opentable-bottom-cta">
-              Switch to Resto <ArrowRight className="w-4 h-4" />
+              Switch to indexFlow <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
         </div>

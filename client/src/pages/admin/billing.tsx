@@ -11,11 +11,11 @@ const stats = [
 ];
 
 const recentTransactions = [
-  { id: 1, client: "La Bella Italia", amount: "$299.00", type: "Subscription", status: "Paid", date: "Jan 28, 2026" },
-  { id: 2, client: "The Golden Dragon", amount: "$149.00", type: "Subscription", status: "Paid", date: "Jan 28, 2026" },
-  { id: 3, client: "Ocean View Bistro", amount: "$499.00", type: "Setup Fee", status: "Paid", date: "Jan 24, 2026" },
-  { id: 4, client: "Mountain Lodge Hotel", amount: "$299.00", type: "Subscription", status: "Paid", date: "Jan 25, 2026" },
-  { id: 5, client: "Café Parisien", amount: "$149.00", type: "Subscription", status: "Failed", date: "Jan 27, 2026" },
+  { id: 1, client: "Acme Digital", amount: "$299.00", type: "Subscription", status: "Paid", date: "Jan 28, 2026" },
+  { id: 2, client: "Dragon Media", amount: "$149.00", type: "Subscription", status: "Paid", date: "Jan 28, 2026" },
+  { id: 3, client: "Coastal SEO", amount: "$499.00", type: "Setup Fee", status: "Paid", date: "Jan 24, 2026" },
+  { id: 4, client: "Summit Marketing", amount: "$299.00", type: "Subscription", status: "Paid", date: "Jan 25, 2026" },
+  { id: 5, client: "Metro Creative", amount: "$149.00", type: "Subscription", status: "Failed", date: "Jan 27, 2026" },
 ];
 
 export default function AdminBilling() {

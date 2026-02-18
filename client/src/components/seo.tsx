@@ -57,69 +57,69 @@ const BASE_URL = "https://indexflow.site";
 
 export const seoData: Record<string, SEOProps> = {
   home: {
-    title: "indexFlow - Done-For-You Hospitality Booking Platform",
-    description: "All-in-one booking, SEO, and AI concierge platform for restaurants, hotels, bars, and cafes. Get more reservations with zero effort.",
+    title: "indexFlow - Done-For-You SEO and Content Marketing Platform",
+    description: "All-in-one SEO, content marketing, and AI-powered platform for agencies. Get more clients with zero effort.",
     canonical: BASE_URL,
     ogType: "website",
   },
   about: {
     title: "How It Works - indexFlow",
-    description: "Learn how indexFlow helps hospitality venues automate bookings, boost SEO, and engage guests with AI-powered tools.",
+    description: "Learn how indexFlow helps agencies automate content creation, boost SEO, and engage clients with AI-powered tools.",
     canonical: `${BASE_URL}/how-it-works`,
   },
   pricing: {
     title: "Pricing - indexFlow",
-    description: "Simple, transparent pricing for restaurants, hotels, bars, and cafes. Start free, scale as you grow.",
+    description: "Simple, transparent pricing for agencies and businesses. Start free, scale as you grow.",
     canonical: `${BASE_URL}/pricing`,
   },
   contact: {
     title: "Contact Us - indexFlow",
-    description: "Get in touch with the indexFlow team. We're here to help your venue succeed.",
+    description: "Get in touch with the indexFlow team. We're here to help your business succeed.",
     canonical: `${BASE_URL}/contact`,
   },
   faq: {
     title: "FAQ - indexFlow",
-    description: "Frequently asked questions about indexFlow's hospitality booking and marketing platform.",
+    description: "Frequently asked questions about indexFlow's SEO and content marketing platform.",
     canonical: `${BASE_URL}/faq`,
   },
   portfolio: {
     title: "Portfolio & Gallery - indexFlow",
-    description: "See real examples of hospitality venues powered by indexFlow.",
+    description: "See real examples of agencies powered by indexFlow.",
     canonical: `${BASE_URL}/gallery`,
   },
   templates: {
     title: "Website Templates - indexFlow",
-    description: "Professional hospitality website templates for restaurants, hotels, bars, and cafes.",
+    description: "Professional website templates for agencies and businesses.",
     canonical: `${BASE_URL}/templates`,
   },
   restaurants: {
-    title: "Restaurant Booking Solutions - indexFlow",
-    description: "Complete booking and marketing platform designed specifically for restaurants.",
+    title: "Restaurant SEO Solutions - indexFlow",
+    description: "Complete SEO and content marketing platform designed for restaurant businesses.",
     canonical: `${BASE_URL}/solutions/restaurants`,
   },
   cafes: {
-    title: "Cafe Booking Solutions - indexFlow",
-    description: "Streamline reservations and marketing for your cafe with indexFlow.",
+    title: "Cafe SEO Solutions - indexFlow",
+    description: "Streamline online visibility and marketing for your cafe with indexFlow.",
     canonical: `${BASE_URL}/solutions/cafes`,
   },
   bars: {
-    title: "Bar Booking Solutions - indexFlow",
-    description: "Manage bar reservations, events, and marketing with indexFlow.",
+    title: "Bar SEO Solutions - indexFlow",
+    description: "Manage online presence, events marketing, and local SEO for bars with indexFlow.",
     canonical: `${BASE_URL}/solutions/bars`,
   },
   hotels: {
-    title: "Hotel Booking Solutions - indexFlow",
-    description: "All-in-one hotel reservation and guest management platform.",
+    title: "Hotel SEO Solutions - indexFlow",
+    description: "All-in-one hotel SEO and digital marketing platform.",
     canonical: `${BASE_URL}/solutions/hotels`,
   },
   multiLocation: {
     title: "Multi-Location Management - indexFlow",
-    description: "Manage multiple hospitality venues from one dashboard.",
+    description: "Manage multiple client workspaces from one dashboard.",
     canonical: `${BASE_URL}/solutions/multi-location`,
   },
   aiConcierge: {
-    title: "AI Concierge - indexFlow Platform",
-    description: "24/7 AI-powered guest assistant that handles bookings, answers questions, and provides personalized recommendations.",
+    title: "AI Assistant - indexFlow Platform",
+    description: "24/7 AI-powered assistant that handles inquiries, answers questions, and provides personalized recommendations.",
     canonical: `${BASE_URL}/platform/ai-concierge`,
   },
   byok: {
@@ -129,18 +129,18 @@ export const seoData: Record<string, SEOProps> = {
   },
   contentMarketing: {
     title: "Content Marketing - indexFlow Platform",
-    description: "AI-powered content creation and blog management for hospitality venues.",
+    description: "AI-powered content creation and blog management for businesses.",
     canonical: `${BASE_URL}/platform/content-marketing`,
   },
   clientDashboard: {
     title: "Client Dashboard - indexFlow Platform",
-    description: "Powerful dashboard to manage your venue's bookings, analytics, and marketing.",
+    description: "Powerful dashboard to manage your workspace's content, analytics, and SEO.",
     canonical: `${BASE_URL}/platform/dashboard`,
   },
-  hospitalityWebsites: {
-    title: "Hospitality Websites - indexFlow Platform",
-    description: "Beautiful, conversion-optimized websites built for hospitality venues.",
-    canonical: `${BASE_URL}/platform/hospitality-websites`,
+  businessWebsites: {
+    title: "Website Builder - indexFlow Platform",
+    description: "Beautiful, conversion-optimized websites built for businesses.",
+    canonical: `${BASE_URL}/platform/business-websites`,
   },
   integrations: {
     title: "Integrations - indexFlow Platform",
@@ -154,7 +154,7 @@ export const seoData: Record<string, SEOProps> = {
   },
   rankTracking: {
     title: "Rank Tracking - indexFlow Platform",
-    description: "Monitor your venue's search engine rankings and track keyword performance.",
+    description: "Monitor your workspace's search engine rankings and track keyword performance.",
     canonical: `${BASE_URL}/platform/rank-tracking`,
   },
   searchConsole: {
@@ -164,72 +164,72 @@ export const seoData: Record<string, SEOProps> = {
   },
   seo: {
     title: "SEO Tools - indexFlow Platform",
-    description: "Comprehensive SEO toolkit designed for hospitality businesses.",
+    description: "Comprehensive SEO toolkit designed for businesses.",
     canonical: `${BASE_URL}/platform/seo`,
   },
   seoTools: {
     title: "SEO Toolkit - indexFlow Platform",
-    description: "Advanced SEO tools to improve your venue's online visibility.",
+    description: "Advanced SEO tools to improve your workspace's online visibility.",
     canonical: `${BASE_URL}/platform/seo-tools`,
   },
   localCitations: {
     title: "Local Citations - indexFlow Services",
-    description: "Build and manage local citations to improve your venue's local search presence.",
+    description: "Build and manage local citations to improve your workspace's local search presence.",
     canonical: `${BASE_URL}/services/local-citations`,
   },
   compareOpenTable: {
     title: "indexFlow vs OpenTable - Comparison",
-    description: "See how indexFlow compares to OpenTable for restaurant reservations.",
+    description: "See how indexFlow compares to OpenTable for restaurant marketing and SEO.",
     canonical: `${BASE_URL}/comparisons/opentable`,
   },
   compareResy: {
     title: "indexFlow vs Resy - Comparison",
-    description: "Compare indexFlow and Resy for restaurant booking management.",
+    description: "Compare indexFlow and Resy for SEO and marketing management.",
     canonical: `${BASE_URL}/comparisons/resy`,
   },
-  bestBookingSystems: {
-    title: "Best Booking Systems Compared - indexFlow",
-    description: "Compare the best restaurant and hospitality booking systems side by side.",
-    canonical: `${BASE_URL}/comparisons/best-booking-systems`,
+  bestPlatforms: {
+    title: "Best SEO Platforms Compared - indexFlow",
+    description: "Compare the best SEO and marketing platforms for businesses side by side.",
+    canonical: `${BASE_URL}/comparisons/best-platforms`,
   },
   comparePricing: {
-    title: "Booking Platform Pricing Comparison - indexFlow",
-    description: "Compare pricing across leading hospitality booking platforms.",
+    title: "SEO Platform Pricing Comparison - indexFlow",
+    description: "Compare pricing across leading SEO and marketing platforms.",
     canonical: `${BASE_URL}/comparisons/pricing`,
   },
   comparePlatform: {
     title: "Platform Comparison - indexFlow",
-    description: "Feature-by-feature comparison of hospitality booking platforms.",
+    description: "Feature-by-feature comparison of leading SEO platforms.",
     canonical: `${BASE_URL}/comparisons/platform`,
   },
   analytics: {
     title: "Analytics - indexFlow Features",
-    description: "Deep analytics and reporting for your hospitality venue.",
+    description: "Deep analytics and reporting for your workspace.",
     canonical: `${BASE_URL}/features/analytics`,
   },
   multiLanguage: {
     title: "Multi-Language Support - indexFlow Features",
-    description: "Serve guests in their preferred language with automatic translation.",
+    description: "Serve clients in their preferred language with automatic translation.",
     canonical: `${BASE_URL}/features/multi-language`,
   },
-  prepaidReservations: {
-    title: "Prepaid Reservations - indexFlow Features",
-    description: "Reduce no-shows with prepaid and deposit-based reservations.",
-    canonical: `${BASE_URL}/features/prepaid-reservations`,
+  prepaidServices: {
+    title: "Prepaid Services - indexFlow Features",
+    description: "Secure payments upfront with prepaid and deposit-based service options.",
+    canonical: `${BASE_URL}/features/prepaid-services`,
   },
   smsConfirmations: {
-    title: "SMS Confirmations - indexFlow Features",
-    description: "Automated SMS booking confirmations and reminders.",
+    title: "SMS Notifications - indexFlow Features",
+    description: "Automated SMS notifications and reminders for clients.",
     canonical: `${BASE_URL}/features/sms-confirmations`,
   },
-  voiceBooking: {
-    title: "Voice Booking - indexFlow Features",
-    description: "AI-powered voice booking for phone reservations.",
-    canonical: `${BASE_URL}/features/voice-booking`,
+  voiceAI: {
+    title: "Voice AI - indexFlow Features",
+    description: "AI-powered voice assistant for phone inquiries and scheduling.",
+    canonical: `${BASE_URL}/features/voice-ai`,
   },
   waitlist: {
-    title: "Waitlist Management - indexFlow Features",
-    description: "Smart waitlist management to fill every seat.",
+    title: "Lead Queue Management - indexFlow Features",
+    description: "Smart lead queue management to maximize conversions.",
     canonical: `${BASE_URL}/features/waitlist`,
   },
 };
@@ -241,7 +241,7 @@ export const combinedHomeSchema = {
       "@type": "Organization",
       name: "indexFlow",
       url: BASE_URL,
-      description: "Done-for-you hospitality booking and marketing platform",
+      description: "Done-for-you SEO and content marketing platform",
       sameAs: [],
     },
     {
@@ -266,23 +266,23 @@ export const combinedHomeSchema = {
 export const howToSchema = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  name: "How to Set Up indexFlow for Your Venue",
-  description: "Step-by-step guide to getting started with indexFlow hospitality platform",
+  name: "How to Set Up indexFlow for Your Workspace",
+  description: "Step-by-step guide to getting started with indexFlow platform",
   step: [
     {
       "@type": "HowToStep",
       name: "Sign Up",
-      text: "Create your indexFlow account and add your venue details.",
+      text: "Create your indexFlow account and add your workspace details.",
     },
     {
       "@type": "HowToStep",
       name: "Configure Your Widget",
-      text: "Customize your AI booking widget with your branding and preferences.",
+      text: "Customize your AI tools and dashboard with your branding and preferences.",
     },
     {
       "@type": "HowToStep",
       name: "Go Live",
-      text: "Embed the widget on your website and start accepting bookings.",
+      text: "Launch your workspace and start tracking rankings and publishing content.",
     },
   ],
 };
@@ -303,12 +303,12 @@ export const faqSchema = (faqs: { question: string; answer: string }[]) => ({
 export const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  name: "indexFlow Hospitality Platform",
+  name: "indexFlow Platform",
   provider: {
     "@type": "Organization",
     name: "indexFlow",
   },
-  description: "All-in-one booking, SEO, and AI concierge platform for hospitality venues.",
+  description: "All-in-one SEO, content marketing, and AI-powered platform for businesses.",
   serviceType: "SaaS",
   areaServed: "Worldwide",
 };

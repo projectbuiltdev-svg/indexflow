@@ -12,8 +12,8 @@ const stats = [
 ];
 
 const templates = [
-  { name: "Booking Confirmation", category: "Transactional", lastEdited: "Feb 10, 2026", status: "Active", sends: "4,230" },
-  { name: "Booking Reminder (24h)", category: "Transactional", lastEdited: "Feb 8, 2026", status: "Active", sends: "3,890" },
+  { name: "Lead Confirmation", category: "Transactional", lastEdited: "Feb 10, 2026", status: "Active", sends: "4,230" },
+  { name: "Project Reminder (24h)", category: "Transactional", lastEdited: "Feb 8, 2026", status: "Active", sends: "3,890" },
   { name: "Welcome Email", category: "Onboarding", lastEdited: "Jan 28, 2026", status: "Active", sends: "1,240" },
   { name: "Password Reset", category: "Authentication", lastEdited: "Jan 15, 2026", status: "Active", sends: "342" },
   { name: "Monthly Newsletter", category: "Marketing", lastEdited: "Feb 1, 2026", status: "Active", sends: "2,100" },

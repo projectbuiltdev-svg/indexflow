@@ -152,7 +152,7 @@ export default function SettingsTrainWidget() {
   // SMS Settings
   const [smsEnabled, setSmsEnabled] = useState(true);
   const [smsTemplate, setSmsTemplate] = useState(
-    "Hi {guest_name}! Your reservation at {venue_name} is confirmed for {date} at {time} for {party_size} guests. Reply HELP for assistance or CANCEL to cancel."
+    "Hi {client_name}! Your appointment with {workspace_name} is confirmed for {date} at {time}. Reply HELP for assistance or CANCEL to cancel."
   );
   const [testPhoneNumber, setTestPhoneNumber] = useState("");
 
@@ -254,8 +254,8 @@ export default function SettingsTrainWidget() {
   const textCategories = [
     { id: "business", label: "Business Info", icon: Building2, placeholder: "Describe your business, history, atmosphere, unique selling points..." },
     { id: "menu", label: "Menu & Services", icon: Utensils, placeholder: "List your menu items, prices, dietary options, special dishes..." },
-    { id: "faq", label: "FAQs", icon: HelpCircle, placeholder: "Common questions and answers about your venue..." },
-    { id: "policies", label: "Policies", icon: FileText, placeholder: "Reservation policies, cancellation rules, dress code, etc..." },
+    { id: "faq", label: "FAQs", icon: HelpCircle, placeholder: "Common questions and answers about your workspace..." },
+    { id: "policies", label: "Policies", icon: FileText, placeholder: "Scheduling policies, cancellation rules, dress code, etc..." },
     { id: "hours", label: "Special Hours", icon: Clock, placeholder: "Holiday hours, special events, seasonal changes..." },
     { id: "reviews", label: "Reviews & Awards", icon: Star, placeholder: "Notable reviews, awards, press mentions..." },
   ];
@@ -336,9 +336,9 @@ export default function SettingsTrainWidget() {
 
     setTimeout(() => {
       const responses = [
-        "Based on your training data, I can help answer questions about your menu, hours, and reservation policies. How can I assist you?",
+        "Based on your training data, I can help answer questions about your services, hours, and scheduling policies. How can I assist you?",
         "I've learned from your website and uploaded content. I can provide information about your dishes, prices, and special offerings.",
-        "Thank you for your question! According to your business information, I can help with reservations, menu inquiries, and general questions about your venue."
+        "Thank you for your question! According to your business information, I can help with scheduling, service inquiries, and general questions about your workspace."
       ];
       
       const assistantMessage: TestMessage = {
@@ -725,9 +725,9 @@ export default function SettingsTrainWidget() {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => { setTestInput("Do you take reservations?"); }}
+                        onClick={() => { setTestInput("Can I schedule an appointment?"); }}
                       >
-                        Reservations
+                        Scheduling
                       </Button>
                     </div>
                   </CardContent>
@@ -752,7 +752,7 @@ export default function SettingsTrainWidget() {
                     </div>
                     <div className="flex gap-2">
                       <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <p>Add policies about reservations, cancellations, dress code</p>
+                      <p>Add policies about scheduling, cancellations, dress code</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -1158,14 +1158,14 @@ export default function SettingsTrainWidget() {
                       SMS Confirmation Settings
                     </CardTitle>
                     <CardDescription>
-                      Auto-send confirmation texts when guests complete pre-paid reservations
+                      Auto-send confirmation texts when clients complete appointments
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="sms-enabled">Enable SMS Confirmations</Label>
-                        <p className="text-sm text-muted-foreground">Automatically text guests after booking</p>
+                        <p className="text-sm text-muted-foreground">Automatically text clients after scheduling</p>
                       </div>
                       <Switch
                         id="sms-enabled"
@@ -1183,11 +1183,11 @@ export default function SettingsTrainWidget() {
                         onChange={(e) => setSmsTemplate(e.target.value)}
                         rows={4}
                         className="mt-1 font-mono text-sm"
-                        placeholder="Hi {guest_name}! Your reservation is confirmed..."
+                        placeholder="Hi {client_name}! Your appointment is confirmed..."
                         data-testid="input-sms-template"
                       />
                       <p className="text-xs text-muted-foreground mt-2">
-                        Available placeholders: {"{guest_name}"}, {"{venue_name}"}, {"{date}"}, {"{time}"}, {"{party_size}"}, {"{confirmation_code}"}
+                        Available placeholders: {"{client_name}"}, {"{workspace_name}"}, {"{date}"}, {"{time}"}, {"{confirmation_code}"}
                       </p>
                     </div>
                   </CardContent>
@@ -1252,7 +1252,7 @@ export default function SettingsTrainWidget() {
                           </div>
                         </TooltipTrigger>
                         <TooltipContent side="top" className="max-w-[250px]">
-                          <p className="text-sm">When your guest completes a pre-paid reservation, Resto automatically sends the confirmation RSVP SMS so you don't have to.</p>
+                          <p className="text-sm">When your client completes a confirmed appointment, indexFlow automatically sends the confirmation SMS so you don't have to.</p>
                         </TooltipContent>
                       </Tooltip>
                     </CardTitle>
@@ -1265,12 +1265,11 @@ export default function SettingsTrainWidget() {
                       <div className="bg-card rounded-lg p-3 shadow-sm max-w-[280px]">
                         <p className="text-sm" data-testid="text-sms-preview">
                           {smsTemplate
-                            .replace("{guest_name}", "John")
-                            .replace("{venue_name}", "Your Restaurant")
+                            .replace("{client_name}", "John")
+                            .replace("{workspace_name}", "Your Business")
                             .replace("{date}", "Friday, Jan 15")
                             .replace("{time}", "7:30 PM")
-                            .replace("{party_size}", "4")
-                            .replace("{confirmation_code}", "RES-7X3K9")}
+                            .replace("{confirmation_code}", "APT-7X3K9")}
                         </p>
                       </div>
                       <p className="text-xs text-muted-foreground mt-3 text-center">

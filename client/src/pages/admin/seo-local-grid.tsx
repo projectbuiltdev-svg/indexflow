@@ -86,8 +86,8 @@ export default function AdminLocalGrid() {
       {!selectedWorkspace ? (
         <Card>
           <CardContent className="py-8">
-            <p className="text-muted-foreground text-center" data-testid="no-venue-selected">
-              Please select a venue to view local grid data.
+            <p className="text-muted-foreground text-center" data-testid="no-workspace-selected">
+              Please select a workspace to view local grid data.
             </p>
           </CardContent>
         </Card>

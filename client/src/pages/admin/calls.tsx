@@ -5,13 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { AdminLayout } from "@/components/admin-layout";
 
 const calls = [
-  { id: 1, client: "La Bella Italia", caller: "+1 (555) 123-4567", duration: "2:34", outcome: "Booking Made", type: "Voice", smsSent: true, date: "Jan 28, 2026 3:45 PM" },
-  { id: 2, client: "The Golden Dragon", caller: "+1 (555) 234-5678", duration: "1:12", outcome: "Info Request", type: "Voice", smsSent: false, date: "Jan 28, 2026 2:30 PM" },
-  { id: 3, client: "Mountain Lodge Hotel", caller: "+1 (555) 345-6789", duration: "4:56", outcome: "Booking Made", type: "Voice", smsSent: true, date: "Jan 28, 2026 1:15 PM" },
-  { id: 4, client: "La Bella Italia", caller: "+1 (555) 456-7890", duration: "0:45", outcome: "Transferred", type: "Voice", smsSent: false, date: "Jan 28, 2026 11:00 AM" },
-  { id: 5, client: "Café Parisien", caller: "+1 (555) 567-8901", duration: "3:21", outcome: "Booking Made", type: "Voice", smsSent: true, date: "Jan 27, 2026 7:30 PM" },
-  { id: 6, client: "La Bella Italia", caller: "+1 (555) 111-2222", duration: "-", outcome: "Confirmed", type: "SMS", smsSent: false, date: "Jan 28, 2026 4:00 PM" },
-  { id: 7, client: "Mountain Lodge Hotel", caller: "+1 (555) 333-4444", duration: "-", outcome: "Cancelled", type: "SMS", smsSent: false, date: "Jan 28, 2026 3:30 PM" },
+  { id: 1, client: "Acme Digital", caller: "+1 (555) 123-4567", duration: "2:34", outcome: "Lead Captured", type: "Voice", smsSent: true, date: "Jan 28, 2026 3:45 PM" },
+  { id: 2, client: "Dragon Media", caller: "+1 (555) 234-5678", duration: "1:12", outcome: "Info Request", type: "Voice", smsSent: false, date: "Jan 28, 2026 2:30 PM" },
+  { id: 3, client: "Summit Marketing", caller: "+1 (555) 345-6789", duration: "4:56", outcome: "Lead Captured", type: "Voice", smsSent: true, date: "Jan 28, 2026 1:15 PM" },
+  { id: 4, client: "Acme Digital", caller: "+1 (555) 456-7890", duration: "0:45", outcome: "Transferred", type: "Voice", smsSent: false, date: "Jan 28, 2026 11:00 AM" },
+  { id: 5, client: "Metro Creative", caller: "+1 (555) 567-8901", duration: "3:21", outcome: "Lead Captured", type: "Voice", smsSent: true, date: "Jan 27, 2026 7:30 PM" },
+  { id: 6, client: "Acme Digital", caller: "+1 (555) 111-2222", duration: "-", outcome: "Confirmed", type: "SMS", smsSent: false, date: "Jan 28, 2026 4:00 PM" },
+  { id: 7, client: "Summit Marketing", caller: "+1 (555) 333-4444", duration: "-", outcome: "Cancelled", type: "SMS", smsSent: false, date: "Jan 28, 2026 3:30 PM" },
 ];
 
 export default function AdminCalls() {
@@ -71,7 +71,7 @@ export default function AdminCalls() {
                     </td>
                     <td className="py-4">{call.duration}</td>
                     <td className="py-4">
-                      <Badge variant={call.outcome === "Booking Made" ? "default" : "secondary"}>
+                      <Badge variant={call.outcome === "Lead Captured" ? "default" : "secondary"}>
                         {call.outcome}
                       </Badge>
                     </td>

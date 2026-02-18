@@ -231,7 +231,7 @@ export default function BarsSolution() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Level Up Your Bar?</h2>
           <p className="text-muted-foreground mb-8">
-            Join bars and nightclubs using Resto to maximize their nightlife potential.
+            Join bars and nightclubs using indexFlow to maximize their nightlife potential.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-bar-bottom-cta">

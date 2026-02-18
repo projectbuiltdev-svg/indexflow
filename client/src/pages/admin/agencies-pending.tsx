@@ -12,15 +12,15 @@ const stats = [
 ];
 
 const pendingSignups = [
-  { name: "Downtown Dining LLC", email: "info@downtowndining.com", date: "Feb 17, 2026", type: "New Agency" },
-  { name: "Riviera Restaurant Group", email: "admin@rivieragroup.com", date: "Feb 16, 2026", type: "New Agency" },
-  { name: "East Side Eats", email: "hello@eastsideeats.com", date: "Feb 15, 2026", type: "New Agency" },
+  { name: "Downtown Digital LLC", email: "info@downtowndigital.com", date: "Feb 17, 2026", type: "New Agency" },
+  { name: "Riviera Marketing Group", email: "admin@rivieragroup.com", date: "Feb 16, 2026", type: "New Agency" },
+  { name: "East Side Creative", email: "hello@eastsidecreative.com", date: "Feb 15, 2026", type: "New Agency" },
 ];
 
 const domainVerifications = [
-  { domain: "coastaldining.com", agency: "Coastal Dining Co.", submitted: "Feb 14, 2026", status: "DNS Pending" },
-  { domain: "alpinehotels.ch", agency: "Alpine Hotels Ltd.", submitted: "Feb 13, 2026", status: "Under Review" },
-  { domain: "metrobistro.nyc", agency: "Metro Bistro Group", submitted: "Feb 12, 2026", status: "DNS Pending" },
+  { domain: "coastalmarketing.com", agency: "Coastal Marketing Co.", submitted: "Feb 14, 2026", status: "DNS Pending" },
+  { domain: "alpinedigital.ch", agency: "Alpine Digital Ltd.", submitted: "Feb 13, 2026", status: "Under Review" },
+  { domain: "metrocreative.nyc", agency: "Metro Creative Group", submitted: "Feb 12, 2026", status: "DNS Pending" },
 ];
 
 export default function AdminAgenciesPending() {

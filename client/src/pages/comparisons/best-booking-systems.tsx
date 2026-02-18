@@ -8,7 +8,7 @@ import { SEO, seoData } from "@/components/seo";
 
 const platforms = [
   {
-    name: "Resto.Restaurant",
+    name: "indexFlow",
     tagline: "Best Value with AI + Managed Service",
     highlight: true,
     pros: [
@@ -43,9 +43,9 @@ const platforms = [
     tagline: "Popular with Upscale Venues",
     highlight: false,
     pros: [
-      "Clean, modern guest-facing experience",
+      "Clean, modern client-facing experience",
       "Good brand recognition with diners",
-      "CRM and guest profiles",
+      "CRM and client profiles",
     ],
     cons: [
       "Opaque pricing -- must contact sales",
@@ -107,7 +107,7 @@ const platforms = [
 export default function BestBookingSystems() {
   return (
     <Layout>
-      <SEO {...seoData.bestBookingSystems} />
+      <SEO {...seoData.bestPlatforms} />
       <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-amber-500/10 via-yellow-500/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
@@ -122,13 +122,13 @@ export default function BestBookingSystems() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Compare the top restaurant reservation platforms.
-              Find the right fit for your venue's size, budget, and goals.
+              Compare the top SEO and marketing platforms.
+              Find the right fit for your business's size, budget, and goals.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
                 <Button size="lg" className="gap-2" data-testid="button-best-booking-try">
-                  Try Resto <ArrowRight className="w-4 h-4" />
+                  Try indexFlow <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/comparisons/pricing">
@@ -200,12 +200,12 @@ export default function BestBookingSystems() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Choose the Best Platform?</h2>
           <p className="text-muted-foreground mb-8">
-            Resto combines AI automation, a custom website, and flat-rate pricing.
+            indexFlow combines AI automation, a custom website, and flat-rate pricing.
             Book a demo and see why restaurants are switching.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-best-booking-bottom-cta">
-              Try Resto <ArrowRight className="w-4 h-4" />
+              Try indexFlow <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
         </div>

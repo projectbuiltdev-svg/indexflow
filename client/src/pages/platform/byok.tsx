@@ -49,7 +49,7 @@ const features = [
 
 const benefits = [
   "Control your AI costs — pay your provider directly at their rates",
-  "Choose your preferred model for each venue and use case",
+  "Choose your preferred model for each workspace and use case",
   "No vendor lock-in — switch providers any time without data loss",
   "Enterprise-grade security with encrypted key storage",
 ];

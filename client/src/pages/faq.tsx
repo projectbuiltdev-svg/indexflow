@@ -27,11 +27,11 @@ const faqs = [
   },
   {
     question: "What types of venues do you work with?",
-    answer: "We specialize in hospitality venues including restaurants, cafes, bars, guest houses, and hotels. Our system is designed specifically for the unique needs of the hospitality industry.",
+    answer: "We work with restaurants, cafes, bars, guest houses, hotels, and other businesses that need booking and SEO solutions. Our system is designed for any business that needs online booking and visibility.",
   },
   {
     question: "How does the AI phone assistant work?",
-    answer: "Our AI assistant answers calls 24/7, handles booking requests, answers common questions about your venue, and can send confirmation texts. It's powered by advanced AI and integrates with your booking system in real-time.",
+    answer: "Our AI assistant answers calls 24/7, handles booking requests, answers common questions about your business, and can send confirmation texts. It's powered by advanced AI and integrates with your booking system in real-time.",
   },
   {
     question: "What happens if I need changes after launch?",
@@ -47,7 +47,7 @@ const faqs = [
   },
   {
     question: "What's the optional SEO package?",
-    answer: "Our one-time SEO package ($499 flat fee, zero recurring charges) helps improve your venue's visibility in search results. It includes keyword optimization, local SEO setup, Google Business Profile optimization, and schema mark-up. Get 100% visibility on Google and all search engines. Contact our sales team for details.",
+    answer: "Our one-time SEO package ($499 flat fee, zero recurring charges) helps improve your business's visibility in search results. It includes keyword optimization, local SEO setup, Google Business Profile optimization, and schema mark-up. Get 100% visibility on Google and all search engines. Contact our sales team for details.",
   },
 ];
 
@@ -65,7 +65,7 @@ export default function FAQ() {
               Frequently Asked Questions
             </h1>
             <p className="text-muted-foreground">
-              Everything you need to know about resto.restaurant
+              Everything you need to know about indexflow.io
             </p>
           </div>
 

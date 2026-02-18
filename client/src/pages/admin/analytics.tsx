@@ -4,23 +4,23 @@ import { Badge } from "@/components/ui/badge";
 import { AdminLayout } from "@/components/admin-layout";
 
 const stats = [
-  { label: "Total Bookings", value: "2,847", change: "+12%", icon: BarChart3 },
+  { label: "Total Leads", value: "2,847", change: "+12%", icon: BarChart3 },
   { label: "AI Voice Calls", value: "1,293", change: "+8%", icon: PhoneCall },
   { label: "SMS Sent", value: "3,847", change: "+15%", icon: MessageCircle },
   { label: "Widget Chats", value: "5,621", change: "+23%", icon: MessageSquare },
   { label: "Keywords Tracked", value: "342", change: "+18%", icon: TrendingUp },
   { label: "Website Changes", value: "89", change: "+9%", icon: FileEdit },
-  { label: "Phone Bookings", value: "456", change: "+11%", icon: Phone },
+  { label: "Phone Leads", value: "456", change: "+11%", icon: Phone },
   { label: "Active Users", value: "156", change: "+5%", icon: Users },
 ];
 
 const topClients = [
-  { name: "La Bella Italia", bookings: 342, calls: 156, sms: 423, widgets: 823, keywords: 28, changes: 12, twilioConnected: true, gscConnected: true },
-  { name: "Mountain Lodge Hotel", bookings: 289, calls: 134, sms: 398, widgets: 567, keywords: 35, changes: 8, twilioConnected: true, gscConnected: true },
-  { name: "The Golden Dragon", bookings: 234, calls: 98, sms: 287, widgets: 445, keywords: 18, changes: 5, twilioConnected: true, gscConnected: true },
-  { name: "Ocean View Bistro", bookings: 198, calls: 0, sms: 0, widgets: 389, keywords: 22, changes: 15, twilioConnected: false, gscConnected: false },
-  { name: "Sakura Sushi", bookings: 167, calls: 45, sms: 134, widgets: 312, keywords: 15, changes: 3, twilioConnected: true, gscConnected: true },
-  { name: "Caf\u00e9 Parisien", bookings: 156, calls: 67, sms: 189, widgets: 298, keywords: 10, changes: 6, twilioConnected: true, gscConnected: false },
+  { name: "Acme Digital", leads: 342, calls: 156, sms: 423, widgets: 823, keywords: 28, changes: 12, twilioConnected: true, gscConnected: true },
+  { name: "Summit Marketing", leads: 289, calls: 134, sms: 398, widgets: 567, keywords: 35, changes: 8, twilioConnected: true, gscConnected: true },
+  { name: "Dragon Media", leads: 234, calls: 98, sms: 287, widgets: 445, keywords: 18, changes: 5, twilioConnected: true, gscConnected: true },
+  { name: "Coastal SEO", leads: 198, calls: 0, sms: 0, widgets: 389, keywords: 22, changes: 15, twilioConnected: false, gscConnected: false },
+  { name: "Sakura Digital", leads: 167, calls: 45, sms: 134, widgets: 312, keywords: 15, changes: 3, twilioConnected: true, gscConnected: true },
+  { name: "Metro Creative", leads: 156, calls: 67, sms: 189, widgets: 298, keywords: 10, changes: 6, twilioConnected: true, gscConnected: false },
 ];
 
 export default function AdminAnalytics() {
@@ -59,7 +59,7 @@ export default function AdminAnalytics() {
               <thead>
                 <tr className="border-b text-left">
                   <th className="pb-3 font-medium text-muted-foreground">Client</th>
-                  <th className="pb-3 font-medium text-muted-foreground text-right">Bookings</th>
+                  <th className="pb-3 font-medium text-muted-foreground text-right">Leads</th>
                   <th className="pb-3 font-medium text-muted-foreground text-right">AI Calls</th>
                   <th className="pb-3 font-medium text-muted-foreground text-right">SMS</th>
                   <th className="pb-3 font-medium text-muted-foreground text-right">Widgets</th>
@@ -78,7 +78,7 @@ export default function AdminAnalytics() {
                         <span className="font-medium">{client.name}</span>
                       </div>
                     </td>
-                    <td className="py-4 text-right">{client.bookings}</td>
+                    <td className="py-4 text-right">{client.leads}</td>
                     <td className="py-4 text-right">{client.calls}</td>
                     <td className="py-4 text-right">{client.sms}</td>
                     <td className="py-4 text-right">{client.widgets}</td>

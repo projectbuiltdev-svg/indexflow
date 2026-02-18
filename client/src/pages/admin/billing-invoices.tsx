@@ -12,12 +12,12 @@ const stats = [
 ];
 
 const invoices = [
-  { id: "INV-2026-0287", agency: "Hospitality Group NYC", amount: "$890.00", date: "Feb 1, 2026", status: "Paid" },
-  { id: "INV-2026-0286", agency: "Alpine Hotels Ltd.", amount: "$890.00", date: "Feb 1, 2026", status: "Paid" },
-  { id: "INV-2026-0285", agency: "Coastal Dining Co.", amount: "$490.00", date: "Feb 1, 2026", status: "Paid" },
-  { id: "INV-2026-0284", agency: "Pacific Venues Inc.", amount: "$490.00", date: "Feb 1, 2026", status: "Overdue" },
-  { id: "INV-2026-0283", agency: "Metro Bistro Group", amount: "$190.00", date: "Feb 1, 2026", status: "Paid" },
-  { id: "INV-2026-0282", agency: "Urban Eats Network", amount: "$0.00", date: "Feb 1, 2026", status: "Trial" },
+  { id: "INV-2026-0287", agency: "Digital Growth NYC", amount: "$890.00", date: "Feb 1, 2026", status: "Paid" },
+  { id: "INV-2026-0286", agency: "Alpine Digital Ltd.", amount: "$890.00", date: "Feb 1, 2026", status: "Paid" },
+  { id: "INV-2026-0285", agency: "Coastal Marketing Co.", amount: "$490.00", date: "Feb 1, 2026", status: "Paid" },
+  { id: "INV-2026-0284", agency: "Pacific Media Inc.", amount: "$490.00", date: "Feb 1, 2026", status: "Overdue" },
+  { id: "INV-2026-0283", agency: "Metro Creative Group", amount: "$190.00", date: "Feb 1, 2026", status: "Paid" },
+  { id: "INV-2026-0282", agency: "Urban Content Network", amount: "$0.00", date: "Feb 1, 2026", status: "Trial" },
 ];
 
 export default function AdminBillingInvoices() {

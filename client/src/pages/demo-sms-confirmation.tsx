@@ -4,7 +4,7 @@ import indexFlowLogo from "@assets/image_1771351451425.png";
 
 export default function DemoSmsConfirmation() {
   useEffect(() => {
-    document.title = "SMS Confirmation Demo - Resto";
+    document.title = "SMS Confirmation Demo - indexFlow";
   }, []);
 
   return (
@@ -55,7 +55,7 @@ export default function DemoSmsConfirmation() {
           </div>
           
           <div className="px-6 pb-4">
-            <p className="text-xs text-center text-gray-400">powered by <span className="underline">Resto.</span></p>
+            <p className="text-xs text-center text-gray-400">powered by <span className="underline">indexFlow</span></p>
           </div>
         </div>
       </div>

@@ -31,7 +31,7 @@ const features = [
   {
     icon: XCircle,
     title: "Cancellation Fee Management",
-    description: "Apply late cancellation or no-show fees automatically based on your venue's policies.",
+    description: "Apply late cancellation or no-show fees automatically based on your business's policies.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
@@ -61,7 +61,7 @@ const benefits = [
 export default function PrepaidReservationsFeature() {
   return (
     <Layout>
-      <SEO {...seoData.prepaidReservations} />
+      <SEO {...seoData.prepaidServices} />
       <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-purple-500/10 via-violet-500/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
@@ -100,7 +100,7 @@ export default function PrepaidReservationsFeature() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Secure Every Reservation</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              From small deposits to full prepayment, choose the right strategy for your venue.
+              From small deposits to full prepayment, choose the right strategy for your business.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

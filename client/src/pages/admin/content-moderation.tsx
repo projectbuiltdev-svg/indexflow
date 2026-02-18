@@ -12,11 +12,11 @@ const stats = [
 ];
 
 const flaggedItems = [
-  { content: "Blog post contains promotional spam links", agency: "Urban Eats Network", venue: "The Kitchen", type: "Blog Post", severity: "High", date: "Feb 17, 2026" },
-  { content: "Menu description with inappropriate language", agency: "Pacific Venues Inc.", venue: "Skyline Bar", type: "Menu Item", severity: "Medium", date: "Feb 16, 2026" },
-  { content: "Fake review detected by AI filter", agency: "Hospitality Group NYC", venue: "La Bella Italia", type: "Review", severity: "High", date: "Feb 16, 2026" },
-  { content: "Image violates brand guidelines", agency: "Coastal Dining Co.", venue: "Ocean View Bistro", type: "Image", severity: "Low", date: "Feb 15, 2026" },
-  { content: "Duplicate content across venues", agency: "Alpine Hotels Ltd.", venue: "Mountain Lodge", type: "Page Content", severity: "Medium", date: "Feb 14, 2026" },
+  { content: "Blog post contains promotional spam links", agency: "Urban Content Network", workspace: "Content Hub", type: "Blog Post", severity: "High", date: "Feb 17, 2026" },
+  { content: "Service description with inappropriate language", agency: "Pacific Media Inc.", workspace: "Pinnacle Digital", type: "Service Page", severity: "Medium", date: "Feb 16, 2026" },
+  { content: "Fake review detected by AI filter", agency: "Digital Growth NYC", workspace: "Acme Digital", type: "Review", severity: "High", date: "Feb 16, 2026" },
+  { content: "Image violates brand guidelines", agency: "Coastal Marketing Co.", workspace: "Coastal SEO", type: "Image", severity: "Low", date: "Feb 15, 2026" },
+  { content: "Duplicate content across workspaces", agency: "Alpine Digital Ltd.", workspace: "Summit Marketing", type: "Page Content", severity: "Medium", date: "Feb 14, 2026" },
 ];
 
 export default function AdminContentModeration() {
@@ -52,7 +52,7 @@ export default function AdminContentModeration() {
               <div key={i} className="flex items-center justify-between gap-4 flex-wrap" data-testid={`row-flagged-${i}`}>
                 <div className="min-w-0">
                   <p className="font-medium">{item.content}</p>
-                  <p className="text-sm text-muted-foreground">{item.agency} &middot; {item.venue} &middot; {item.date}</p>
+                  <p className="text-sm text-muted-foreground">{item.agency} &middot; {item.workspace} &middot; {item.date}</p>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <Badge variant="outline">{item.type}</Badge>

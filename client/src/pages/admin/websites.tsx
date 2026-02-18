@@ -5,10 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { AdminLayout } from "@/components/admin-layout";
 
 const websites = [
-  { id: 1, name: "La Bella Italia", domain: "labellaitalia.com", status: "Live", template: "Elegante", lastUpdated: "Jan 28, 2026" },
-  { id: 2, name: "Ocean View Bistro", domain: "oceanviewbistro.com", status: "Building", template: "Coastal", lastUpdated: "Jan 27, 2026" },
-  { id: 3, name: "Mountain Lodge Hotel", domain: "mountainlodge.com", status: "Live", template: "Rustic", lastUpdated: "Jan 20, 2026" },
-  { id: 4, name: "The Wine Cellar", domain: "thewineceller.com", status: "Live", template: "Modern", lastUpdated: "Jan 15, 2026" },
+  { id: 1, name: "Acme Digital", domain: "acmedigital.com", status: "Live", template: "Elegante", lastUpdated: "Jan 28, 2026" },
+  { id: 2, name: "Coastal SEO", domain: "coastalseo.com", status: "Building", template: "Coastal", lastUpdated: "Jan 27, 2026" },
+  { id: 3, name: "Summit Marketing", domain: "summitmarketing.com", status: "Live", template: "Rustic", lastUpdated: "Jan 20, 2026" },
+  { id: 4, name: "Pinnacle Digital", domain: "pinnacledigital.com", status: "Live", template: "Modern", lastUpdated: "Jan 15, 2026" },
 ];
 
 export default function AdminWebsites() {

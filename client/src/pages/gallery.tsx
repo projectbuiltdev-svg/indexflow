@@ -263,7 +263,7 @@ export default function Gallery() {
             Browse <span className="text-primary">Styles</span>, We Build Custom
           </h1>
           <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
-            Preview and explore our website designs across different styles and venue types. 
+            Preview and explore our website designs across different styles and business types. 
             Every site we deliver is custom-built for your unique brand. You just tell us what 
             style best suits and fits or supply us website examples that you like.
           </p>
@@ -333,7 +333,7 @@ export default function Gallery() {
                   >
                     <img 
                       src={item.image} 
-                      alt={`${item.title} website template for ${item.category} - Resto.Restaurant`}
+                      alt={`${item.title} website template for ${item.category} - indexFlow`}
                       loading="lazy"
                       decoding="async"
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -402,7 +402,7 @@ export default function Gallery() {
             <h2 className="text-2xl lg:text-3xl font-bold mb-3">Love a Style?</h2>
             <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
               These are just starting points. We'll customize every detail — colors, fonts, 
-              layout, and features — to match your venue's unique personality.
+              layout, and features — to match your business's unique personality.
             </p>
             <Button asChild size="lg">
               <a href="/contact" data-testid="button-portfolio-contact">

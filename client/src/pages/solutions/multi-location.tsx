@@ -31,19 +31,19 @@ const features = [
   {
     icon: Network,
     title: "Brand Consistency",
-    description: "Maintain consistent branding across all locations while allowing each venue its own personality.",
+    description: "Maintain consistent branding across all locations while allowing each workspace its own personality.",
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
   },
 ];
 
 const benefits = [
-  "Single dashboard for all venues with role-based access",
+  "Single dashboard for all locations with role-based access",
   "Per-location websites with shared brand guidelines",
   "Consolidated billing across all locations",
-  "AI phone assistant configured per venue",
+  "AI phone assistant configured per location",
   "Cross-location booking transfer and guest recognition",
-  "Group-level reporting with individual venue drill-down",
+  "Group-level reporting with individual location drill-down",
   "Bulk settings management with per-location overrides",
   "Dedicated account manager for multi-location clients",
 ];
@@ -67,7 +67,7 @@ const useCases = [
   {
     icon: Shield,
     title: "Hospitality Groups",
-    description: "Mix of restaurants, bars, and cafes? No problem. Manage diverse venue types under one umbrella.",
+    description: "Mix of restaurants, bars, and cafes? No problem. Manage diverse business types under one umbrella.",
   },
 ];
 
@@ -75,8 +75,8 @@ export default function MultiLocationSolution() {
   return (
     <Layout>
       <SEO
-        title="Multi-Location Management | Resto.Restaurant"
-        description="Manage all your hospitality venues from one centralized dashboard. Cross-location analytics, unified settings, and consistent branding for restaurant groups, hotel chains, and franchise operations."
+        title="Multi-Location Management | indexFlow"
+        description="Manage all your locations from one centralized dashboard. Cross-location analytics, unified settings, and consistent branding for restaurant groups, hotel chains, and franchise operations."
       />
       <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -101,7 +101,7 @@ export default function MultiLocationSolution() {
               <span className="text-muted-foreground">/month per additional location</span>
             </div>
             <p className="text-sm text-muted-foreground mb-8">
-              No limit on locations. Full dashboard, SEO tracking, and AI for each venue.
+              No limit on locations. Full dashboard, SEO tracking, and AI for each location.
             </p>
             <div className="flex items-center justify-center gap-4">
               <Link href="/contact">
@@ -124,7 +124,7 @@ export default function MultiLocationSolution() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Built for Scale</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to manage multiple hospitality venues efficiently.
+              Everything you need to manage multiple locations efficiently.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

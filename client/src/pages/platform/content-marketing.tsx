@@ -17,7 +17,7 @@ const features = [
   {
     icon: Search,
     title: "Industry-Relevant Topics",
-    description: "Content tailored to hospitality — dining guides, travel tips, seasonal menus, and local experiences.",
+    description: "Content tailored to your business — dining guides, travel tips, seasonal menus, and local experiences.",
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
@@ -53,7 +53,7 @@ const features = [
 
 const benefits = [
   "Improve search rankings and organic traffic month over month",
-  "Establish your venue as a trusted authority in your market",
+  "Establish your business as a trusted authority in your market",
   "Attract new customers who discover you through content",
   "Save time — we handle research, writing, and publishing",
 ];
@@ -76,8 +76,8 @@ export default function ContentMarketingPage() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Professional content marketing for hospitality businesses.
-              We research, write, and publish SEO-optimized articles that attract guests to your venue.
+              Professional content marketing for all businesses.
+              We research, write, and publish SEO-optimized articles that attract customers to your business.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link href="/contact">
@@ -100,7 +100,7 @@ export default function ContentMarketingPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">What's Included</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              A complete content marketing service designed for the hospitality industry.
+              A complete content marketing service designed for all businesses.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -165,7 +165,7 @@ export default function ContentMarketingPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Grow Your Online Presence?</h2>
           <p className="text-muted-foreground mb-8">
-            Let our team handle your content marketing while you focus on hospitality.
+            Let our team handle your content marketing while you focus on your business.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-content-bottom-cta">

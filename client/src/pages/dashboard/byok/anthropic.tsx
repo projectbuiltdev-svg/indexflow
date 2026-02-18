@@ -27,7 +27,7 @@ export default function ByokAnthropic() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    document.title = "Anthropic Integration | Resto Dashboard";
+    document.title = "Anthropic Integration | indexFlow Dashboard";
   }, []);
 
   const { data: allProviders = [] } = useQuery<AiProviderSettings[]>({

@@ -9,25 +9,25 @@ const twilioStats = [
   { label: "Total Voice Calls", value: "1,293", change: "+87 this week", icon: PhoneCall },
   { label: "SMS Sent", value: "3,847", change: "+312 this week", icon: MessageCircle },
   { label: "Twilio Connected", value: "38", change: "of 47 clients", icon: CheckCircle },
-  { label: "Bookings via Phone", value: "456", change: "+34 this week", icon: Phone },
+  { label: "Leads via Phone", value: "456", change: "+34 this week", icon: Phone },
 ];
 
 const clientTwilioStatus = [
-  { id: 1, name: "La Bella Italia", connected: true, phoneNumber: "+1 (555) 123-4567", voiceCalls: 156, smsSent: 423, aiProvider: "OpenAI", plan: "Complete Solution" },
-  { id: 2, name: "The Golden Dragon", connected: true, phoneNumber: "+1 (555) 234-5678", voiceCalls: 98, smsSent: 287, aiProvider: "Anthropic", plan: "Virtual Concierge" },
-  { id: 3, name: "Ocean View Bistro", connected: false, phoneNumber: "-", voiceCalls: 0, smsSent: 0, aiProvider: "None", plan: "Complete Solution" },
-  { id: 4, name: "Mountain Lodge Hotel", connected: true, phoneNumber: "+1 (555) 345-6789", voiceCalls: 134, smsSent: 398, aiProvider: "OpenAI", plan: "Complete Solution" },
-  { id: 5, name: "Café Parisien", connected: true, phoneNumber: "+1 (555) 456-7890", voiceCalls: 67, smsSent: 189, aiProvider: "Google AI", plan: "Virtual Concierge" },
-  { id: 6, name: "Sakura Sushi", connected: true, phoneNumber: "+1 (555) 567-8901", voiceCalls: 45, smsSent: 134, aiProvider: "OpenAI", plan: "Complete Solution" },
-  { id: 7, name: "The Rustic Table", connected: false, phoneNumber: "-", voiceCalls: 0, smsSent: 0, aiProvider: "None", plan: "Virtual Concierge" },
+  { id: 1, name: "Acme Digital", connected: true, phoneNumber: "+1 (555) 123-4567", voiceCalls: 156, smsSent: 423, aiProvider: "OpenAI", plan: "Complete Solution" },
+  { id: 2, name: "Dragon Media", connected: true, phoneNumber: "+1 (555) 234-5678", voiceCalls: 98, smsSent: 287, aiProvider: "Anthropic", plan: "Virtual Concierge" },
+  { id: 3, name: "Coastal SEO", connected: false, phoneNumber: "-", voiceCalls: 0, smsSent: 0, aiProvider: "None", plan: "Complete Solution" },
+  { id: 4, name: "Summit Marketing", connected: true, phoneNumber: "+1 (555) 345-6789", voiceCalls: 134, smsSent: 398, aiProvider: "OpenAI", plan: "Complete Solution" },
+  { id: 5, name: "Metro Creative", connected: true, phoneNumber: "+1 (555) 456-7890", voiceCalls: 67, smsSent: 189, aiProvider: "Google AI", plan: "Virtual Concierge" },
+  { id: 6, name: "Sakura Digital", connected: true, phoneNumber: "+1 (555) 567-8901", voiceCalls: 45, smsSent: 134, aiProvider: "OpenAI", plan: "Complete Solution" },
+  { id: 7, name: "Rustic Creative", connected: false, phoneNumber: "-", voiceCalls: 0, smsSent: 0, aiProvider: "None", plan: "Virtual Concierge" },
 ];
 
 const recentSms = [
-  { id: 1, client: "La Bella Italia", to: "+1 (555) 111-2222", type: "Confirmation", status: "Delivered", time: "2 mins ago" },
-  { id: 2, client: "Mountain Lodge Hotel", to: "+1 (555) 333-4444", type: "Reminder", status: "Delivered", time: "15 mins ago" },
-  { id: 3, client: "Café Parisien", to: "+1 (555) 555-6666", type: "Confirmation", status: "Delivered", time: "32 mins ago" },
-  { id: 4, client: "The Golden Dragon", to: "+1 (555) 777-8888", type: "Cancellation", status: "Delivered", time: "1 hour ago" },
-  { id: 5, client: "Sakura Sushi", to: "+1 (555) 999-0000", type: "Confirmation", status: "Failed", time: "2 hours ago" },
+  { id: 1, client: "Acme Digital", to: "+1 (555) 111-2222", type: "Confirmation", status: "Delivered", time: "2 mins ago" },
+  { id: 2, client: "Summit Marketing", to: "+1 (555) 333-4444", type: "Reminder", status: "Delivered", time: "15 mins ago" },
+  { id: 3, client: "Metro Creative", to: "+1 (555) 555-6666", type: "Confirmation", status: "Delivered", time: "32 mins ago" },
+  { id: 4, client: "Dragon Media", to: "+1 (555) 777-8888", type: "Cancellation", status: "Delivered", time: "1 hour ago" },
+  { id: 5, client: "Sakura Digital", to: "+1 (555) 999-0000", type: "Confirmation", status: "Failed", time: "2 hours ago" },
 ];
 
 export default function AdminTwilio() {
@@ -168,7 +168,7 @@ export default function AdminTwilio() {
               <ul className="space-y-1.5 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> AI phone assistant (multi-provider)</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Speech recognition & TwiML</li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Phone reservation creation</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Phone inquiry tracking</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Call logging & transcripts</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Configurable voice persona</li>
               </ul>
@@ -179,10 +179,10 @@ export default function AdminTwilio() {
                 SMS Features
               </h3>
               <ul className="space-y-1.5 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Booking confirmations</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Project confirmations</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Appointment reminders</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Cancellation notices</li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Guest self-service (CONFIRM/CANCEL/STATUS)</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Client self-service (CONFIRM/CANCEL/STATUS)</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Custom SMS templates</li>
               </ul>
             </div>
@@ -193,10 +193,10 @@ export default function AdminTwilio() {
               </h3>
               <ul className="space-y-1.5 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Twilio signature validation</li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Venue-level authorization</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Workspace-level authorization</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Auto webhook configuration</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Client BYOK support</li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Per-venue Twilio credentials</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Per-workspace Twilio credentials</li>
               </ul>
             </div>
           </div>

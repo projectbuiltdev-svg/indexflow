@@ -134,7 +134,7 @@ export default function Templates() {
                 Don't See What You Need?
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-                Every template is fully customizable. Tell us about your venue and we'll create a design that perfectly matches your brand.
+                Every template is fully customizable. Tell us about your business and we'll create a design that perfectly matches your brand.
               </p>
               <Link href="/contact">
                 <Button size="lg" className="gap-2" data-testid="button-templates-cta">

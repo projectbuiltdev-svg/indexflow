@@ -38,14 +38,14 @@ const features = [
   {
     icon: Image,
     title: "Photo Galleries",
-    description: "Showcase your venue with stunning, optimized photo galleries that load fast and look incredible.",
+    description: "Showcase your business with stunning, optimized photo galleries that load fast and look incredible.",
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
   },
   {
     icon: MapPin,
     title: "Google Maps Integration",
-    description: "Embedded maps with directions, helping guests find your venue effortlessly.",
+    description: "Embedded maps with directions, helping guests find your business effortlessly.",
     color: "text-teal-500",
     bgColor: "bg-teal-500/10",
   },
@@ -75,18 +75,18 @@ const benefits = [
 export default function HospitalityWebsitesPage() {
   return (
     <Layout>
-      <SEO {...seoData.hospitalityWebsites} />
+      <SEO {...seoData.businessWebsites} />
       <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-teal-500/10 via-emerald-500/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4">
               <Palette className="w-3 h-3 mr-1" />
-              Hospitality Websites
+              Custom Websites
             </Badge>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
               Bespoke Websites{" "}
               <span className="bg-gradient-to-r from-teal-500 to-emerald-500 bg-clip-text text-transparent">
-                for Hospitality
+                Built to Convert
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
@@ -179,7 +179,7 @@ export default function HospitalityWebsitesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready for a Website That Works as Hard as You Do?</h2>
           <p className="text-muted-foreground mb-8">
-            Get a bespoke website designed and built specifically for your venue.
+            Get a bespoke website designed and built specifically for your business.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link href="/templates">

@@ -11,13 +11,13 @@ const stats = [
 ];
 
 const keywords = [
-  { keyword: "best restaurant near me", volume: "22,200", avgPos: "8.4", agencies: 12, trend: "up" },
-  { keyword: "hotel booking downtown", volume: "14,800", avgPos: "11.2", agencies: 6, trend: "up" },
-  { keyword: "brunch reservations", volume: "9,900", avgPos: "6.1", agencies: 15, trend: "stable" },
-  { keyword: "rooftop bar NYC", volume: "8,100", avgPos: "4.7", agencies: 3, trend: "up" },
-  { keyword: "private dining room", volume: "6,600", avgPos: "15.8", agencies: 8, trend: "down" },
-  { keyword: "boutique hotel deals", volume: "5,400", avgPos: "19.3", agencies: 4, trend: "stable" },
-  { keyword: "wine tasting events", volume: "4,400", avgPos: "7.9", agencies: 9, trend: "up" },
+  { keyword: "best seo agency near me", volume: "22,200", avgPos: "8.4", agencies: 12, trend: "up" },
+  { keyword: "digital marketing services", volume: "14,800", avgPos: "11.2", agencies: 6, trend: "up" },
+  { keyword: "content marketing strategy", volume: "9,900", avgPos: "6.1", agencies: 15, trend: "stable" },
+  { keyword: "local seo services NYC", volume: "8,100", avgPos: "4.7", agencies: 3, trend: "up" },
+  { keyword: "technical seo audit", volume: "6,600", avgPos: "15.8", agencies: 8, trend: "down" },
+  { keyword: "link building services", volume: "5,400", avgPos: "19.3", agencies: 4, trend: "stable" },
+  { keyword: "keyword research tools", volume: "4,400", avgPos: "7.9", agencies: 9, trend: "up" },
 ];
 
 export default function AdminPlatformSeoKeywords() {

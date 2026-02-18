@@ -10,28 +10,28 @@ const features = [
   {
     icon: MessageSquare,
     title: "Instant Booking Confirmation",
-    description: "Guests receive an SMS confirmation within seconds of completing their reservation.",
+    description: "Clients receive an SMS confirmation within seconds of completing their appointment.",
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
   },
   {
     icon: Bell,
     title: "24-Hour Reminder",
-    description: "Automated reminder sent 24 hours before the reservation to reduce last-minute no-shows.",
+    description: "Automated reminder sent 24 hours before the appointment to reduce last-minute cancellations.",
     color: "text-amber-500",
     bgColor: "bg-amber-500/10",
   },
   {
     icon: Clock,
     title: "1-Hour Reminder",
-    description: "A final reminder one hour before arrival keeps the reservation top of mind for guests.",
+    description: "A final reminder one hour before the appointment keeps it top of mind for clients.",
     color: "text-yellow-600",
     bgColor: "bg-yellow-600/10",
   },
   {
     icon: XCircle,
     title: "Cancellation Notifications",
-    description: "Notify staff and guests instantly when a reservation is cancelled, freeing up the table.",
+    description: "Notify team and clients instantly when an appointment is cancelled, freeing up availability.",
     color: "text-red-500",
     bgColor: "bg-red-500/10",
   },
@@ -162,7 +162,7 @@ export default function SmsConfirmationsFeature() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Automate Your Guest Communication?</h2>
           <p className="text-muted-foreground mb-8">
-            Let SMS do the work so your staff can focus on hospitality, not phone calls.
+            Let SMS do the work so your staff can focus on your business, not phone calls.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-sms-bottom-cta">

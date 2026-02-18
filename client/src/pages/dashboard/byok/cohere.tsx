@@ -27,7 +27,7 @@ export default function ByokCohere() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    document.title = "Cohere Integration | Resto Dashboard";
+    document.title = "Cohere Integration | indexFlow Dashboard";
   }, []);
 
   const { data: allProviders = [] } = useQuery<AiProviderSettings[]>({

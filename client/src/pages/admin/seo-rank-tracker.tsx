@@ -86,8 +86,8 @@ export default function AdminRankTracker() {
       {!selectedWorkspace ? (
         <Card>
           <CardContent className="py-8">
-            <p className="text-muted-foreground text-center" data-testid="no-venue-selected">
-              Please select a venue to view rank tracking.
+            <p className="text-muted-foreground text-center" data-testid="no-workspace-selected">
+              Please select a workspace to view rank tracking.
             </p>
           </CardContent>
         </Card>

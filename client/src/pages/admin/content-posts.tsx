@@ -12,12 +12,12 @@ const stats = [
 ];
 
 const posts = [
-  { title: "Best Brunch Spots in Manhattan", agency: "Hospitality Group NYC", venue: "La Bella Italia", status: "Published", date: "Feb 16, 2026", views: "2,341" },
-  { title: "Summer Wine Pairings Guide", agency: "Coastal Dining Co.", venue: "Ocean View Bistro", status: "Published", date: "Feb 15, 2026", views: "1,892" },
-  { title: "Farm-to-Table: Our New Menu", agency: "Metro Bistro Group", venue: "Green Table", status: "Draft", date: "Feb 14, 2026", views: "0" },
-  { title: "Valentine's Day Special Events", agency: "Alpine Hotels Ltd.", venue: "Mountain Lodge", status: "Published", date: "Feb 13, 2026", views: "4,567" },
-  { title: "Cocktail Masterclass Recap", agency: "Pacific Venues Inc.", venue: "Skyline Bar", status: "Published", date: "Feb 12, 2026", views: "987" },
-  { title: "New Chef's Tasting Menu", agency: "Urban Eats Network", venue: "The Kitchen", status: "Draft", date: "Feb 11, 2026", views: "0" },
+  { title: "Top SEO Trends for 2026", agency: "Digital Growth NYC", workspace: "Acme Digital", status: "Published", date: "Feb 16, 2026", views: "2,341" },
+  { title: "Complete Guide to Local SEO", agency: "Coastal Marketing Co.", workspace: "Coastal SEO", status: "Published", date: "Feb 15, 2026", views: "1,892" },
+  { title: "Content Strategy for B2B Growth", agency: "Metro Creative Group", workspace: "Metro Creative", status: "Draft", date: "Feb 14, 2026", views: "0" },
+  { title: "Link Building Best Practices", agency: "Alpine Digital Ltd.", workspace: "Summit Marketing", status: "Published", date: "Feb 13, 2026", views: "4,567" },
+  { title: "Technical SEO Audit Checklist", agency: "Pacific Media Inc.", workspace: "Pinnacle Digital", status: "Published", date: "Feb 12, 2026", views: "987" },
+  { title: "Core Web Vitals Optimization Guide", agency: "Urban Content Network", workspace: "Content Hub", status: "Draft", date: "Feb 11, 2026", views: "0" },
 ];
 
 export default function AdminContentPosts() {
@@ -53,7 +53,7 @@ export default function AdminContentPosts() {
               <div key={post.title} className="flex items-center justify-between gap-4 flex-wrap" data-testid={`row-post-${post.title.toLowerCase().replace(/\s+/g, "-")}`}>
                 <div className="min-w-0">
                   <p className="font-medium">{post.title}</p>
-                  <p className="text-sm text-muted-foreground">{post.agency} &middot; {post.venue} &middot; {post.date}</p>
+                  <p className="text-sm text-muted-foreground">{post.agency} &middot; {post.workspace} &middot; {post.date}</p>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm text-muted-foreground">{post.views} views</span>

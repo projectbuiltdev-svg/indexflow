@@ -68,7 +68,7 @@ const features = [
 const benefits = [
   "Everything in one place — no switching between tools",
   "Real-time updates — bookings appear instantly as they're made",
-  "Mobile responsive — manage your venue from any device",
+  "Mobile responsive — manage your workspace from any device",
   "Role-based access — control what each team member can see",
 ];
 
@@ -114,7 +114,7 @@ export default function DashboardPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Everything You Need to Run Your Venue</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              A powerful yet intuitive dashboard designed for hospitality teams.
+              A powerful yet intuitive dashboard designed for your team.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -179,7 +179,7 @@ export default function DashboardPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Streamline Your Operations?</h2>
           <p className="text-muted-foreground mb-8">
-            See how the Resto dashboard can simplify your day-to-day venue management.
+            See how the indexFlow dashboard can simplify your day-to-day workspace management.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-dashboard-bottom-cta">

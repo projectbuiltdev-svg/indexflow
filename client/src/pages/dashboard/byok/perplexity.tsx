@@ -27,7 +27,7 @@ export default function ByokPerplexity() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    document.title = "Perplexity Integration | Resto Dashboard";
+    document.title = "Perplexity Integration | indexFlow Dashboard";
   }, []);
 
   const { data: allProviders = [] } = useQuery<AiProviderSettings[]>({

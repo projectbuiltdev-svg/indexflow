@@ -28,7 +28,7 @@ export default function ByokOpenai() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    document.title = "OpenAI Integration | Resto Dashboard";
+    document.title = "OpenAI Integration | indexFlow Dashboard";
   }, []);
 
   const { data: allProviders = [] } = useQuery<AiProviderSettings[]>({

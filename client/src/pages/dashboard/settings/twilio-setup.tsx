@@ -55,7 +55,7 @@ export default function SettingsTwilioSetup() {
   });
 
   useEffect(() => {
-    document.title = "Twilio Setup Guide | Resto Dashboard";
+    document.title = "Twilio Setup Guide | indexFlow Dashboard";
   }, []);
 
   const twilioConnected = settings?.isConnected || false;
@@ -103,7 +103,7 @@ export default function SettingsTwilioSetup() {
     {
       number: 3,
       title: "Purchase a Phone Number",
-      description: "Buy a Twilio phone number that will be your venue's AI phone line.",
+      description: "Buy a Twilio phone number that will be your workspace's AI phone line.",
       completed: hasPhoneNumber,
       details: [
         "In Twilio Console, go to Phone Numbers > Manage > Buy a Number",
@@ -159,7 +159,7 @@ export default function SettingsTwilioSetup() {
       completed: hasVoiceConfig && hasSmsConfig,
       details: [
         "Set the AI voice persona (male or female)",
-        "Write a custom phone greeting for your venue",
+        "Write a custom phone greeting for your workspace",
         "Configure max call duration and voicemail settings",
         "Customize the SMS confirmation template with your branding",
         "Test with a phone call to your Twilio number",
@@ -179,7 +179,7 @@ export default function SettingsTwilioSetup() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold" data-testid="text-twilio-setup-title">Twilio Setup Guide</h1>
-          <p className="text-muted-foreground">Follow these steps to enable AI-powered phone calls and SMS for your venue</p>
+          <p className="text-muted-foreground">Follow these steps to enable AI-powered phone calls and SMS for your workspace</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -313,7 +313,7 @@ export default function SettingsTwilioSetup() {
                     <MessageSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">SMS Confirmations</span>
-                      <p className="text-muted-foreground">Automatic booking confirmations and reminders via text</p>
+                      <p className="text-muted-foreground">Automatic appointment confirmations and reminders via text</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
@@ -356,7 +356,7 @@ export default function SettingsTwilioSetup() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground space-y-2">
-                <p>Twilio charges are separate from your Resto subscription:</p>
+                <p>Twilio charges are separate from your indexFlow subscription:</p>
                 <ul className="space-y-1.5 ml-1">
                   <li className="flex items-start gap-2">
                     <ArrowRight className="w-3 h-3 mt-1 flex-shrink-0" />

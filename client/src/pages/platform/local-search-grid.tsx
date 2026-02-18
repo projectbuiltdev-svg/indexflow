@@ -27,13 +27,13 @@ const steps = [
   {
     number: 1,
     title: "Enter your location",
-    description: "Add your venue's address and we automatically center the grid on your business. Your Google Business Profile is detected and linked instantly.",
+    description: "Add your business address and we automatically center the grid on your business. Your Google Business Profile is detected and linked instantly.",
     highlight: "Set Up in Seconds",
   },
   {
     number: 2,
     title: "Choose keywords that matter",
-    description: "Select up to 25 keywords that drive foot traffic — cuisine types, 'near me' searches, occasion-based terms, and competitor brand names. We suggest high-impact keywords based on your venue type.",
+    description: "Select up to 25 keywords that drive foot traffic — cuisine types, 'near me' searches, occasion-based terms, and competitor brand names. We suggest high-impact keywords based on your business type.",
     highlight: "Choose the Keywords",
   },
   {
@@ -60,7 +60,7 @@ const features = [
   {
     icon: Grid3X3,
     title: "Geo-Grid Rank Tracking",
-    description: "See your Google Maps ranking at every point across a customizable grid centered on your venue.",
+    description: "See your Google Maps ranking at every point across a customizable grid centered on your business.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
@@ -122,27 +122,27 @@ const faqs = [
   },
   {
     question: "How is this different from regular rank tracking?",
-    answer: "Regular rank tracking checks your position from a single location (usually the city center). But Google results change dramatically based on the searcher's location. A grid tracker checks from 9 to 49 different points around your venue, showing you exactly where you rank well and where you need improvement.",
+    answer: "Regular rank tracking checks your position from a single location (usually the city center). But Google results change dramatically based on the searcher's location. A grid tracker checks from 9 to 49 different points around your business, showing you exactly where you rank well and where you need improvement.",
   },
   {
     question: "How does this compare to BrightLocal or Whitespark?",
-    answer: "BrightLocal charges $39-79/month and geo-grid scans consume credits — heavy users burn through their allowance fast. Whitespark charges $14-140/month for rank tracking, and their geo-grid product is sold separately starting at $10/month. Both have keyword limits that push you into higher tiers. With Resto, geo-grid tracking is built into every plan with simple pay-as-you-go credits at $10 for 5 scans — plus every new account gets a $5 starter credit. And you get a full booking system, AI phone answering, and website management that neither platform offers.",
+    answer: "BrightLocal charges $39-79/month and geo-grid scans consume credits — heavy users burn through their allowance fast. Whitespark charges $14-140/month for rank tracking, and their geo-grid product is sold separately starting at $10/month. Both have keyword limits that push you into higher tiers. With indexFlow, geo-grid tracking is built into every plan with simple pay-as-you-go credits at $10 for 5 scans — plus every new account gets a $5 starter credit. And you get a full booking system, AI phone answering, and website management that neither platform offers.",
   },
   {
     question: "How much does Local Search Grid cost?",
-    answer: "Local Search Grid is built into every Resto plan. Every new account gets a $5 starter credit, and additional scans are pay-as-you-go — $10 for 5 scans or $35 for 25 scans (save 30%). No monthly subscription fees for the tool itself, no tier upgrades needed.",
+    answer: "Local Search Grid is built into every indexFlow plan. Every new account gets a $5 starter credit, and additional scans are pay-as-you-go — $10 for 5 scans or $35 for 25 scans (save 30%). No monthly subscription fees for the tool itself, no tier upgrades needed.",
   },
   {
     question: "How many keywords can I track?",
-    answer: "You can track up to 25 keywords per venue. This covers all the important searches — your cuisine type, 'near me' terms, occasion-based searches (birthday dinner, date night), and competitor brand names. Most venues find 15-20 keywords covers everything that matters.",
+    answer: "You can track up to 25 keywords per workspace. This covers all the important searches — your cuisine type, 'near me' terms, occasion-based searches (birthday dinner, date night), and competitor brand names. Most businesses find 15-20 keywords covers everything that matters.",
   },
   {
     question: "How often are rankings updated?",
-    answer: "You can scan whenever you want — each scan uses 1 credit. Most venues scan weekly or after making changes to their Google Business Profile to measure impact. You'll always see the latest scan date and can compare against previous scans to track progress.",
+    answer: "You can scan whenever you want — each scan uses 1 credit. Most businesses scan weekly or after making changes to their Google Business Profile to measure impact. You'll always see the latest scan date and can compare against previous scans to track progress.",
   },
   {
     question: "How does the grid work?",
-    answer: "Every venue uses a 5x5 grid (25 scan points) per scan. You can adjust the distance between points — from 0.5 miles for dense urban neighborhoods to 5 miles for wider suburban coverage. Each point checks your Google Maps ranking at that exact location.",
+    answer: "Every workspace uses a 5x5 grid (25 scan points) per scan. You can adjust the distance between points — from 0.5 miles for dense urban neighborhoods to 5 miles for wider suburban coverage. Each point checks your Google Maps ranking at that exact location.",
   },
   {
     question: "What do the colors on the grid mean?",
@@ -154,15 +154,15 @@ const faqs = [
   },
   {
     question: "Can I track multiple locations?",
-    answer: "Yes. Each venue on your Resto account gets its own grid with up to 25 keywords. Multi-location brands can compare grid performance across all their venues to identify which locations need the most attention and where to focus marketing spend.",
+    answer: "Yes. Each workspace on your indexFlow account gets its own grid with up to 25 keywords. Multi-location brands can compare grid performance across all their workspaces to identify which locations need the most attention and where to focus marketing spend.",
   },
   {
     question: "Do I need SEO experience to use this?",
-    answer: "Not at all. The color-coded grid makes results instantly understandable — green is good, red needs work. And because Resto is a fully managed platform, our team handles the technical SEO work for you. You just watch the dots turn green.",
+    answer: "Not at all. The color-coded grid makes results instantly understandable — green is good, red needs work. And because indexFlow is a fully managed platform, our team handles the technical SEO work for you. You just watch the dots turn green.",
   },
   {
     question: "How long before I see results?",
-    answer: "Most venues start seeing improvements within 4-8 weeks of optimizing their Google Business Profile, building citations, and improving reviews. The grid gives you visual proof of progress — you'll literally see red and orange dots shift to yellow and green as your rankings climb.",
+    answer: "Most businesses start seeing improvements within 4-8 weeks of optimizing their Google Business Profile, building citations, and improving reviews. The grid gives you visual proof of progress — you'll literally see red and orange dots shift to yellow and green as your rankings climb.",
   },
 ];
 
@@ -480,7 +480,7 @@ export default function LocalSearchGridPage() {
             <Badge variant="outline" className="mb-4">Features</Badge>
             <h2 className="text-3xl font-bold mb-4">Everything You Need to Dominate Locally</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Built specifically for hospitality businesses that depend on local foot traffic.
+              Built specifically for businesses that depend on local foot traffic.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -513,7 +513,7 @@ export default function LocalSearchGridPage() {
               </h2>
               <ul className="space-y-4">
                 {[
-                  "See your true local ranking from every direction around your venue",
+                  "See your true local ranking from every direction around your business",
                   "Identify exactly which neighborhoods need attention",
                   "Track competitor positions across your entire service area",
                   "Watch your coverage expand week over week with visual proof",
@@ -560,7 +560,7 @@ export default function LocalSearchGridPage() {
               Pay-As-You-Go vs Monthly Subscriptions
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Other platforms lock you into expensive monthly plans with hidden credit limits. With Resto, geo-grid scanning is built in — just buy credits when you need them.
+              Other platforms lock you into expensive monthly plans with hidden credit limits. With indexFlow, geo-grid scanning is built in — just buy credits when you need them.
             </p>
           </div>
 
@@ -645,14 +645,14 @@ export default function LocalSearchGridPage() {
               </CardContent>
             </Card>
 
-            {/* Resto */}
+            {/* indexFlow */}
             <Card className="border-primary border-2 relative" data-testid="card-compare-resto">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <Badge className="shadow-lg">Best Value</Badge>
               </div>
               <CardContent className="p-6">
                 <div className="text-center mb-6">
-                  <p className="text-sm text-muted-foreground mb-1">Resto.Restaurant</p>
+                  <p className="text-sm text-muted-foreground mb-1">indexFlow</p>
                   <div className="flex items-baseline justify-center gap-1">
                     <span className="text-3xl font-bold text-primary">$10</span>
                     <span className="text-muted-foreground text-sm">/5 scans</span>

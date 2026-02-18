@@ -42,7 +42,7 @@ export default function SettingsPayments() {
   });
 
   useEffect(() => {
-    document.title = "Payments - Settings | Resto Dashboard";
+    document.title = "Payments - Settings | indexFlow Dashboard";
   }, []);
 
   useEffect(() => {

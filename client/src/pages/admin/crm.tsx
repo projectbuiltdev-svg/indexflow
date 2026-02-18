@@ -42,7 +42,7 @@ export default function AdminCrm() {
     contactName: "",
     contactEmail: "",
     contactPhone: "",
-    businessType: "Restaurant",
+    businessType: "Agency",
     plan: "Complete Solution",
     source: "Website",
     notes: "",
@@ -60,7 +60,7 @@ export default function AdminCrm() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/crm/deals"] });
       setShowAddDeal(false);
-      setNewDeal({ businessName: "", contactName: "", contactEmail: "", contactPhone: "", businessType: "Restaurant", plan: "Complete Solution", source: "Website", notes: "" });
+      setNewDeal({ businessName: "", contactName: "", contactEmail: "", contactPhone: "", businessType: "Agency", plan: "Complete Solution", source: "Website", notes: "" });
       toast({ title: "Deal added to pipeline" });
     },
     onError: (err: any) => {
@@ -127,8 +127,8 @@ export default function AdminCrm() {
     });
   };
 
-  const assignees = [...new Set(deals.map((d: CrmDeal) => d.assignedTo).filter(Boolean))];
-  const sources = [...new Set(deals.map((d: CrmDeal) => d.source).filter(Boolean))];
+  const assignees = Array.from(new Set(deals.map((d: CrmDeal) => d.assignedTo).filter(Boolean)));
+  const sources = Array.from(new Set(deals.map((d: CrmDeal) => d.source).filter(Boolean)));
   const totalPipelineValue = filteredDeals.reduce((sum, d) => sum + Number(d.value || 0), 0);
 
   if (isLoading) {
@@ -470,10 +470,10 @@ export default function AdminCrm() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Restaurant">Restaurant</SelectItem>
-                      <SelectItem value="Cafe">Cafe</SelectItem>
-                      <SelectItem value="Bar">Bar</SelectItem>
-                      <SelectItem value="Hotel">Hotel</SelectItem>
+                      <SelectItem value="Agency">Agency</SelectItem>
+                      <SelectItem value="Freelancer">Freelancer</SelectItem>
+                      <SelectItem value="Enterprise">Enterprise</SelectItem>
+                      <SelectItem value="Startup">Startup</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

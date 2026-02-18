@@ -31,7 +31,7 @@ export default function HotelVibrant() {
               Warmth &<br /><span className="text-orange-500">Welcome</span>
             </h1>
             <p className="text-lg text-zinc-600 mb-8 leading-relaxed">
-              A cozy home away from home. Homemade breakfast, comfortable rooms, and genuine hospitality since 1985.
+              A cozy home away from home. Homemade breakfast, comfortable rooms, and genuine warmth since 1985.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white">

@@ -4,11 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AdminLayout } from "@/components/admin-layout";
 
 const notifications = [
-  { id: 1, type: "success", title: "New Client Signup", message: "Ocean View Bistro has signed up for Complete Solution", time: "2 hours ago", read: false },
-  { id: 2, type: "warning", title: "Payment Failed", message: "Café Parisien subscription payment failed", time: "5 hours ago", read: false },
-  { id: 3, type: "info", title: "Website Published", message: "Mountain Lodge Hotel website is now live", time: "1 day ago", read: true },
-  { id: 4, type: "success", title: "Setup Complete", message: "The Wine Cellar setup has been completed", time: "2 days ago", read: true },
-  { id: 5, type: "info", title: "High Call Volume", message: "La Bella Italia received 50+ AI calls today", time: "3 days ago", read: true },
+  { id: 1, type: "success", title: "New Client Signup", message: "Coastal SEO has signed up for Complete Solution", time: "2 hours ago", read: false },
+  { id: 2, type: "warning", title: "Payment Failed", message: "Metro Creative subscription payment failed", time: "5 hours ago", read: false },
+  { id: 3, type: "info", title: "Website Published", message: "Summit Marketing website is now live", time: "1 day ago", read: true },
+  { id: 4, type: "success", title: "Setup Complete", message: "Pinnacle Digital setup has been completed", time: "2 days ago", read: true },
+  { id: 5, type: "info", title: "High Call Volume", message: "Acme Digital received 50+ AI calls today", time: "3 days ago", read: true },
 ];
 
 const getIcon = (type: string) => {

@@ -76,7 +76,7 @@ export default function AnalyticsFeature() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              A unified analytics dashboard for hospitality businesses. Monitor every booking channel,
+              A unified analytics dashboard for all businesses. Monitor every booking channel,
               track conversion rates, and make data-driven decisions to maximize revenue.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -100,7 +100,7 @@ export default function AnalyticsFeature() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Insights That Drive Results</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              From booking funnels to guest demographics, get the full picture of your hospitality performance.
+              From booking funnels to guest demographics, get the full picture of your business performance.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -162,7 +162,7 @@ export default function AnalyticsFeature() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Unlock Your Data?</h2>
           <p className="text-muted-foreground mb-8">
-            See how Resto's analytics dashboard can help you optimize every aspect of your booking operations.
+            See how indexFlow's analytics dashboard can help you optimize every aspect of your booking operations.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-analytics-bottom-cta">

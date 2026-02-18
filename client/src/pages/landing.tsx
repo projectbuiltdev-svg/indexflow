@@ -7,16 +7,16 @@ import {
   Globe,
   Bot,
   TrendingUp,
-  UtensilsCrossed,
+  Briefcase,
   Building2,
-  Coffee,
-  Wine,
+  Users,
+  Layers,
   MessageSquare,
   FileText,
   Search,
-  Phone,
+  BarChart3,
   MapPin,
-  CalendarCheck,
+  LayoutGrid,
   Check,
   Menu,
   X,
@@ -30,135 +30,113 @@ const navLinks = [
   { label: "Solutions", href: "#solutions" },
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
-  { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
-  { label: "Portfolio", href: "#portfolio" },
 ];
 
 const steps = [
   {
     icon: Globe,
-    title: "We Build Your Website",
+    title: "Connect Your Clients",
     description:
-      "Our team designs and launches a stunning, conversion-optimized website tailored to your venue.",
+      "Add your client workspaces, connect their domains, and set up keyword tracking in minutes.",
   },
   {
     icon: Bot,
-    title: "AI Books Your Guests",
+    title: "AI Creates Content",
     description:
-      "Our AI-powered booking widget handles reservations 24/7, reducing no-shows and maximizing covers.",
+      "Our AI content engine generates SEO-optimized blog posts, meta tags, and landing pages at scale.",
   },
   {
     icon: TrendingUp,
-    title: "You Grow Your Business",
+    title: "Watch Rankings Climb",
     description:
-      "Focus on what you do best while our SEO engine and marketing tools drive more guests to your door.",
+      "Track keyword positions, monitor local search grids, and measure the impact of every campaign.",
   },
 ];
 
 const solutions = [
   {
-    icon: UtensilsCrossed,
-    title: "Restaurants",
+    icon: Briefcase,
+    title: "Agencies",
     description:
-      "Streamline table reservations, manage peak hours, and fill every seat with AI-driven booking.",
+      "Manage multiple client workspaces from one dashboard. White-label reports, automate content, and scale your SEO operations.",
+  },
+  {
+    icon: Users,
+    title: "Freelancers",
+    description:
+      "Deliver professional SEO services with enterprise-grade tools. Track rankings, publish content, and impress clients.",
   },
   {
     icon: Building2,
-    title: "Hotels",
+    title: "Enterprises",
     description:
-      "Maximize room occupancy with seamless online booking, upsells, and guest communication tools.",
+      "Centralize SEO across departments and locations. Maintain brand consistency with team collaboration tools.",
   },
   {
-    icon: Coffee,
-    title: "Cafes",
+    icon: Layers,
+    title: "Multi-Location",
     description:
-      "Accept walk-in queues and reservations, promote daily specials, and build a loyal customer base.",
-  },
-  {
-    icon: Wine,
-    title: "Bars",
-    description:
-      "Manage event bookings, VIP tables, and private hire requests with an intelligent booking system.",
+      "Optimize local SEO for every location. Track Google Maps rankings with our 5x5 local search grid.",
   },
 ];
 
 const features = [
   {
-    icon: MessageSquare,
-    title: "AI Booking Widget",
-    description:
-      "Conversational AI that handles reservations, answers FAQs, and guides guests through the booking flow.",
-  },
-  {
     icon: FileText,
-    title: "Content Engine",
+    title: "AI Content Engine",
     description:
-      "Automated blog posts, landing pages, and social content generated to attract and convert visitors.",
+      "Generate SEO-optimized blog posts, landing pages, and meta descriptions powered by AI. Publish directly or schedule ahead.",
   },
   {
     icon: Search,
-    title: "SEO & Rankings",
+    title: "Keyword Rank Tracker",
     description:
-      "On-page optimization, schema markup, and keyword tracking to dominate local search results.",
-  },
-  {
-    icon: Phone,
-    title: "Twilio Voice Integration",
-    description:
-      "AI-powered phone answering that takes reservations, handles enquiries, and never misses a call.",
+      "Monitor keyword positions across Google. Track daily changes, spot opportunities, and measure campaign impact.",
   },
   {
     icon: MapPin,
     title: "Local Search Grid",
     description:
-      "Visualize your Google Maps ranking across your service area and track improvements over time.",
+      "Visualize your Google Maps rankings across a 5x5 grid in your service area. Identify weak spots and track improvements.",
   },
   {
-    icon: CalendarCheck,
-    title: "Reservation Management",
+    icon: BarChart3,
+    title: "SEO Health Reports",
     description:
-      "Full dashboard to view, edit, and manage all bookings with automated confirmations and reminders.",
+      "Automated technical SEO audits, internal linking analysis, and keyword cannibalization detection for every workspace.",
+  },
+  {
+    icon: MessageSquare,
+    title: "CRM & Lead Tracking",
+    description:
+      "Capture leads from your content, manage contacts through a visual pipeline, and never miss a follow-up.",
+  },
+  {
+    icon: LayoutGrid,
+    title: "White-Label Dashboard",
+    description:
+      "Customize branding, colors, and domains for each client. Deliver a fully branded experience under your agency name.",
   },
 ];
 
-const completePlanFeatures = [
-  "Custom website",
-  "AI booking widget",
-  "SEO content engine",
-  "Rank tracker",
+const proPlanFeatures = [
+  "Unlimited workspaces",
+  "AI content engine",
+  "Keyword rank tracker",
   "Local search grid",
-  "Twilio voice",
-  "Email support",
+  "SEO health reports",
+  "CRM & lead tracking",
+  "White-label branding",
+  "Priority support",
 ];
 
-const widgetPlanFeatures = [
-  "AI booking widget",
-  "Basic analytics",
+const starterPlanFeatures = [
+  "Up to 3 workspaces",
+  "AI content engine",
+  "Keyword rank tracker",
+  "Basic SEO reports",
   "Email support",
-];
-
-const templateCategories = [
-  {
-    title: "Restaurant",
-    count: 4,
-    description: "Fine dining, casual, fast-casual, and family restaurant templates.",
-  },
-  {
-    title: "Hotel",
-    count: 4,
-    description: "Boutique, resort, business, and luxury hotel templates.",
-  },
-  {
-    title: "Cafe",
-    count: 4,
-    description: "Coffee shop, bakery, brunch spot, and tea house templates.",
-  },
-  {
-    title: "Bar",
-    count: 4,
-    description: "Cocktail bar, pub, wine bar, and rooftop lounge templates.",
-  },
 ];
 
 export default function LandingPage() {
@@ -190,13 +168,13 @@ export default function LandingPage() {
             </div>
 
             <div className="hidden lg:flex items-center gap-3 flex-wrap">
-              <Link href="/dashboard">
+              <Link href="/select-workspace">
                 <Button variant="outline" className="text-white border-slate-600 bg-transparent backdrop-blur-sm" data-testid="button-login">
-                  Login
+                  Log In
                 </Button>
               </Link>
-              <Link href="/dashboard">
-                <Button data-testid="button-get-started-nav">Get Started</Button>
+              <Link href="/select-workspace">
+                <Button data-testid="button-get-started-nav">Start Free Trial</Button>
               </Link>
             </div>
 
@@ -227,13 +205,13 @@ export default function LandingPage() {
                 </a>
               ))}
               <div className="flex gap-3 pt-2 flex-wrap">
-                <Link href="/dashboard">
+                <Link href="/select-workspace">
                   <Button variant="outline" className="text-white border-slate-600 bg-transparent backdrop-blur-sm" data-testid="button-login-mobile">
-                    Login
+                    Log In
                   </Button>
                 </Link>
-                <Link href="/dashboard">
-                  <Button data-testid="button-get-started-mobile">Get Started</Button>
+                <Link href="/select-workspace">
+                  <Button data-testid="button-get-started-mobile">Start Free Trial</Button>
                 </Link>
               </div>
             </div>
@@ -250,16 +228,16 @@ export default function LandingPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
-              Done-For-You Hospitality Booking Platform
+              The SEO Platform Built for Agencies
             </h1>
             <p className="mt-6 text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl">
-              AI-powered booking widgets, SEO content engine, and complete
-              website management for restaurants, hotels, cafes, and bars.
+              AI-powered content engine, keyword rank tracking, local search grid, and white-label reporting
+              — everything your agency needs to scale SEO for every client.
             </p>
             <div className="mt-10 flex gap-4 flex-wrap">
-              <Link href="/dashboard">
+              <Link href="/select-workspace">
                 <Button size="lg" data-testid="button-hero-get-started">
-                  Get Started - $299/mo
+                  Start Free Trial
                   <ArrowRight className="ml-1" />
                 </Button>
               </Link>
@@ -289,7 +267,7 @@ export default function LandingPage() {
               How It Works
             </h2>
             <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
-              Three simple steps to transform your hospitality business online.
+              Three simple steps to supercharge your SEO workflow.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -321,10 +299,10 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-              Solutions for Every Venue
+              Built for Every Team
             </h2>
             <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
-              Tailored booking and marketing tools for the hospitality industry.
+              Whether you're a solo freelancer or an enterprise team, indexFlow scales with your needs.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -361,7 +339,7 @@ export default function LandingPage() {
               Powerful Features
             </h2>
             <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
-              Everything you need to attract, convert, and retain guests online.
+              Everything you need to run, report on, and scale your SEO campaigns.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -404,108 +382,69 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <Card
               className="relative border-primary"
-              data-testid="card-pricing-complete"
+              data-testid="card-pricing-pro"
             >
               <div className="absolute -top-3 left-6">
                 <Badge data-testid="badge-most-popular">Most Popular</Badge>
               </div>
               <CardHeader>
-                <CardTitle className="text-2xl">Complete Plan</CardTitle>
+                <CardTitle className="text-2xl">Pro Plan</CardTitle>
                 <div className="mt-2">
-                  <span className="text-4xl font-bold">$299</span>
+                  <span className="text-4xl font-bold">$199</span>
                   <span className="text-muted-foreground">/mo</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Everything included to grow your venue online.
+                  Everything you need to scale your agency's SEO operations.
                 </p>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {completePlanFeatures.map((feature) => (
+                  {proPlanFeatures.map((feature) => (
                     <li key={feature} className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-primary shrink-0" />
                       <span className="text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <Link href="/dashboard">
-                  <Button className="w-full mt-8" data-testid="button-pricing-complete">
-                    Get Started
+                <Link href="/select-workspace">
+                  <Button className="w-full mt-8" data-testid="button-pricing-pro">
+                    Start Free Trial
                   </Button>
                 </Link>
               </CardContent>
             </Card>
 
-            <Card data-testid="card-pricing-widget">
+            <Card data-testid="card-pricing-starter">
               <CardHeader>
-                <CardTitle className="text-2xl">Widget Only</CardTitle>
+                <CardTitle className="text-2xl">Starter Plan</CardTitle>
                 <div className="mt-2">
-                  <span className="text-4xl font-bold">$149</span>
+                  <span className="text-4xl font-bold">$49</span>
                   <span className="text-muted-foreground">/mo</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Just the booking widget for your existing site.
+                  Perfect for freelancers and small teams getting started.
                 </p>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {widgetPlanFeatures.map((feature) => (
+                  {starterPlanFeatures.map((feature) => (
                     <li key={feature} className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-primary shrink-0" />
                       <span className="text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <Link href="/dashboard">
+                <Link href="/select-workspace">
                   <Button
                     variant="outline"
                     className="w-full mt-8"
-                    data-testid="button-pricing-widget"
+                    data-testid="button-pricing-starter"
                   >
-                    Get Started
+                    Start Free Trial
                   </Button>
                 </Link>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="portfolio"
-        className="py-20 md:py-28 bg-background"
-        data-testid="section-portfolio"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-              16 Stunning Templates
-            </h2>
-            <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
-              Professionally designed, conversion-optimized templates for every type of venue.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {templateCategories.map((category) => (
-              <Card
-                key={category.title}
-                data-testid={`card-template-${category.title.toLowerCase()}`}
-              >
-                <CardHeader>
-                  <div className="w-full h-32 rounded-md bg-muted flex items-center justify-center mb-3">
-                    <span className="text-2xl font-semibold text-muted-foreground">
-                      {category.count} Templates
-                    </span>
-                  </div>
-                  <CardTitle className="text-lg">{category.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {category.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
@@ -517,32 +456,24 @@ export default function LandingPage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-            Ready to Transform Your Venue?
+            Ready to Scale Your SEO?
           </h2>
           <p className="mt-6 text-lg text-slate-300 max-w-2xl mx-auto">
-            Get in touch to learn how indexFlow can fill your tables, rooms, and
-            seats with AI-powered booking technology.
+            Get in touch to learn how indexFlow can help your agency deliver
+            better results for every client.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 flex-wrap">
             <a
-              href="mailto:hello@resto.restaurant"
+              href="mailto:hello@indexflow.io"
               className="flex items-center gap-2 text-slate-300"
               data-testid="link-email"
             >
               <Mail className="w-5 h-5" />
-              <span>hello@resto.restaurant</span>
-            </a>
-            <a
-              href="tel:+18005551234"
-              className="flex items-center gap-2 text-slate-300"
-              data-testid="link-phone"
-            >
-              <Phone className="w-5 h-5" />
-              <span>+1 (800) 555-1234</span>
+              <span>hello@indexflow.io</span>
             </a>
           </div>
           <div className="mt-10">
-            <a href="mailto:hello@resto.restaurant">
+            <a href="mailto:hello@indexflow.io">
               <Button size="lg" data-testid="button-contact-demo">
                 Book a Demo
               </Button>
@@ -560,7 +491,7 @@ export default function LandingPage() {
             <div>
               <img src={logoImage} alt="indexFlow" className="h-6" />
               <p className="mt-3 text-sm">
-                The all-in-one hospitality booking platform powered by AI.
+                The all-in-one SEO and content platform built for agencies.
               </p>
             </div>
             <div>
@@ -577,8 +508,8 @@ export default function LandingPage() {
                   </a>
                 </li>
                 <li>
-                  <a href="#portfolio" data-testid="link-footer-templates">
-                    Templates
+                  <a href="#solutions" data-testid="link-footer-solutions">
+                    Solutions
                   </a>
                 </li>
               </ul>

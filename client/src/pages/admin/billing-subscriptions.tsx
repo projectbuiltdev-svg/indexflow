@@ -12,12 +12,12 @@ const stats = [
 ];
 
 const subscriptions = [
-  { agency: "Hospitality Group NYC", plan: "Enterprise", mrr: "$890", seats: 23, status: "Active", renewal: "Mar 1, 2026" },
-  { agency: "Alpine Hotels Ltd.", plan: "Enterprise", mrr: "$890", seats: 34, status: "Active", renewal: "Mar 5, 2026" },
-  { agency: "Coastal Dining Co.", plan: "Professional", mrr: "$490", seats: 12, status: "Active", renewal: "Mar 8, 2026" },
-  { agency: "Pacific Venues Inc.", plan: "Professional", mrr: "$490", seats: 18, status: "Past Due", renewal: "Feb 15, 2026" },
-  { agency: "Metro Bistro Group", plan: "Starter", mrr: "$190", seats: 8, status: "Active", renewal: "Mar 12, 2026" },
-  { agency: "Urban Eats Network", plan: "Starter", mrr: "$190", seats: 5, status: "Trial", renewal: "Mar 1, 2026" },
+  { agency: "Digital Growth NYC", plan: "Enterprise", mrr: "$890", seats: 23, status: "Active", renewal: "Mar 1, 2026" },
+  { agency: "Alpine Digital Ltd.", plan: "Enterprise", mrr: "$890", seats: 34, status: "Active", renewal: "Mar 5, 2026" },
+  { agency: "Coastal Marketing Co.", plan: "Professional", mrr: "$490", seats: 12, status: "Active", renewal: "Mar 8, 2026" },
+  { agency: "Pacific Media Inc.", plan: "Professional", mrr: "$490", seats: 18, status: "Past Due", renewal: "Feb 15, 2026" },
+  { agency: "Metro Creative Group", plan: "Starter", mrr: "$190", seats: 8, status: "Active", renewal: "Mar 12, 2026" },
+  { agency: "Urban Content Network", plan: "Starter", mrr: "$190", seats: 5, status: "Trial", renewal: "Mar 1, 2026" },
 ];
 
 export default function AdminBillingSubscriptions() {

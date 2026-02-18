@@ -12,13 +12,13 @@ const stats = [
 ];
 
 const users = [
-  { name: "Sarah Chen", email: "sarah@hospitalitynyc.com", agency: "Hospitality Group NYC", role: "Owner", status: "Active", lastLogin: "2 min ago" },
-  { name: "Mark Rivera", email: "mark@coastaldining.com", agency: "Coastal Dining Co.", role: "Owner", status: "Active", lastLogin: "1 hr ago" },
-  { name: "Julia Weber", email: "julia@alpinehotels.ch", agency: "Alpine Hotels Ltd.", role: "Owner", status: "Active", lastLogin: "3 hrs ago" },
-  { name: "Tom Bradley", email: "tom@hospitalitynyc.com", agency: "Hospitality Group NYC", role: "Admin", status: "Active", lastLogin: "5 hrs ago" },
-  { name: "Amy Liu", email: "amy@hospitalitynyc.com", agency: "Hospitality Group NYC", role: "Editor", status: "Active", lastLogin: "1 day ago" },
-  { name: "David Kim", email: "david@metrobistro.nyc", agency: "Metro Bistro Group", role: "Owner", status: "Active", lastLogin: "2 days ago" },
-  { name: "Lisa Tanaka", email: "lisa@pacificvenues.com", agency: "Pacific Venues Inc.", role: "Owner", status: "Inactive", lastLogin: "30 days ago" },
+  { name: "Sarah Chen", email: "sarah@digitalgrowth.com", agency: "Digital Growth NYC", role: "Owner", status: "Active", lastLogin: "2 min ago" },
+  { name: "Mark Rivera", email: "mark@coastalmarketing.com", agency: "Coastal Marketing Co.", role: "Owner", status: "Active", lastLogin: "1 hr ago" },
+  { name: "Julia Weber", email: "julia@alpinedigital.ch", agency: "Alpine Digital Ltd.", role: "Owner", status: "Active", lastLogin: "3 hrs ago" },
+  { name: "Tom Bradley", email: "tom@digitalgrowth.com", agency: "Digital Growth NYC", role: "Admin", status: "Active", lastLogin: "5 hrs ago" },
+  { name: "Amy Liu", email: "amy@digitalgrowth.com", agency: "Digital Growth NYC", role: "Editor", status: "Active", lastLogin: "1 day ago" },
+  { name: "David Kim", email: "david@metrocreative.com", agency: "Metro Creative Group", role: "Owner", status: "Active", lastLogin: "2 days ago" },
+  { name: "Lisa Tanaka", email: "lisa@pacificmedia.com", agency: "Pacific Media Inc.", role: "Owner", status: "Inactive", lastLogin: "30 days ago" },
 ];
 
 export default function AdminUsersAll() {

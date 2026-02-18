@@ -67,7 +67,7 @@ const features = [
 
 const benefits = [
   "No switching between tools -- everything in one dashboard",
-  "Actionable search insights tailored to hospitality",
+  "Actionable search insights tailored to your business",
   "Track SEO improvements with clear before/after data",
 ];
 
@@ -113,7 +113,7 @@ export default function SearchConsolePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">All Your Search Data in One Place</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Everything Google Search Console offers, surfaced right in your Resto dashboard.
+              Everything Google Search Console offers, surfaced right in your indexFlow dashboard.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

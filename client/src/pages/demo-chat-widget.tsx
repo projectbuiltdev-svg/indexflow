@@ -27,7 +27,7 @@ export default function DemoChatWidget() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    document.title = "Support Widget Demo - Resto";
+    document.title = "Support Widget Demo - indexFlow";
   }, []);
 
   useEffect(() => {

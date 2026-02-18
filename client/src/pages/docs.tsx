@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 export default function Docs() {
   useEffect(() => {
-    document.title = "Platform Documentation - Resto.Restaurant";
+    document.title = "Platform Documentation - indexFlow";
   }, []);
 
   return (
@@ -42,12 +42,12 @@ export default function Docs() {
       <h3 className="text-amber-500 border-b border-gray-300 pb-1 mt-6 font-semibold">Home Page <code className="bg-gray-100 px-1 rounded">/</code></h3>
       <ol className="list-decimal pl-6 space-y-2">
         <li><strong>Hero Section</strong> - Rotating video background with frosted glass effects, CTA buttons, stats bar</li>
-        <li><strong>"Who We Serve"</strong> - 4 venue type cards (Restaurants, Cafes, Bars, Hotels)</li>
+        <li><strong>"Who We Serve"</strong> - 4 business type cards (Restaurants, Cafes, Bars, Hotels)</li>
         <li><strong>"The Problem"</strong> - 6 pain points</li>
         <li><strong>"The Solution"</strong> - 6 benefits</li>
         <li><strong>CMS Partners</strong> - Scrolling logos</li>
         <li><strong>Pricing</strong> - Complete Solution ($299/mo) &amp; Widget Only ($149/mo)</li>
-        <li><strong>"Why Choose Resto"</strong> - 4 feature cards</li>
+        <li><strong>"Why Choose indexFlow"</strong> - 4 feature cards</li>
         <li><strong>Testimonials</strong> - Customer reviews</li>
         <li><strong>Final CTA</strong></li>
       </ol>
@@ -72,7 +72,7 @@ export default function Docs() {
           <tr><td className="border p-2">BYOK (Bring Your Own Key)</td><td className="border p-2 font-mono text-sm">/platform/byok</td></tr>
           <tr><td className="border p-2">Content Marketing</td><td className="border p-2 font-mono text-sm">/platform/content-marketing</td></tr>
           <tr><td className="border p-2">Dashboard Overview</td><td className="border p-2 font-mono text-sm">/platform/dashboard</td></tr>
-          <tr><td className="border p-2">Hospitality Websites</td><td className="border p-2 font-mono text-sm">/platform/hospitality-websites</td></tr>
+          <tr><td className="border p-2">Custom Websites</td><td className="border p-2 font-mono text-sm">/platform/hospitality-websites</td></tr>
           <tr><td className="border p-2">Integrations</td><td className="border p-2 font-mono text-sm">/platform/integrations</td></tr>
           <tr><td className="border p-2">Local Search Grid</td><td className="border p-2 font-mono text-sm">/platform/local-search-grid</td></tr>
           <tr><td className="border p-2">Rank Tracking</td><td className="border p-2 font-mono text-sm">/platform/rank-tracking</td></tr>
@@ -138,7 +138,7 @@ export default function Docs() {
         <tbody>
           <tr><td className="border p-2 font-semibold">Complete Solution</td><td className="border p-2">$299/month</td><td className="border p-2">Full website, booking system, AI concierge, voice/SMS, SEO tools, analytics</td></tr>
           <tr><td className="border p-2 font-semibold">Widget Only</td><td className="border p-2">$149/month</td><td className="border p-2">AI booking widget for existing website, voice/SMS, analytics</td></tr>
-          <tr><td className="border p-2 font-semibold">Additional Locations</td><td className="border p-2">$25/month each</td><td className="border p-2">Multi-location support per extra venue</td></tr>
+          <tr><td className="border p-2 font-semibold">Additional Locations</td><td className="border p-2">$25/month each</td><td className="border p-2">Multi-location support per extra workspace</td></tr>
         </tbody>
       </table>
 
@@ -173,7 +173,7 @@ export default function Docs() {
         <li>Text-to-speech per message - Browser SpeechSynthesis (demo) or BYOK provider (deployed)</li>
         <li>Voice mode toggle</li>
         <li>Quick actions: Make Reservation, View Menu, Hours</li>
-        <li>"powered by Resto." footer</li>
+        <li>"powered by indexFlow." footer</li>
         <li>Widget Chat API: <code className="bg-gray-100 px-1 rounded">POST /api/widget/:workspaceId/chat</code> (public, rate-limited)</li>
       </ul>
 
@@ -259,14 +259,14 @@ export default function Docs() {
       <p className="mt-2 text-sm text-gray-600">Floating live chat widget available on all dashboard pages for instant support.</p>
 
       <h2 className="bg-amber-500 text-white p-3 rounded mt-8 text-xl font-bold">6. ADMIN DASHBOARD</h2>
-      <p className="mb-2"><strong>Access:</strong> /admin/* (Resto.Restaurant internal staff only)</p>
+      <p className="mb-2"><strong>Access:</strong> /admin/* (indexFlow internal staff only)</p>
       <p className="mb-2"><strong>Roles:</strong> super_admin, admin, sales, seo_production, website_production, customer_support - each with specific access levels</p>
       
       <table className="w-full border-collapse my-4">
         <thead><tr className="bg-gray-100"><th className="border p-2 text-left">Page</th><th className="border p-2 text-left">Route</th><th className="border p-2 text-left">Function</th></tr></thead>
         <tbody>
           <tr><td className="border p-2">Dashboard</td><td className="border p-2 font-mono text-sm">/admin</td><td className="border p-2">Overview stats, recent clients, quick actions</td></tr>
-          <tr><td className="border p-2">Clients</td><td className="border p-2 font-mono text-sm">/admin/clients</td><td className="border p-2">Client venue management</td></tr>
+          <tr><td className="border p-2">Clients</td><td className="border p-2 font-mono text-sm">/admin/clients</td><td className="border p-2">Client workspace management</td></tr>
           <tr><td className="border p-2">Users</td><td className="border p-2 font-mono text-sm">/admin/users</td><td className="border p-2">Platform user accounts</td></tr>
           <tr><td className="border p-2">Billing</td><td className="border p-2 font-mono text-sm">/admin/billing</td><td className="border p-2">Subscription &amp; invoice management</td></tr>
           <tr><td className="border p-2">Websites</td><td className="border p-2 font-mono text-sm">/admin/websites</td><td className="border p-2">Client website configurations</td></tr>
@@ -306,7 +306,7 @@ export default function Docs() {
       </table>
 
       <h3 className="text-amber-500 border-b border-gray-300 pb-1 mt-6 font-semibold">Template Previews (Iframe Embeds)</h3>
-      <p className="mt-2 mb-2">4 venue types &times; 4 styles = 16 template previews</p>
+      <p className="mt-2 mb-2">4 business types &times; 4 styles = 16 template previews</p>
       <table className="w-full border-collapse my-4">
         <thead><tr className="bg-gray-100"><th className="border p-2 text-left">Venue Type</th><th className="border p-2 text-left">Styles</th></tr></thead>
         <tbody>
@@ -513,7 +513,7 @@ export default function Docs() {
         <li>Auto-scaling for variable traffic</li>
         <li>Environment variables and secrets management</li>
         <li><strong>Custom domain hosting</strong> for client websites (e.g. client-restaurant.com)</li>
-        <li><strong>Subdomain management</strong> (e.g. clientname.resto.restaurant)</li>
+        <li><strong>Subdomain management</strong> (e.g. clientname.indexflow.io)</li>
         <li>SSL/TLS certificates handled automatically for all custom and subdomains</li>
         <li>Production backend from day one — not a later migration</li>
       </ul>
@@ -548,7 +548,7 @@ export default function Docs() {
         <li>Set up managed PostgreSQL on Northflank</li>
         <li>Configure environment variables and secrets (DataForSEO, Twilio, Stripe, etc.)</li>
         <li>Set up custom domain routing for client sites (e.g. client-restaurant.com)</li>
-        <li>Configure subdomain management (e.g. clientname.resto.restaurant)</li>
+        <li>Configure subdomain management (e.g. clientname.indexflow.io)</li>
         <li>SSL/TLS certificates are provisioned automatically per domain</li>
         <li>Point Cloudflare client sites to the Northflank API URL</li>
         <li>Configure CORS to accept requests from all client domains and subdomains</li>

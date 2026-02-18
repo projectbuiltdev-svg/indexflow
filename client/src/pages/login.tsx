@@ -16,7 +16,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    document.title = "Client Login - Resto";
+    document.title = "Client Login - indexFlow";
   }, []);
 
   const handleSignIn = (e?: React.FormEvent) => {

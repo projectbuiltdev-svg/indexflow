@@ -25,7 +25,7 @@ export default function SettingsClosures() {
   const { toast } = useToast();
 
   useEffect(() => {
-    document.title = "Closures - Resto Dashboard";
+    document.title = "Closures - indexFlow Dashboard";
   }, []);
 
   const { data: closures = [], isLoading } = useQuery<Closure[]>({
@@ -41,7 +41,7 @@ export default function SettingsClosures() {
       setNewReason("");
       toast({
         title: "Closure added",
-        description: "Your venue will be marked as closed on the selected date.",
+        description: "Your workspace will be marked as unavailable on the selected date.",
       });
     },
     onError: () => {
@@ -71,7 +71,7 @@ export default function SettingsClosures() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold">Closures</h1>
-          <p className="text-muted-foreground">Mark dates when your venue is closed</p>
+          <p className="text-muted-foreground">Mark dates when your workspace is unavailable</p>
         </div>
 
         <Card>
@@ -81,7 +81,7 @@ export default function SettingsClosures() {
               Add Closure
             </CardTitle>
             <CardDescription>
-              The booking system will block reservations on these dates.
+              The system will block scheduling on these dates.
             </CardDescription>
           </CardHeader>
           <CardContent>

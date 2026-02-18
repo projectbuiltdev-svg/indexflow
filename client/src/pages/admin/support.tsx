@@ -239,7 +239,7 @@ export default function AdminSupport() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Subject</TableHead>
-                    <TableHead>Venue</TableHead>
+                    <TableHead>Workspace</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Priority</TableHead>
                     <TableHead>Status</TableHead>
@@ -361,7 +361,7 @@ export default function AdminSupport() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-muted-foreground">Venue ID:</span>
+                    <span className="text-muted-foreground">Workspace ID:</span>
                     <p className="font-mono">{selectedTicket.workspaceId}</p>
                   </div>
                   <div>

@@ -114,7 +114,7 @@ export default function RoomTypes() {
   const isPending = createMutation.isPending || editMutation.isPending;
 
   if (!workspaceId) {
-    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to manage room types.</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a workspace from the sidebar to manage room types.</div>;
   }
 
   if (isLoading) {

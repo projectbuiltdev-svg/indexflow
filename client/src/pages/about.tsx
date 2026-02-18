@@ -13,7 +13,7 @@ const aboutSections = [
   { id: "explainer", label: "Watch" },
   { id: "process", label: "The Process" },
   { id: "whats-included", label: "What's Included" },
-  { id: "why-resto", label: "Why Resto" },
+  { id: "why-resto", label: "Why indexFlow" },
   { id: "pricing-overview", label: "Pricing" },
   { id: "get-started", label: "Get Started" },
   { id: "faq", label: "FAQ" },
@@ -31,7 +31,7 @@ const steps = [
   {
     number: "2",
     title: "We Build Everything",
-    description: "Custom website, booking system, AI phone assistant — all tailored to your venue.",
+    description: "Custom website, booking system, AI phone assistant — all tailored to your business.",
     icon: Globe,
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
@@ -112,7 +112,7 @@ export default function About() {
               Watch Our Explainer
             </h2>
             <p className="text-muted-foreground">
-              See how Resto transforms your hospitality business in under 2 minutes.
+              See how indexFlow transforms your business in under 2 minutes.
             </p>
           </div>
           <div className="relative w-full rounded-xl overflow-hidden shadow-2xl" style={{ paddingBottom: "56.25%" }}>
@@ -121,7 +121,7 @@ export default function About() {
               className="absolute inset-0 w-full h-full"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
-              title="Resto Explainer Video"
+              title="indexFlow Explainer Video"
               data-testid="video-explainer-howit"
             />
           </div>
@@ -145,7 +145,7 @@ export default function About() {
                       It answers, replies and books pre-paid reservations; your guests receive instant SMS confirmations + email reminders.
                     </p>
                     <p className="text-muted-foreground leading-relaxed text-justify">
-                      The venue gets alerted to an RSVP confirmation, and your front desk immediately processes the booking.
+                      Your workspace gets alerted to an RSVP confirmation, and your front desk immediately processes the booking.
                     </p>
                   </div>
                   <div className="flex items-center justify-center">
@@ -231,7 +231,7 @@ export default function About() {
       <section id="why-resto" className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">Why Choose Resto</Badge>
+            <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">Why Choose indexFlow</Badge>
             <h2 className="text-3xl font-bold mb-4">The Smart Choice</h2>
             <p className="text-muted-foreground">
               Zero Tech Stress. Maximum Bookings.
@@ -295,7 +295,7 @@ export default function About() {
                   <Phone className="w-7 h-7 text-green-500" />
                 </div>
                 <h3 className="font-semibold mb-2">Contact us</h3>
-                <p className="text-sm text-muted-foreground">Tell us about your venue</p>
+                <p className="text-sm text-muted-foreground">Tell us about your business</p>
               </CardContent>
             </Card>
             <Card className="hover-elevate relative">
@@ -349,7 +349,7 @@ export default function About() {
             <div className="text-left space-y-6">
               <div className="p-4 bg-card rounded-lg border">
                 <p className="font-semibold mb-2">How long does setup take?</p>
-                <p className="text-sm text-muted-foreground">5-20 business days from payment to sign-off, depending on your venue's complexity.</p>
+                <p className="text-sm text-muted-foreground">5-20 business days from payment to sign-off, depending on your business's complexity.</p>
               </div>
               <div className="p-4 bg-card rounded-lg border">
                 <p className="font-semibold mb-2">What is BYOK?</p>

@@ -23,9 +23,9 @@ export default function Locations() {
     <Layout>
       <SEO 
         title="Restaurant Booking Software by Location"
-        description={`Resto serves hospitality businesses in ${locations.length}+ cities worldwide. Find AI-powered booking software for restaurants, cafes, bars, and hotels in your city.`}
+        description={`indexFlow serves businesses in ${locations.length}+ cities worldwide. Find AI-powered booking software for restaurants, cafes, bars, and hotels in your city.`}
         canonical="/locations"
-        keywords="restaurant booking software, hospitality reservation system, AI booking by city, restaurant software locations, global hospitality technology"
+        keywords="restaurant booking software, reservation system, AI booking by city, restaurant software locations, booking technology"
       />
       <div className="min-h-screen">
         <nav className="border-b bg-muted/30 py-2 px-4" aria-label="Breadcrumb" data-testid="breadcrumb-nav">
@@ -49,7 +49,7 @@ export default function Locations() {
             </h1>
             
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8" data-testid="text-page-description">
-              Resto serves hospitality businesses in major cities across North America, Europe, 
+              indexFlow serves businesses in major cities across North America, Europe, 
               Asia-Pacific, and beyond. Find your city and see how we can help.
             </p>
 
@@ -104,7 +104,7 @@ export default function Locations() {
               Don't See Your City?
             </h2>
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Resto works with hospitality businesses worldwide. Even if your city isn't listed, 
+              indexFlow works with businesses worldwide. Even if your city isn't listed, 
               we can help you streamline reservations and grow your business.
             </p>
             <Button size="lg" asChild data-testid="button-contact">
@@ -207,7 +207,7 @@ export default function Locations() {
         <section className="py-12" data-testid="learn-more-section">
           <div className="container max-w-6xl mx-auto px-4 text-center">
             <h2 className="text-2xl font-bold mb-6">
-              Learn More About Resto
+              Learn More About indexFlow
             </h2>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/how-it-works">

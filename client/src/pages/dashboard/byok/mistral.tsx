@@ -27,7 +27,7 @@ export default function ByokMistral() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    document.title = "Mistral Integration | Resto Dashboard";
+    document.title = "Mistral Integration | indexFlow Dashboard";
   }, []);
 
   const { data: allProviders = [] } = useQuery<AiProviderSettings[]>({

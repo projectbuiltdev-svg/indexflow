@@ -24,7 +24,7 @@ const contactInfo = [
   {
     icon: Mail,
     title: "Email",
-    lines: ["hello@resto.restaurant", "sales@resto.restaurant"],
+    lines: ["hello@indexflow.io", "sales@indexflow.io"],
   },
   {
     icon: Clock,
@@ -42,12 +42,12 @@ const inquiryTypes = [
   { value: "other", label: "Other" },
 ];
 
-const venueTypes = [
+const businessTypes = [
   { value: "restaurant", label: "Restaurant" },
   { value: "cafe", label: "Cafe" },
   { value: "bar", label: "Bar" },
   { value: "hotel", label: "Hotel" },
-  { value: "multiple", label: "Multiple Venues" },
+  { value: "multiple", label: "Multiple Locations" },
   { value: "other", label: "Other" },
 ];
 
@@ -167,7 +167,7 @@ export default function Contact() {
             Let's Build Your <span className="text-primary">Booking Website</span>
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Ready to transform your venue's online presence? Schedule a demo or ask us anything about our services. We've made this simple and easy.
+            Ready to transform your business's online presence? Schedule a demo or ask us anything about our services. We've made this simple and easy.
           </p>
         </div>
       </section>
@@ -237,16 +237,16 @@ export default function Contact() {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="venueType">Venue Type</Label>
+                        <Label htmlFor="businessType">Business Type</Label>
                         <Select
                           value={formData.venueType}
                           onValueChange={(value) => setFormData({ ...formData, venueType: value })}
                         >
-                          <SelectTrigger id="venueType" data-testid="select-venue-type">
-                            <SelectValue placeholder="Select venue type" />
+                          <SelectTrigger id="businessType" data-testid="select-venue-type">
+                            <SelectValue placeholder="Select business type" />
                           </SelectTrigger>
                           <SelectContent>
-                            {venueTypes.map((type) => (
+                            {businessTypes.map((type) => (
                               <SelectItem key={type.value} value={type.value}>
                                 {type.label}
                               </SelectItem>
@@ -278,7 +278,7 @@ export default function Contact() {
                       <Label htmlFor="message">Message</Label>
                       <Textarea
                         id="message"
-                        placeholder="Tell us about your venue and what you're looking for..."
+                        placeholder="Tell us about your business and what you're looking for..."
                         rows={5}
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -457,7 +457,7 @@ export default function Contact() {
                     <h3 className="font-semibold">Stay in the Loop</h3>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Get insights on hospitality tech and booking tips delivered to your inbox.
+                    Get insights on booking systems and SEO tips delivered to your inbox.
                   </p>
                   <div className="space-y-2">
                     <Input 
@@ -476,7 +476,7 @@ export default function Contact() {
               <Card className="bg-muted">
                 <CardContent className="p-5">
                   <div className="text-center mb-4">
-                    <h3 className="font-semibold text-sm">Resto works on these CMS platforms</h3>
+                    <h3 className="font-semibold text-sm">indexFlow works on these CMS platforms</h3>
                   </div>
                   <div className="grid grid-cols-5 gap-2">
                     {[

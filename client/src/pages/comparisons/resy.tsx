@@ -47,7 +47,7 @@ export default function ResyComparison() {
               Resy Alternative
             </Badge>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Resto vs Resy{" "}
+              indexFlow vs Resy{" "}
               <span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
                 Side-by-Side
               </span>
@@ -59,7 +59,7 @@ export default function ResyComparison() {
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
                 <Button size="lg" className="gap-2" data-testid="button-resy-switch">
-                  Switch to Resto <ArrowRight className="w-4 h-4" />
+                  Switch to indexFlow <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/pricing">
@@ -77,7 +77,7 @@ export default function ResyComparison() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Feature Comparison</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              See how Resto stacks up against Resy across key capabilities.
+              See how indexFlow stacks up against Resy across key capabilities.
             </p>
           </div>
           <Card>
@@ -87,7 +87,7 @@ export default function ResyComparison() {
                   <thead>
                     <tr className="border-b">
                       <th className="text-left p-4 font-semibold">Feature</th>
-                      <th className="text-center p-4 font-semibold text-primary">Resto</th>
+                      <th className="text-center p-4 font-semibold text-primary">indexFlow</th>
                       <th className="text-center p-4 font-semibold text-muted-foreground">Resy</th>
                     </tr>
                   </thead>
@@ -114,7 +114,7 @@ export default function ResyComparison() {
       <section className="py-16 lg:py-20 bg-accent/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Where Resto Stands Apart</h2>
+            <h2 className="text-3xl font-bold mb-4">Where indexFlow Stands Apart</h2>
           </div>
           <div className="grid sm:grid-cols-2 gap-6">
             {advantages.map((adv) => (
@@ -133,11 +133,11 @@ export default function ResyComparison() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready for More Features at a Better Price?</h2>
           <p className="text-muted-foreground mb-8">
-            Move from Resy to Resto and get AI, SEO tools, and a custom website included.
+            Move from Resy to indexFlow and get AI, SEO tools, and a custom website included.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-resy-bottom-cta">
-              Switch to Resto <ArrowRight className="w-4 h-4" />
+              Switch to indexFlow <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
         </div>

@@ -8,16 +8,16 @@ const stats = [
   { label: "Total Agencies", value: "24", icon: Building2 },
   { label: "Active Agencies", value: "21", icon: TrendingUp },
   { label: "Total Users", value: "187", icon: Users },
-  { label: "Total Venues", value: "312", icon: Globe },
+  { label: "Total Workspaces", value: "312", icon: Globe },
 ];
 
 const agencies = [
-  { name: "Hospitality Group NYC", owner: "Sarah Chen", venues: 14, users: 23, plan: "Enterprise", status: "Active" },
-  { name: "Coastal Dining Co.", owner: "Mark Rivera", venues: 8, users: 12, plan: "Professional", status: "Active" },
-  { name: "Alpine Hotels Ltd.", owner: "Julia Weber", venues: 22, users: 34, plan: "Enterprise", status: "Active" },
-  { name: "Metro Bistro Group", owner: "David Kim", venues: 5, users: 8, plan: "Starter", status: "Active" },
-  { name: "Pacific Venues Inc.", owner: "Lisa Tanaka", venues: 11, users: 18, plan: "Professional", status: "Suspended" },
-  { name: "Urban Eats Network", owner: "Carlos Mendez", venues: 3, users: 5, plan: "Starter", status: "Pending" },
+  { name: "Digital Growth NYC", owner: "Sarah Chen", workspaces: 14, users: 23, plan: "Enterprise", status: "Active" },
+  { name: "Coastal Marketing Co.", owner: "Mark Rivera", workspaces: 8, users: 12, plan: "Professional", status: "Active" },
+  { name: "Alpine Digital Ltd.", owner: "Julia Weber", workspaces: 22, users: 34, plan: "Enterprise", status: "Active" },
+  { name: "Metro Creative Group", owner: "David Kim", workspaces: 5, users: 8, plan: "Starter", status: "Active" },
+  { name: "Pacific Media Inc.", owner: "Lisa Tanaka", workspaces: 11, users: 18, plan: "Professional", status: "Suspended" },
+  { name: "Urban Content Network", owner: "Carlos Mendez", workspaces: 3, users: 5, plan: "Starter", status: "Pending" },
 ];
 
 export default function AdminAgencies() {
@@ -53,7 +53,7 @@ export default function AdminAgencies() {
               <div key={agency.name} className="flex items-center justify-between gap-4 flex-wrap" data-testid={`row-agency-${agency.name.toLowerCase().replace(/\s+/g, "-")}`}>
                 <div className="min-w-0">
                   <p className="font-medium">{agency.name}</p>
-                  <p className="text-sm text-muted-foreground">Owner: {agency.owner} &middot; {agency.venues} venues &middot; {agency.users} users</p>
+                  <p className="text-sm text-muted-foreground">Owner: {agency.owner} &middot; {agency.workspaces} workspaces &middot; {agency.users} users</p>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <Badge variant="outline">{agency.plan}</Badge>

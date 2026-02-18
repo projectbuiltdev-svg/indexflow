@@ -66,7 +66,7 @@ function EditorialArticle({ post }: { post: PostData }) {
             <p className="text-lg text-muted-foreground leading-relaxed mb-5">{post.description}</p>
           )}
           <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
-            <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> Resto Editorial</span>
+            <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> indexFlow Editorial</span>
             <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {formatDate(post.publishedAt)}</span>
             <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {estimateReadTime(post.compiledHtml)}</span>
           </div>
@@ -100,7 +100,7 @@ function MagazineArticle({ post }: { post: PostData }) {
             <p className="text-lg opacity-60 leading-relaxed mb-5">{post.description}</p>
           )}
           <div className="flex items-center gap-4 text-sm opacity-40 flex-wrap">
-            <span>Resto Editorial</span>
+            <span>indexFlow Editorial</span>
             <span>{formatDate(post.publishedAt)}</span>
             <span>{estimateReadTime(post.compiledHtml)}</span>
           </div>
@@ -136,7 +136,7 @@ function MinimalArticle({ post }: { post: PostData }) {
             <p className="text-muted-foreground leading-relaxed mb-4">{post.description}</p>
           )}
           <div className="text-xs text-muted-foreground/60">
-            Resto Editorial -- {formatDate(post.publishedAt)} -- {estimateReadTime(post.compiledHtml)}
+            indexFlow Editorial -- {formatDate(post.publishedAt)} -- {estimateReadTime(post.compiledHtml)}
           </div>
         </header>
         <div className={`${PROSE_BASE} prose-base`} dangerouslySetInnerHTML={{ __html: post.compiledHtml || "" }} data-testid="post-body" />
@@ -167,7 +167,7 @@ function ClassicArticle({ post }: { post: PostData }) {
             <p className="text-muted-foreground font-serif leading-relaxed max-w-2xl mx-auto mb-4">{post.description}</p>
           )}
           <div className="text-xs text-muted-foreground/60 font-serif italic">
-            By Resto Editorial -- {formatDate(post.publishedAt)} -- {estimateReadTime(post.compiledHtml)}
+            By indexFlow Editorial -- {formatDate(post.publishedAt)} -- {estimateReadTime(post.compiledHtml)}
           </div>
         </header>
         <div className={`${PROSE_BASE} prose-headings:font-serif`} dangerouslySetInnerHTML={{ __html: post.compiledHtml || "" }} data-testid="post-body" />
@@ -198,7 +198,7 @@ function GridArticle({ post }: { post: PostData }) {
             <p className="text-muted-foreground leading-relaxed max-w-2xl mb-4">{post.description}</p>
           )}
           <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
-            <span>Resto Editorial</span>
+            <span>indexFlow Editorial</span>
             <span>{formatDate(post.publishedAt)}</span>
             <span>{estimateReadTime(post.compiledHtml)}</span>
           </div>
@@ -233,7 +233,7 @@ function BrutalistArticle({ post }: { post: PostData }) {
             <p className="text-lg opacity-60 leading-relaxed max-w-3xl mb-4">{post.description}</p>
           )}
           <div className="text-xs font-mono opacity-40 uppercase">
-            Resto Editorial / {formatDate(post.publishedAt)} / {estimateReadTime(post.compiledHtml)}
+            indexFlow Editorial / {formatDate(post.publishedAt)} / {estimateReadTime(post.compiledHtml)}
           </div>
         </div>
       </div>
@@ -280,7 +280,7 @@ export default function BlogPost() {
   const { category, slug } = params;
 
   const { data: post, isLoading, error } = useQuery<PostData>({
-    queryKey: [`/api/public/blog/post?domain=resto.restaurant&slug=${encodeURIComponent(slug || "")}`],
+    queryKey: [`/api/public/blog/post?domain=indexflow.io&slug=${encodeURIComponent(slug || "")}`],
     enabled: !!slug,
   });
 
@@ -289,7 +289,7 @@ export default function BlogPost() {
 
   useEffect(() => {
     if (post?.title) {
-      document.title = `${post.title} | Resto.Restaurant Blog`;
+      document.title = `${post.title} | indexFlow Blog`;
     }
   }, [post?.title]);
 
@@ -338,7 +338,7 @@ export default function BlogPost() {
           </Link>
           <Link href="/contact" data-testid="link-post-cta">
             <Button className="gap-2" data-testid="button-post-cta">
-              Get Started with Resto <ArrowRight className="w-4 h-4" />
+              Get Started with indexFlow <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
         </div>

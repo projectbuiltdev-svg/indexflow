@@ -12,11 +12,11 @@ const stats = [
 ];
 
 const phoneNumbers = [
-  { number: "+1 (212) 555-0142", agency: "Hospitality Group NYC", type: "Voice + SMS", status: "Active", calls: 234 },
-  { number: "+1 (415) 555-0198", agency: "Coastal Dining Co.", type: "Voice + SMS", status: "Active", calls: 156 },
-  { number: "+41 44 555 0173", agency: "Alpine Hotels Ltd.", type: "Voice", status: "Active", calls: 89 },
-  { number: "+1 (646) 555-0234", agency: "Metro Bistro Group", type: "SMS Only", status: "Active", calls: 0 },
-  { number: "+1 (310) 555-0167", agency: "Pacific Venues Inc.", type: "Voice + SMS", status: "Suspended", calls: 0 },
+  { number: "+1 (212) 555-0142", agency: "Digital Growth NYC", type: "Voice + SMS", status: "Active", calls: 234 },
+  { number: "+1 (415) 555-0198", agency: "Coastal Marketing Co.", type: "Voice + SMS", status: "Active", calls: 156 },
+  { number: "+41 44 555 0173", agency: "Alpine Digital Ltd.", type: "Voice", status: "Active", calls: 89 },
+  { number: "+1 (646) 555-0234", agency: "Metro Creative Group", type: "SMS Only", status: "Active", calls: 0 },
+  { number: "+1 (310) 555-0167", agency: "Pacific Media Inc.", type: "Voice + SMS", status: "Suspended", calls: 0 },
 ];
 
 export default function AdminSystemTwilio() {

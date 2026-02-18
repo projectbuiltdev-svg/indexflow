@@ -62,7 +62,7 @@ const VENUE_PAGE_SIZE = 50;
 
 const BLOG_CATEGORIES = [
   { value: "general", label: "General" },
-  { value: "booking-systems", label: "Booking Systems" },
+  { value: "seo-strategy", label: "SEO Strategy" },
   { value: "ai-automation", label: "AI & Automation" },
   { value: "voice-sms", label: "Voice & SMS" },
   { value: "website-design", label: "Website Design" },
@@ -1585,7 +1585,7 @@ function BulkGenerateModal({
               variant="ghost"
               size="sm"
               onClick={() => {
-                const csv = "title,keyword,intent,funnel,category\nBest Restaurant Booking Systems 2025,restaurant booking system,informational,tofu,booking-systems\nHow to Reduce No-Shows with Deposits,no-show deposits,commercial,mofu,payments-deposits\n";
+                const csv = "title,keyword,intent,funnel,category\nBest SEO Tools for Agencies 2025,seo tools for agencies,informational,tofu,seo-strategy\nHow to Improve Client Retention with Reports,client retention reporting,commercial,mofu,analytics\n";
                 const blob = new Blob([csv], { type: "text/csv" });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
@@ -2043,7 +2043,7 @@ function TemplateMiniPreview({
     return (
       <div className="h-full bg-stone-50/50 dark:bg-card flex flex-col" style={{ transform: "scale(1)", transformOrigin: "top left" }}>
         <div className="border-b border-stone-200 dark:border-border px-3 py-2 text-center">
-          <div className="text-[8px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">The Resto Journal</div>
+          <div className="text-[8px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">The indexFlow Journal</div>
         </div>
         <div className="flex-1 px-3 py-2.5">
           <div className="text-[7px] uppercase tracking-wider text-muted-foreground/60 mb-1">Featured</div>
@@ -2067,7 +2067,7 @@ function TemplateMiniPreview({
     return (
       <div className="h-full flex flex-col">
         <div className="bg-zinc-900 dark:bg-zinc-950 text-white px-3 py-2" style={magHeaderStyle}>
-          <div className="text-[8px] font-bold tracking-tight">Resto / Insights</div>
+          <div className="text-[8px] font-bold tracking-tight">indexFlow / Insights</div>
         </div>
         <div className="bg-gradient-to-b from-zinc-900 to-zinc-800 dark:from-zinc-950 dark:to-zinc-900 text-white px-3 py-3 flex-shrink-0" style={magHeaderStyle}>
           <div className="text-[6px] uppercase tracking-widest opacity-40 mb-1">Featured</div>
@@ -2111,7 +2111,7 @@ function TemplateMiniPreview({
     return (
       <div className="h-full bg-amber-50/30 dark:bg-card flex flex-col">
         <div className="border-b border-amber-200/60 dark:border-border px-3 py-2 text-center">
-          <div className="text-[9px] font-serif font-bold italic">The Resto Review</div>
+          <div className="text-[9px] font-serif font-bold italic">The indexFlow Review</div>
           <div className="w-8 h-px mx-auto mt-1" style={{ backgroundColor: accentColor || "hsl(0 0% 30% / 0.2)" }} />
         </div>
         <div className="flex-1 px-3 py-2.5 text-center">
@@ -2134,7 +2134,7 @@ function TemplateMiniPreview({
     return (
       <div className="h-full bg-slate-50/60 dark:bg-card flex flex-col">
         <div className="px-3 py-2">
-          <div className="text-[7px] font-semibold uppercase tracking-wider text-muted-foreground mb-0.5">Resto Blog</div>
+          <div className="text-[7px] font-semibold uppercase tracking-wider text-muted-foreground mb-0.5">indexFlow Blog</div>
           <div className="text-[9px] font-bold">Latest from our team</div>
         </div>
         <div className="px-3 pb-2">
@@ -2283,7 +2283,7 @@ function TemplatePreview({
     return (
       <div className="rounded-md border" data-testid="div-template-preview-classic">
         <div className="border-b text-center py-4 px-6" style={accentBorderStyle}>
-          <h2 className="text-lg font-serif font-bold italic">The Resto Review</h2>
+          <h2 className="text-lg font-serif font-bold italic">The indexFlow Review</h2>
           <div className="w-16 h-px mx-auto mt-2" style={{ backgroundColor: accentColor || "hsl(var(--foreground) / 0.3)" }} />
         </div>
         <div className="max-w-2xl mx-auto px-6 py-8">
@@ -2315,7 +2315,7 @@ function TemplatePreview({
     return (
       <div className="rounded-md border" data-testid="div-template-preview-grid">
         <div className="px-6 py-5">
-          <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">Resto Blog</div>
+          <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">indexFlow Blog</div>
           <Badge variant="secondary" className="text-xs">{category || "Uncategorized"}</Badge>
         </div>
         <div className="px-6 pb-4">
@@ -2500,7 +2500,7 @@ function DomainManager({ workspaceId }: { workspaceId: string }) {
           {isLoading ? (
             <div className="text-sm text-muted-foreground">Loading...</div>
           ) : domains.length === 0 ? (
-            <div className="text-sm text-muted-foreground">No domains mapped. Add a domain to enable the public blog API for this venue.</div>
+            <div className="text-sm text-muted-foreground">No domains mapped. Add a domain to enable the public blog API for this workspace.</div>
           ) : (
             <div className="space-y-2">
               {domains.map((d) => (
@@ -2617,12 +2617,12 @@ function CampaignHistory({ workspaceId, onSelect }: { workspaceId: string; onSel
   );
 }
 
-function VenueCombobox({
-  venues,
+function WorkspaceCombobox({
+  workspaces,
   selectedWorkspaceId,
   onSelect,
 }: {
-  venues: Venue[];
+  workspaces: Venue[];
   selectedWorkspaceId: string;
   onSelect: (id: string) => void;
 }) {
@@ -2630,24 +2630,24 @@ function VenueCombobox({
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
 
-  const restoVenue = venues.find((v) => v.id === "resto-platform");
-  const clientVenues = venues.filter((v) => v.id !== "resto-platform");
+  const platformWorkspace = workspaces.find((v) => v.id === "indexflow-platform");
+  const clientWorkspaces = workspaces.filter((v) => v.id !== "indexflow-platform");
 
   const filtered = useMemo(() => {
-    if (!search) return clientVenues;
+    if (!search) return clientWorkspaces;
     const q = search.toLowerCase();
-    return clientVenues.filter(
+    return clientWorkspaces.filter(
       (v) => v.name.toLowerCase().includes(q) || v.id.includes(q)
     );
-  }, [clientVenues, search]);
+  }, [clientWorkspaces, search]);
 
   const totalPages = Math.ceil(filtered.length / VENUE_PAGE_SIZE);
   const paged = filtered.slice(page * VENUE_PAGE_SIZE, (page + 1) * VENUE_PAGE_SIZE);
-  const selectedWorkspace = venues.find((v) => v.id === selectedWorkspaceId);
+  const selectedWorkspace = workspaces.find((v) => v.id === selectedWorkspaceId);
 
   useEffect(() => {
     setPage(0);
-  }, [search, clientVenues.length]);
+  }, [search, clientWorkspaces.length]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -2657,12 +2657,12 @@ function VenueCombobox({
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between"
-          data-testid="button-venue-selector"
+          data-testid="button-workspace-selector"
         >
           <div className="flex items-center gap-2 min-w-0">
             <Building2 className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
             <span className="truncate">
-              {selectedWorkspace ? selectedWorkspace.name : "Select a venue..."}
+              {selectedWorkspace ? selectedWorkspace.name : "Select a workspace..."}
             </span>
           </div>
           <ChevronsUpDown className="h-4 w-4 flex-shrink-0 opacity-50" />
@@ -2671,36 +2671,36 @@ function VenueCombobox({
       <PopoverContent className="w-[400px] p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder="Search venues..."
+            placeholder="Search workspaces..."
             value={search}
             onValueChange={setSearch}
-            data-testid="input-venue-search"
+            data-testid="input-workspace-search"
           />
           <CommandList>
-            <CommandEmpty>No venues found.</CommandEmpty>
+            <CommandEmpty>No workspaces found.</CommandEmpty>
 
-            {restoVenue && (
+            {platformWorkspace && (
               <CommandGroup heading="Platform">
                 <CommandItem
-                  value={restoVenue.id}
+                  value={platformWorkspace.id}
                   onSelect={() => {
-                    onSelect(restoVenue.id);
+                    onSelect(platformWorkspace.id);
                     setOpen(false);
                   }}
-                  data-testid={`button-venue-${restoVenue.id}`}
+                  data-testid={`button-workspace-${platformWorkspace.id}`}
                 >
-                  <Check className={`h-4 w-4 mr-2 ${selectedWorkspaceId === restoVenue.id ? "opacity-100" : "opacity-0"}`} />
+                  <Check className={`h-4 w-4 mr-2 ${selectedWorkspaceId === platformWorkspace.id ? "opacity-100" : "opacity-0"}`} />
                   <div className="min-w-0 flex-1">
-                    <div className="font-medium truncate">{restoVenue.name}</div>
-                    <div className="text-xs text-muted-foreground">{restoVenue.type}</div>
+                    <div className="font-medium truncate">{platformWorkspace.name}</div>
+                    <div className="text-xs text-muted-foreground">{platformWorkspace.type}</div>
                   </div>
                 </CommandItem>
               </CommandGroup>
             )}
 
-            {restoVenue && paged.length > 0 && <CommandSeparator />}
+            {platformWorkspace && paged.length > 0 && <CommandSeparator />}
 
-            <CommandGroup heading={`Client venues${filtered.length > 0 ? ` (${filtered.length})` : ""}`}>
+            <CommandGroup heading={`Client workspaces${filtered.length > 0 ? ` (${filtered.length})` : ""}`}>
               {paged.map((v) => (
                 <CommandItem
                   key={v.id}
@@ -2709,7 +2709,7 @@ function VenueCombobox({
                     onSelect(v.id);
                     setOpen(false);
                   }}
-                  data-testid={`button-venue-${v.id}`}
+                  data-testid={`button-workspace-${v.id}`}
                 >
                   <Check className={`h-4 w-4 mr-2 ${selectedWorkspaceId === v.id ? "opacity-100" : "opacity-0"}`} />
                   <div className="min-w-0 flex-1">
@@ -2731,7 +2731,7 @@ function VenueCombobox({
                     size="sm"
                     disabled={page === 0}
                     onClick={(e) => { e.stopPropagation(); setPage((p) => p - 1); }}
-                    data-testid="button-venue-prev"
+                    data-testid="button-workspace-prev"
                   >
                     Prev
                   </Button>
@@ -2740,7 +2740,7 @@ function VenueCombobox({
                     size="sm"
                     disabled={page >= totalPages - 1}
                     onClick={(e) => { e.stopPropagation(); setPage((p) => p + 1); }}
-                    data-testid="button-venue-next"
+                    data-testid="button-workspace-next"
                   >
                     Next
                   </Button>
@@ -3189,34 +3189,34 @@ function ReportForm({ workspaceId, onSubmit, isPending }: {
 }
 
 export default function AdminContent() {
-  const [selectedWorkspaceId, setSelectedWorkspaceId] = useState("resto-platform");
+  const [selectedWorkspaceId, setSelectedWorkspaceId] = useState("indexflow-platform");
   const [editingPost, setEditingPost] = useState<WorkspaceBlogPost | null | "new">(null);
   const [bulkModalOpen, setBulkModalOpen] = useState(false);
   const [activeCampaignId, setActiveCampaignId] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<"posts" | "domains" | "campaigns">("posts");
   const [guideOpen, setGuideOpen] = useState(false);
 
-  const { data: venues = [] } = useQuery<Venue[]>({
+  const { data: workspaces = [] } = useQuery<Venue[]>({
     queryKey: ["/api/workspaces"],
     queryFn: () => adminApi("GET", "/api/workspaces"),
   });
 
   useEffect(() => {
-    if (venues.length > 0 && !venues.find((v) => v.id === selectedWorkspaceId)) {
-      const resto = venues.find((v) => v.id === "resto-platform");
-      setSelectedWorkspaceId(resto ? resto.id : venues[0].id);
+    if (workspaces.length > 0 && !workspaces.find((v) => v.id === selectedWorkspaceId)) {
+      const platform = workspaces.find((v) => v.id === "indexflow-platform");
+      setSelectedWorkspaceId(platform ? platform.id : workspaces[0].id);
     }
-  }, [venues, selectedWorkspaceId]);
+  }, [workspaces, selectedWorkspaceId]);
 
-  const selectedWorkspace = venues.find((v) => v.id === selectedWorkspaceId);
-  const hasValidVenue = selectedWorkspace !== undefined;
+  const selectedWorkspace = workspaces.find((v) => v.id === selectedWorkspaceId);
+  const hasValidWorkspace = selectedWorkspace !== undefined;
 
   return (
     <AdminLayout>
       <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold" data-testid="text-content-title">Content Engine</h1>
-          <p className="text-sm text-muted-foreground">White-label blog management for client venues</p>
+          <p className="text-sm text-muted-foreground">White-label blog management for client workspaces</p>
         </div>
         <Button
           variant="ghost"
@@ -3236,7 +3236,7 @@ export default function AdminContent() {
               <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                 <div className="rounded-md bg-muted/50 p-3" data-testid="text-reference-title">
                   <p className="font-semibold mb-1">What is this?</p>
-                  <p className="text-muted-foreground" data-testid="text-reference-desc">A white-label blog system. Create and publish posts on behalf of client venues. Each venue's blog lives on their own domain.</p>
+                  <p className="text-muted-foreground" data-testid="text-reference-desc">A white-label blog system. Create and publish posts on behalf of client workspaces. Each workspace's blog lives on their own domain.</p>
                 </div>
                 <div className="rounded-md bg-muted/50 p-3">
                   <p className="font-semibold mb-1">Creating Content</p>
@@ -3253,8 +3253,8 @@ export default function AdminContent() {
       </Collapsible>
 
       <div className="mb-6 max-w-md">
-        <VenueCombobox
-          venues={venues}
+        <WorkspaceCombobox
+          workspaces={workspaces}
           selectedWorkspaceId={selectedWorkspaceId}
           onSelect={(id) => {
             setSelectedWorkspaceId(id);
@@ -3264,7 +3264,7 @@ export default function AdminContent() {
         />
       </div>
 
-      {editingPost !== null && hasValidVenue ? (
+      {editingPost !== null && hasValidWorkspace ? (
         <PostEditor
           post={editingPost === "new" ? null : editingPost}
           workspaceId={selectedWorkspaceId}
@@ -3272,7 +3272,7 @@ export default function AdminContent() {
             setEditingPost(null);
           }}
         />
-      ) : hasValidVenue ? (
+      ) : hasValidWorkspace ? (
         activeCampaignId ? (
           <div>
             <Button variant="ghost" onClick={() => setActiveCampaignId(null)} className="mb-4" data-testid="button-back-to-posts">
@@ -3348,13 +3348,13 @@ export default function AdminContent() {
         <Card>
           <CardContent className="py-12 text-center">
             <Building2 className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-            <p className="font-medium mb-1">Select a venue</p>
-            <p className="text-sm text-muted-foreground">Pick a venue from the dropdown above to manage its blog.</p>
+            <p className="font-medium mb-1">Select a workspace</p>
+            <p className="text-sm text-muted-foreground">Pick a workspace from the dropdown above to manage its blog.</p>
           </CardContent>
         </Card>
       )}
 
-      {hasValidVenue && (
+      {hasValidWorkspace && (
         <BulkGenerateModal
           workspaceId={selectedWorkspaceId}
           open={bulkModalOpen}

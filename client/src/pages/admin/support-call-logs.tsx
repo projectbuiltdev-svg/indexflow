@@ -12,12 +12,12 @@ const stats = [
 ];
 
 const callLogs = [
-  { id: "CALL-8934", from: "+1 (917) 555-0123", to: "La Bella Italia", agency: "Hospitality Group NYC", duration: "4:12", type: "Inbound", status: "Completed", time: "10 min ago" },
-  { id: "CALL-8933", from: "+1 (212) 555-0456", to: "Ocean View Bistro", agency: "Coastal Dining Co.", duration: "2:45", type: "Inbound", status: "Completed", time: "25 min ago" },
-  { id: "CALL-8932", from: "System", to: "+1 (646) 555-0789", agency: "Metro Bistro Group", duration: "1:30", type: "Outbound", status: "Completed", time: "1 hr ago" },
-  { id: "CALL-8931", from: "+41 79 555 0234", to: "Mountain Lodge", agency: "Alpine Hotels Ltd.", duration: "5:18", type: "Inbound", status: "Completed", time: "2 hrs ago" },
-  { id: "CALL-8930", from: "+1 (310) 555-0567", to: "Skyline Bar", agency: "Pacific Venues Inc.", duration: "0:00", type: "Inbound", status: "Missed", time: "3 hrs ago" },
-  { id: "CALL-8929", from: "System", to: "+1 (917) 555-0890", agency: "Hospitality Group NYC", duration: "0:45", type: "Outbound", status: "Voicemail", time: "4 hrs ago" },
+  { id: "CALL-8934", from: "+1 (917) 555-0123", to: "Acme Digital", agency: "Digital Growth NYC", duration: "4:12", type: "Inbound", status: "Completed", time: "10 min ago" },
+  { id: "CALL-8933", from: "+1 (212) 555-0456", to: "Coastal SEO", agency: "Coastal Marketing Co.", duration: "2:45", type: "Inbound", status: "Completed", time: "25 min ago" },
+  { id: "CALL-8932", from: "System", to: "+1 (646) 555-0789", agency: "Metro Creative Group", duration: "1:30", type: "Outbound", status: "Completed", time: "1 hr ago" },
+  { id: "CALL-8931", from: "+41 79 555 0234", to: "Summit Marketing", agency: "Alpine Digital Ltd.", duration: "5:18", type: "Inbound", status: "Completed", time: "2 hrs ago" },
+  { id: "CALL-8930", from: "+1 (310) 555-0567", to: "Pinnacle Digital", agency: "Pacific Media Inc.", duration: "0:00", type: "Inbound", status: "Missed", time: "3 hrs ago" },
+  { id: "CALL-8929", from: "System", to: "+1 (917) 555-0890", agency: "Digital Growth NYC", duration: "0:45", type: "Outbound", status: "Voicemail", time: "4 hrs ago" },
 ];
 
 export default function AdminSupportCallLogs() {

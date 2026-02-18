@@ -16,21 +16,21 @@ const seoStats = [
 ];
 
 const clientRankings = [
-  { id: 1, name: "La Bella Italia", domain: "labellaitalia.com", keywords: 28, avgPosition: 8.4, topKeyword: "italian restaurant near me", topPosition: 3, gscConnected: true, change: "up" },
-  { id: 2, name: "Mountain Lodge Hotel", domain: "mountainlodge.com", keywords: 35, avgPosition: 12.7, topKeyword: "mountain lodge accommodation", topPosition: 5, gscConnected: true, change: "up" },
-  { id: 3, name: "The Golden Dragon", domain: "goldendragon.com", keywords: 18, avgPosition: 19.2, topKeyword: "chinese restaurant delivery", topPosition: 8, gscConnected: true, change: "down" },
-  { id: 4, name: "Ocean View Bistro", domain: "oceanviewbistro.com", keywords: 22, avgPosition: 15.6, topKeyword: "ocean view dining", topPosition: 4, gscConnected: false, change: "same" },
-  { id: 5, name: "Sakura Sushi", domain: "sakurasushi.com", keywords: 15, avgPosition: 21.3, topKeyword: "sushi restaurant downtown", topPosition: 11, gscConnected: true, change: "up" },
-  { id: 6, name: "The Rustic Table", domain: "rustictable.com", keywords: 12, avgPosition: 28.9, topKeyword: "farm to table restaurant", topPosition: 14, gscConnected: false, change: "down" },
+  { id: 1, name: "Acme Digital", domain: "acmedigital.com", keywords: 28, avgPosition: 8.4, topKeyword: "seo agency near me", topPosition: 3, gscConnected: true, change: "up" },
+  { id: 2, name: "Summit Marketing", domain: "summitmarketing.com", keywords: 35, avgPosition: 12.7, topKeyword: "marketing agency mountain view", topPosition: 5, gscConnected: true, change: "up" },
+  { id: 3, name: "Dragon Media", domain: "dragonmedia.com", keywords: 18, avgPosition: 19.2, topKeyword: "web design agency", topPosition: 8, gscConnected: true, change: "down" },
+  { id: 4, name: "Coastal SEO", domain: "coastalseo.com", keywords: 22, avgPosition: 15.6, topKeyword: "content writing services", topPosition: 4, gscConnected: false, change: "same" },
+  { id: 5, name: "Sakura Digital", domain: "sakuradigital.com", keywords: 15, avgPosition: 21.3, topKeyword: "local seo services", topPosition: 11, gscConnected: true, change: "up" },
+  { id: 6, name: "Rustic Creative", domain: "rusticcreative.com", keywords: 12, avgPosition: 28.9, topKeyword: "organic seo services", topPosition: 14, gscConnected: false, change: "down" },
 ];
 
 const initialClientKeywords: Record<number, string[]> = {
-  1: ["italian restaurant near me", "best pasta downtown", "pizza delivery", "romantic dinner italian", "italian catering", "wine bar italian", "lunch specials italian", "italian brunch"],
-  2: ["mountain lodge accommodation", "ski resort hotel", "mountain retreat", "lodge booking online", "mountain view rooms", "winter getaway hotel", "hiking lodge", "spa mountain hotel"],
-  3: ["chinese restaurant delivery", "dim sum near me", "chinese takeaway", "best chinese food", "dragon restaurant", "asian cuisine delivery", "chinese buffet"],
-  4: ["ocean view dining", "beachfront restaurant", "seafood bistro", "waterfront dining", "sunset dinner restaurant", "fresh catch restaurant"],
-  5: ["sushi restaurant downtown", "best sushi near me", "omakase dining", "japanese restaurant", "sashimi delivery"],
-  6: ["farm to table restaurant", "organic dining", "local produce restaurant", "rustic dining experience"],
+  1: ["seo agency near me", "best seo services", "local seo optimization", "content marketing agency", "digital marketing firm", "link building services", "seo audit services", "keyword research"],
+  2: ["marketing agency mountain view", "digital marketing services", "social media management", "brand strategy consultant", "ppc management", "email marketing agency", "lead generation", "conversion optimization"],
+  3: ["web design agency", "ecommerce seo services", "technical seo audit", "site speed optimization", "schema markup services", "core web vitals", "mobile seo"],
+  4: ["content writing services", "blog writing agency", "copywriting services", "content strategy", "seo content creation", "guest post outreach"],
+  5: ["local seo services", "google business profile", "citation building", "local search optimization", "map pack ranking"],
+  6: ["organic seo services", "white hat seo", "enterprise seo", "seo consulting"],
 };
 
 const aiMentionStats = [
@@ -374,16 +374,16 @@ export default function AdminSeo() {
                 <Grid3X3 className="w-5 h-5" />
                 Local Search Grid
               </CardTitle>
-              <CardDescription>Geo-grid rank tracking across all client venues (DataForSEO powered)</CardDescription>
+              <CardDescription>Geo-grid rank tracking across all client workspaces (DataForSEO powered)</CardDescription>
             </div>
-            <Badge variant="secondary">25 keywords per venue</Badge>
+            <Badge variant="secondary">25 keywords per workspace</Badge>
           </div>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
-            <Card className="p-4 text-center" data-testid="card-admin-grid-stat-venues">
+            <Card className="p-4 text-center" data-testid="card-admin-grid-stat-workspaces">
               <div className="text-2xl font-bold text-primary">38</div>
-              <p className="text-xs text-muted-foreground">Venues with Grids</p>
+              <p className="text-xs text-muted-foreground">Workspaces with Grids</p>
             </Card>
             <Card className="p-4 text-center" data-testid="card-admin-grid-stat-keywords">
               <div className="text-2xl font-bold text-primary">412</div>
@@ -414,12 +414,12 @@ export default function AdminSeo() {
               </thead>
               <tbody>
                 {[
-                  { id: 1, name: "La Bella Italia", gridKeywords: 18, gridSize: "5x5", avgPos: 4.2, threePack: 72, status: "active", change: "up" },
-                  { id: 2, name: "Mountain Lodge Hotel", gridKeywords: 22, gridSize: "5x5", avgPos: 6.1, threePack: 58, status: "active", change: "up" },
-                  { id: 3, name: "The Golden Dragon", gridKeywords: 12, gridSize: "5x5", avgPos: 9.8, threePack: 38, status: "active", change: "down" },
-                  { id: 4, name: "Ocean View Bistro", gridKeywords: 15, gridSize: "5x5", avgPos: 5.5, threePack: 65, status: "active", change: "up" },
-                  { id: 5, name: "Sakura Sushi", gridKeywords: 8, gridSize: "5x5", avgPos: 11.2, threePack: 29, status: "active", change: "same" },
-                  { id: 6, name: "The Rustic Table", gridKeywords: 0, gridSize: "—", avgPos: 0, threePack: 0, status: "not_setup", change: "same" },
+                  { id: 1, name: "Acme Digital", gridKeywords: 18, gridSize: "5x5", avgPos: 4.2, threePack: 72, status: "active", change: "up" },
+                  { id: 2, name: "Summit Marketing", gridKeywords: 22, gridSize: "5x5", avgPos: 6.1, threePack: 58, status: "active", change: "up" },
+                  { id: 3, name: "Dragon Media", gridKeywords: 12, gridSize: "5x5", avgPos: 9.8, threePack: 38, status: "active", change: "down" },
+                  { id: 4, name: "Coastal SEO", gridKeywords: 15, gridSize: "5x5", avgPos: 5.5, threePack: 65, status: "active", change: "up" },
+                  { id: 5, name: "Sakura Digital", gridKeywords: 8, gridSize: "5x5", avgPos: 11.2, threePack: 29, status: "active", change: "same" },
+                  { id: 6, name: "Rustic Creative", gridKeywords: 0, gridSize: "—", avgPos: 0, threePack: 0, status: "not_setup", change: "same" },
                 ].map((client) => (
                   <tr key={client.id} className="border-b last:border-0" data-testid={`row-grid-client-${client.id}`}>
                     <td className="py-3 font-medium text-sm">{client.name}</td>
@@ -463,7 +463,7 @@ export default function AdminSeo() {
       <Card>
         <CardHeader>
           <CardTitle>Platform SEO Configuration</CardTitle>
-          <CardDescription>Resto-managed SEO tools and integrations</CardDescription>
+          <CardDescription>Platform SEO tools and integrations</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -504,7 +504,7 @@ export default function AdminSeo() {
               <ul className="space-y-1.5 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Geo-grid Google Maps tracking</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> 5x5 grid (25 scan points)</li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> 25 keywords per venue</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> 25 keywords per workspace</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Pay-as-you-go credits ($10/5 scans)</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> Color-coded heatmap results</li>
                 <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" /> DataForSEO Standard Queue</li>

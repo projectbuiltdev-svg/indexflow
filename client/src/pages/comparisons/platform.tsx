@@ -64,7 +64,7 @@ export default function PlatformComparison() {
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
               Every feature compared across platforms. See exactly what you get
-              with Resto vs the competition.
+              with indexFlow vs the competition.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link href="/contact">
@@ -97,7 +97,7 @@ export default function PlatformComparison() {
                   <thead>
                     <tr className="border-b">
                       <th className="text-left p-4 font-semibold min-w-[180px]">Feature</th>
-                      <th className="text-center p-4 font-semibold text-primary min-w-[100px]">Resto</th>
+                      <th className="text-center p-4 font-semibold text-primary min-w-[100px]">indexFlow</th>
                       <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">OpenTable</th>
                       <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">Resy</th>
                       <th className="text-center p-4 font-semibold text-muted-foreground min-w-[100px]">SevenRooms</th>
@@ -124,13 +124,13 @@ export default function PlatformComparison() {
       <section className="py-16 lg:py-20 bg-accent/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">What Sets Resto Apart</h2>
+            <h2 className="text-3xl font-bold mb-4">What Sets indexFlow Apart</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="hover-elevate">
               <CardContent className="p-6 text-center">
                 <div className="text-4xl font-bold text-primary mb-2">16</div>
-                <p className="text-sm text-muted-foreground">Features where Resto leads</p>
+                <p className="text-sm text-muted-foreground">Features where indexFlow leads</p>
               </CardContent>
             </Card>
             <Card className="hover-elevate">

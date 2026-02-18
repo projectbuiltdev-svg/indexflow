@@ -78,7 +78,7 @@ export default function RoomsList() {
   });
 
   if (!workspaceId) {
-    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to manage rooms.</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a workspace from the sidebar to manage rooms.</div>;
   }
 
   if (isLoading) {

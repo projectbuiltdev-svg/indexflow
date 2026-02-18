@@ -160,7 +160,7 @@ export default function LocalCitationsPage() {
               Industry-Leading Citation Services
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              We recommend these trusted providers for local citation management. Both specialize in helping hospitality businesses get found in local search.
+              We recommend these trusted providers for local citation management. Both specialize in helping businesses get found in local search.
             </p>
           </div>
 
@@ -217,7 +217,7 @@ export default function LocalCitationsPage() {
                 ))}
               </ul>
               <p className="text-sm text-muted-foreground mt-6">
-                Pair local citations with Resto's built-in Rank Tracker and Local Search Grid to monitor the impact on your rankings.
+                Pair local citations with indexFlow's built-in Rank Tracker and Local Search Grid to monitor the impact on your rankings.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">

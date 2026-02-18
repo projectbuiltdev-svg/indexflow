@@ -60,7 +60,7 @@ export default function SettingsTwilioVoice() {
   }, [settings]);
 
   useEffect(() => {
-    document.title = "Twilio Voice Settings | Resto Dashboard";
+    document.title = "Twilio Voice Settings | indexFlow Dashboard";
   }, []);
 
   const connectMutation = useMutation({
@@ -118,7 +118,7 @@ export default function SettingsTwilioVoice() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold">Twilio Voice Settings</h1>
-            <p className="text-muted-foreground">Configure AI-powered voice calls for your venue</p>
+            <p className="text-muted-foreground">Configure AI-powered voice calls for your workspace</p>
           </div>
         </div>
 

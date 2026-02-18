@@ -93,14 +93,14 @@ const repPerformance = [
 ];
 
 const users = [
-  { id: 1, name: "Admin User", email: "admin@resto.restaurant", role: "super_admin" as AdminRole, department: "management" as AdminDepartment, lastActive: "Just now", isActive: true, lastLogin: "Feb 15, 2026 9:02 AM", lastLogout: null, sessionDuration: "2h 14m", funnelActivity: "12 actions" },
-  { id: 2, name: "John Smith", email: "john@resto.restaurant", role: "admin" as AdminRole, department: "management" as AdminDepartment, lastActive: "2 hours ago", isActive: true, lastLogin: "Feb 15, 2026 7:30 AM", lastLogout: "Feb 15, 2026 9:15 AM", sessionDuration: "1h 45m", funnelActivity: "8 actions" },
-  { id: 3, name: "Maria Garcia", email: "maria@resto.restaurant", role: "sales" as AdminRole, department: "the_boiler_room" as AdminDepartment, lastActive: "1 hour ago", isActive: true, lastLogin: "Feb 15, 2026 8:10 AM", lastLogout: null, sessionDuration: "3h 06m", funnelActivity: "27 actions" },
-  { id: 4, name: "David Chen", email: "david@resto.restaurant", role: "sales" as AdminRole, department: "the_boiler_room" as AdminDepartment, lastActive: "5 hours ago", isActive: true, lastLogin: "Feb 14, 2026 4:00 PM", lastLogout: "Feb 14, 2026 6:32 PM", sessionDuration: "2h 32m", funnelActivity: "19 actions" },
-  { id: 5, name: "Sarah Johnson", email: "sarah@resto.restaurant", role: "seo_production" as AdminRole, department: "seo_production" as AdminDepartment, lastActive: "3 hours ago", isActive: true, lastLogin: "Feb 15, 2026 6:45 AM", lastLogout: "Feb 15, 2026 8:20 AM", sessionDuration: "1h 35m", funnelActivity: "5 actions" },
-  { id: 6, name: "Tom Wilson", email: "tom@resto.restaurant", role: "website_production" as AdminRole, department: "website_production" as AdminDepartment, lastActive: "1 day ago", isActive: true, lastLogin: "Feb 14, 2026 10:00 AM", lastLogout: "Feb 14, 2026 5:45 PM", sessionDuration: "7h 45m", funnelActivity: "34 actions" },
-  { id: 7, name: "Lisa Brown", email: "lisa@resto.restaurant", role: "customer_support" as AdminRole, department: "customer_support" as AdminDepartment, lastActive: "30 min ago", isActive: true, lastLogin: "Feb 15, 2026 10:30 AM", lastLogout: null, sessionDuration: "0h 46m", funnelActivity: "3 actions" },
-  { id: 8, name: "James Lee", email: "james@resto.restaurant", role: "customer_support" as AdminRole, department: "customer_support" as AdminDepartment, lastActive: "1 week ago", isActive: false, lastLogin: "Feb 8, 2026 9:00 AM", lastLogout: "Feb 8, 2026 11:30 AM", sessionDuration: "2h 30m", funnelActivity: "0 actions" },
+  { id: 1, name: "Admin User", email: "admin@indexflow.io", role: "super_admin" as AdminRole, department: "management" as AdminDepartment, lastActive: "Just now", isActive: true, lastLogin: "Feb 15, 2026 9:02 AM", lastLogout: null, sessionDuration: "2h 14m", funnelActivity: "12 actions" },
+  { id: 2, name: "John Smith", email: "john@indexflow.io", role: "admin" as AdminRole, department: "management" as AdminDepartment, lastActive: "2 hours ago", isActive: true, lastLogin: "Feb 15, 2026 7:30 AM", lastLogout: "Feb 15, 2026 9:15 AM", sessionDuration: "1h 45m", funnelActivity: "8 actions" },
+  { id: 3, name: "Maria Garcia", email: "maria@indexflow.io", role: "sales" as AdminRole, department: "the_boiler_room" as AdminDepartment, lastActive: "1 hour ago", isActive: true, lastLogin: "Feb 15, 2026 8:10 AM", lastLogout: null, sessionDuration: "3h 06m", funnelActivity: "27 actions" },
+  { id: 4, name: "David Chen", email: "david@indexflow.io", role: "sales" as AdminRole, department: "the_boiler_room" as AdminDepartment, lastActive: "5 hours ago", isActive: true, lastLogin: "Feb 14, 2026 4:00 PM", lastLogout: "Feb 14, 2026 6:32 PM", sessionDuration: "2h 32m", funnelActivity: "19 actions" },
+  { id: 5, name: "Sarah Johnson", email: "sarah@indexflow.io", role: "seo_production" as AdminRole, department: "seo_production" as AdminDepartment, lastActive: "3 hours ago", isActive: true, lastLogin: "Feb 15, 2026 6:45 AM", lastLogout: "Feb 15, 2026 8:20 AM", sessionDuration: "1h 35m", funnelActivity: "5 actions" },
+  { id: 6, name: "Tom Wilson", email: "tom@indexflow.io", role: "website_production" as AdminRole, department: "website_production" as AdminDepartment, lastActive: "1 day ago", isActive: true, lastLogin: "Feb 14, 2026 10:00 AM", lastLogout: "Feb 14, 2026 5:45 PM", sessionDuration: "7h 45m", funnelActivity: "34 actions" },
+  { id: 7, name: "Lisa Brown", email: "lisa@indexflow.io", role: "customer_support" as AdminRole, department: "customer_support" as AdminDepartment, lastActive: "30 min ago", isActive: true, lastLogin: "Feb 15, 2026 10:30 AM", lastLogout: null, sessionDuration: "0h 46m", funnelActivity: "3 actions" },
+  { id: 8, name: "James Lee", email: "james@indexflow.io", role: "customer_support" as AdminRole, department: "customer_support" as AdminDepartment, lastActive: "1 week ago", isActive: false, lastLogin: "Feb 8, 2026 9:00 AM", lastLogout: "Feb 8, 2026 11:30 AM", sessionDuration: "2h 30m", funnelActivity: "0 actions" },
 ];
 
 export default function AdminUsers() {
@@ -169,7 +169,7 @@ export default function AdminUsers() {
                   <Input
                     id="invite-email"
                     type="email"
-                    placeholder="jane@resto.restaurant"
+                    placeholder="jane@indexflow.io"
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
                     data-testid="input-invite-email"

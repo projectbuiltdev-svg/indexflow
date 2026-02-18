@@ -12,12 +12,12 @@ const stats = [
 ];
 
 const tickets = [
-  { id: "TKT-1042", subject: "Widget not loading on Safari", agency: "Hospitality Group NYC", priority: "High", status: "Open", created: "2 hrs ago" },
-  { id: "TKT-1041", subject: "Booking confirmation email delayed", agency: "Coastal Dining Co.", priority: "Medium", status: "Open", created: "4 hrs ago" },
-  { id: "TKT-1040", subject: "Cannot add new team member", agency: "Alpine Hotels Ltd.", priority: "Low", status: "In Progress", created: "6 hrs ago" },
-  { id: "TKT-1039", subject: "SEO rank tracker shows incorrect data", agency: "Metro Bistro Group", priority: "High", status: "Open", created: "1 day ago" },
-  { id: "TKT-1038", subject: "Custom domain SSL certificate issue", agency: "Pacific Venues Inc.", priority: "Critical", status: "In Progress", created: "1 day ago" },
-  { id: "TKT-1037", subject: "Billing invoice discrepancy", agency: "Urban Eats Network", priority: "Medium", status: "Resolved", created: "2 days ago" },
+  { id: "TKT-1042", subject: "Widget not loading on Safari", agency: "Digital Growth NYC", priority: "High", status: "Open", created: "2 hrs ago" },
+  { id: "TKT-1041", subject: "Lead confirmation email delayed", agency: "Coastal Marketing Co.", priority: "Medium", status: "Open", created: "4 hrs ago" },
+  { id: "TKT-1040", subject: "Cannot add new team member", agency: "Alpine Digital Ltd.", priority: "Low", status: "In Progress", created: "6 hrs ago" },
+  { id: "TKT-1039", subject: "SEO rank tracker shows incorrect data", agency: "Metro Creative Group", priority: "High", status: "Open", created: "1 day ago" },
+  { id: "TKT-1038", subject: "Custom domain SSL certificate issue", agency: "Pacific Media Inc.", priority: "Critical", status: "In Progress", created: "1 day ago" },
+  { id: "TKT-1037", subject: "Billing invoice discrepancy", agency: "Urban Content Network", priority: "Medium", status: "Resolved", created: "2 days ago" },
 ];
 
 export default function AdminSupportTickets() {

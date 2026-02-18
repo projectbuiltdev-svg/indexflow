@@ -45,7 +45,7 @@ const features = [
   {
     icon: Settings,
     title: "Configurable Greetings",
-    description: "Customize your AI's greeting, personality, and responses to match your venue's brand and tone.",
+    description: "Customize your AI's greeting, personality, and responses to match your business's brand and tone.",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
@@ -61,7 +61,7 @@ const benefits = [
 export default function VoiceBookingFeature() {
   return (
     <Layout>
-      <SEO {...seoData.voiceBooking} />
+      <SEO {...seoData.voiceAI} />
       <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-indigo-500/10 via-blue-500/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">

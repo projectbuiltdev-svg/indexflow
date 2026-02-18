@@ -5,11 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { AdminLayout } from "@/components/admin-layout";
 
 const widgets = [
-  { id: 1, client: "La Bella Italia", type: "Full Widget", status: "Active", voiceEnabled: true, interactions: 234, voiceInteractions: 56, lastConfig: "Jan 25, 2026" },
-  { id: 2, client: "The Golden Dragon", type: "Booking Only", status: "Active", voiceEnabled: true, interactions: 156, voiceInteractions: 31, lastConfig: "Jan 22, 2026" },
-  { id: 3, client: "Ocean View Bistro", type: "Full Widget", status: "Pending", voiceEnabled: false, interactions: 0, voiceInteractions: 0, lastConfig: "Jan 27, 2026" },
-  { id: 4, client: "Café Parisien", type: "Booking Only", status: "Active", voiceEnabled: true, interactions: 89, voiceInteractions: 18, lastConfig: "Jan 18, 2026" },
-  { id: 5, client: "Mountain Lodge Hotel", type: "Full Widget", status: "Active", voiceEnabled: true, interactions: 312, voiceInteractions: 74, lastConfig: "Jan 20, 2026" },
+  { id: 1, client: "Acme Digital", type: "Full Widget", status: "Active", voiceEnabled: true, interactions: 234, voiceInteractions: 56, lastConfig: "Jan 25, 2026" },
+  { id: 2, client: "Dragon Media", type: "Chat Only", status: "Active", voiceEnabled: true, interactions: 156, voiceInteractions: 31, lastConfig: "Jan 22, 2026" },
+  { id: 3, client: "Coastal SEO", type: "Full Widget", status: "Pending", voiceEnabled: false, interactions: 0, voiceInteractions: 0, lastConfig: "Jan 27, 2026" },
+  { id: 4, client: "Metro Creative", type: "Chat Only", status: "Active", voiceEnabled: true, interactions: 89, voiceInteractions: 18, lastConfig: "Jan 18, 2026" },
+  { id: 5, client: "Summit Marketing", type: "Full Widget", status: "Active", voiceEnabled: true, interactions: 312, voiceInteractions: 74, lastConfig: "Jan 20, 2026" },
 ];
 
 export default function AdminWidgets() {

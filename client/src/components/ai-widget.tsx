@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { MessageCircle, X, Mic, MicOff, Send, Bot, User, Calendar, Paperclip, Volume2, VolumeX, Loader2, UtensilsCrossed } from "lucide-react";
+import { MessageCircle, X, Mic, MicOff, Send, Bot, User, Calendar, Paperclip, Volume2, VolumeX, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import indexFlowLogo from "@assets/image_1771351451425.png";
 
@@ -11,11 +11,11 @@ interface Message {
 }
 
 const mockResponses = [
-  "I'd be happy to help you with your booking! What date and time works best for you?",
-  "Great choice! We have availability for that time. How many guests will be joining you?",
-  "Perfect! I've noted that down. Can I get your name and phone number to confirm the reservation?",
-  "Your reservation is all set! You'll receive a confirmation text shortly. Is there anything else I can help with?",
-  "Absolutely! We offer a variety of cuisines and special dietary options. Would you like me to share our menu highlights?",
+  "I'd be happy to help! What can I assist you with today?",
+  "Great question! Let me look into that for you. Can you tell me more about what you need?",
+  "I've noted that down. Can I get your name and email to follow up?",
+  "All set! Our team will reach out within 24 hours. Is there anything else I can help with?",
+  "Absolutely! We offer a range of SEO and content services. Would you like to learn more about our capabilities?",
 ];
 
 function useSpeechRecognition() {
@@ -155,7 +155,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hi! I'm Resto, How can I help you today?",
+      text: "Hi! I'm indexFlow AI, How can I help you today?",
       isBot: true,
       timestamp: new Date(),
     },
@@ -300,7 +300,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
     setShowQuickActions(false);
     const userMessage: Message = {
       id: Date.now(),
-      text: "I'd like to make a reservation",
+      text: "I'd like to schedule a consultation",
       isBot: false,
       timestamp: new Date(),
     };
@@ -310,7 +310,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
     setTimeout(() => {
       const botMessage: Message = {
         id: Date.now() + 1,
-        text: "I'd be happy to help you book a table! Please tell me:\n\n1. What date would you like?\n2. What time works best?\n3. How many guests?\n\nOr simply tell me in your own words!",
+        text: "I'd be happy to help you schedule a consultation! Please tell me:\n\n1. What date works best?\n2. What time do you prefer?\n3. What topics would you like to discuss?\n\nOr simply tell me in your own words!",
         isBot: true,
         timestamp: new Date(),
       };
@@ -323,7 +323,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
     setShowQuickActions(false);
     const userMessage: Message = {
       id: Date.now(),
-      text: "I'd like to make a pre-paid reservation",
+      text: "I'd like to get started with a consultation",
       isBot: false,
       timestamp: new Date(),
     };
@@ -333,7 +333,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
     setTimeout(() => {
       const botMessage: Message = {
         id: Date.now() + 1,
-        text: "Great choice! Pre-paid reservations guarantee your table.\n\nPlease provide your booking details:\n\n1. Date\n2. Time\n3. Number of guests\n4. Name\n5. Email\n6. Phone\n\nYour card will be charged a $25 deposit to secure your reservation.",
+        text: "Great choice! I can help you get started.\n\nPlease provide your details:\n\n1. Name\n2. Email\n3. Phone\n4. Company\n5. What service are you interested in?\n\nOur team will follow up within 24 hours.",
         isBot: true,
         timestamp: new Date(),
       };
@@ -346,7 +346,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
     setShowQuickActions(false);
     const userMessage: Message = {
       id: Date.now(),
-      text: "Can I see the menu?",
+      text: "What services do you offer?",
       isBot: false,
       timestamp: new Date(),
     };
@@ -356,7 +356,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
     setTimeout(() => {
       const botMessage: Message = {
         id: Date.now() + 1,
-        text: "Of course! Our menu features a wonderful selection of dishes prepared fresh daily.\n\nYou can view the full menu on our website, or I can help you with:\n\n1. Today's specials\n2. Dietary options (vegan, gluten-free, etc.)\n3. Drinks & cocktails\n4. Desserts\n\nWhat would you like to know more about?",
+        text: "We offer a comprehensive suite of SEO and content marketing services!\n\nHere's what we can help with:\n\n1. Keyword Research & Rank Tracking\n2. AI-Powered Content Creation\n3. Local SEO & Google Maps Optimization\n4. Technical SEO Audits\n\nWhat would you like to know more about?",
         isBot: true,
         timestamp: new Date(),
       };
@@ -503,28 +503,28 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                   <Button
                     onClick={handleQuickReservation}
                     className="gap-2 bg-white hover:bg-gray-100 text-white w-48 ring-1 ring-black/10"
-                    data-testid="button-quick-reservation"
+                    data-testid="button-quick-consultation"
                   >
                     <Calendar className="w-4 h-4 text-black" />
-                    <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent font-semibold">Make a Reservation</span>
+                    <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent font-semibold">Schedule Consultation</span>
                   </Button>
                   <Button
                     onClick={handleMenu}
                     className="gap-2 bg-white hover:bg-gray-100 text-white w-48 ring-1 ring-black/10"
-                    data-testid="button-quick-menu"
+                    data-testid="button-quick-services"
                   >
-                    <UtensilsCrossed className="w-4 h-4 text-black" />
-                    <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent font-semibold">View Menu</span>
+                    <Search className="w-4 h-4 text-black" />
+                    <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent font-semibold">View Services</span>
                   </Button>
                   <div className="flex flex-col items-center">
                     <Button
                       onClick={handlePrepaidReservation}
                       className="gap-2 bg-blue-500 hover:bg-blue-600 text-white w-48"
-                      data-testid="button-prepaid-reservation"
+                      data-testid="button-get-started"
                     >
-                      Guarantee Booking
+                      Get Started
                     </Button>
-                    <span className="text-xs text-muted-foreground mt-1">RSVP (pre-pay Reservation)</span>
+                    <span className="text-xs text-muted-foreground mt-1">Request a free consultation</span>
                   </div>
                 </div>
               )}
@@ -591,7 +591,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                 </Button>
               </div>
               <p className="text-xs text-center text-muted-foreground mt-2">
-                powered by <a href="https://resto.restaurant" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Resto.</a>
+                powered by <a href="https://indexflow.io" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">indexFlow</a>
               </p>
             </div>
           </div>
@@ -605,10 +605,10 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                 setTimeout(() => handleQuickReservation(), 100);
               }}
               className="text-sm font-medium hover:bg-gray-100 transition-all flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-xl ring-1 ring-black/10"
-              data-testid="button-closed-reservation"
+              data-testid="button-closed-consultation"
             >
               <Calendar className="w-4 h-4 text-black" />
-              <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent font-semibold">Make a Reservation</span>
+              <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent font-semibold">Schedule Consultation</span>
             </button>
           )}
           <Button

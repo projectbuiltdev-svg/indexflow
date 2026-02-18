@@ -124,8 +124,8 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
     : `/locations/${location.slug}`;
 
   const seoKeywords = service
-    ? `${displayService.name.toLowerCase()} booking software ${location.city}, ${displayService.name.toLowerCase()} reservation system ${location.city}, AI booking ${location.city}, hospitality software ${location.country}`
-    : `restaurant booking software ${location.city}, hospitality reservation system ${location.city}, AI concierge ${location.city}, booking software ${location.country}`;
+    ? `${displayService.name.toLowerCase()} booking software ${location.city}, ${displayService.name.toLowerCase()} reservation system ${location.city}, AI booking ${location.city}, booking software ${location.country}`
+    : `restaurant booking software ${location.city}, reservation system ${location.city}, AI concierge ${location.city}, booking software ${location.country}`;
 
   return (
     <Layout>
@@ -287,10 +287,10 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
           <div className="container max-w-6xl mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                How Resto Helps {displayService.namePlural} in {location.city}
+                How indexFlow Helps {displayService.namePlural} in {location.city}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Our AI-powered platform is designed specifically for the hospitality industry.
+                Our AI-powered platform is designed specifically for all businesses.
               </p>
             </div>
 
@@ -386,7 +386,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 Pricing for {location.city} {displayService.namePlural}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Transparent, flat-rate pricing with no hidden fees. Choose the plan that fits your venue.
+                Transparent, flat-rate pricing with no hidden fees. Choose the plan that fits your business.
               </p>
             </div>
 
@@ -509,7 +509,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   Ready to Transform Your {location.city} {displayService.name}?
                 </h2>
                 <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-                  Join hundreds of hospitality businesses using Resto to streamline operations, 
+                  Join hundreds of businesses using indexFlow to streamline operations, 
                   reduce no-shows, and grow revenue.
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -553,7 +553,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 Booking Solutions by Venue Type
               </h2>
               <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-                Explore our specialized solutions for different hospitality businesses in {location.city}.
+                Explore our specialized solutions for different types of businesses in {location.city}.
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {serviceTypes.map((svc) => {
@@ -633,7 +633,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
         <section className="py-16" data-testid="learn-more-section">
           <div className="container max-w-6xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-center mb-8">
-              Learn More About Resto
+              Learn More About indexFlow
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link href="/how-it-works">
@@ -659,7 +659,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   <CardContent className="p-5 text-center">
                     <Star className="h-8 w-8 text-primary mx-auto mb-3" />
                     <h3 className="font-semibold mb-1">Website Templates</h3>
-                    <p className="text-sm text-muted-foreground">Beautiful designs for your venue</p>
+                    <p className="text-sm text-muted-foreground">Beautiful designs for your business</p>
                   </CardContent>
                 </Card>
               </Link>

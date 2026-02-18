@@ -8,7 +8,7 @@ const sections = [
   {
     icon: FileText,
     title: "1. Service Agreement",
-    content: `By engaging Resto.restaurant to build and manage your venue's booking website, you agree to these Terms of Service. These terms govern the relationship between Resto.restaurant ("we", "us", "our") and your hospitality venue ("you", "your", "client").
+    content: `By engaging indexFlow to build and manage your business's booking website, you agree to these Terms of Service. These terms govern the relationship between indexFlow ("we", "us", "our") and your business ("you", "your", "client").
 
 Our services include website design and development, booking system integration, voice and text widget deployment, hosting, maintenance, and ongoing support as specified in your service agreement.`,
   },
@@ -20,7 +20,7 @@ Our services include website design and development, booking system integration,
 • Provide accurate business information for website content and configuration
 • Maintain valid payment methods for subscription and usage-based fees
 • Respond to reasonable requests for information or approvals in a timely manner
-• Comply with applicable laws regarding your venue's operations and guest data
+• Comply with applicable laws regarding your business's operations and guest data
 • Notify us promptly of any issues or required changes to your booking system
 • Not use our services for any unlawful purposes`,
   },
@@ -45,7 +45,7 @@ Response times: Critical issues within 2 hours, standard issues within 1 busines
   {
     icon: Shield,
     title: "5. Data & Intellectual Property",
-    content: `Your venue's content (menus, photos, descriptions) remains your property. We retain ownership of our platform, templates, and technology.
+    content: `Your business's content (menus, photos, descriptions) remains your property. We retain ownership of our platform, templates, and technology.
 
 You grant us a license to use your content and branding to build and display your website. We grant you a license to use the booking system and widgets for the duration of our agreement.
 
@@ -65,7 +65,7 @@ Upon termination, we can provide an export of your booking data in standard form
   {
     icon: AlertTriangle,
     title: "7. Limitation of Liability",
-    content: `Resto.restaurant is not liable for indirect, incidental, or consequential damages arising from use of our services, including lost revenue from booking system downtime.
+    content: `indexFlow is not liable for indirect, incidental, or consequential damages arising from use of our services, including lost revenue from booking system downtime.
 
 Our total liability is limited to fees paid in the 12 months preceding any claim. We are not responsible for third-party services (Twilio, payment processors) beyond reasonable integration efforts.
 
@@ -84,7 +84,7 @@ We may update these terms with 30 days notice. Continued use after changes take 
 
 export default function Terms() {
   useEffect(() => {
-    document.title = "Terms of Service | Resto.Restaurant - Hospitality Booking Platform";
+    document.title = "Terms of Service | indexFlow - Hospitality Booking Platform";
   }, []);
 
   return (
@@ -96,7 +96,7 @@ export default function Terms() {
             Terms of <span className="text-primary">Service</span>
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            These terms govern the relationship between Resto.restaurant and our hospitality venue clients.
+            These terms govern the relationship between indexFlow and our business clients.
           </p>
           <p className="text-sm text-muted-foreground mt-4">Last updated: January 2026</p>
         </div>
@@ -131,14 +131,14 @@ export default function Terms() {
                 If you have questions about these Terms of Service, please contact us:
               </p>
               <div className="text-sm space-y-1">
-                <p><strong>Email:</strong> legal@resto.restaurant</p>
+                <p><strong>Email:</strong> legal@indexflow.io</p>
               </div>
             </CardContent>
           </Card>
 
           <div className="mt-8 text-center text-sm text-muted-foreground">
             <p>
-              By engaging Resto.restaurant for your venue's booking infrastructure, 
+              By engaging indexFlow for your business's booking infrastructure, 
               you acknowledge that you have read, understood, and agree to these Terms of Service.
             </p>
           </div>

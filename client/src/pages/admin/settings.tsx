@@ -24,7 +24,7 @@ export default function AdminSettings() {
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="general" data-testid="tab-general">General</TabsTrigger>
-          <TabsTrigger value="venue" data-testid="tab-venue">Venue Settings</TabsTrigger>
+          <TabsTrigger value="workspace" data-testid="tab-workspace">Workspace Settings</TabsTrigger>
           <TabsTrigger value="api" data-testid="tab-api">API Keys</TabsTrigger>
           <TabsTrigger value="seo" data-testid="tab-seo">SEO</TabsTrigger>
           <TabsTrigger value="ai" data-testid="tab-ai">AI Providers</TabsTrigger>
@@ -40,11 +40,11 @@ export default function AdminSettings() {
             <CardContent className="space-y-4">
               <div className="grid gap-2">
                 <Label htmlFor="company-name">Company Name</Label>
-                <Input id="company-name" defaultValue="Resto.Restaurant" data-testid="input-company-name" />
+                <Input id="company-name" defaultValue="indexFlow" data-testid="input-company-name" />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="support-email">Support Email</Label>
-                <Input id="support-email" defaultValue="support@resto.restaurant" data-testid="input-support-email" />
+                <Input id="support-email" defaultValue="support@indexflow.io" data-testid="input-support-email" />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="support-phone">Support Phone</Label>
@@ -83,13 +83,13 @@ export default function AdminSettings() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="venue" className="space-y-6">
+        <TabsContent value="workspace" className="space-y-6">
           <Card>
             <CardHeader className="flex flex-row items-center gap-2">
               <Clock className="h-5 w-5 text-muted-foreground" />
               <div>
                 <CardTitle>Business Hours</CardTitle>
-                <CardDescription>Default business hours for new venues</CardDescription>
+                <CardDescription>Default business hours for new workspaces</CardDescription>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -102,7 +102,7 @@ export default function AdminSettings() {
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium">Allow Custom Hours Per Venue</p>
+                  <p className="font-medium">Allow Custom Hours Per Workspace</p>
                   <p className="text-sm text-muted-foreground">Clients can set their own business hours</p>
                 </div>
                 <Switch defaultChecked data-testid="switch-custom-hours" />
@@ -147,7 +147,7 @@ export default function AdminSettings() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="default-tables">Default Tables per Venue</Label>
+                  <Label htmlFor="default-tables">Default Resources per Workspace</Label>
                   <Input id="default-tables" type="number" defaultValue="15" data-testid="input-default-tables" />
                 </div>
                 <div className="grid gap-2">
@@ -175,7 +175,7 @@ export default function AdminSettings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-2">
-                <Label htmlFor="max-team">Max Team Members per Venue</Label>
+                <Label htmlFor="max-team">Max Team Members per Workspace</Label>
                 <Input id="max-team" type="number" defaultValue="10" data-testid="input-max-team" />
               </div>
               <div className="flex items-center justify-between">
@@ -207,7 +207,7 @@ export default function AdminSettings() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Show "Powered By" Badge</p>
-                  <p className="text-sm text-muted-foreground">Display Resto.Restaurant branding on widget</p>
+                  <p className="text-sm text-muted-foreground">Display indexFlow branding on widget</p>
                 </div>
                 <Switch defaultChecked data-testid="switch-powered-by" />
               </div>
@@ -281,7 +281,7 @@ export default function AdminSettings() {
               <TrendingUp className="h-5 w-5 text-muted-foreground" />
               <div>
                 <CardTitle>DataForSEO</CardTitle>
-                <CardDescription>Rank Tracker API credentials (Resto-managed, shared across all clients)</CardDescription>
+                <CardDescription>Rank Tracker API credentials (Platform-managed, shared across all clients)</CardDescription>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -513,7 +513,7 @@ export default function AdminSettings() {
             <CardContent className="space-y-4">
               <div className="grid gap-2">
                 <Label htmlFor="notification-email">Notification Email</Label>
-                <Input id="notification-email" defaultValue="admin@resto.restaurant" data-testid="input-notification-email" />
+                <Input id="notification-email" defaultValue="admin@indexflow.io" data-testid="input-notification-email" />
               </div>
               <div className="flex items-center justify-between">
                 <div>

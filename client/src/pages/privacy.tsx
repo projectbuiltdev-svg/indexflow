@@ -10,10 +10,10 @@ const sections = [
     title: "Information We Collect",
     content: [
       "Business contact information (name, email, phone) when you inquire about our services",
-      "Company and venue information to understand your needs and provide tailored solutions",
+      "Company and business information to understand your needs and provide tailored solutions",
       "Communication history when you interact with our sales and support teams",
       "Usage data from client dashboards to improve our platform and services",
-      "Technical data necessary to deploy and maintain your venue's website and booking system",
+      "Technical data necessary to deploy and maintain your business's website and booking system",
     ],
   },
   {
@@ -21,7 +21,7 @@ const sections = [
     title: "How We Use Your Information",
     content: [
       "Responding to inquiries and providing demos of our platform",
-      "Setting up and managing your venue's website and booking infrastructure",
+      "Setting up and managing your business's website and booking infrastructure",
       "Providing technical support and maintenance for your systems",
       "Sending updates about new features, improvements, and relevant industry news",
       "Improving our services based on aggregated usage patterns and feedback",
@@ -32,7 +32,7 @@ const sections = [
     title: "Data Protection & Security",
     content: [
       "All data transmissions are encrypted using industry-standard SSL/TLS protocols",
-      "Client venue data is stored securely with access controls and regular backups",
+      "Client business data is stored securely with access controls and regular backups",
       "We implement strict access controls - only authorized team members access client data",
       "Regular security audits and vulnerability assessments are conducted",
       "We never sell your business information or your guests' data to third parties",
@@ -53,7 +53,7 @@ const sections = [
 
 export default function Privacy() {
   useEffect(() => {
-    document.title = "Privacy Policy | Resto.Restaurant - Hospitality Booking Platform";
+    document.title = "Privacy Policy | indexFlow - Hospitality Booking Platform";
   }, []);
 
   return (
@@ -65,7 +65,7 @@ export default function Privacy() {
             Privacy <span className="text-primary">Policy</span>
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            We take the privacy of our clients and their venue data seriously. This policy explains how we collect, use, and protect information.
+            We take the privacy of our clients and their business data seriously. This policy explains how we collect, use, and protect information.
           </p>
           <p className="text-sm text-muted-foreground mt-4">Last updated: January 2026</p>
         </div>
@@ -79,7 +79,7 @@ export default function Privacy() {
               <div>
                 <h3 className="font-semibold mb-1">Summary</h3>
                 <p className="text-sm text-muted-foreground">
-                  Resto.restaurant collects information necessary to provide our website building 
+                  indexFlow collects information necessary to provide our website building 
                   and booking management services. We protect your business data with industry-standard 
                   security and never sell your information to third parties.
                 </p>
@@ -122,12 +122,12 @@ export default function Privacy() {
                   <h2 className="text-xl font-semibold mb-4">Guest Data Processing</h2>
                   <div className="space-y-3 text-sm text-muted-foreground">
                     <p>
-                      When we build and manage booking systems for your venue, guest reservation data 
+                      When we build and manage booking systems for your business, guest reservation data 
                       is collected and processed on your behalf. You remain the data controller for 
                       your guests' information, and we act as a data processor.
                     </p>
                     <p>
-                      <strong className="text-foreground">Your responsibilities:</strong> Ensure your venue's privacy policy informs guests about data collection
+                      <strong className="text-foreground">Your responsibilities:</strong> Ensure your business's privacy policy informs guests about data collection
                     </p>
                     <p>
                       <strong className="text-foreground">Our responsibilities:</strong> Securely store and process guest data only as instructed by you
@@ -148,7 +148,7 @@ export default function Privacy() {
                 If you have questions about this Privacy Policy or how we handle data, please contact us:
               </p>
               <div className="text-sm space-y-1">
-                <p><strong>Email:</strong> privacy@resto.restaurant</p>
+                <p><strong>Email:</strong> privacy@indexflow.io</p>
               </div>
             </CardContent>
           </Card>

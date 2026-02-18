@@ -18,15 +18,15 @@ export type BlogCategory =
   | "Operations & Management";
 
 export const blogCategories: { label: BlogCategory; slug: string; description: string }[] = [
-  { label: "Booking Systems", slug: "booking-systems", description: "Reservation platforms, booking software, and system reviews for hospitality venues." },
+  { label: "Booking Systems", slug: "booking-systems", description: "Reservation platforms, booking software, and system reviews for all businesses." },
   { label: "AI & Automation", slug: "ai-automation", description: "How AI and automation are transforming restaurant, cafe, bar, and hotel bookings." },
   { label: "Voice & SMS", slug: "voice-sms", description: "Voice booking, SMS confirmations, reminders, and communication automation." },
   { label: "Website & Design", slug: "website-design", description: "Restaurant website design, builders, templates, and online presence tips." },
-  { label: "Payments & Deposits", slug: "payments-deposits", description: "Prepaid reservations, deposit systems, and payment integration for hospitality." },
+  { label: "Payments & Deposits", slug: "payments-deposits", description: "Prepaid reservations, deposit systems, and payment integration for your business." },
   { label: "Comparisons", slug: "comparisons", description: "Side-by-side comparisons, alternatives, and reviews of booking platforms." },
   { label: "Pricing & Cost", slug: "pricing-cost", description: "Cost breakdowns, pricing guides, and ROI analysis for booking solutions." },
   { label: "Industry Guides", slug: "industry-guides", description: "In-depth guides for restaurants, cafes, bars, hotels, and multi-location businesses." },
-  { label: "Local Guides", slug: "local-guides", description: "City-specific booking and hospitality technology guides." },
+  { label: "Local Guides", slug: "local-guides", description: "City-specific booking and business technology guides." },
   { label: "Operations & Management", slug: "operations-management", description: "Booking management, table management, and operational efficiency." },
 ];
 
@@ -72,8 +72,8 @@ function apiPostToBlogPost(p: ApiPostsResponse["posts"][number], idx: number): B
     id: p.slug + "-" + idx,
     slug: p.slug,
     title: p.title,
-    excerpt: p.description || `Read our latest insights on ${catLabel.toLowerCase()} for hospitality businesses.`,
-    author: "Resto Editorial",
+    excerpt: p.description || `Read our latest insights on ${catLabel.toLowerCase()} for your business.`,
+    author: "indexFlow Editorial",
     date: pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
     readTime: `${readMin} min read`,
     category: catLabel,
@@ -134,7 +134,7 @@ function EditorialStyle({ posts, activeCategory }: { posts: BlogPost[]; activeCa
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center mb-2">
             <h1 className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground" data-testid="text-blog-heading">
-              The Resto Journal
+              The indexFlow Journal
             </h1>
           </div>
         </div>
@@ -214,7 +214,7 @@ function MagazineStyle({ posts, activeCategory }: { posts: BlogPost[]; activeCat
     <div className="min-h-[60vh]">
       <section className="bg-zinc-900 dark:bg-zinc-950 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between gap-4">
-          <h1 className="text-lg font-bold tracking-tight" data-testid="text-blog-heading">Resto / Insights</h1>
+          <h1 className="text-lg font-bold tracking-tight" data-testid="text-blog-heading">indexFlow / Insights</h1>
           <span className="text-xs opacity-50 uppercase tracking-widest">Hospitality Intelligence</span>
         </div>
       </section>
@@ -276,7 +276,7 @@ function MinimalStyle({ posts, activeCategory }: { posts: BlogPost[]; activeCate
       <section className="py-16 lg:py-24">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl lg:text-4xl font-light tracking-tight mb-3" data-testid="text-blog-heading">Writing</h1>
-          <p className="text-muted-foreground text-sm">Ideas and analysis on hospitality technology</p>
+          <p className="text-muted-foreground text-sm">Ideas and analysis on booking systems and SEO</p>
         </div>
       </section>
 
@@ -333,7 +333,7 @@ function ClassicStyle({ posts, activeCategory }: { posts: BlogPost[]; activeCate
     <div className="bg-amber-50/30 dark:bg-transparent min-h-[60vh]">
       <section className="border-b border-amber-200/60 dark:border-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center">
-          <h1 className="text-2xl font-serif font-bold tracking-tight italic" data-testid="text-blog-heading">The Resto Review</h1>
+          <h1 className="text-2xl font-serif font-bold tracking-tight italic" data-testid="text-blog-heading">The indexFlow Review</h1>
           <div className="w-20 h-px bg-amber-800/20 dark:bg-foreground/30 mx-auto mt-3" />
         </div>
       </section>
@@ -394,7 +394,7 @@ function GridStyle({ posts, activeCategory }: { posts: BlogPost[]; activeCategor
     <div className="bg-slate-50/60 dark:bg-transparent min-h-[60vh]">
       <section className="py-8 lg:py-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-sm font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-1" data-testid="text-blog-heading">Resto Blog</h1>
+          <h1 className="text-sm font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-1" data-testid="text-blog-heading">indexFlow Blog</h1>
           <p className="text-2xl lg:text-3xl font-bold tracking-tight">Latest from our team</p>
         </div>
       </section>
@@ -577,11 +577,11 @@ export default function Blog() {
   const [blogStyle, setBlogStyle] = useState<BlogStyle>("editorial");
 
   const { data, isLoading } = useQuery<ApiPostsResponse>({
-    queryKey: ["/api/public/blog/posts?domain=resto.restaurant"],
+    queryKey: ["/api/public/blog/posts?domain=indexflow.io"],
   });
 
   useEffect(() => {
-    document.title = "Blog | Resto.Restaurant - Hospitality Booking Insights";
+    document.title = "Blog | indexFlow - Hospitality Booking Insights";
   }, []);
 
   useEffect(() => {
@@ -634,7 +634,7 @@ export default function Blog() {
       <section className="py-12 lg:py-16 border-t border-border">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-xl font-bold mb-2">Ready to stop missing bookings?</h2>
-          <p className="text-sm text-muted-foreground mb-5">See how Resto can automate your booking process and free up your staff.</p>
+          <p className="text-sm text-muted-foreground mb-5">See how indexFlow can automate your booking process and free up your staff.</p>
           <Link href="/contact" data-testid="link-blog-cta">
             <Button className="gap-2" data-testid="button-blog-cta">
               Get Started <ArrowRight className="w-4 h-4" />

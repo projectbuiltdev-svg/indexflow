@@ -17,7 +17,7 @@ const cmsPartners = [
 
 export default function DemoCMSLogos() {
   useEffect(() => {
-    document.title = "CMS Integrations Demo - Resto";
+    document.title = "CMS Integrations Demo - indexFlow";
   }, []);
 
   return (

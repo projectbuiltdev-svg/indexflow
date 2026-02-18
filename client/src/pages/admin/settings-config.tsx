@@ -12,18 +12,18 @@ const stats = [
 ];
 
 const featureFlags = [
-  { name: "ai_voice_booking", label: "AI Voice Booking", description: "Enable AI-powered voice booking for agencies", enabled: true },
+  { name: "ai_voice_leads", label: "AI Voice Leads", description: "Enable AI-powered voice lead capture for agencies", enabled: true },
   { name: "seo_local_grid", label: "Local SEO Grid", description: "Local search grid tracking feature", enabled: true },
   { name: "content_ai_writer", label: "AI Content Writer", description: "AI-powered blog and content generation", enabled: true },
   { name: "multi_language", label: "Multi-Language Support", description: "Multi-language website content", enabled: true },
-  { name: "room_bookings", label: "Room Bookings", description: "Hotel room booking system", enabled: true },
+  { name: "project_tracking", label: "Project Tracking", description: "Client project management system", enabled: true },
   { name: "advanced_analytics", label: "Advanced Analytics", description: "Detailed analytics with custom reports", enabled: false },
   { name: "api_v2", label: "API v2 Access", description: "Next-gen API endpoints for integrations", enabled: false },
   { name: "white_label", label: "White Label Mode", description: "Full white-label branding for agencies", enabled: false },
 ];
 
 const limits = [
-  { name: "Max Venues per Agency", starter: "5", professional: "15", enterprise: "Unlimited" },
+  { name: "Max Workspaces per Agency", starter: "5", professional: "15", enterprise: "Unlimited" },
   { name: "Max Users per Agency", starter: "10", professional: "25", enterprise: "Unlimited" },
   { name: "AI Calls per Month", starter: "100", professional: "500", enterprise: "2,000" },
   { name: "Keywords Tracked", starter: "50", professional: "200", enterprise: "1,000" },

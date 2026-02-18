@@ -7,7 +7,6 @@ import {
   Globe,
   MessageSquare,
   Phone,
-  Bed,
   Headset,
   Download,
   Volume2,
@@ -22,8 +21,8 @@ import { AdminLayout } from "@/components/admin-layout";
 const stats = [
   { label: "Total Clients", value: "47", change: "+3 this month", icon: Building2 },
   { label: "Active Subscriptions", value: "43", change: "$12,857/mo", icon: CreditCard },
-  { label: "Table Bookings", value: "2,847", change: "+234 this week", icon: BarChart3 },
-  { label: "Room Bookings", value: "156", change: "+18 this week", icon: Bed },
+  { label: "Total Leads", value: "2,847", change: "+234 this week", icon: BarChart3 },
+  { label: "Active Projects", value: "156", change: "+18 this week", icon: BarChart3 },
   { label: "AI Calls Handled", value: "1,293", change: "This month", icon: Phone },
   { label: "SMS Sent", value: "3,847", change: "+312 this week", icon: MessageSquare },
   { label: "Widget Voice", value: "179", change: "+47 this week", icon: Volume2 },
@@ -33,10 +32,10 @@ const stats = [
 ];
 
 const recentClients = [
-  { name: "La Bella Italia", plan: "Complete Solution", status: "Active", date: "Jan 28, 2026" },
-  { name: "The Golden Dragon", plan: "Virtual Concierge", status: "Active", date: "Jan 25, 2026" },
-  { name: "Ocean View Bistro", plan: "Complete Solution", status: "Pending Setup", date: "Jan 24, 2026" },
-  { name: "Mountain Lodge Hotel", plan: "Complete Solution", status: "Active", date: "Jan 20, 2026" },
+  { name: "Acme Digital", plan: "Complete Solution", status: "Active", date: "Jan 28, 2026" },
+  { name: "Dragon Media", plan: "Virtual Concierge", status: "Active", date: "Jan 25, 2026" },
+  { name: "Coastal SEO", plan: "Complete Solution", status: "Pending Setup", date: "Jan 24, 2026" },
+  { name: "Summit Marketing", plan: "Complete Solution", status: "Active", date: "Jan 20, 2026" },
 ];
 
 export default function AdminDashboard() {

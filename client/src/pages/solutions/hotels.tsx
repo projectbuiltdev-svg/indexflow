@@ -106,7 +106,7 @@ export default function HotelsSolution() {
             <p className="text-lg text-muted-foreground mb-8">
               From boutique hotels to vacation rentals, reduce OTA dependency with 
               a stunning direct booking experience. Our AI concierge handles guest 
-              inquiries while you focus on hospitality.
+              inquiries while you focus on your business.
             </p>
             <div className="flex items-center justify-center gap-4">
               <Link href="/contact">
@@ -231,7 +231,7 @@ export default function HotelsSolution() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Boost Direct Bookings?</h2>
           <p className="text-muted-foreground mb-8">
-            Join hotels worldwide using Resto to reduce OTA dependency and increase revenue.
+            Join hotels worldwide using indexFlow to reduce OTA dependency and increase revenue.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-hotel-bottom-cta">

@@ -27,7 +27,7 @@ const integrationCards = [
   },
   {
     name: "Twilio Voice",
-    description: "AI-powered phone system that answers calls, takes reservations, and provides venue information 24/7.",
+    description: "AI-powered phone system that answers calls, takes reservations, and provides business information 24/7.",
     icon: Phone,
     color: "text-green-500",
     bgColor: "bg-green-500/10",
@@ -214,7 +214,7 @@ export default function IntegrationsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Connect Your Venue?</h2>
           <p className="text-muted-foreground mb-8">
-            See how Stripe, PayPal, and Twilio work together to power your hospitality business.
+            See how Stripe, PayPal, and Twilio work together to power your business.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-integrations-bottom-cta">

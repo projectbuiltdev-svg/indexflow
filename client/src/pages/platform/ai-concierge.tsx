@@ -52,7 +52,7 @@ const features = [
   {
     icon: BookOpen,
     title: "Knowledge Base Training",
-    description: "Train the AI on your menu, policies, and FAQs so it gives accurate, venue-specific answers every time.",
+    description: "Train the AI on your menu, policies, and FAQs so it gives accurate, business-specific answers every time.",
     color: "text-indigo-500",
     bgColor: "bg-indigo-500/10",
   },
@@ -172,7 +172,7 @@ export default function AiConciergePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Add AI Booking to Your Site?</h2>
           <p className="text-muted-foreground mb-8">
-            Get a live demo of the AI concierge widget customized for your venue.
+            Get a live demo of the AI concierge widget customized for your business.
           </p>
           <Link href="/contact">
             <Button size="lg" className="gap-2" data-testid="button-concierge-bottom-cta">

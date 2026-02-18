@@ -163,13 +163,13 @@ export default function SettingsWidgetCode() {
 
   const currentCms = cmsOptions.find(cms => cms.id === selectedCms) || cmsOptions[0];
 
-  const scriptCode = `<!-- Resto Booking Widget -->
-<script src="https://resto.restaurant/widget.js" data-venue-id="${workspaceId}"></script>
-<div id="resto-booking-widget"></div>`;
+  const scriptCode = `<!-- indexFlow Widget -->
+<script src="https://indexflow.io/widget.js" data-venue-id="${workspaceId}"></script>
+<div id="indexflow-widget"></div>`;
 
-  const iframeCode = `<!-- Resto Booking Widget -->
+  const iframeCode = `<!-- indexFlow Widget -->
 <iframe 
-  src="https://resto.restaurant/widget/${workspaceId}" 
+  src="https://indexflow.io/widget/${workspaceId}" 
   width="100%" 
   height="600" 
   frameborder="0"
@@ -208,7 +208,7 @@ export default function SettingsWidgetCode() {
             Widget Code
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Add the booking widget to your existing website
+            Add the AI widget to your existing website
           </p>
         </div>
 
@@ -299,7 +299,7 @@ export default function SettingsWidgetCode() {
                 ))}
               </ol>
               <p className="text-xs sm:text-sm text-muted-foreground mt-4 sm:mt-6 p-3 bg-muted rounded-md">
-                The widget will automatically display your venue's availability based on your 
+                The widget will automatically display your workspace's availability based on your 
                 business hours, table settings, and closure dates.
               </p>
             </CardContent>
@@ -357,7 +357,7 @@ export default function SettingsWidgetCode() {
                   <h3 className="font-semibold mb-1 text-sm sm:text-base">Need Help?</h3>
                   <p className="text-xs sm:text-sm text-muted-foreground">
                     Having trouble? Contact us at{" "}
-                    <span className="text-primary break-all">support@resto.restaurant</span>
+                    <span className="text-primary break-all">support@indexflow.io</span>
                   </p>
                 </div>
               </div>

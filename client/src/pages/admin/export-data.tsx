@@ -29,20 +29,20 @@ const exportTypes = [
     bgColor: "bg-blue-500/10",
   },
   {
-    id: "bookings",
-    title: "All Bookings",
-    description: "Export platform-wide table reservations across all clients",
+    id: "leads",
+    title: "All Leads",
+    description: "Export platform-wide lead data across all clients",
     icon: Calendar,
-    fields: ["Client", "Date", "Time", "Guest Name", "Party Size", "Status", "Source"],
+    fields: ["Client", "Date", "Time", "Contact Name", "Project Size", "Status", "Source"],
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
   {
-    id: "room-bookings",
-    title: "Room Bookings",
-    description: "Export all hotel room reservations across all hotel clients",
-    icon: Bed,
-    fields: ["Client", "Guest", "Room Type", "Check-in", "Check-out", "Guests", "Status", "Total"],
+    id: "projects",
+    title: "Active Projects",
+    description: "Export all active projects across all clients",
+    icon: BarChart3,
+    fields: ["Client", "Contact", "Project Type", "Start Date", "End Date", "Team Size", "Status", "Total"],
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
@@ -139,7 +139,7 @@ const exportTypes = [
   {
     id: "closures",
     title: "Scheduled Closures",
-    description: "Export venue closure dates for holidays and special events across all clients",
+    description: "Export workspace closure dates for holidays and special events across all clients",
     icon: CalendarOff,
     fields: ["Client", "Start Date", "End Date", "Reason", "Type", "Status", "Created"],
     color: "text-slate-500",
@@ -150,7 +150,7 @@ const exportTypes = [
     title: "Platform Analytics",
     description: "Export platform-wide performance metrics and usage statistics",
     icon: BarChart3,
-    fields: ["Date", "Total Bookings", "AI Calls", "Widget Interactions", "Active Users", "Revenue"],
+    fields: ["Date", "Total Leads", "AI Calls", "Widget Interactions", "Active Users", "Revenue"],
     color: "text-lime-500",
     bgColor: "bg-lime-500/10",
   },
@@ -158,7 +158,7 @@ const exportTypes = [
 
 const recentExports = [
   { name: "all_clients_feb_2026.csv", type: "Client Data", date: "Feb 10, 2026", rows: 47 },
-  { name: "platform_bookings_feb_2026.csv", type: "All Bookings", date: "Feb 9, 2026", rows: 2847 },
+  { name: "platform_leads_feb_2026.csv", type: "All Leads", date: "Feb 9, 2026", rows: 2847 },
   { name: "rank_tracker_feb_2026.csv", type: "Rank Tracker", date: "Feb 8, 2026", rows: 342 },
   { name: "website_changes_feb_2026.csv", type: "Website Changes", date: "Feb 7, 2026", rows: 89 },
   { name: "billing_q1_2026.csv", type: "Billing & Revenue", date: "Feb 5, 2026", rows: 516 },
@@ -247,11 +247,11 @@ export default function AdminExportData() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Clients</SelectItem>
-                  <SelectItem value="la-bella">La Bella Italia</SelectItem>
-                  <SelectItem value="golden-dragon">The Golden Dragon</SelectItem>
-                  <SelectItem value="ocean-view">Ocean View Bistro</SelectItem>
-                  <SelectItem value="mountain-lodge">Mountain Lodge Hotel</SelectItem>
-                  <SelectItem value="cafe-parisien">Caf&eacute; Parisien</SelectItem>
+                  <SelectItem value="acme-digital">Acme Digital</SelectItem>
+                  <SelectItem value="dragon-media">Dragon Media</SelectItem>
+                  <SelectItem value="coastal-seo">Coastal SEO</SelectItem>
+                  <SelectItem value="summit-marketing">Summit Marketing</SelectItem>
+                  <SelectItem value="metro-creative">Metro Creative</SelectItem>
                 </SelectContent>
               </Select>
             </div>

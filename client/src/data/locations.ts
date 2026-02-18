@@ -235,7 +235,7 @@ export const locations: Location[] = [
     state: "GA",
     country: "USA",
     region: "North America",
-    description: "Southern hospitality meets culinary creativity in the heart of the South.",
+    description: "Southern charm meets culinary creativity in the heart of the South.",
     population: "500K",
     restaurants: 4000,
     restaurantCount: "4,000+",

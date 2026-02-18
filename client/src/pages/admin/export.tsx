@@ -29,18 +29,18 @@ interface ExportCategory {
 
 const exportCategories: ExportCategory[] = [
   {
-    name: "Venues",
+    name: "Workspaces",
     endpoint: "/api/workspaces",
     icon: Building2,
     headers: ["ID", "Name", "Type", "Plan", "Status", "Phone", "Email", "Address"],
     rowMapper: (v) => [String(v.id), String(v.name), String(v.type), String(v.plan), String(v.status), String(v.phone || ""), String(v.email || ""), String(v.address || "")],
   },
   {
-    name: "Reservations",
-    endpoint: "/api/reservations",
+    name: "Analytics",
+    endpoint: "/api/analytics",
     icon: CalendarCheck,
-    headers: ["ID", "Venue ID", "Guest Name", "Email", "Phone", "Party Size", "Date", "Time", "Status"],
-    rowMapper: (r) => [String(r.id), String(r.workspaceId), String(r.guestName), String(r.guestEmail || ""), String(r.guestPhone || ""), String(r.partySize), String(r.date), String(r.time), String(r.status || "")],
+    headers: ["ID", "Workspace ID", "Contact Name", "Email", "Phone", "Project Size", "Date", "Time", "Status"],
+    rowMapper: (r) => [String(r.id), String(r.workspaceId), String(r.contactName), String(r.contactEmail || ""), String(r.contactPhone || ""), String(r.projectSize), String(r.date), String(r.time), String(r.status || "")],
   },
   {
     name: "Contact Messages",
@@ -53,7 +53,7 @@ const exportCategories: ExportCategory[] = [
     name: "Support Tickets",
     endpoint: "/api/support-tickets",
     icon: LifeBuoy,
-    headers: ["ID", "Venue ID", "Subject", "Category", "Priority", "Status", "Date"],
+    headers: ["ID", "Workspace ID", "Subject", "Category", "Priority", "Status", "Date"],
     rowMapper: (t) => [String(t.id), String(t.workspaceId), String(t.subject), String(t.category), String(t.priority), String(t.status), String(t.createdAt || "")],
   },
 ];

@@ -65,12 +65,12 @@ const solutions = [
   {
     icon: Users,
     title: "Enhance Staff Productivity",
-    description: "Free your team from the phone. Let them focus on guests while Resto manages your calls 24/7 and web reservations.",
+    description: "Free your team from the phone. Let them focus on guests while indexFlow manages your calls 24/7 and web reservations.",
   },
   {
     icon: Zap,
     title: "Quick Setup & Dedicated Support",
-    description: "Get started fast and enjoy reliable, ongoing support from people who truly know the hospitality business inside and out.",
+    description: "Get started fast and enjoy reliable, ongoing support from people who truly know the booking and SEO business inside and out.",
   },
 ];
 
@@ -173,7 +173,7 @@ function HeroVideo() {
             allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
             style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "177.78vh", minWidth: "100%", height: "56.25vw", minHeight: "100%", border: 0 }}
-            title="Resto"
+            title="indexFlow"
             data-testid="hero-video"
           />
         </div>
@@ -186,7 +186,7 @@ export default function Home() {
   const [currentVenueIndex, setCurrentVenueIndex] = useState(0);
 
   useEffect(() => {
-    document.title = "Resto - Managed Booking & Website Platform for Hospitality";
+    document.title = "indexFlow - Managed Booking & Website Platform for Hospitality";
   }, []);
 
   useEffect(() => {
@@ -298,7 +298,7 @@ export default function Home() {
               Sound Familiar?
             </h2>
             <p className="text-muted-foreground">
-              Most hospitality venues lose bookings every single day to these common issues.
+              Most businesses lose bookings every single day to these common issues.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -324,7 +324,7 @@ export default function Home() {
             <h2 className="text-3xl lg:text-4xl font-bold">Virtual Concierge</h2>
             <p className="text-lg lg:text-xl text-muted-foreground mb-4">(AI) website booking widget</p>
             <p className="text-muted-foreground">
-              Transform your hospitality experience with Resto
+              Transform your business with indexFlow
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -397,7 +397,7 @@ export default function Home() {
             <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">See How It Works</Badge>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">Watch Our Explainer</h2>
             <p className="text-muted-foreground">
-              See how Resto transforms your hospitality business in under 2 minutes.
+              See how indexFlow transforms your business in under 2 minutes.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto">
@@ -412,7 +412,7 @@ export default function Home() {
                   allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
                   style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
-                  title="Resto Video 2"
+                  title="indexFlow Video 2"
                   data-testid="explainer-video-2"
                 />
               </div>
@@ -678,7 +678,7 @@ export default function Home() {
                     It answers, replies and books pre-paid reservations; your guests receive instant SMS confirmations + email reminders.
                   </p>
                   <p>
-                    The venue gets alerted to an RSVP confirmation, and your front desk immediately processes the booking.
+                    Your workspace gets alerted to an RSVP confirmation, and your front desk immediately processes the booking.
                   </p>
                   <p className="font-semibold text-foreground">
                     AI Concierge never sleeps, never gets tired & never misses a booking! Even when your front desk is closed.
@@ -693,7 +693,7 @@ export default function Home() {
       <section className="py-16 lg:py-24 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">Why Choose Resto</Badge>
+            <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">Why Choose indexFlow</Badge>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
               The Smart Choice
             </h2>
@@ -761,7 +761,7 @@ export default function Home() {
               Bespoke Web Design
             </h2>
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Your venue is unique and your website should be too. We craft custom designs that capture your brand's personality, and sets you apart from the competition.
+              Your business is unique and your website should be too. We craft custom designs that capture your brand's personality, and sets you apart from the competition.
             </p>
             <Link href="/contact">
               <Button size="lg" className="gap-2 bg-gradient-to-r from-primary via-blue-500 to-purple-500 hover:from-primary/90 hover:via-blue-500/90 hover:to-purple-500/90 text-white px-8 py-6 text-lg font-semibold shadow-lg" data-testid="button-bespoke-design">
@@ -893,7 +893,7 @@ export default function Home() {
             </Badge>
             <h2 className="text-3xl font-bold mb-4">Serving Hospitality Businesses Worldwide</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              From New York to Tokyo, London to Sydney—Resto powers reservations for venues in 50+ major cities.
+              From New York to Tokyo, London to Sydney—indexFlow powers reservations for venues in 50+ major cities.
             </p>
           </div>
           

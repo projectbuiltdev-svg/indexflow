@@ -28,7 +28,7 @@ export default function SettingsResources() {
   const { toast } = useToast();
 
   useEffect(() => {
-    document.title = "Resources - Resto Dashboard";
+    document.title = "Resources - indexFlow Dashboard";
   }, []);
 
   const { data: resources = [], isLoading } = useQuery<Resource[]>({

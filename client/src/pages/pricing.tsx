@@ -16,8 +16,8 @@ const pricingSections = [
 
 const addOns = [
   {
-    title: "Hospitality Websites",
-    description: "Custom-designed websites built for restaurants, hotels, and venues",
+    title: "Custom Websites",
+    description: "Custom-designed websites built for restaurants, hotels, and businesses",
     icon: Globe,
     href: "/platform/hospitality-websites",
     color: "text-blue-500",

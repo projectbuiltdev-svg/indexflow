@@ -37,11 +37,11 @@ export default function AdminAgencyDetail() {
         <Card>
           <CardHeader>
             <CardTitle>Workspaces</CardTitle>
-            <CardDescription>Venues managed by this agency</CardDescription>
+            <CardDescription>Workspaces managed by this agency</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {["La Bella Italia", "The Golden Dragon", "Ocean View Bistro", "Skyline Rooftop Bar"].map((name) => (
+              {["Acme Digital", "Dragon Media", "Coastal SEO", "Pinnacle Digital"].map((name) => (
                 <div key={name} className="flex items-center justify-between gap-2 flex-wrap">
                   <span className="font-medium">{name}</span>
                   <Badge variant="default">Active</Badge>
@@ -59,9 +59,9 @@ export default function AdminAgencyDetail() {
           <CardContent>
             <div className="space-y-3">
               {[
-                { name: "Sarah Chen", role: "Owner", email: "sarah@hospitalitynyc.com" },
-                { name: "Tom Bradley", role: "Admin", email: "tom@hospitalitynyc.com" },
-                { name: "Amy Liu", role: "Editor", email: "amy@hospitalitynyc.com" },
+                { name: "Sarah Chen", role: "Owner", email: "sarah@digitalgrowth.com" },
+                { name: "Tom Bradley", role: "Admin", email: "tom@digitalgrowth.com" },
+                { name: "Amy Liu", role: "Editor", email: "amy@digitalgrowth.com" },
               ].map((user) => (
                 <div key={user.email} className="flex items-center justify-between gap-2 flex-wrap">
                   <div>

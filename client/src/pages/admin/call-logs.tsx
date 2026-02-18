@@ -14,7 +14,7 @@ export default function AdminCallLogs() {
   useWorkspace();
   const [filterWorkspaceId, setFilterWorkspaceId] = useState<string>("all");
 
-  const { data: venues = [] } = useQuery<Workspace[]>({
+  const { data: workspaces = [] } = useQuery<Workspace[]>({
     queryKey: ["/api/workspaces"],
   });
 
@@ -22,7 +22,7 @@ export default function AdminCallLogs() {
     queryKey: ["/api/call-logs"],
   });
 
-  const venueMap = new Map(venues.map((v) => [v.id, v]));
+  const workspaceMap = new Map(workspaces.map((v) => [v.id, v]));
 
   const filteredLogs = filterWorkspaceId === "all"
     ? logs
@@ -37,12 +37,12 @@ export default function AdminCallLogs() {
           <h1 className="text-2xl font-semibold" data-testid="page-title-call-logs">Call Logs</h1>
         </div>
         <Select value={filterWorkspaceId} onValueChange={setFilterWorkspaceId}>
-          <SelectTrigger className="w-[200px]" data-testid="select-filter-venue">
-            <SelectValue placeholder="Filter by venue" />
+          <SelectTrigger className="w-[200px]" data-testid="select-filter-workspace">
+            <SelectValue placeholder="Filter by workspace" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Venues</SelectItem>
-            {venues.map((v) => (
+            <SelectItem value="all">All Workspaces</SelectItem>
+            {workspaces.map((v) => (
               <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
             ))}
           </SelectContent>
@@ -52,7 +52,7 @@ export default function AdminCallLogs() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {filterWorkspaceId !== "all" ? `Call Logs - ${venueMap.get(filterWorkspaceId)?.name}` : "All Call Logs"}
+            {filterWorkspaceId !== "all" ? `Call Logs - ${workspaceMap.get(filterWorkspaceId)?.name}` : "All Call Logs"}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -70,7 +70,7 @@ export default function AdminCallLogs() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Venue</TableHead>
+                  <TableHead>Workspace</TableHead>
                   <TableHead>Caller Phone</TableHead>
                   <TableHead>Duration</TableHead>
                   <TableHead>Status</TableHead>
@@ -82,7 +82,7 @@ export default function AdminCallLogs() {
                 {filteredLogs.map((log) => (
                   <TableRow key={log.id} data-testid={`row-call-log-${log.id}`}>
                     <TableCell className="font-medium">
-                      {venueMap.get(log.workspaceId)?.name || log.workspaceId}
+                      {workspaceMap.get(log.workspaceId)?.name || log.workspaceId}
                     </TableCell>
                     <TableCell className="text-muted-foreground">{log.callerPhone || "-"}</TableCell>
                     <TableCell className="text-muted-foreground">{log.duration ? `${log.duration}s` : "-"}</TableCell>

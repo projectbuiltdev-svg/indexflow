@@ -21,7 +21,7 @@ interface WidgetSetting {
 export default function AdminWidgetConfig() {
   useWorkspace();
 
-  const { data: venues = [], isLoading: venuesLoading } = useQuery<Workspace[]>({
+  const { data: workspaces = [], isLoading: workspacesLoading } = useQuery<Workspace[]>({
     queryKey: ["/api/workspaces"],
   });
 
@@ -29,8 +29,8 @@ export default function AdminWidgetConfig() {
     queryKey: ["/api/widget-settings"],
   });
 
-  const isLoading = venuesLoading || widgetLoading;
-  const venueMap = new Map(venues.map((v) => [v.id, v]));
+  const isLoading = workspacesLoading || widgetLoading;
+  const workspaceMap = new Map(workspaces.map((v) => [v.id, v]));
 
   return (
     <AdminLayout>
@@ -44,7 +44,7 @@ export default function AdminWidgetConfig() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Widget Settings by Venue</CardTitle>
+          <CardTitle>Widget Settings by Workspace</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -61,7 +61,7 @@ export default function AdminWidgetConfig() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Venue</TableHead>
+                  <TableHead>Workspace</TableHead>
                   <TableHead>Enabled</TableHead>
                   <TableHead>Color</TableHead>
                   <TableHead>Position</TableHead>
@@ -72,7 +72,7 @@ export default function AdminWidgetConfig() {
                 {allWidgetSettings.map((ws) => (
                   <TableRow key={ws.id} data-testid={`row-widget-${ws.id}`}>
                     <TableCell className="font-medium">
-                      {venueMap.get(ws.workspaceId)?.name || ws.workspaceId}
+                      {workspaceMap.get(ws.workspaceId)?.name || ws.workspaceId}
                     </TableCell>
                     <TableCell>
                       <Badge variant={ws.isEnabled ? "default" : "outline"}>

@@ -61,9 +61,9 @@ const caseStudies: CaseStudy[] = [
     location: "New York, NY",
     heroStat: "+40%",
     heroLabel: "Revenue Increase",
-    summary: "A family-run Italian restaurant in Manhattan turned missed after-hours calls into booked tables with Resto's AI phone assistant and online booking system.",
+    summary: "A family-run Italian restaurant in Manhattan turned missed after-hours calls into booked tables with indexFlow's AI phone assistant and online booking system.",
     challenge: "La Bella Italia was losing an estimated 15-20 reservation calls per week outside business hours. Their paper-based booking system led to frequent double bookings, and staff spent over 2 hours daily managing phone enquiries instead of serving guests.",
-    solution: "Resto deployed the Complete Solution package including a custom website, AI-powered phone assistant, and online booking widget.",
+    solution: "indexFlow deployed the Complete Solution package including a custom website, AI-powered phone assistant, and online booking widget.",
     solutionBullets: [
       "AI phone assistant handles calls 24/7 in English and Italian",
       "Prepaid reservation feature reduced weekend no-shows",
@@ -91,7 +91,7 @@ const caseStudies: CaseStudy[] = [
     heroLabel: "Direct Bookings",
     summary: "A 45-room boutique hotel in Shibuya increased direct bookings by 35% and reduced OTA dependency by building a modern website with real-time room availability and an AI concierge.",
     challenge: "Sakura Grand was paying 15-22% commission on over 80% of bookings through OTAs. Their outdated website had no real-time availability and phone staff couldn't handle enquiries in both Japanese and English during peak tourist season.",
-    solution: "Resto built a bilingual website with real-time room booking, integrated an AI phone concierge, and implemented SEO targeting tourist search terms.",
+    solution: "indexFlow built a bilingual website with real-time room booking, integrated an AI phone concierge, and implemented SEO targeting tourist search terms.",
     solutionBullets: [
       "Bilingual website with real-time room availability",
       "AI phone concierge fluent in Japanese and English",
@@ -118,13 +118,13 @@ const caseStudies: CaseStudy[] = [
     heroStat: "+70%",
     heroLabel: "Booking Efficiency",
     summary: "A multi-location restaurant group across Dubai unified booking management and AI phone handling across three venues, improving efficiency by 70%.",
-    challenge: "Managing reservations across three locations with separate systems was chaotic. Staff at each venue spent hours coordinating, and guests calling the wrong location were often lost entirely. The brand had no unified online presence.",
-    solution: "Resto's multi-location setup gave Spice Route a single dashboard managing all three venues with intelligent call routing.",
+    challenge: "Managing reservations across three locations with separate systems was chaotic. Staff at each location spent hours coordinating, and guests calling the wrong location were often lost entirely. The brand had no unified online presence.",
+    solution: "indexFlow's multi-location setup gave Spice Route a single dashboard managing all three locations with intelligent call routing.",
     solutionBullets: [
-      "Single dashboard managing all three venues",
+      "Single dashboard managing all three locations",
       "AI phone system routes calls to correct location",
       "Arabic and English language support",
-      "Individual location pages driving bookings to each venue",
+      "Individual location pages driving bookings to each workspace",
     ],
     results: [
       { label: "Booking Efficiency", value: "+70%", icon: Zap },
@@ -147,7 +147,7 @@ const caseStudies: CaseStudy[] = [
     heroLabel: "No-Show Rate",
     summary: "A premium rooftop bar eliminated no-shows entirely with prepaid bookings and resource-based capacity management for different zones.",
     challenge: "Rooftop Social lost an estimated $3,000 per month from no-shows on premium terrace tables. Their booking system couldn't handle different capacity zones (indoor bar, covered terrace, open rooftop) or weather-dependent availability changes.",
-    solution: "Resto configured resource management for three distinct zones with independent capacities and prepaid booking for premium areas.",
+    solution: "indexFlow configured resource management for three distinct zones with independent capacities and prepaid booking for premium areas.",
     solutionBullets: [
       "Three distinct zones with independent capacities",
       "Prepaid bookings for premium terrace tables",
@@ -175,7 +175,7 @@ const caseStudies: CaseStudy[] = [
     heroLabel: "No-Show Rate",
     summary: "A specialty Scandinavian caf\u00e9 with limited seating transformed morning rush operations with pre-orders and SMS confirmations, reducing no-shows to near zero.",
     challenge: "With only 24 seats, every empty reserved table cost Fika real revenue. Morning rushes were chaotic with phone orders mixed with walk-ins, and the single staff member couldn't answer calls while making coffee.",
-    solution: "Resto's widget enabled online pre-ordering for pickup alongside table reservations with smart SMS-based attendance management.",
+    solution: "indexFlow's widget enabled online pre-ordering for pickup alongside table reservations with smart SMS-based attendance management.",
     solutionBullets: [
       "Online pre-ordering for pickup alongside reservations",
       "SMS confirmations and automated reminders",
@@ -351,8 +351,8 @@ export default function CaseStudies() {
   return (
     <Layout>
       <SEO
-        title="Case Studies | Resto.Restaurant"
-        description="In-depth success stories from restaurants, cafes, bars, and hotels using Resto.Restaurant. See the real numbers behind our clients' growth."
+        title="Case Studies | indexFlow"
+        description="In-depth success stories from restaurants, cafes, bars, and hotels using indexFlow. See the real numbers behind our clients' growth."
         canonicalUrl="/case-studies"
       />
 
@@ -377,8 +377,8 @@ export default function CaseStudies() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              See how hospitality businesses around the world transformed their operations,
-              increased revenue, and eliminated no-shows with Resto.Restaurant.
+              See how businesses around the world transformed their operations,
+              increased revenue, and eliminated no-shows with indexFlow.
             </p>
           </div>
 
@@ -435,7 +435,7 @@ export default function CaseStudies() {
                 Ready to become our next success story?
               </h2>
               <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-                Join hundreds of hospitality businesses already growing with Resto.Restaurant.
+                Join hundreds of businesses already growing with indexFlow.
                 Your first consultation is free.
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">

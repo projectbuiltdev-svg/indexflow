@@ -41,7 +41,7 @@ export default function SettingsTwilioSms() {
   
   const [smsEnabled, setSmsEnabled] = useState(true);
   const [smsTemplate, setSmsTemplate] = useState(
-    "Hi {guest_name}! Your reservation at {venue_name} is confirmed for {date} at {time} for {party_size} guests. Reply HELP for assistance or CANCEL to cancel."
+    "Hi {client_name}! Your appointment with {workspace_name} is confirmed for {date} at {time}. Reply HELP for assistance or CANCEL to cancel."
   );
   const [testPhoneNumber, setTestPhoneNumber] = useState("");
 
@@ -59,7 +59,7 @@ export default function SettingsTwilioSms() {
   }, [settings]);
 
   useEffect(() => {
-    document.title = "Twilio SMS Settings | Resto Dashboard";
+    document.title = "Twilio SMS Settings | indexFlow Dashboard";
   }, []);
 
   const connectMutation = useMutation({
@@ -112,7 +112,7 @@ export default function SettingsTwilioSms() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold">Twilio SMS Settings</h1>
-            <p className="text-muted-foreground">Configure automated SMS confirmations for pre-paid reservations</p>
+            <p className="text-muted-foreground">Configure automated SMS confirmations for appointments</p>
           </div>
         </div>
 
@@ -205,14 +205,14 @@ export default function SettingsTwilioSms() {
                   SMS Confirmation Settings
                 </CardTitle>
                 <CardDescription>
-                  Auto-send confirmation texts when guests complete pre-paid reservations
+                  Auto-send confirmation texts when clients complete appointments
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="sms-enabled">Enable SMS Confirmations</Label>
-                    <p className="text-sm text-muted-foreground">Automatically text guests after booking</p>
+                    <p className="text-sm text-muted-foreground">Automatically text clients after scheduling</p>
                   </div>
                   <Switch
                     id="sms-enabled"
@@ -230,11 +230,11 @@ export default function SettingsTwilioSms() {
                     onChange={(e) => setSmsTemplate(e.target.value)}
                     rows={4}
                     className="mt-1 font-mono text-sm"
-                    placeholder="Hi {guest_name}! Your reservation is confirmed..."
+                    placeholder="Hi {client_name}! Your appointment is confirmed..."
                     data-testid="input-sms-template"
                   />
                   <p className="text-xs text-muted-foreground mt-2">
-                    Available placeholders: {"{guest_name}"}, {"{venue_name}"}, {"{date}"}, {"{time}"}, {"{party_size}"}, {"{confirmation_code}"}
+                    Available placeholders: {"{client_name}"}, {"{workspace_name}"}, {"{date}"}, {"{time}"}, {"{confirmation_code}"}
                   </p>
                 </div>
               </CardContent>
@@ -246,8 +246,8 @@ export default function SettingsTwilioSms() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Instant booking confirmations</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Pre-paid reservation receipts</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Instant appointment confirmations</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Pre-paid service receipts</li>
                   <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Reminder notifications</li>
                   <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Two-way text messaging</li>
                 </ul>
@@ -268,7 +268,7 @@ export default function SettingsTwilioSms() {
                       </div>
                     </TooltipTrigger>
                     <TooltipContent side="top" className="max-w-[250px]">
-                      <p className="text-sm">When your guest completes a pre-paid reservation, Resto automatically sends the confirmation RSVP SMS so you don't have to.</p>
+                      <p className="text-sm">When your client completes a confirmed appointment, indexFlow automatically sends the confirmation SMS so you don't have to.</p>
                     </TooltipContent>
                   </Tooltip>
                 </CardTitle>
@@ -281,12 +281,11 @@ export default function SettingsTwilioSms() {
                   <div className="bg-card rounded-lg p-3 shadow-sm max-w-[280px]">
                     <p className="text-sm" data-testid="text-sms-preview">
                       {smsTemplate
-                        .replace("{guest_name}", "John")
-                        .replace("{venue_name}", "Your Restaurant")
+                        .replace("{client_name}", "John")
+                        .replace("{workspace_name}", "Your Business")
                         .replace("{date}", "Friday, Jan 15")
                         .replace("{time}", "7:30 PM")
-                        .replace("{party_size}", "4")
-                        .replace("{confirmation_code}", "RES-7X3K9")}
+                        .replace("{confirmation_code}", "APT-7X3K9")}
                     </p>
                   </div>
                   <p className="text-xs text-muted-foreground mt-3 text-center">
