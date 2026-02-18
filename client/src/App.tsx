@@ -232,9 +232,7 @@ function hasAdminPermission(role: AdminRole, permission: string): boolean {
 function ClientRoute({ component: Component }: { component: ComponentType }) {
   return (
     <ClientLayout>
-      <Suspense fallback={<div className="flex items-center justify-center min-h-[60vh]"><div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary" /></div>}>
-        <Component />
-      </Suspense>
+      <Component />
     </ClientLayout>
   );
 }
@@ -254,7 +252,7 @@ function AdminRoute({ component: Component, permission }: { component: Component
 
 function Router() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-[60vh]"><div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary" /></div>}>
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen bg-background"><div className="flex flex-col items-center gap-3"><div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary" /><p className="text-sm text-muted-foreground">Loading...</p></div></div>}>
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/how-it-works" component={About} />

@@ -6,11 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 import indexFlowLogo from "@assets/image_1771351451425.png";
 
 export default function Login() {
-  const { toast } = useToast();
   const [, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,11 +23,7 @@ export default function Login() {
     try {
       localStorage.setItem("indexflow_session", "active");
     } catch {}
-    toast({
-      title: "Signed in",
-      description: "Redirecting to your dashboard...",
-    });
-    setTimeout(() => navigate("/select-workspace"), 300);
+    navigate("/select-workspace");
   };
 
   return (
