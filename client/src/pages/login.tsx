@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ArrowLeft, LogIn, Eye, EyeOff } from "lucide-react";
 import { SiGoogle } from "react-icons/si";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import indexFlowLogo from "@assets/image_1771351451425.png";
 
 export default function Login() {
   const { toast } = useToast();
+  const [, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -21,10 +22,14 @@ export default function Login() {
 
   const handleSignIn = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    try {
+      localStorage.setItem("indexflow_session", "active");
+    } catch {}
     toast({
-      title: "Coming Soon",
-      description: "Authentication will be available when the platform launches.",
+      title: "Signed in",
+      description: "Redirecting to your dashboard...",
     });
+    setTimeout(() => navigate("/select-workspace"), 300);
   };
 
   return (
@@ -38,11 +43,11 @@ export default function Login() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <img src={indexFlowLogo} alt="indexFlow Restaurant Booking Dashboard Login" className="h-16" />
+            <img src={indexFlowLogo} alt="indexFlow" className="h-16" />
           </div>
           <CardTitle className="text-2xl">Client Login</CardTitle>
           <CardDescription>
-            Manage bookings, calls, and settings.
+            Sign in to manage your workspaces, content, and SEO tools.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -72,7 +77,7 @@ export default function Login() {
               <Input
                 id="email"
                 type="email"
-                placeholder="you@restaurant.com"
+                placeholder="you@agency.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 data-testid="input-email"
