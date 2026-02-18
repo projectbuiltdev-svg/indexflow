@@ -31,12 +31,7 @@ export default function SelectWorkspace() {
 
   useEffect(() => {
     document.title = "My Workspaces - indexFlow";
-    const session = JSON.parse(localStorage.getItem("indexflow_session") || "{}");
-    if (!session.email) {
-      setLocation("/client-login");
-      return;
-    }
-  }, [setLocation]);
+  }, []);
 
   const filteredWorkspaces = useMemo(() => {
     if (!searchQuery.trim()) return workspaces;
