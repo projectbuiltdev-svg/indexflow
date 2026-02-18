@@ -1,0 +1,88 @@
+IndexFlow Super Admin Dashboard
+This is for IndexFlow platform owners (you) to manage all agencies/workspaces:
+Dashboard
+Platform Overview (total agencies, total workspaces, MRR, active users, system health)
+Agencies
+All Agencies (list, search, filter by plan/status)
+Agency Detail (their workspaces, users, usage, billing)
+Pending Approvals (new signups, domain verifications)
+Content
+All Posts (across all agencies, search/filter)
+All Campaigns (across all agencies)
+Content Moderation (flagged content, abuse reports)
+Platform SEO
+Keyword Usage (total keywords tracked across platform)
+API Usage (DataForSEO calls, quotas)
+Billing
+Subscriptions (all agency plans, MRR, churn)
+Revenue (charts, growth, ARPU)
+Invoices (platform invoices to agencies)
+Payouts (if rev-share with white label resellers)
+System
+API Keys (platform-level OpenAI, Pexels, Pixabay, DataForSEO, Unsplash keys)
+Twilio (platform Twilio account, phone numbers, usage)
+Email (transactional email config, templates)
+Infrastructure (server health, queue status, error rates)
+Users
+All Users (across all agencies)
+Admin Users (platform staff with roles)
+Support
+All Tickets (across all agencies)
+Call Logs (platform-wide)
+System Announcements (maintenance notices, feature releases)
+Settings
+Platform Config (default plans, limits, feature flags)
+Branding (IndexFlow's own branding defaults)
+
+IndexFlow Client Dashboard (Updated)
+This is for agencies logging in to manage their content/SEO work:
+Dashboard
+Overview (stats, content due today, recent activity)
+Content Engine
+Posts
+Pages
+Campaigns
+Domains
+SEO
+Links
+Health
+CMS
+Reports
+Invoices
+Rank Tracker
+Track Keywords
+Local Search Grid
+Google Search Console
+Twilio
+Call Logs
+Voice Settings
+SMS Settings
+Widget
+Monitoring
+Widget Code
+CRM
+Pipeline
+Contacts
+Analytics
+Overview
+Export Data
+Connections
+AI Providers (OpenAI, Grok, Anthropic, Google AI, Mistral, Cohere, Perplexity)
+Image Banks (Unsplash, Pexels, Pixabay)
+Payments (Stripe / PayPal)
+Twilio Account
+AI Training
+Knowledge Base
+Channels (Widget, Twilio)
+Settings
+Team & Invites
+White Label
+Billing & Usage
+Setup Guide
+Support
+Documentation
+Support Tickets
+Top-right avatar dropdown:
+Theme toggle
+Account
+Sign Out
