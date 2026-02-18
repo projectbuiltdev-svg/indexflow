@@ -1,11 +1,11 @@
 import {
   Building2,
-  Layers,
   DollarSign,
   Users,
-  Activity,
+  FileText,
   ArrowUpRight,
   Clock,
+  Layers,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -56,19 +56,19 @@ const mrrData = [
   { month: "Dec", mrr: 14750 },
 ];
 
-const newAgenciesData = [
-  { month: "Jan", agencies: 3 },
-  { month: "Feb", agencies: 5 },
-  { month: "Mar", agencies: 4 },
-  { month: "Apr", agencies: 6 },
-  { month: "May", agencies: 5 },
-  { month: "Jun", agencies: 7 },
-  { month: "Jul", agencies: 4 },
-  { month: "Aug", agencies: 6 },
-  { month: "Sep", agencies: 5 },
-  { month: "Oct", agencies: 3 },
-  { month: "Nov", agencies: 4 },
-  { month: "Dec", agencies: 5 },
+const newWorkspacesData = [
+  { month: "Jan", workspaces: 8 },
+  { month: "Feb", workspaces: 12 },
+  { month: "Mar", workspaces: 10 },
+  { month: "Apr", workspaces: 15 },
+  { month: "May", workspaces: 13 },
+  { month: "Jun", workspaces: 18 },
+  { month: "Jul", workspaces: 11 },
+  { month: "Aug", workspaces: 14 },
+  { month: "Sep", workspaces: 16 },
+  { month: "Oct", workspaces: 9 },
+  { month: "Nov", workspaces: 12 },
+  { month: "Dec", workspaces: 15 },
 ];
 
 const planDistribution = [
@@ -81,19 +81,19 @@ const planDistribution = [
 const planColors = [COLORS.primary, COLORS.green, COLORS.orange, COLORS.purple];
 
 const recentActivity = [
-  { description: "New agency registered: Acme Digital", time: "2 minutes ago", icon: Building2 },
+  { description: "New workspace created: Acme Digital", time: "2 minutes ago", icon: Building2 },
   { description: "Content published: SEO Guide 2026", time: "15 minutes ago", icon: Layers },
   { description: "Plan upgraded: Solo to Pro", time: "1 hour ago", icon: ArrowUpRight },
   { description: "New workspace created: Coastal Media", time: "3 hours ago", icon: Layers },
-  { description: "New agency registered: Summit Marketing", time: "5 hours ago", icon: Building2 },
+  { description: "New workspace created: Summit Marketing", time: "5 hours ago", icon: Building2 },
 ];
 
-const recentAgencies = [
-  { name: "Acme Digital", plan: "Pro", owner: "John Smith", workspaces: 4, created: "Feb 15, 2026", status: "Active" },
-  { name: "Dragon Media", plan: "Enterprise", owner: "Sarah Chen", workspaces: 12, created: "Feb 12, 2026", status: "Active" },
-  { name: "Coastal SEO", plan: "White Label", owner: "Mike Johnson", workspaces: 8, created: "Feb 10, 2026", status: "Active" },
-  { name: "Summit Marketing", plan: "Solo", owner: "Lisa Park", workspaces: 1, created: "Feb 8, 2026", status: "Pending" },
-  { name: "Riverside Agency", plan: "Pro", owner: "Tom Davis", workspaces: 3, created: "Feb 5, 2026", status: "Active" },
+const recentWorkspaces = [
+  { name: "Acme Digital", plan: "Pro", ownerEmail: "john@acmedigital.com", contentPosts: 42, created: "Feb 15, 2026", status: "Active" },
+  { name: "Dragon Media", plan: "Enterprise", ownerEmail: "sarah@dragonmedia.io", contentPosts: 128, created: "Feb 12, 2026", status: "Active" },
+  { name: "Coastal SEO", plan: "White Label", ownerEmail: "mike@coastalseo.com", contentPosts: 67, created: "Feb 10, 2026", status: "Active" },
+  { name: "Summit Marketing", plan: "Solo", ownerEmail: "lisa@summitmktg.com", contentPosts: 8, created: "Feb 8, 2026", status: "Pending" },
+  { name: "Riverside Agency", plan: "Pro", ownerEmail: "tom@riverside.agency", contentPosts: 35, created: "Feb 5, 2026", status: "Active" },
 ];
 
 function getPlanVariant(plan: string) {
@@ -117,25 +117,11 @@ export default function AdminDashboard() {
           <h1 className="text-2xl font-bold" data-testid="text-page-title">Platform Overview</h1>
         </div>
 
-        <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
-          <Card data-testid="card-total-agencies">
-            <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Agencies</CardTitle>
-              <Building2 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold" data-testid="text-total-agencies">47</div>
-              <p className="text-xs flex items-center gap-1" style={{ color: COLORS.green }}>
-                <ArrowUpRight className="h-3 w-3" />
-                +12%
-              </p>
-            </CardContent>
-          </Card>
-
+        <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
           <Card data-testid="card-total-workspaces">
             <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Workspaces</CardTitle>
-              <Layers className="h-4 w-4 text-muted-foreground" />
+              <Building2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold" data-testid="text-total-workspaces">183</div>
@@ -146,13 +132,13 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card data-testid="card-mrr">
+          <Card data-testid="card-monthly-revenue">
             <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">MRR</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Monthly Revenue</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold" data-testid="text-mrr">$14,750</div>
+              <div className="text-2xl font-bold" data-testid="text-monthly-revenue">$14,750</div>
               <p className="text-xs flex items-center gap-1" style={{ color: COLORS.green }}>
                 <ArrowUpRight className="h-3 w-3" />
                 +15.3%
@@ -174,20 +160,17 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card data-testid="card-system-health">
+          <Card data-testid="card-content-generated">
             <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">System Health</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">Content Generated</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2">
-                <span
-                  className="inline-block h-3 w-3 rounded-full"
-                  style={{ backgroundColor: COLORS.green }}
-                  data-testid="indicator-system-health"
-                />
-                <span className="text-2xl font-bold" data-testid="text-system-health">Healthy</span>
-              </div>
+              <div className="text-2xl font-bold" data-testid="text-content-generated">1,247</div>
+              <p className="text-xs flex items-center gap-1" style={{ color: COLORS.green }}>
+                <ArrowUpRight className="h-3 w-3" />
+                +22%
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -195,7 +178,7 @@ export default function AdminDashboard() {
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
           <Card data-testid="card-mrr-growth">
             <CardHeader>
-              <CardTitle>MRR Growth</CardTitle>
+              <CardTitle>MRR Over Last 12 Months</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">
@@ -222,14 +205,14 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card data-testid="card-new-agencies-chart">
+          <Card data-testid="card-new-workspaces-chart">
             <CardHeader>
-              <CardTitle>New Agencies</CardTitle>
+              <CardTitle>New Workspaces Per Month</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={newAgenciesData}>
+                  <BarChart data={newWorkspacesData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                     <XAxis dataKey="month" className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
                     <YAxis className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
@@ -237,7 +220,7 @@ export default function AdminDashboard() {
                       contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "6px" }}
                       labelStyle={{ color: "hsl(var(--foreground))" }}
                     />
-                    <Bar dataKey="agencies" fill={COLORS.primary} radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="workspaces" fill={COLORS.primary} radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -303,40 +286,40 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        <Card data-testid="card-recent-agencies-table">
+        <Card data-testid="card-recent-workspaces-table">
           <CardHeader>
-            <CardTitle>Recent Agencies</CardTitle>
+            <CardTitle>Recent Workspaces</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Agency Name</TableHead>
+                  <TableHead>Name</TableHead>
                   <TableHead>Plan</TableHead>
-                  <TableHead>Owner</TableHead>
-                  <TableHead>Workspaces</TableHead>
+                  <TableHead>Owner Email</TableHead>
+                  <TableHead>Content Posts</TableHead>
                   <TableHead>Created</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {recentAgencies.map((agency, index) => (
-                  <TableRow key={agency.name} data-testid={`row-agency-${index}`}>
-                    <TableCell className="font-medium" data-testid={`text-agency-name-${index}`}>{agency.name}</TableCell>
+                {recentWorkspaces.map((workspace, index) => (
+                  <TableRow key={workspace.name} data-testid={`row-workspace-${index}`}>
+                    <TableCell className="font-medium" data-testid={`text-workspace-name-${index}`}>{workspace.name}</TableCell>
                     <TableCell>
-                      <Badge variant={getPlanVariant(agency.plan)} data-testid={`badge-plan-${index}`}>
-                        {agency.plan}
+                      <Badge variant={getPlanVariant(workspace.plan)} data-testid={`badge-plan-${index}`}>
+                        {workspace.plan}
                       </Badge>
                     </TableCell>
-                    <TableCell data-testid={`text-agency-owner-${index}`}>{agency.owner}</TableCell>
-                    <TableCell data-testid={`text-agency-workspaces-${index}`}>{agency.workspaces}</TableCell>
-                    <TableCell data-testid={`text-agency-created-${index}`}>{agency.created}</TableCell>
+                    <TableCell data-testid={`text-workspace-email-${index}`}>{workspace.ownerEmail}</TableCell>
+                    <TableCell data-testid={`text-workspace-posts-${index}`}>{workspace.contentPosts}</TableCell>
+                    <TableCell data-testid={`text-workspace-created-${index}`}>{workspace.created}</TableCell>
                     <TableCell>
                       <Badge
-                        variant={agency.status === "Active" ? "default" : "secondary"}
+                        variant={workspace.status === "Active" ? "default" : "secondary"}
                         data-testid={`badge-status-${index}`}
                       >
-                        {agency.status}
+                        {workspace.status}
                       </Badge>
                     </TableCell>
                   </TableRow>

@@ -3,34 +3,29 @@ import { Link, useLocation } from "wouter";
 import {
   LayoutDashboard,
   FileText,
-  File,
   Megaphone,
-  Globe,
-  Link as LinkIcon,
-  HeartPulse,
+  ImageIcon,
   RefreshCw,
-  BarChart3,
-  Receipt,
   TrendingUp,
   MapPin,
+  Search,
+  Code2,
+  Link as LinkIcon,
+  Globe,
   Monitor,
-  PhoneCall,
-  Mic,
-  MessageSquare,
-  Activity,
-  Code,
   Kanban,
   Contact,
-  Download,
+  BarChart3,
+  MessageSquare,
   Brain,
-  ImageIcon,
-  CreditCard,
-  Phone,
-  BookOpen,
-  Radio,
+  Code,
+  Settings,
   Users,
-  Palette,
-  Compass,
+  Key,
+  Phone,
+  CreditCard,
+  Coins,
+  BookOpen,
   LifeBuoy,
   ChevronDown,
   Sun,
@@ -81,50 +76,33 @@ interface NavGroup {
 
 const navGroups: NavGroup[] = [
   {
-    label: "Content Engine",
+    label: "Overview",
+    prefix: "/today",
+    items: [
+      { title: "Dashboard", path: "/today", icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: "Content",
     prefix: "/content",
     items: [
       { title: "Posts", path: "/content/posts", icon: FileText },
-      { title: "Pages", path: "/content/pages", icon: File },
       { title: "Campaigns", path: "/content/campaigns", icon: Megaphone },
-      { title: "Domains", path: "/content/domains", icon: Globe },
+      { title: "Media Library", path: "/content/domains", icon: ImageIcon },
+      { title: "CMS Sync", path: "/seo/cms", icon: RefreshCw },
     ],
   },
   {
     label: "SEO",
     prefix: "/seo",
     items: [
-      { title: "Links", path: "/seo/links", icon: LinkIcon },
-      { title: "Health", path: "/seo/health", icon: HeartPulse },
-      { title: "CMS", path: "/seo/cms", icon: RefreshCw },
-      { title: "Reports", path: "/seo/reports", icon: BarChart3 },
-      { title: "Invoices", path: "/seo/invoices", icon: Receipt },
-    ],
-  },
-  {
-    label: "Rank Tracker",
-    prefix: "/rank-tracker",
-    items: [
-      { title: "Track Keywords", path: "/rank-tracker/track-keywords", icon: TrendingUp },
+      { title: "Rank Tracker", path: "/rank-tracker/track-keywords", icon: TrendingUp },
       { title: "Local Search Grid", path: "/rank-tracker/local-search-grid", icon: MapPin },
-      { title: "Google Search Console", path: "/rank-tracker/google-search-console", icon: Monitor },
-    ],
-  },
-  {
-    label: "Twilio",
-    prefix: "/twilio",
-    items: [
-      { title: "Call Logs", path: "/twilio/call-logs", icon: PhoneCall },
-      { title: "Voice Settings", path: "/twilio/voice", icon: Mic },
-      { title: "SMS Settings", path: "/twilio/sms", icon: MessageSquare },
-    ],
-  },
-  {
-    label: "Widget",
-    prefix: "/widget",
-    items: [
-      { title: "Monitoring", path: "/widget/monitoring", icon: Activity },
-      { title: "Widget Code", path: "/widget/code", icon: Code },
+      { title: "Site Audit", path: "/seo/health", icon: Search },
+      { title: "Schema Markup", path: "/seo/links", icon: Code2 },
+      { title: "Link Builder", path: "/seo/reports", icon: LinkIcon },
+      { title: "Site Profile", path: "/content/pages", icon: Globe },
+      { title: "Search Console", path: "/rank-tracker/google-search-console", icon: Monitor },
     ],
   },
   {
@@ -136,47 +114,40 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Analytics",
-    prefix: "/analytics",
+    label: "Business",
+    prefix: "/business",
     items: [
-      { title: "Overview", path: "/analytics/overview", icon: BarChart3 },
-      { title: "Export Data", path: "/analytics/export", icon: Download },
+      { title: "Invoices", path: "/seo/invoices", icon: FileText },
+      { title: "Reports", path: "/analytics/overview", icon: BarChart3 },
     ],
   },
   {
-    label: "Connections",
-    prefix: "/connections",
+    label: "Widget",
+    prefix: "/widget",
     items: [
-      { title: "AI Providers", path: "/connections/ai-providers", icon: Brain },
-      { title: "Image Banks", path: "/connections/image-banks", icon: ImageIcon },
-      { title: "Payments", path: "/connections/payments", icon: CreditCard },
-      { title: "Twilio Account", path: "/connections/twilio", icon: Phone },
-    ],
-  },
-  {
-    label: "AI Training",
-    prefix: "/ai-training",
-    items: [
-      { title: "Knowledge Base", path: "/ai-training/knowledge-base", icon: BookOpen },
-      { title: "Channels", path: "/ai-training/channels", icon: Radio },
+      { title: "Chat Widget", path: "/widget/monitoring", icon: MessageSquare },
+      { title: "Training Data", path: "/ai-training/knowledge-base", icon: Brain },
+      { title: "Embed Code", path: "/widget/code", icon: Code },
     ],
   },
   {
     label: "Settings",
     prefix: "/settings",
     items: [
-      { title: "Team & Invites", path: "/settings/team", icon: Users },
-      { title: "White Label", path: "/settings/white-label", icon: Palette },
-      { title: "Billing & Usage", path: "/settings/billing", icon: CreditCard },
-      { title: "Setup Guide", path: "/settings/setup-guide", icon: Compass },
+      { title: "General", path: "/settings/white-label", icon: Settings },
+      { title: "Team", path: "/settings/team", icon: Users },
+      { title: "API Keys (BYOK)", path: "/connections/ai-providers", icon: Key },
+      { title: "Twilio", path: "/connections/twilio", icon: Phone },
+      { title: "Payments", path: "/connections/payments", icon: CreditCard },
+      { title: "Credits", path: "/settings/billing", icon: Coins },
     ],
   },
   {
-    label: "Support",
+    label: "Help",
     prefix: "/support",
     items: [
       { title: "Documentation", path: "/support/documentation", icon: BookOpen },
-      { title: "Support Tickets", path: "/support/tickets", icon: LifeBuoy },
+      { title: "Support", path: "/support/tickets", icon: LifeBuoy },
     ],
   },
 ];
@@ -193,8 +164,8 @@ export function ClientSidebar() {
     return location.startsWith(fullPath);
   };
 
-  const isGroupActive = (prefix: string) => {
-    return location.startsWith(`${base}${prefix}`);
+  const isGroupActive = (group: NavGroup) => {
+    return group.items.some((item) => isActive(item.path));
   };
 
   const [isDark, setIsDark] = useState(() => {
@@ -251,30 +222,9 @@ export function ClientSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive("/today")}
-                  tooltip="Dashboard"
-                  data-testid="link-dashboard"
-                >
-                  <Link href={`${base}/today`}>
-                    <LayoutDashboard />
-                    <span>Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
         {navGroups.map((group) => (
           <SidebarGroup key={group.label}>
-            <Collapsible defaultOpen={isGroupActive(group.prefix)} className="group/collapsible">
+            <Collapsible defaultOpen={isGroupActive(group)} className="group/collapsible">
               <CollapsibleTrigger asChild>
                 <SidebarGroupLabel className="cursor-pointer" data-testid={`group-${group.label.toLowerCase().replace(/\s+/g, "-")}`}>
                   {group.label}

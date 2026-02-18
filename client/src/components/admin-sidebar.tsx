@@ -2,28 +2,30 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import {
   LayoutDashboard,
+  BarChart3,
   Building2,
-  ClipboardCheck,
-  FileText,
-  Megaphone,
-  ShieldAlert,
-  TrendingUp,
-  Activity,
-  RefreshCw,
-  DollarSign,
-  Receipt,
-  Banknote,
-  Key,
-  Phone,
-  Mail,
-  Server,
   Users,
-  UserCog,
+  Palette,
+  ToggleLeft,
+  CreditCard,
+  FileText,
+  RefreshCw,
+  PenTool,
+  Megaphone,
+  ImageIcon,
+  ShieldCheck,
+  TrendingUp,
+  MapPin,
+  Code2,
+  Link as LinkIcon,
+  Globe,
+  Kanban,
+  Contact,
+  Handshake,
   LifeBuoy,
-  PhoneCall,
   Bell,
   Settings,
-  Palette,
+  Terminal,
   ChevronDown,
   Zap,
   Sun,
@@ -64,71 +66,68 @@ interface NavGroup {
 
 const navGroups: NavGroup[] = [
   {
-    label: "Dashboard",
+    label: "Overview",
     items: [
       { title: "Dashboard", icon: LayoutDashboard, path: "/admin" },
+      { title: "Analytics", icon: BarChart3, path: "/admin/analytics" },
     ],
   },
   {
-    label: "Agencies",
+    label: "Platform",
     items: [
-      { title: "All Agencies", icon: Building2, path: "/admin/agencies" },
-      { title: "Pending Approvals", icon: ClipboardCheck, path: "/admin/agencies/pending" },
+      { title: "Workspaces", icon: Building2, path: "/admin/agencies" },
+      { title: "Users", icon: Users, path: "/admin/users/all" },
+      { title: "White Label", icon: Palette, path: "/admin/settings/branding" },
+      { title: "Feature Flags", icon: ToggleLeft, path: "/admin/settings/config" },
+    ],
+  },
+  {
+    label: "Revenue",
+    items: [
+      { title: "Billing", icon: CreditCard, path: "/admin/billing/subscriptions" },
+      { title: "Invoices", icon: FileText, path: "/admin/billing/invoices" },
+      { title: "Subscriptions", icon: RefreshCw, path: "/admin/billing/revenue" },
     ],
   },
   {
     label: "Content",
     items: [
-      { title: "All Posts", icon: FileText, path: "/admin/content/posts" },
-      { title: "All Campaigns", icon: Megaphone, path: "/admin/content/campaigns" },
-      { title: "Content Moderation", icon: ShieldAlert, path: "/admin/content/moderation" },
+      { title: "Content Engine", icon: PenTool, path: "/admin/content/posts" },
+      { title: "Campaigns", icon: Megaphone, path: "/admin/content/campaigns" },
+      { title: "Image Pipeline", icon: ImageIcon, path: "/admin/content/moderation" },
+      { title: "Quality Gates", icon: ShieldCheck, path: "/admin/platform-seo/keywords" },
     ],
   },
   {
-    label: "Platform SEO",
+    label: "SEO",
     items: [
-      { title: "Keyword Usage", icon: TrendingUp, path: "/admin/platform-seo/keywords" },
-      { title: "API Usage", icon: Activity, path: "/admin/platform-seo/api-usage" },
+      { title: "Rank Tracker", icon: TrendingUp, path: "/admin/platform-seo/api-usage" },
+      { title: "Local Grid", icon: MapPin, path: "/admin/support/call-logs" },
+      { title: "Schema Markup", icon: Code2, path: "/admin/system/api-keys" },
+      { title: "Link Builder", icon: LinkIcon, path: "/admin/system/email" },
+      { title: "Site Profiles", icon: Globe, path: "/admin/system/infrastructure" },
     ],
   },
   {
-    label: "Billing",
+    label: "CRM",
     items: [
-      { title: "Subscriptions", icon: RefreshCw, path: "/admin/billing/subscriptions" },
-      { title: "Revenue", icon: DollarSign, path: "/admin/billing/revenue" },
-      { title: "Invoices", icon: Receipt, path: "/admin/billing/invoices" },
-      { title: "Payouts", icon: Banknote, path: "/admin/billing/payouts" },
-    ],
-  },
-  {
-    label: "System",
-    items: [
-      { title: "API Keys", icon: Key, path: "/admin/system/api-keys" },
-      { title: "Twilio", icon: Phone, path: "/admin/system/twilio" },
-      { title: "Email", icon: Mail, path: "/admin/system/email" },
-      { title: "Infrastructure", icon: Server, path: "/admin/system/infrastructure" },
-    ],
-  },
-  {
-    label: "Users",
-    items: [
-      { title: "All Users", icon: Users, path: "/admin/users/all" },
-      { title: "Admin Users", icon: UserCog, path: "/admin/users/admins" },
+      { title: "Pipeline", icon: Kanban, path: "/admin/billing/payouts" },
+      { title: "Contacts", icon: Contact, path: "/admin/users/admins" },
+      { title: "Deals", icon: Handshake, path: "/admin/agencies/pending" },
     ],
   },
   {
     label: "Support",
     items: [
-      { title: "All Tickets", icon: LifeBuoy, path: "/admin/support/tickets" },
-      { title: "Call Logs", icon: PhoneCall, path: "/admin/support/call-logs" },
+      { title: "Tickets", icon: LifeBuoy, path: "/admin/support/tickets" },
       { title: "Announcements", icon: Bell, path: "/admin/support/announcements" },
     ],
   },
   {
-    label: "Settings",
+    label: "System",
     items: [
-      { title: "Platform Config", icon: Settings, path: "/admin/settings/config" },
-      { title: "Branding", icon: Palette, path: "/admin/settings/branding" },
+      { title: "Settings", icon: Settings, path: "/admin/system/twilio" },
+      { title: "API Logs", icon: Terminal, path: "/admin/billing/revenue" },
     ],
   },
 ];
@@ -177,7 +176,7 @@ export function AdminSidebar() {
         {navGroups.map((group) => (
           <SidebarGroup key={group.label} className="py-0">
             <Collapsible
-              defaultOpen={isGroupActive(group) || group.label === "Dashboard"}
+              defaultOpen={isGroupActive(group) || group.label === "Overview"}
               className="group/collapsible"
             >
               <SidebarGroupLabel asChild>
