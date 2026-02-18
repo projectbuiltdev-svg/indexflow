@@ -94,6 +94,7 @@ const SeoHealth = lazy(() => import("@/pages/dashboard/seo-health"));
 const SeoCms = lazy(() => import("@/pages/dashboard/seo-cms"));
 const SeoReports = lazy(() => import("@/pages/dashboard/seo-reports"));
 const SeoInvoices = lazy(() => import("@/pages/dashboard/seo-invoices"));
+const ContentEngine = lazy(() => import("@/pages/dashboard/content-engine"));
 
 const TwilioCallLogs = lazy(() => import("@/pages/dashboard/twilio-call-logs"));
 const TwilioVoice = lazy(() => import("@/pages/dashboard/twilio-voice"));
@@ -395,6 +396,9 @@ function Router() {
         <Route path="/:workspaceId/content/pages">{() => <ClientRoute component={ContentPages} />}</Route>
         <Route path="/:workspaceId/content/campaigns">{() => <ClientRoute component={ContentCampaigns} />}</Route>
         <Route path="/:workspaceId/content/domains">{() => <ClientRoute component={ContentDomains} />}</Route>
+
+        {/* Content Engine (unified) */}
+        <Route path="/:workspaceId/content-engine">{() => <ClientRoute component={ContentEngine} />}</Route>
 
         {/* SEO */}
         <Route path="/:workspaceId/seo/links">{() => <ClientRoute component={SeoLinks} />}</Route>

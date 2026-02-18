@@ -1,0 +1,25 @@
+Core Content Engine Files:
+
+server/draft-generator.ts (461 lines) - Bulk draft generator with GPT-4o. Creates posts with quality gates (word count 1500-2500, 6+ headings, image placeholders, FAQ section, duplicate detection). Supports 3 post types: standard, listicle, how-to. Auto-resolves images and schema after generation.
+
+server/image-resolver.ts (269 lines) - Auto-resolves <BlogImage prompt="..." /> placeholders to real stock photos via Pixabay/Pexels/Unsplash APIs. Uses GPT-4o to generate SEO-optimized alt text, captions, and search queries. Falls back across multiple image APIs.
+
+server/post-processor.ts (318 lines) - Post-processing validator. Scans/auto-fixes rel attributes (dofollow internal, nofollow external), checks anchor text diversity, link density, image alt coverage. Saves results to validation table.
+
+server/link-builder.ts (335 lines) - Cross-post link builder. Keyword indexing from titles/headings, auto-suggests inter-post links, bulk auto-link, orphan report (posts with zero inbound links), link health checker (HEAD requests to detect broken links).
+
+server/schema-markup.ts (305 lines) - Schema.org auto-detection with 20 types. GPT-4o analyzes post content to classify schema type and generate JSON-LD. Heuristic fallback if AI unavailable. Manual override and regeneration for any type.
+
+server/content-formatters.ts (189 lines) - CMS formatters for WordPress (Gutenberg blocks), Webflow, Shopify, Ghost, and Wix. Each formatter outputs HTML with SEO metadata and schema markup.
+
+server/page-auditor.ts (394 lines) - On-page SEO auditing. Fetches any URL, extracts meta tags, headings, word count, links, images, schema. Calculates SEO score (0-100). Generates recommendations by category. GPT-4o powered optimization suggestions.
+
+server/sitemap-crawler.ts (169 lines) - Crawls sitemap.xml (including sitemap indexes) to discover site pages. Guesses page types. Stores pages for internal linking context.
+
+server/wp-plugin-generator.ts (432 lines) - Generates a downloadable WordPress plugin ZIP. Plugin handles API sync, webhook push/pull, image importing, SEO meta sync (Yoast/RankMath/AIOSEO), cron scheduling.
+
+server/integration-routes.ts (285 lines) - CMS integration API routes. API key generation/management, authenticated post endpoints, webhook registration, sync status reporting, plugin downloads.
+
+server/crm-routes.ts (197 lines) - Full CRM CRUD: contacts, pipeline stages, deals.
+
+server/crypto.ts (73 lines) - AES-256-GCM encryption for sensitive credentials.

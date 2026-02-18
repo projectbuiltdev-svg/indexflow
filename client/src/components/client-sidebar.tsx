@@ -125,21 +125,16 @@ const navGroups: NavGroup[] = [
     label: "Content Engine",
     collapsible: true,
     items: [
-      { title: "Posts", path: "/content/posts", icon: FileText },
-      { title: "Pages", path: "/content/pages", icon: File },
-      { title: "Campaigns", path: "/content/campaigns", icon: Megaphone },
-      { title: "Domains", path: "/content/domains", icon: Globe },
-    ],
-  },
-  {
-    label: "SEO",
-    collapsible: true,
-    items: [
-      { title: "Links", path: "/seo/links", icon: LinkIcon },
-      { title: "Health", path: "/seo/health", icon: HeartPulse },
-      { title: "CMS", path: "/seo/cms", icon: RefreshCw },
-      { title: "Reports", path: "/seo/reports", icon: ClipboardList },
-      { title: "Invoices", path: "/seo/invoices", icon: Receipt },
+      { title: "Posts", path: "/content-engine?tab=posts", icon: FileText },
+      { title: "Pages", path: "/content-engine?tab=pages", icon: File },
+      { title: "Campaigns", path: "/content-engine?tab=campaigns", icon: Megaphone },
+      { title: "Domains", path: "/content-engine?tab=domains", icon: Globe },
+      { title: "SEO", path: "/content-engine?tab=seo", icon: HeartPulse },
+      { title: "Links", path: "/content-engine?tab=links", icon: LinkIcon },
+      { title: "Health", path: "/content-engine?tab=health", icon: HeartPulse },
+      { title: "CMS", path: "/content-engine?tab=cms", icon: RefreshCw },
+      { title: "Reports", path: "/content-engine?tab=reports", icon: ClipboardList },
+      { title: "Invoices", path: "/content-engine?tab=invoices", icon: Receipt },
     ],
   },
   {
@@ -206,13 +201,23 @@ export function ClientSidebar() {
   const base = selectedWorkspace ? `/${selectedWorkspace.id}` : "";
 
   const isActive = (path: string) => {
-    const fullPath = `${base}${path}`;
+    const pathOnly = path.split("?")[0];
+    const fullPath = `${base}${pathOnly}`;
+    const tabParam = path.includes("?tab=") ? path.split("?tab=")[1] : null;
     if (path === "/today") return location === fullPath;
+    if (tabParam) {
+      const currentSearch = typeof window !== "undefined" ? window.location.search : "";
+      return location === fullPath && currentSearch === `?tab=${tabParam}`;
+    }
     return location.startsWith(fullPath);
   };
 
   const isGroupActive = (group: NavGroup) => {
-    return group.items.some((item) => isActive(item.path));
+    return group.items.some((item) => {
+      const pathOnly = item.path.split("?")[0];
+      const fullPath = `${base}${pathOnly}`;
+      return location.startsWith(fullPath);
+    });
   };
 
   const handleSignOut = () => {
@@ -291,7 +296,7 @@ export function ClientSidebar() {
                             asChild
                             isActive={isActive(item.path)}
                             tooltip={item.title}
-                            data-testid={`link-${item.path.split("/").filter(Boolean).join("-")}`}
+                            data-testid={`link-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
                           >
                             <Link href={`${base}${item.path}`}>
                               <item.icon />
@@ -313,7 +318,7 @@ export function ClientSidebar() {
                         asChild
                         isActive={isActive(item.path)}
                         tooltip={item.title}
-                        data-testid={`link-${item.path.split("/").filter(Boolean).join("-")}`}
+                        data-testid={`link-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
                       >
                         <Link href={`${base}${item.path}`}>
                           <item.icon />
