@@ -1,0 +1,424 @@
+
+IndexFlow Dashboard Designs
+Tech Stack
+React + Vite + TypeScript
+Tailwind CSS + shadcn/ui
+Wouter (routing)
+TanStack Query (data fetching)
+Recharts (charts)
+Lucide React (icons)
+Drizzle ORM + PostgreSQL
+Color Palette (index.css variables)
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 221 83% 53%;
+  --sidebar-background: 222 47% 11%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-accent: 217 33% 17%;
+  --sidebar-accent-foreground: 210 40% 98%;
+}
+.dark {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --card: 217 33% 17%;
+  --card-foreground: 210 40% 98%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --border: 217 33% 17%;
+  --sidebar-background: 222 55% 8%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-accent: 217 33% 14%;
+  --sidebar-accent-foreground: 210 40% 98%;
+}
+Super Admin Dashboard Layout
+Sidebar Navigation (shadcn Sidebar component, dark bg)
+Logo: "IndexFlow" + icon (Zap from lucide)
+Collapsed icon width: 4rem
+Expanded width: 16rem
+Groups:
+  [Overview]
+    - Dashboard          (LayoutDashboard)
+    - Analytics          (BarChart3)
+  [Platform]
+    - Workspaces         (Building2)
+    - Users              (Users)
+    - White Label        (Palette)
+    - Feature Flags      (ToggleLeft)
+  [Revenue]
+    - Billing            (CreditCard)
+    - Invoices           (FileText)
+    - Subscriptions      (RefreshCw)
+  [Content]
+    - Content Engine     (PenTool)
+    - Campaigns          (Megaphone)
+    - Image Pipeline     (ImageIcon)
+    - Quality Gates      (ShieldCheck)
+  [SEO]
+    - Rank Tracker       (TrendingUp)
+    - Local Grid         (MapPin)
+    - Schema Markup      (Code2)
+    - Link Builder       (Link)
+    - Site Profiles      (Globe)
+  [CRM]
+    - Pipeline           (Kanban)
+    - Contacts           (Contact)
+    - Deals              (Handshake)
+  [Support]
+    - Tickets            (LifeBuoy)
+    - Announcements      (Bell)
+  [System]
+    - Settings           (Settings)
+    - API Logs           (Terminal)
+Footer:
+    - User avatar + name + role
+    - Theme toggle (Sun/Moon)
+    - Logout
+Page: Dashboard (/)
+Header: "Platform Overview"
+Row 1: 4 stat cards (equal width)
+  [Total Workspaces]  count + trend arrow
+  [Monthly Revenue]   $amount + % change
+  [Active Users]      count + trend
+  [Content Generated] post count this month
+Row 2: 2 charts (50/50 split)
+  [Left]  Line chart: MRR over last 12 months (Recharts AreaChart)
+  [Right] Bar chart: New workspaces per month
+Row 3: 2 panels (50/50 split)
+  [Left]  Recent Activity feed (list of workspace actions)
+  [Right] Plan Distribution (pie chart: Solo / Pro / White Label / Enterprise)
+Row 4: Full width table
+  "Recent Workspaces" -- 5 most recently created
+  Columns: Name | Plan | Owner Email | Content Posts | Created | Status badge
+Page: Workspaces (/workspaces)
+Header: "Workspaces" + [Create Workspace] button (primary)
+Filters row: Search input | Plan dropdown (All/Solo/Pro/WhiteLabel/Enterprise) | Status dropdown (All/Active/Suspended)
+Table (full width):
+  Columns: Name | Domain | Plan (badge) | Owner | Posts | SEO Score | Credits | Status (badge) | Actions (dropdown)
+  Actions: View | Edit | Suspend | Delete
+Click row -> Workspace Detail page:
+  Tabs: Overview | Content | SEO | CRM | Billing | Settings
+  Overview: stat cards (posts, keywords tracked, deals, invoices) + recent activity
+  Content: table of posts for this workspace
+  SEO: rank tracker results, grid scans
+  CRM: pipeline summary, contact count
+  Billing: subscription info, invoice history
+  Settings: workspace config, domain, branding
+Page: Users (/users)
+Header: "Users" + [Invite User] button
+Table:
+  Columns: Name | Email | Workspace(s) | Role (badge) | Last Login | Status | Actions
+  Roles: owner, admin, editor, viewer
+  Actions: Edit | Reset Password | Suspend | Delete
+Page: White Label (/white-label)
+Header: "White Label Configurations"
+Grid of cards (3 columns):
+  Each card shows:
+    - Client logo (small)
+    - Brand name
+    - Custom domain
+    - Primary color swatch
+    - Workspace count
+    - [Edit] [Preview] buttons
+Edit dialog:
+  - Logo upload (drag & drop zone)
+  - Brand name input
+  - Custom domain input
+  - Primary color picker
+  - Support email input
+  - Favicon upload
+Page: Billing (/billing)
+Header: "Revenue & Billing"
+Row 1: 4 stat cards
+  [MRR] | [ARR] | [Churn Rate] | [Avg Revenue Per Workspace]
+Row 2: Revenue chart (AreaChart, 12 months)
+Row 3: Subscription table
+  Columns: Workspace | Plan | Amount | Status | Next Billing | Actions
+Page: Content Engine (/content)
+Header: "Content Engine" + [Campaign Stats] badge
+Tabs: Campaigns | All Posts | Quality Gates | Image Pipeline
+Campaigns tab:
+  Table: Campaign Name | Workspace | Posts | Status | Created | Actions
+All Posts tab:
+  Filters: Workspace dropdown | Status dropdown | Category dropdown | Search
+  Table: Title | Workspace | Status (badge) | Word Count | Images | Schema | Published | Actions
+Quality Gates tab:
+  Stats cards: Pass Rate | Avg Word Count | Avg Headings | Image Coverage
+  Chart: Pass/Fail trend over time
+Image Pipeline tab:
+  Recent image resolutions
+  Table: Post | Image Count | Source (Pixabay/Pexels) | Status | Resolved At
+Page: Support Tickets (/support)
+Header: "Support Tickets" + unread count badge
+Filters: Status (Open/In Progress/Resolved/Closed) | Priority (Low/Medium/High/Urgent) | Workspace
+Table: # | Subject | Workspace | Priority (badge, color-coded) | Status (badge) | Created | Assigned To | Actions
+Page: Settings (/settings)
+Tabs: General | API | Email | Defaults | Danger Zone
+General: Platform name, logo, default timezone
+API: Rate limits per plan tier, webhook URLs
+Email: SMTP config, notification templates
+Defaults: Default quality gate thresholds, credit amounts per plan
+Danger Zone: Purge old data, maintenance mode toggle
+Client Dashboard Layout
+Sidebar Navigation
+Logo: Workspace name (or white-label brand) + workspace icon
+Collapsed icon width: 4rem
+Expanded width: 16rem
+Groups:
+  [Overview]
+    - Dashboard          (LayoutDashboard)
+  [Content]
+    - Posts              (FileText)
+    - Campaigns          (Megaphone)
+    - Media Library      (ImageIcon)
+    - CMS Sync           (RefreshCw)
+  [SEO]
+    - Rank Tracker       (TrendingUp)
+    - Local Search Grid  (MapPin)
+    - Site Audit         (Search)
+    - Schema Markup      (Code2)
+    - Link Builder       (Link)
+    - Site Profile       (Globe)
+    - Search Console     (Monitor)
+  [CRM]
+    - Pipeline           (Kanban)
+    - Contacts           (Contact)
+  [Business]
+    - Invoices           (FileText)
+    - Reports            (BarChart3)
+  [Widget]
+    - Chat Widget        (MessageSquare)
+    - Training Data      (Brain)
+    - Embed Code         (Code)
+  [Settings]
+    - General            (Settings)
+    - Team               (Users)
+    - API Keys (BYOK)    (Key)
+    - Twilio             (Phone)
+    - Payments           (CreditCard)
+    - Credits            (Coins)
+  [Help]
+    - Documentation      (BookOpen)
+    - Support            (LifeBuoy)
+Footer:
+    - User avatar + name + role
+    - Theme toggle
+    - Workspace switcher (if multi-workspace plan)
+    - Logout
+Page: Dashboard (/)
+Header: "Dashboard" + workspace name + plan badge
+Row 1: 5 stat cards
+  [Total Posts] | [Published] | [Keywords Tracked] | [Open Deals] | [Revenue (invoices)]
+Row 2: 2 charts (60/40 split)
+  [Left]  Area chart: Content published per month (last 6 months)
+  [Right] Donut chart: Posts by status (Draft / Review / Published / Scheduled)
+Row 3: 2 panels (50/50 split)
+  [Left]  "Recent Posts" -- last 5 posts, title + status badge + date
+  [Right] "SEO Snapshot" -- top 5 tracked keywords + current position + change arrow
+Row 4: Full width
+  "Pipeline Summary" -- horizontal bar showing deal count per stage, color-coded
+Page: Posts (/posts)
+Header: "Content Posts" + [New Post] button (primary) + [Bulk Generate] button (outline)
+Filters row: Search | Status dropdown | Category dropdown | Schema Type dropdown
+Table:
+  Columns: Title | Category | Status (badge) | Words | Images | Schema (badge) | Published Date | Actions
+  Actions: Edit | Preview | Duplicate | Export MDX | Delete
+Bulk Generate dialog (modal):
+  - Campaign name input
+  - Topic/keyword textarea (one per line)
+  - Category dropdown
+  - Target word count range (slider: 1500-2500)
+  - [Generate] button -> SSE progress bar
+Page: Post Editor (/posts/:id)
+Layout: 2 columns (70/30)
+Left column:
+  - Title input (large text)
+  - Category dropdown
+  - Content editor (textarea or rich text)
+  - Image placeholders shown inline with [Resolve Images] button
+Right column (sticky sidebar):
+  - Status dropdown (Draft / Review / Published / Scheduled)
+  - Published date picker (if scheduled)
+  - Primary keyword input
+  - Meta title input
+  - Meta description textarea (with character count)
+  - Slug input (auto-generated, editable)
+  Collapsible sections:
+    [Schema Markup]
+      - Schema type dropdown (20 types)
+      - [Auto-Detect] button
+      - JSON-LD preview (code block, copyable)
+    [SEO Score]
+      - Score badge (0-100, color: red/yellow/green)
+      - Checklist: title length, meta desc, headings, images, internal links
+    [Links]
+      - Internal link count
+      - External link count
+      - [Suggest Links] button
+      - Link list with rel attribute badges (dofollow/nofollow)
+    [CMS Export]
+      - Target CMS dropdown (WordPress/Webflow/Shopify/Ghost/Wix)
+      - [Export] button
+      - [Export MDX] button
+Page: Rank Tracker (/rank-tracker)
+Header: "Rank Tracker" + credits remaining badge + [Buy Credits] button
+Subheader: [Add Keywords] button + [Refresh All] button (uses credits)
+Table:
+  Columns: Keyword | Position | Change (arrow + number, green/red) | URL | Search Volume | Last Checked | Actions
+  Actions: View History | Remove
+Keyword detail (expandable row or side panel):
+  - Position history line chart (last 30 days)
+  - Competitor positions table
+Page: Local Search Grid (/local-grid)
+Header: "Local Search Grid" + credits remaining badge + [Buy Credits] button
+Setup panel (if no scans yet):
+  - Business name input
+  - Location (address) input
+  - Keyword input
+  - Grid size: 5x5 (fixed)
+  - [Run Scan] button
+Results:
+  - 5x5 grid visualization (colored cells: green = top 3, yellow = 4-10, red = 11+, gray = not found)
+  - Each cell shows rank number
+  - Click cell -> details panel with competitors at that point
+  - Scan history dropdown to compare previous scans
+Page: Pipeline (/crm/pipeline)
+Header: "Sales Pipeline" + [Add Deal] button + toggle: Board View / List View
+Board View (default):
+  - Horizontal scrollable kanban columns
+  - Each column = pipeline stage (colored header bar)
+  - Deal cards: Contact name, deal value ($), expected close date
+  - Drag deals between columns
+  - Column footer: deal count + total value
+List View:
+  Table: Deal Name | Contact | Value | Stage (badge) | Expected Close | Assigned To | Actions
+[Add Deal] dialog:
+  - Deal name input
+  - Contact dropdown (searchable)
+  - Value input + currency dropdown
+  - Stage dropdown
+  - Expected close date picker
+  - Assigned to input
+  - Source dropdown
+  - Notes textarea
+Page: Contacts (/crm/contacts)
+Header: "Contacts" + [Add Contact] button + contact count badge
+Search bar + tag filter dropdown
+Table:
+  Columns: Name | Email | Company | Phone | Tags (badges) | Deals | Source | Actions
+  Actions: View | Edit | Delete
+Contact detail dialog:
+  Left: Contact info (name, email, phone, company, website, tags, source, notes)
+  Right: Associated deals table + activity timeline
+Page: Invoices (/invoices)
+Header: "Invoices" + [Create Invoice] button
+Stat cards row: Draft | Sent | Paid | Overdue (each with count + total $)
+Table:
+  Columns: Invoice # | Client | Amount | Tax | Total | Status (badge, color) | Due Date | Actions
+  Actions: View | Edit | Send | Mark Paid | Download PDF | Delete
+Invoice editor (full page):
+  Header: Invoice # (auto: INV-0001) | Status dropdown | Due date picker
+  Client info: Name, email, address inputs
+  Line items table: Description | Qty | Unit Price | Total | [Remove]
+  [Add Line Item] button
+  Footer: Subtotal | Tax % input | Tax amount | Total
+  Currency dropdown (USD/EUR/GBP/AUD/CAD)
+  Notes textarea
+  [Save Draft] [Send Invoice] buttons
+Page: Reports (/reports)
+Header: "Reports" + [Save Report] button
+Tabs: Content | SEO | Revenue
+Content tab:
+  Row 1: Stat cards -- Total Posts | Published | Avg Word Count | Image Coverage %
+  Row 2: Charts
+    [Left] Bar chart: Posts by category
+    [Right] Bar chart: Posts by month
+  Row 3: Schema coverage pie chart + posts by status breakdown
+SEO tab:
+  Row 1: Stat cards -- Pages Audited | Avg SEO Score | Keywords Tracked | Avg Position
+  Row 2: SEO score distribution histogram
+  Row 3: Top improving / declining keywords table
+Revenue tab:
+  Row 1: Stat cards -- Total Invoiced | Paid | Outstanding | Overdue
+  Row 2: Revenue area chart (monthly)
+  Row 3: Invoice status pie chart
+Saved reports: list of previously saved snapshots with date + [View] [Delete]
+Page: Credits (/settings/credits)
+Header: "Credits & Usage"
+2 cards side by side:
+  [Rank Tracker Credits]
+    - Remaining: X
+    - Used this month: Y
+    - [Buy Credits] button -> pricing: 5 for $10, 25 for $35
+  [Local Grid Credits]
+    - Remaining: X
+    - Used this month: Y
+    - [Buy Credits] button -> same pricing
+Usage history table:
+  Columns: Date | Type (Rank/Grid) | Credits Used | Triggered By | Keyword/Scan
+Page: Settings (/settings)
+Tabs: General | Team | API Keys | Twilio | Payments
+General:
+  - Workspace name input
+  - Domain input
+  - Timezone dropdown
+  - Logo upload
+  - [Save] button
+Team:
+  Table: Name | Email | Role (dropdown: owner/admin/editor/viewer) | Actions
+  [Invite Member] button
+API Keys (BYOK):
+  Cards for each provider: OpenAI | Anthropic | Google | Grok | Mistral | Cohere | Perplexity
+  Each card: Provider name + icon, API key input (masked), [Save] [Test] buttons
+Twilio:
+  Account SID, Auth Token, Phone Number inputs
+  Voice settings, SMS settings
+  [Save] [Test Connection] buttons
+Payments:
+  Stripe integration
+  API key inputs
+  Webhook URL display
+Responsive Behavior
+Sidebar collapses to icon-only on screens < 1024px
+Sidebar becomes a drawer (hamburger menu) on screens < 768px
+Tables become scrollable horizontally on mobile
+Stat card rows wrap to 2x2 grid on tablet, single column on mobile
+Kanban board scrolls horizontally on smaller screens
+Charts resize responsively (Recharts ResponsiveContainer)
+Component Library (all from shadcn/ui)
+Card, Button, Badge, Table, Dialog, Select, Input, Textarea, Tabs, DropdownMenu, Avatar, Tooltip, Separator, Skeleton, Sheet (mobile sidebar), Command (search), Calendar (date pickers), Switch, Slider, Progress, Alert
+
+Key Data Models (workspace replaces venue)
+workspaces (id, name, domain, plan, ownerId, status, branding, createdAt)
+workspace_users (workspaceId, userId, role)
+blog_posts (id, workspaceId, title, content, status, category, wordCount, schemaType, schemaJson, publishedAt)
+content_campaigns (id, workspaceId, name, postCount, status, createdAt)
+rank_tracker_keywords (id, workspaceId, keyword, position, lastChecked)
+grid_scans (id, workspaceId, keyword, location, gridSize, results, scannedAt)
+crm_contacts (id, workspaceId, name, email, phone, company, tags, source)
+crm_pipeline_stages (id, workspaceId, name, position, color)
+crm_deals (id, workspaceId, contactId, stageId, name, value, currency, expectedClose)
+invoices (id, workspaceId, number, clientName, status, total, currency, dueDate)
+invoice_line_items (id, invoiceId, description, quantity, unitPrice)
+white_label_configs (id, workspaceId, brandName, logo, domain, primaryColor, supportEmail)
+credits (id, workspaceId, type, remaining, used)

@@ -1,0 +1,96 @@
+Page: Setup Guide (/settings/setup)
+Header: "Setup Guide"
+Checklist (vertical stepper):
+  1. [x] Create account
+  2. [ ] Add your first workspace
+  3. [ ] Connect AI provider (or use platform defaults)
+  4. [ ] Add your first domain
+  5. [ ] Create your first content campaign
+  6. [ ] Set up rank tracking keywords
+  7. [ ] Configure your widget
+  8. [ ] Invite team members
+Each step: Title + description + [Go to Setting] link
+Progress bar at top: X of 8 complete
+Page: Documentation (/support/docs)
+Header: "Documentation"
+Search bar
+Categories (accordion or card grid):
+  Getting Started | Content Engine | SEO Tools | Rank Tracker | CRM | Invoices | Widget | API Reference | FAQs
+Each article: Title + body (markdown rendered) + last updated date
+Page: Support Tickets (/support/tickets)
+Header: "Support" + [New Ticket] button
+Table:
+  Columns: # | Subject | Priority (badge) | Status (badge) | Created | Last Reply | Actions
+  Actions: View | Reply
+Ticket detail view:
+  Conversation thread (messages alternating sides)
+  Reply textarea + [Send] button
+  Status dropdown + Priority dropdown (editable)
+New Ticket dialog:
+  Subject input
+  Priority dropdown (Low/Medium/High/Urgent)
+  Description textarea
+  [Submit] button
+Responsive Behavior
+Sidebar collapses to icon-only on screens < 1024px
+Sidebar becomes a drawer (hamburger menu) on screens < 768px
+Tables become scrollable horizontally on mobile
+Stat card rows wrap to 2x2 grid on tablet, single column on mobile
+Kanban board scrolls horizontally on smaller screens
+Charts resize responsively (Recharts ResponsiveContainer)
+Post editor switches from 2-column to single column on mobile (sidebar below content)
+Component Library (all from shadcn/ui)
+Card, Button, Badge, Table, Dialog, Select, Input, Textarea, Tabs, DropdownMenu, Avatar, Tooltip, Separator, Skeleton, Sheet (mobile sidebar/drawers), Command (search), Calendar (date pickers), Switch, Slider, Progress, Alert, Accordion, Collapsible
+
+Key Data Models (workspace replaces venue)
+agencies (id, name, plan, ownerId, status, createdAt)
+workspaces (id, agencyId, name, domain, status, branding, createdAt)
+users (id, agencyId, email, name, role, lastLogin, status)
+admin_users (id, email, name, role, lastLogin)
+blog_posts (id, workspaceId, title, content, slug, status, category, wordCount, schemaType, schemaJson, schemaAutoDetected, primaryKeyword, metaTitle, metaDescription, publishedAt, createdAt)
+content_campaigns (id, workspaceId, name, postCount, completedCount, status, createdAt)
+content_assets (id, workspaceId, url, altText, caption, source, createdAt)
+workspace_site_profiles (id, workspaceId, domain, targetKeywords, brandTerms)
+workspace_site_pages (id, profileId, url, title, keywords)
+post_keyword_index (id, postId, keyword, source)
+post_validation_results (id, postId, checks, passed, failed, createdAt)
+rank_tracker_keywords (id, workspaceId, keyword, currentPosition, previousPosition, url, searchVolume, lastChecked)
+rank_tracker_results (id, keywordId, position, checkedAt)
+rank_tracker_credits (id, workspaceId, remaining, used)
+grid_keywords (id, workspaceId, keyword, location, businessName)
+grid_scan_results (id, keywordId, gridData, scannedAt)
+grid_refresh_credits (id, workspaceId, remaining, used)
+crm_contacts (id, workspaceId, name, email, phone, company, website, tags, source, notes)
+crm_pipeline_stages (id, workspaceId, name, position, color)
+crm_deals (id, workspaceId, contactId, stageId, name, value, currency, expectedClose, assignedTo, source, notes)
+invoices (id, workspaceId, number, clientName, clientEmail, clientAddress, status, subtotal, taxRate, taxAmount, total, currency, dueDate, notes, createdAt)
+invoice_line_items (id, invoiceId, description, quantity, unitPrice, total)
+content_reports (id, workspaceId, type, data, createdAt)
+widget_settings (id, workspaceId, position, primaryColor, welcomeMessage, pillText)
+widget_chat_logs (id, workspaceId, visitorId, messages, startedAt, endedAt)
+knowledge_base_items (id, workspaceId, title, category, type, content, status)
+ai_provider_settings (id, workspaceId, provider, apiKey, model, status)
+twilio_settings (id, workspaceId, accountSid, authToken, phoneNumber)
+call_logs (id, workspaceId, phoneNumber, direction, duration, status, recording, transcript, aiSummary, createdAt)
+white_label_configs (id, agencyId, brandName, logo, favicon, domain, primaryColor, supportEmail)
+credits (id, workspaceId, type, remaining, used, lastPurchased)
+support_tickets (id, workspaceId, subject, description, priority, status, createdAt)
+admin_settings (id, key, value)
+announcements (id, title, type, content, targetAudience, publishedAt, expiresAt, status)
+subscriptions (id, agencyId, plan, amount, billingCycle, status, nextBilling, stripeId)
+Pricing Tiers (enforced in platform)
+Feature	Solo ($99/mo)	Professional ($299/mo)	White Label ($499/mo)	Enterprise (custom)
+Workspaces	1	3-50	100	Unlimited
+Content Engine	Yes	Yes	Yes	Yes
+SEO Tools	Yes	Yes	Yes	Yes
+CRM	Basic	Full	Full	Full
+Widget	Yes	Yes	Yes	Yes
+Twilio	Yes	Yes	Yes	Yes
+CMS Sync	Yes	Yes	Yes	Yes
+White Label	No	No	Yes	Yes
+Custom Domain	No	Yes	Yes	Yes
+API Access	No	No	No	Yes
+Priority Support	No	No	Yes	Yes
+Rank Tracker Credits	1 free/week	1 free/week	5 free/week	10 free/week
+Grid Scan Credits	1 free/week	1 free/week	5 free/week	10 free/week
+Team Members	1	5	20	Unlimited
