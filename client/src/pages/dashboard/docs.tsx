@@ -8,28 +8,28 @@ import { BookOpen, HelpCircle } from "lucide-react";
 
 const faqItems = [
   {
-    question: "How do I add a new reservation?",
-    answer: "Navigate to the Today or Calendar page and click the 'Add Reservation' button. Fill in the guest details, date, time, and party size, then submit the form.",
+    question: "How do I get started with indexFlow?",
+    answer: "Navigate to the Dashboard to see an overview of your workspace. From there, you can configure your AI widget, manage content, and track SEO performance.",
   },
   {
-    question: "How do I manage business hours?",
-    answer: "Go to Settings > Hours to configure your opening and closing times for each day of the week. You can also mark specific days as closed.",
+    question: "How do I manage my workspace settings?",
+    answer: "Go to Settings to configure your workspace preferences, team members, and integrations.",
   },
   {
-    question: "How do I set up the booking widget?",
-    answer: "The booking widget can be embedded on your website. Go to Settings to find your widget configuration options and embed code.",
+    question: "How do I set up the AI widget?",
+    answer: "The AI widget can be embedded on your website. Go to Settings to find your widget configuration options and embed code.",
   },
   {
     question: "How do I export my data?",
-    answer: "Visit the Export page to download your reservations, call logs, and support tickets as CSV files.",
+    answer: "Visit the Export page to download your contacts, call logs, and support tickets as CSV files.",
   },
   {
     question: "How do I track keyword rankings?",
     answer: "Use the Rank Tracker page to add keywords you want to monitor. The system will track their positions over time.",
   },
   {
-    question: "How do I manage room bookings?",
-    answer: "Set up your room types first under Rooms > Types, then add individual rooms under Rooms > List. You can then create and manage bookings under Rooms > Bookings.",
+    question: "How do I manage content?",
+    answer: "Use the Content section to create and manage pages, blog posts, and campaigns for your websites.",
   },
   {
     question: "How do I submit a support ticket?",
@@ -51,7 +51,7 @@ export default function Documentation() {
   });
 
   if (!workspaceId) {
-    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to view documentation.</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a workspace from the sidebar to view documentation.</div>;
   }
 
   if (isLoading) {

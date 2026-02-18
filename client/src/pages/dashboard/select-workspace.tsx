@@ -61,10 +61,10 @@ export default function SelectWorkspace() {
 
   const getWorkspaceTypeLabel = (type: string) => {
     const types: Record<string, string> = {
-      restaurant: "Restaurant",
-      cafe: "Cafe",
-      bar: "Bar",
-      hotel: "Hotel",
+      agency: "Agency",
+      client: "Client",
+      project: "Project",
+      enterprise: "Enterprise",
       other: "Workspace",
     };
     return types[type] || type;

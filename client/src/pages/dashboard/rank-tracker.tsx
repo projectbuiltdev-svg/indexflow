@@ -58,25 +58,25 @@ interface RankResult {
 const MAX_KEYWORDS = 1000;
 
 const demoKeywordBases = [
-  "best restaurant near me", "fine dining downtown", "romantic dinner restaurant",
-  "book a table online", "private dining rooms", "restaurant reservations near me",
-  "best brunch spots", "outdoor dining patio", "italian restaurant",
-  "sushi bar near me", "vegan restaurant", "gluten free dining",
-  "family friendly restaurant", "late night food", "happy hour deals",
-  "restaurant with live music", "waterfront dining", "rooftop bar restaurant",
-  "farm to table restaurant", "best steakhouse", "seafood restaurant",
-  "thai food near me", "mexican restaurant", "french bistro",
-  "japanese restaurant", "indian cuisine", "mediterranean food",
-  "pizza delivery", "burger joint near me", "wine bar restaurant",
-  "cocktail bar food", "sunday brunch", "breakfast restaurant",
-  "lunch specials near me", "dinner reservations", "catering services",
-  "private event venue", "wedding reception venue", "corporate dining",
-  "chef tasting menu", "prix fixe dinner", "food delivery restaurant",
-  "takeout restaurant", "curbside pickup food", "restaurant gift cards",
-  "restaurant week deals", "michelin star restaurant", "zagat rated restaurant",
-  "best new restaurant", "restaurant opening near me",
+  "best seo agency near me", "digital marketing services", "content marketing agency",
+  "local seo company", "website optimization services", "seo consultant near me",
+  "best ppc management", "social media marketing agency", "web design agency",
+  "link building services", "keyword research tools", "technical seo audit",
+  "affordable seo services", "enterprise seo solutions", "ecommerce seo agency",
+  "local search optimization", "google ads management", "content strategy agency",
+  "organic traffic growth", "best marketing agency", "seo audit services",
+  "backlink analysis tools", "rank tracking software", "seo reporting platform",
+  "content writing services", "blog management agency", "on-page seo services",
+  "off-page seo company", "seo tools for agencies", "white label seo provider",
+  "marketing analytics platform", "conversion rate optimization", "landing page optimization",
+  "email marketing agency", "lead generation services", "brand strategy consulting",
+  "competitive analysis tools", "market research agency", "digital pr services",
+  "schema markup services", "site speed optimization", "mobile seo services",
+  "international seo agency", "multilingual seo services", "seo training courses",
+  "seo certification programs", "top rated seo company", "award winning seo agency",
+  "best new marketing tools", "seo software comparison",
 ];
-const demoPages = ["/", "/menu", "/reservations", "/private-dining", "/patio", "/events", "/catering", "/about", "/contact", "/specials"];
+const demoPages = ["/", "/services", "/pricing", "/case-studies", "/blog", "/about", "/contact", "/solutions", "/resources", "/careers"];
 const demoResults: RankResult[] = Array.from({ length: 300 }, (_, i) => {
   const base = demoKeywordBases[i % demoKeywordBases.length];
   const suffix = i >= demoKeywordBases.length ? ` ${["city", "2025", "best", "top rated", "affordable", "luxury"][Math.floor(i / demoKeywordBases.length) % 6]}` : "";
@@ -89,7 +89,7 @@ const demoResults: RankResult[] = Array.from({ length: 300 }, (_, i) => {
     keyword: `${base}${suffix}`,
     position: pos,
     previousPosition: prev,
-    url: pos !== null ? `https://yourvenue.com${demoPages[i % demoPages.length]}` : null,
+    url: pos !== null ? `https://yoursite.com${demoPages[i % demoPages.length]}` : null,
     searchEngine: "google",
     checkedAt: new Date().toISOString(),
   };
@@ -118,7 +118,7 @@ export default function RankTracker() {
   const resultsLimit = 20;
 
   useEffect(() => {
-    document.title = "Rank Tracker | Resto Dashboard";
+    document.title = "Rank Tracker | indexFlow Dashboard";
   }, []);
 
   const { data: venue } = useQuery<{ id: string; name: string; website: string | null }>({
@@ -329,7 +329,7 @@ export default function RankTracker() {
             Rank Tracker
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            powered by Resto
+            powered by indexFlow
           </p>
         </div>
 
@@ -388,7 +388,7 @@ export default function RankTracker() {
                   <Label htmlFor="keyword-input" className="sr-only">Keywords</Label>
                   <Textarea
                     id="keyword-input"
-                    placeholder="best restaurant near me&#10;fine dining downtown&#10;book a table online"
+                    placeholder="best seo agency near me&#10;digital marketing services&#10;content marketing agency"
                     value={keywordInput}
                     onChange={(e) => setKeywordInput(e.target.value)}
                     rows={4}
@@ -610,7 +610,7 @@ export default function RankTracker() {
                 <div className="space-y-2">
                   <h3 className="font-semibold text-sm sm:text-base">Upload 1,000 Keywords</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Monitor performance and page rank positions on Google & AI search engines. Track how your venue ranks across traditional and AI-powered search results.
+                    Monitor performance and page rank positions on Google & AI search engines. Track how your site ranks across traditional and AI-powered search results.
                   </p>
                   <div className="flex flex-wrap gap-3 pt-1">
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground">

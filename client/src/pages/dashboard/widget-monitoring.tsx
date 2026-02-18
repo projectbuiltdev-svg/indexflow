@@ -4,9 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Users, Clock, TrendingUp, CheckCircle } from "lucide-react";
 
 const mockSessions = [
-  { id: 1, visitor: "Visitor #1042", messages: 8, duration: "4:32", outcome: "Booking Made", date: "2026-02-18 15:10" },
+  { id: 1, visitor: "Visitor #1042", messages: 8, duration: "4:32", outcome: "Lead Captured", date: "2026-02-18 15:10" },
   { id: 2, visitor: "Visitor #1041", messages: 3, duration: "1:15", outcome: "FAQ Answered", date: "2026-02-18 14:30" },
-  { id: 3, visitor: "Visitor #1040", messages: 12, duration: "6:20", outcome: "Booking Made", date: "2026-02-18 13:00" },
+  { id: 3, visitor: "Visitor #1040", messages: 12, duration: "6:20", outcome: "Lead Captured", date: "2026-02-18 13:00" },
   { id: 4, visitor: "Visitor #1039", messages: 2, duration: "0:45", outcome: "Abandoned", date: "2026-02-18 11:30" },
   { id: 5, visitor: "Visitor #1038", messages: 5, duration: "2:10", outcome: "FAQ Answered", date: "2026-02-17 16:45" },
 ];
@@ -86,7 +86,7 @@ export default function WidgetMonitoring() {
                       <Clock className="w-3 h-3" />
                       {session.duration}
                     </span>
-                    <Badge variant={session.outcome === "Booking Made" ? "default" : "secondary"} className="text-xs">
+                    <Badge variant={session.outcome === "Lead Captured" ? "default" : "secondary"} className="text-xs">
                       {session.outcome}
                     </Badge>
                   </div>

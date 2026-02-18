@@ -12,8 +12,8 @@ const mockMetrics = [
 
 const mockTopPages = [
   { page: "/", views: 4210, visitors: 2100 },
-  { page: "/menu", views: 2890, visitors: 1450 },
-  { page: "/reservations", views: 2340, visitors: 1170 },
+  { page: "/services", views: 2890, visitors: 1450 },
+  { page: "/pricing", views: 2340, visitors: 1170 },
   { page: "/about", views: 1580, visitors: 890 },
   { page: "/contact", views: 1120, visitors: 620 },
 ];

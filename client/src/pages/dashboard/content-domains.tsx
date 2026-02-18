@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Globe, Plus, Shield, AlertTriangle } from "lucide-react";
 
 const mockDomains = [
-  { id: 1, domain: "myrestaurant.com", status: "active", ssl: true, primary: true, expires: "2027-03-15" },
-  { id: 2, domain: "www.myrestaurant.com", status: "active", ssl: true, primary: false, expires: "2027-03-15" },
-  { id: 3, domain: "order.myrestaurant.com", status: "pending", ssl: false, primary: false, expires: "2027-03-15" },
+  { id: 1, domain: "myagency.com", status: "active", ssl: true, primary: true, expires: "2027-03-15" },
+  { id: 2, domain: "www.myagency.com", status: "active", ssl: true, primary: false, expires: "2027-03-15" },
+  { id: 3, domain: "blog.myagency.com", status: "pending", ssl: false, primary: false, expires: "2027-03-15" },
 ];
 
 export default function ContentDomains() {

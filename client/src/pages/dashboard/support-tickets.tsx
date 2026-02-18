@@ -8,7 +8,7 @@ const mockTickets = [
   { id: "TKT-1024", subject: "Widget not loading on Safari", priority: "high", status: "open", created: "2026-02-18", updated: "2026-02-18" },
   { id: "TKT-1023", subject: "API rate limit exceeded", priority: "medium", status: "in-progress", created: "2026-02-17", updated: "2026-02-18" },
   { id: "TKT-1022", subject: "Custom domain SSL certificate issue", priority: "high", status: "in-progress", created: "2026-02-16", updated: "2026-02-17" },
-  { id: "TKT-1021", subject: "How to export booking data?", priority: "low", status: "resolved", created: "2026-02-15", updated: "2026-02-16" },
+  { id: "TKT-1021", subject: "How to export analytics data?", priority: "low", status: "resolved", created: "2026-02-15", updated: "2026-02-16" },
   { id: "TKT-1020", subject: "Twilio webhook not triggering", priority: "medium", status: "resolved", created: "2026-02-14", updated: "2026-02-15" },
 ];
 

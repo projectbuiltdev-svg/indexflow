@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Link2, Plus, ExternalLink, AlertCircle } from "lucide-react";
 
 const mockLinks = [
-  { id: 1, source: "/menu", target: "/reservations", anchor: "Book a table", status: "active", type: "internal" },
-  { id: 2, source: "/blog/spring-menu", target: "/menu", anchor: "View our menu", status: "active", type: "internal" },
+  { id: 1, source: "/services", target: "/pricing", anchor: "View pricing", status: "active", type: "internal" },
+  { id: 2, source: "/blog/seo-tips", target: "/services", anchor: "View our services", status: "active", type: "internal" },
   { id: 3, source: "/about", target: "/contact", anchor: "Get in touch", status: "active", type: "internal" },
-  { id: 4, source: "/events", target: "/private-dining", anchor: "Private dining info", status: "broken", type: "internal" },
+  { id: 4, source: "/solutions", target: "/case-studies", anchor: "View case studies", status: "broken", type: "internal" },
   { id: 5, source: "/blog/tips", target: "https://example.com/article", anchor: "Read more", status: "active", type: "external" },
 ];
 

@@ -29,7 +29,7 @@ function downloadCSV(content: string, filename: string) {
 }
 
 const exportItems = [
-  { label: "Reservations", endpoint: "reservations", icon: CalendarCheck },
+  { label: "Contacts", endpoint: "contacts", icon: CalendarCheck },
   { label: "Call Logs", endpoint: "call-logs", icon: Phone },
   { label: "Support Tickets", endpoint: "support-tickets", icon: Ticket },
 ];
@@ -40,7 +40,7 @@ export default function DashboardExport() {
   const [loading, setLoading] = useState<string | null>(null);
 
   if (!selectedWorkspace?.id) {
-    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a venue from the sidebar to export data.</div>;
+    return <div className="p-6 text-muted-foreground" data-testid="no-venue-message">Please select a workspace from the sidebar to export data.</div>;
   }
 
   const handleExport = async (item: typeof exportItems[0]) => {

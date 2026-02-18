@@ -8,7 +8,7 @@ const mockExports = [
   { id: 1, name: "February 2026 - Full Report", format: "CSV", size: "2.4 MB", date: "2026-02-15", status: "ready" },
   { id: 2, name: "January 2026 - Full Report", format: "CSV", size: "2.1 MB", date: "2026-01-31", status: "ready" },
   { id: 3, name: "Q4 2025 Summary", format: "XLSX", size: "4.8 MB", date: "2025-12-31", status: "ready" },
-  { id: 4, name: "Custom: Bookings Data", format: "CSV", size: "1.2 MB", date: "2026-02-10", status: "ready" },
+  { id: 4, name: "Custom: Rankings Data", format: "CSV", size: "1.2 MB", date: "2026-02-10", status: "ready" },
 ];
 
 export default function AnalyticsExport() {

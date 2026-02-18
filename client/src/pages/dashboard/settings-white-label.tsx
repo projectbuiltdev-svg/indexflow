@@ -94,9 +94,9 @@ export default function SettingsWhiteLabel() {
             <CardContent>
               <div className="space-y-3">
                 {[
-                  { template: "Booking Confirmation", status: "customized" },
+                  { template: "Report Notification", status: "customized" },
                   { template: "Reminder", status: "customized" },
-                  { template: "Cancellation", status: "default" },
+                  { template: "Account Update", status: "default" },
                   { template: "Welcome Email", status: "customized" },
                   { template: "Follow-up", status: "default" },
                 ].map((item, i) => (

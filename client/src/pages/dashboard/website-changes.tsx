@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   FileEdit, Send, Clock, CheckCircle, XCircle, AlertCircle, Globe,
-  Type, Image, DollarSign, UtensilsCrossed, Timer, Link2, HelpCircle,
+  Type, Image, DollarSign, FileText, Timer, Link2, HelpCircle,
   ArrowRight, Sparkles, Zap, MessageSquare, ChevronDown, ChevronUp
 } from "lucide-react";
 
@@ -34,7 +34,7 @@ const changeTypes = [
   { value: "text", label: "Text Update", icon: Type, color: "text-blue-500 dark:text-blue-400", bg: "bg-blue-500/10 dark:bg-blue-500/20" },
   { value: "image", label: "Image Swap", icon: Image, color: "text-purple-500 dark:text-purple-400", bg: "bg-purple-500/10 dark:bg-purple-500/20" },
   { value: "pricing", label: "Pricing Change", icon: DollarSign, color: "text-emerald-500 dark:text-emerald-400", bg: "bg-emerald-500/10 dark:bg-emerald-500/20" },
-  { value: "menu", label: "Menu Update", icon: UtensilsCrossed, color: "text-orange-500 dark:text-orange-400", bg: "bg-orange-500/10 dark:bg-orange-500/20" },
+  { value: "content", label: "Content Update", icon: FileText, color: "text-orange-500 dark:text-orange-400", bg: "bg-orange-500/10 dark:bg-orange-500/20" },
   { value: "hours", label: "Hours / Info", icon: Timer, color: "text-cyan-500 dark:text-cyan-400", bg: "bg-cyan-500/10 dark:bg-cyan-500/20" },
   { value: "domain", label: "Custom Domain", icon: Link2, color: "text-rose-500 dark:text-rose-400", bg: "bg-rose-500/10 dark:bg-rose-500/20" },
   { value: "other", label: "Other", icon: HelpCircle, color: "text-muted-foreground", bg: "bg-muted" },
@@ -57,7 +57,7 @@ export default function WebsiteChanges() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
   useEffect(() => {
-    document.title = "Website Changes | Resto Dashboard";
+    document.title = "Website Changes | indexFlow Dashboard";
   }, []);
 
   const { data: changes = [], isLoading } = useQuery<WebsiteChangeRequest[]>({
@@ -120,7 +120,7 @@ export default function WebsiteChanges() {
                 Website Changes
               </h1>
               <p className="text-sm text-muted-foreground mt-0.5">
-                Request updates to your website — text, images, menus, pricing, and more
+                Request updates to your website — text, images, content, pricing, and more
               </p>
             </div>
           </div>
@@ -194,7 +194,7 @@ export default function WebsiteChanges() {
                   </Label>
                   <Input
                     id="page-url"
-                    placeholder="https://yoursite.com/menu"
+                    placeholder="https://yoursite.com/page"
                     value={pageUrl}
                     onChange={(e) => setPageUrl(e.target.value)}
                     data-testid="input-page-url"
@@ -210,11 +210,11 @@ export default function WebsiteChanges() {
                     id="change-description"
                     placeholder={
                       changeType === "text" ? "e.g. Update the About section heading to 'Our Story Since 1985' and change the description paragraph to..."
-                      : changeType === "image" ? "e.g. Replace the hero image with the new exterior photo I emailed to support@resto.restaurant..."
-                      : changeType === "pricing" ? "e.g. Update all pasta dishes to reflect new prices: Carbonara $22, Bolognese $20, Primavera $19..."
-                      : changeType === "menu" ? "e.g. Add new seasonal desserts section: Tiramisu $14, Panna Cotta $12, Affogato $10..."
-                      : changeType === "hours" ? "e.g. Update Saturday hours to 10am - 11pm, and add note 'Closed for private events on Dec 24-25'..."
-                      : changeType === "domain" ? "e.g. Connect our domain myrestaurant.com — DNS is managed through GoDaddy, we can update records..."
+                      : changeType === "image" ? "e.g. Replace the hero image with the new photo I emailed to support@indexflow.io..."
+                      : changeType === "pricing" ? "e.g. Update the pricing page to reflect new plan prices..."
+                      : changeType === "content" ? "e.g. Add a new section about our services with updated descriptions..."
+                      : changeType === "hours" ? "e.g. Update business hours to 9am - 6pm, and add note about holiday schedule..."
+                      : changeType === "domain" ? "e.g. Connect our domain mybusiness.com — DNS is managed through GoDaddy, we can update records..."
                       : "Please describe the change you need..."
                     }
                     value={description}
@@ -441,7 +441,7 @@ export default function WebsiteChanges() {
                   {[
                     { icon: Type, label: "Text & headings", color: "text-blue-500 dark:text-blue-400" },
                     { icon: Image, label: "Photos & images", color: "text-purple-500 dark:text-purple-400" },
-                    { icon: DollarSign, label: "Pricing & menus", color: "text-emerald-500 dark:text-emerald-400" },
+                    { icon: DollarSign, label: "Pricing & content", color: "text-emerald-500 dark:text-emerald-400" },
                     { icon: Timer, label: "Hours & contact info", color: "text-cyan-500 dark:text-cyan-400" },
                     { icon: Link2, label: "Custom domain setup", color: "text-rose-500 dark:text-rose-400" },
                   ].map((item, i) => (
@@ -483,7 +483,7 @@ export default function WebsiteChanges() {
                   <div>
                     <p className="text-sm font-medium mb-1">Sending images?</p>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Email your photos to <span className="font-medium text-foreground">support@resto.restaurant</span> and reference them in your request.
+                      Email your photos to <span className="font-medium text-foreground">support@indexflow.io</span> and reference them in your request.
                     </p>
                   </div>
                 </div>

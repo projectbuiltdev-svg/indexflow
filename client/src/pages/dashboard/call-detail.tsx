@@ -16,7 +16,7 @@ interface CallLog {
   status: string | null;
   transcript: string | null;
   aiSummary: string | null;
-  reservationId: string | null;
+  inquiryId: string | null;
   recordingUrl: string | null;
   createdAt: string;
 }
@@ -29,7 +29,7 @@ export default function CallDetail() {
   });
 
   useEffect(() => {
-    document.title = `Call ${callId} - Resto Dashboard`;
+    document.title = `Call ${callId} - indexFlow Dashboard`;
   }, [callId]);
 
   const parsedTranscript = useMemo(() => {

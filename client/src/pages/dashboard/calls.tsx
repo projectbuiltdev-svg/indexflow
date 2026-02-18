@@ -15,7 +15,7 @@ interface CallLog {
   status: string | null;
   transcript: string | null;
   aiSummary: string | null;
-  reservationId: string | null;
+  inquiryId: string | null;
   recordingUrl: string | null;
   createdAt: string;
 }
@@ -49,7 +49,7 @@ export default function Calls() {
   const { workspaceId } = useParams<{ workspaceId: string }>();
 
   useEffect(() => {
-    document.title = "Calls - Resto Dashboard";
+    document.title = "Calls - indexFlow Dashboard";
   }, []);
 
   const { data: calls = [], isLoading } = useQuery<CallLog[]>({
@@ -86,14 +86,14 @@ export default function Calls() {
   const getResultBadge = (summary: string | null) => {
     if (!summary) return <Badge variant="outline">Call</Badge>;
     const lower = summary.toLowerCase();
-    if (lower.includes("booking") && lower.includes("made")) {
-      return <Badge className="bg-green-500/10 text-green-600">Booking Made</Badge>;
+    if (lower.includes("inquiry") || lower.includes("converted")) {
+      return <Badge className="bg-green-500/10 text-green-600">Inquiry Converted</Badge>;
     }
     if (lower.includes("cancel")) {
       return <Badge className="bg-red-500/10 text-red-600">Cancelled</Badge>;
     }
-    if (lower.includes("modif")) {
-      return <Badge className="bg-yellow-500/10 text-yellow-600">Modified</Badge>;
+    if (lower.includes("follow")) {
+      return <Badge className="bg-yellow-500/10 text-yellow-600">Follow-up</Badge>;
     }
     return <Badge variant="outline">{summary}</Badge>;
   };

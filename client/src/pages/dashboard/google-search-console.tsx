@@ -37,7 +37,7 @@ export default function GoogleSearchConsole() {
   const [queryDateRange, setQueryDateRange] = useState("28d");
 
   useEffect(() => {
-    document.title = "Google Search Console | Resto Dashboard";
+    document.title = "Google Search Console | indexFlow Dashboard";
   }, []);
 
   const { data: allSettings = [] } = useQuery<SeoSettings[]>({

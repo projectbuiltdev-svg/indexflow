@@ -57,14 +57,14 @@ function generateDemoGrid(size: number): (number | null)[] {
 }
 
 const demoKeywords = [
-  "italian restaurant near me",
-  "best pasta downtown",
-  "romantic dinner nyc",
-  "book a table italian",
-  "pizza delivery near me",
-  "date night restaurant",
-  "family restaurant italian",
-  "outdoor dining near me",
+  "seo agency near me",
+  "best digital marketing downtown",
+  "content marketing services",
+  "local seo company",
+  "website optimization near me",
+  "social media marketing agency",
+  "ppc management services",
+  "web design agency near me",
 ];
 
 export default function LocalSearchGrid() {
@@ -81,7 +81,7 @@ export default function LocalSearchGrid() {
   const demoGrid = useMemo(() => generateDemoGrid(gridNum), [gridNum]);
 
   useEffect(() => {
-    document.title = "Local Search Grid | Resto Dashboard";
+    document.title = "Local Search Grid | indexFlow Dashboard";
   }, []);
 
   const { data: venue } = useQuery<{ id: string; name: string; address: string | null }>({
@@ -149,7 +149,7 @@ export default function LocalSearchGrid() {
       toast({ title: "Grid scanned", description: "Your grid rankings have been updated with live data from Google Maps" });
     },
     onError: (err: any) => {
-      toast({ title: "Scan failed", description: err?.message || "Failed to scan grid. Check that your venue has coordinates set.", variant: "destructive" });
+      toast({ title: "Scan failed", description: err?.message || "Failed to scan grid. Check that your workspace has coordinates set.", variant: "destructive" });
     },
   });
 
@@ -233,7 +233,7 @@ export default function LocalSearchGrid() {
             Local Search Grid
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            powered by Resto
+            powered by indexFlow
           </p>
         </div>
 
@@ -252,7 +252,7 @@ export default function LocalSearchGrid() {
                 <div className="shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">1</div>
                 <div>
                   <p className="font-medium text-sm">Add Keywords</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Enter up to 25 keywords that your customers search for — cuisine types, 'near me' terms, and occasion-based searches.</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Enter up to 25 keywords that your clients' customers search for — service types, 'near me' terms, and intent-based searches.</p>
                 </div>
               </div>
               <div className="flex gap-3">
@@ -278,14 +278,14 @@ export default function LocalSearchGrid() {
           {/* Left Column — Setup */}
           <div className="space-y-4 sm:space-y-6">
 
-            {/* Venue Location */}
+            {/* Workspace Location */}
             <div className="rounded-md border border-green-200 dark:border-green-800/50 bg-green-50/80 dark:bg-green-950/30 p-4 sm:p-6" data-testid="card-venue-location">
               <h3 className="text-base sm:text-lg font-semibold text-green-800 dark:text-green-300 flex items-center gap-2">
                 <MapPin className="w-4 h-4 shrink-0" />
-                Grid Center: {venue?.name || "Your Venue"}
+                Grid Center: {venue?.name || "Your Workspace"}
               </h3>
               <p className="text-sm text-green-700/80 dark:text-green-400/80 mt-2" data-testid="text-venue-address">
-                {venue?.address || "Your venue address will be used as the center point of the grid."}
+                {venue?.address || "Your workspace address will be used as the center point of the grid."}
               </p>
               <div className="flex items-center gap-2 text-xs text-green-600 dark:text-green-400 mt-2">
                 <CheckCircle className="w-3.5 h-3.5" />
@@ -313,6 +313,7 @@ export default function LocalSearchGrid() {
                   </div>
                   <div>
                     <Label htmlFor="grid-distance" className="text-sm">Distance Between Points</Label>
+
                     <Select value={distance} onValueChange={setDistance}>
                       <SelectTrigger id="grid-distance" data-testid="select-grid-distance">
                         <SelectValue />
@@ -349,7 +350,7 @@ export default function LocalSearchGrid() {
                   <Label htmlFor="grid-keyword-input" className="sr-only">Keywords</Label>
                   <Textarea
                     id="grid-keyword-input"
-                    placeholder={"italian restaurant near me\nbest pasta downtown\nromantic dinner restaurant"}
+                    placeholder={"seo agency near me\nbest digital marketing downtown\ncontent marketing services"}
                     value={keywordInput}
                     onChange={(e) => setKeywordInput(e.target.value)}
                     rows={4}

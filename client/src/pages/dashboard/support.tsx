@@ -70,7 +70,7 @@ export default function Support() {
   });
 
   useEffect(() => {
-    document.title = "Support - Resto Dashboard";
+    document.title = "Support - indexFlow Dashboard";
   }, []);
 
   const form = useForm<TicketFormData>({
@@ -100,7 +100,7 @@ export default function Support() {
     onError: () => {
       toast({
         title: "Failed to Submit Ticket",
-        description: "Please try again or email support@resto.restaurant directly.",
+        description: "Please try again or email support@indexflow.io directly.",
         variant: "destructive"
       });
     }
@@ -164,7 +164,7 @@ export default function Support() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email Support</p>
-                  <p className="font-semibold">support@resto.restaurant</p>
+                  <p className="font-semibold">support@indexflow.io</p>
                 </div>
               </div>
             </CardContent>
@@ -375,9 +375,9 @@ export default function Support() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card className="hover-elevate cursor-pointer">
                 <CardContent className="py-4">
-                  <h3 className="font-medium mb-1">How do I install the booking widget?</h3>
+                  <h3 className="font-medium mb-1">How do I install the AI widget?</h3>
                   <p className="text-sm text-muted-foreground">
-                    Go to Settings &gt; Widget Code and copy the embed code for your platform.
+                    Go to Settings &gt; Widget Code and copy the embed code for your website.
                   </p>
                 </CardContent>
               </Card>
@@ -385,7 +385,7 @@ export default function Support() {
                 <CardContent className="py-4">
                   <h3 className="font-medium mb-1">How do I train the AI assistant?</h3>
                   <p className="text-sm text-muted-foreground">
-                    Go to Settings &gt; AI Training to add your business info, menus, and FAQs.
+                    Go to Settings &gt; AI Training to add your business info, knowledge base, and FAQs.
                   </p>
                 </CardContent>
               </Card>

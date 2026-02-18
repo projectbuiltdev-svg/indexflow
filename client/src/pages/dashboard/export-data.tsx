@@ -23,10 +23,10 @@ import { DashboardLayout } from "@/components/dashboard-layout";
 const exportTypes = [
   {
     id: "bookings",
-    title: "Table Bookings",
-    description: "Export all table reservation data including guest details, party size, status, and notes",
+    title: "Client Reports",
+    description: "Export all client report data including contact details, campaign status, and notes",
     icon: Calendar,
-    fields: ["Date", "Time", "Guest Name", "Email", "Phone", "Party Size", "Status", "Notes", "Source"],
+    fields: ["Date", "Time", "Client Name", "Email", "Phone", "Campaign", "Status", "Notes", "Source"],
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },
@@ -44,16 +44,16 @@ const exportTypes = [
     title: "Analytics Data",
     description: "Export performance metrics including widget interactions, conversion rates, and trends",
     icon: BarChart3,
-    fields: ["Date", "Widget Impressions", "Interactions", "Conversions", "Calls Answered", "Bookings Made"],
+    fields: ["Date", "Widget Impressions", "Interactions", "Conversions", "Calls Answered", "Leads Generated"],
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },
   {
     id: "rooms",
-    title: "Room Bookings",
-    description: "Export hotel room reservation data including guest details, room types, and check-in/out dates",
+    title: "Project Data",
+    description: "Export project data including client details, project types, and timeline dates",
     icon: Bed,
-    fields: ["Booking ID", "Guest Name", "Room Type", "Room Number", "Check-in", "Check-out", "Guests", "Status", "Total"],
+    fields: ["Project ID", "Client Name", "Project Type", "Project Code", "Start Date", "End Date", "Team", "Status", "Total"],
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
   },
@@ -87,7 +87,7 @@ const exportTypes = [
   {
     id: "team",
     title: "Team Members",
-    description: "Export your staff directory with roles, contact details, and permissions",
+    description: "Export your team directory with roles, contact details, and permissions",
     icon: Users,
     fields: ["Name", "Email", "Phone", "Role", "Status", "Added Date"],
     color: "text-amber-500",
@@ -122,8 +122,8 @@ const exportTypes = [
   },
   {
     id: "closures",
-    title: "Scheduled Closures",
-    description: "Export your venue closure dates for holidays, renovations, and special events",
+    title: "Scheduled Maintenance",
+    description: "Export your workspace maintenance dates for updates, migrations, and planned downtime",
     icon: CalendarOff,
     fields: ["Start Date", "End Date", "Reason", "Type", "Status", "Created"],
     color: "text-slate-500",
@@ -223,7 +223,7 @@ export default function ExportData() {
     <DashboardLayout>
       <div className="mb-6">
         <h1 className="text-2xl font-bold" data-testid="text-export-title">Export Data</h1>
-        <p className="text-muted-foreground">Download your venue data in CSV format</p>
+        <p className="text-muted-foreground">Download your workspace data in CSV format</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 mb-6">

@@ -6,10 +6,10 @@ import { FileText, Plus, Eye, Clock, CheckCircle } from "lucide-react";
 
 const mockPosts = [
   { id: 1, title: "10 Tips for Better Customer Experience", status: "published", views: 1243, date: "2026-02-15" },
-  { id: 2, title: "How to Optimize Your Booking Flow", status: "published", views: 892, date: "2026-02-12" },
-  { id: 3, title: "Seasonal Menu Ideas for Spring 2026", status: "draft", views: 0, date: "2026-02-10" },
-  { id: 4, title: "Why Online Reservations Matter", status: "published", views: 2104, date: "2026-02-08" },
-  { id: 5, title: "Staff Training Best Practices", status: "scheduled", views: 0, date: "2026-02-20" },
+  { id: 2, title: "How to Optimize Your Content Strategy", status: "published", views: 892, date: "2026-02-12" },
+  { id: 3, title: "SEO Trends to Watch in Spring 2026", status: "draft", views: 0, date: "2026-02-10" },
+  { id: 4, title: "Why Local SEO Matters for Agencies", status: "published", views: 2104, date: "2026-02-08" },
+  { id: 5, title: "Team Collaboration Best Practices", status: "scheduled", views: 0, date: "2026-02-20" },
 ];
 
 export default function ContentPosts() {

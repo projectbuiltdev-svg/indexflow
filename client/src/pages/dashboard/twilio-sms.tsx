@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, Send, CheckCircle, Clock } from "lucide-react";
 
 const mockMessages = [
-  { id: 1, to: "+1 (555) 123-4567", message: "Your reservation for 2 at 7:00 PM is confirmed.", type: "confirmation", status: "delivered", date: "2026-02-18 14:30" },
-  { id: 2, to: "+1 (555) 234-5678", message: "Reminder: Your reservation is tomorrow at 8:00 PM.", type: "reminder", status: "delivered", date: "2026-02-18 10:00" },
-  { id: 3, to: "+1 (555) 345-6789", message: "Your table is ready! Please proceed to the host stand.", type: "notification", status: "delivered", date: "2026-02-17 19:15" },
-  { id: 4, to: "+1 (555) 456-7890", message: "Thank you for dining with us! We'd love your feedback.", type: "follow-up", status: "pending", date: "2026-02-17 21:00" },
+  { id: 1, to: "+1 (555) 123-4567", message: "Your monthly SEO report is ready to view.", type: "confirmation", status: "delivered", date: "2026-02-18 14:30" },
+  { id: 2, to: "+1 (555) 234-5678", message: "Reminder: Your strategy call is scheduled for tomorrow at 2:00 PM.", type: "reminder", status: "delivered", date: "2026-02-18 10:00" },
+  { id: 3, to: "+1 (555) 345-6789", message: "Your keyword rankings have improved! Check your dashboard for details.", type: "notification", status: "delivered", date: "2026-02-17 19:15" },
+  { id: 4, to: "+1 (555) 456-7890", message: "Thank you for choosing our services! We'd love your feedback.", type: "follow-up", status: "pending", date: "2026-02-17 21:00" },
 ];
 
 export default function TwilioSms() {

@@ -67,7 +67,7 @@ export default function TwilioVoice() {
             <CardContent>
               <div className="p-3 rounded-lg border">
                 <p className="text-sm text-muted-foreground" data-testid="text-greeting">
-                  "Hello, thank you for calling! I'm your AI assistant. How can I help you today? I can assist with reservations, hours, menu information, and more."
+                  "Hello, thank you for calling! I'm your AI assistant. How can I help you today? I can assist with account inquiries, service information, and more."
                 </p>
               </div>
               <Button variant="outline" size="sm" className="mt-3" data-testid="button-edit-greeting">
