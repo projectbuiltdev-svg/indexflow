@@ -417,7 +417,7 @@ export default function Support() {
                     </p>
                   </div>
                   <Button variant="outline" asChild>
-                    <a href={`/${workspaceId}/documentation`}>
+                    <a href={`/${workspaceId}/support/documentation`}>
                       View Documentation
                       <ExternalLink className="w-4 h-4 ml-2" />
                     </a>

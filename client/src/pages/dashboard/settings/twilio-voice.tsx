@@ -111,7 +111,7 @@ export default function SettingsTwilioVoice() {
     <DashboardLayout>
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <Link href={`/${workspaceId}/settings/train-widget`}>
+          <Link href={`/${workspaceId}/twilio/voice`}>
             <Button variant="ghost" size="icon" data-testid="button-back-training">
               <ArrowLeft className="w-4 h-4" />
             </Button>
