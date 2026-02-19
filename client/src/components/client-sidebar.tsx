@@ -55,12 +55,6 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface NavItem {
   title: string;
@@ -212,107 +206,151 @@ export function ClientSidebar() {
   };
 
   return (
-    <TooltipProvider delayDuration={0}>
-      <div
-        className="flex flex-col h-full w-16 bg-sidebar text-sidebar-foreground border-r border-sidebar-border shrink-0 overflow-y-auto overflow-x-hidden"
-        data-testid="client-sidebar"
-      >
-        <div className="flex items-center justify-center py-3">
-          <img src={indexFlowLogo} alt="indexFlow" className="h-8" data-testid="img-client-logo" />
-        </div>
+    <div
+      className="flex flex-col h-full w-56 bg-sidebar text-sidebar-foreground border-r border-sidebar-border shrink-0"
+      data-testid="client-sidebar"
+    >
+      <div className="px-3 pt-3 pb-1">
+        <img src={indexFlowLogo} alt="indexFlow" className="h-10" data-testid="img-client-logo" />
+      </div>
 
-        <div className="flex-1 flex flex-col gap-0.5 px-1.5">
-          {navGroups.map((group) => (
-            <div key={group.label}>
-              {group.items.map((item) => {
-                const active = isActive(item.path);
-                return (
-                  <Tooltip key={item.path + item.title}>
-                    <TooltipTrigger asChild>
-                      <Link href={`${base}${item.path}`}>
-                        <div
-                          className={`flex items-center justify-center w-full h-9 rounded-md cursor-pointer transition-colors ${
-                            active
-                              ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                              : "hover-elevate"
-                          }`}
-                          data-testid={`link-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
-                        >
-                          <item.icon className="h-4 w-4" />
-                        </div>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="text-xs">
-                      {item.title}
-                    </TooltipContent>
-                  </Tooltip>
-                );
-              })}
-              {group.label !== "AI Training" && (
-                <div className="my-1 mx-2 border-t border-sidebar-border" />
-              )}
+      <div className="px-2 pb-1">
+        <Collapsible defaultOpen className="group/workspace">
+          <CollapsibleTrigger className="flex w-full items-center gap-1 px-2 py-1.5 text-xs font-medium text-sidebar-foreground/70 cursor-pointer" data-testid="trigger-workspace">
+            <Globe className="h-3.5 w-3.5 mr-1" />
+            <span>Workspace</span>
+            <ChevronDown className="ml-auto h-3 w-3 transition-transform group-data-[state=open]/workspace:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="px-1 pb-1">
+              <Select
+                value={selectedWorkspace?.id ?? ""}
+                onValueChange={(val) => {
+                  const workspace = workspaces.find((w) => w.id === val) ?? null;
+                  selectWorkspace(workspace);
+                }}
+              >
+                <SelectTrigger data-testid="select-workspace" className="w-full bg-sidebar-accent border-sidebar-border text-sidebar-foreground text-xs">
+                  <SelectValue placeholder="Select workspace" />
+                </SelectTrigger>
+                <SelectContent className="max-h-64">
+                  {workspaces.map((workspace) => (
+                    <SelectItem
+                      key={workspace.id}
+                      value={workspace.id}
+                      data-testid={`select-workspace-option-${workspace.id}`}
+                    >
+                      {workspace.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          ))}
-        </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </div>
 
-        <div className="flex flex-col gap-0.5 px-1.5 pb-1">
-          <div className="my-1 mx-2 border-t border-sidebar-border" />
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
+        {navGroups.map((group) => (
+          <div key={group.label} className="px-2">
+            {group.collapsible ? (
+              <Collapsible defaultOpen={false} className="group/collapsible">
+                <CollapsibleTrigger
+                  className="flex w-full items-center gap-1 px-2 py-1.5 text-xs font-medium text-sidebar-foreground/70 cursor-pointer"
+                  data-testid={`trigger-${group.label.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {group.label}
+                  <ChevronDown className="ml-auto h-3 w-3 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <div className="flex flex-col gap-0.5">
+                    {group.items.map((item) => {
+                      const active = isActive(item.path);
+                      return (
+                        <Link key={item.path + item.title} href={`${base}${item.path}`}>
+                          <div
+                            className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-sm cursor-pointer transition-colors ${
+                              active
+                                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                : "hover-elevate"
+                            }`}
+                            data-testid={`link-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
+                          >
+                            <item.icon className="h-4 w-4 shrink-0" />
+                            <span className="truncate">{item.title}</span>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            ) : (
+              <div className="flex flex-col gap-0.5">
+                {group.items.map((item) => {
+                  const active = isActive(item.path);
+                  return (
+                    <Link key={item.path + item.title} href={`${base}${item.path}`}>
+                      <div
+                        className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-sm cursor-pointer transition-colors ${
+                          active
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                            : "hover-elevate"
+                        }`}
+                        data-testid={`link-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
+                      >
+                        <item.icon className="h-4 w-4 shrink-0" />
+                        <span className="truncate">{item.title}</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="px-2 pb-2 mt-auto">
+        <div className="flex flex-col gap-0.5">
           {bottomItems.map((item) => {
             const active = isActive(item.path);
             return (
-              <Tooltip key={item.path + item.title}>
-                <TooltipTrigger asChild>
-                  <Link href={`${base}${item.path}`}>
-                    <div
-                      className={`flex items-center justify-center w-full h-9 rounded-md cursor-pointer transition-colors ${
-                        active
-                          ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                          : "hover-elevate"
-                      }`}
-                      data-testid={`link-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
-                    >
-                      <item.icon className="h-4 w-4" />
-                    </div>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="text-xs">
-                  {item.title}
-                </TooltipContent>
-              </Tooltip>
+              <Link key={item.path + item.title} href={`${base}${item.path}`}>
+                <div
+                  className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-sm cursor-pointer transition-colors ${
+                    active
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "hover-elevate"
+                  }`}
+                  data-testid={`link-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  <item.icon className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{item.title}</span>
+                </div>
+              </Link>
             );
           })}
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div
-                className="flex items-center justify-center w-full h-9 rounded-md cursor-pointer hover-elevate"
-                onClick={() => setIsDark(!isDark)}
-                data-testid="button-client-theme-toggle"
-              >
-                {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="text-xs">
-              Theme
-            </TooltipContent>
-          </Tooltip>
+          <div
+            className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm cursor-pointer hover-elevate"
+            onClick={() => setIsDark(!isDark)}
+            data-testid="button-client-theme-toggle"
+          >
+            {isDark ? <Sun className="h-4 w-4 shrink-0" /> : <Moon className="h-4 w-4 shrink-0" />}
+            <span>Theme</span>
+          </div>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div
-                className="flex items-center justify-center w-full h-9 rounded-md cursor-pointer text-red-400 hover-elevate"
-                onClick={handleSignOut}
-                data-testid="button-client-sign-out"
-              >
-                <LogOut className="h-4 w-4" />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="text-xs">
-              Sign Out
-            </TooltipContent>
-          </Tooltip>
+          <div
+            className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm cursor-pointer text-red-400 hover-elevate"
+            onClick={handleSignOut}
+            data-testid="button-client-sign-out"
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            <span>Sign Out</span>
+          </div>
         </div>
       </div>
-    </TooltipProvider>
+    </div>
   );
 }
