@@ -52,7 +52,6 @@ import {
   SidebarMenuButton,
   SidebarHeader,
   SidebarFooter,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   Select,
@@ -229,11 +228,10 @@ export function ClientSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="none">
       <SidebarHeader>
-        <div className="flex items-center justify-between px-3 py-2">
+        <div className="flex items-center px-3 py-2">
           <img src={indexFlowLogo} alt="indexFlow" className="h-14" data-testid="img-client-logo" />
-          <SidebarTrigger className="text-sidebar-foreground" data-testid="button-client-sidebar-toggle" />
         </div>
         <div className="px-2 pb-1">
           <Collapsible defaultOpen className="group/workspace">
