@@ -235,9 +235,10 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/15 z-[1]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 text-center">
           <div className="inline-block backdrop-blur-sm bg-black/15 rounded-2xl px-4 py-6 sm:px-8 sm:py-10 lg:px-12 lg:py-14 mx-2">
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight mb-2 bg-gradient-to-r from-white via-white/95 to-white/80 bg-clip-text text-transparent drop-shadow-lg">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight mb-1 bg-gradient-to-r from-white via-white/95 to-white/80 bg-clip-text text-transparent drop-shadow-lg">
               Still Paying for 10+ SEO Tools
             </h1>
+            <div className="mx-auto w-32 sm:w-40 lg:w-52 h-1 rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 mb-1" />
             <img src={indexFlowLogo} alt="IndexFlow" className="h-7 sm:h-8 lg:h-10 mx-auto mt-8 mb-6 drop-shadow-lg" data-testid="hero-logo" />
             <div className="max-w-3xl mx-auto mb-6 space-y-1">
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg">
