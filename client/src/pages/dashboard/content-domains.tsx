@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, CheckCircle, Pencil, Trash2, Search } from "lucide-react";
+import { ContentEngineTabs } from "@/components/content-engine-tabs";
 
 const initialDomains = [
   { id: 1, domain: "example.com", status: "Verified", postsPublished: 42, added: "2025-09-10" },
@@ -106,6 +107,7 @@ export default function ContentDomains() {
 
   return (
     <div className="p-6 space-y-6">
+      <ContentEngineTabs />
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Domains</h1>
         <Button data-testid="button-add-domain" onClick={() => setAddOpen(true)}>

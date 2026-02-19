@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Eye, Play, Trash2, Search } from "lucide-react";
+import { ContentEngineTabs } from "@/components/content-engine-tabs";
 
 const initialCampaigns = [
   { id: 1, name: "Spring Product Launch", postCount: 12, completed: 8, status: "Active", created: "2026-01-15" },
@@ -102,6 +103,7 @@ export default function ContentCampaigns() {
 
   return (
     <div className="p-6 space-y-6">
+      <ContentEngineTabs />
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Campaigns</h1>
         <Button data-testid="button-new-campaign" onClick={() => setNewOpen(true)}>

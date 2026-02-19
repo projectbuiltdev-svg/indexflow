@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { RefreshCw, AlertCircle, AlertTriangle, Info, Eye, Search, X } from "lucide-react";
+import { ContentEngineTabs } from "@/components/content-engine-tabs";
 
 const initialCriticalIssues = [
   { id: 1, title: "Missing page titles on 3 pages", description: "Pages /services, /about, /blog are missing title tags" },
@@ -91,6 +92,7 @@ export default function SeoHealth() {
 
   return (
     <div className="p-6 space-y-6">
+      <ContentEngineTabs />
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">SEO Health</h1>
         <div className="flex items-center gap-2 flex-wrap">

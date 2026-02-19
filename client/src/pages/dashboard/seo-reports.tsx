@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Save, FileText, CheckCircle, Type, Image, Search, Target, TrendingUp, DollarSign, Clock, AlertTriangle, Download } from "lucide-react";
+import { ContentEngineTabs } from "@/components/content-engine-tabs";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const categoryData = [
@@ -80,6 +81,7 @@ export default function SeoReports() {
 
   return (
     <div className="p-6 space-y-6">
+      <ContentEngineTabs />
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Reports</h1>
         <div className="flex items-center gap-2 flex-wrap">

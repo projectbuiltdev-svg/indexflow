@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Settings, RefreshCw, Eye, RotateCcw, Plug, Unplug, HelpCircle, X, ExternalLink } from "lucide-react";
+import { ContentEngineTabs } from "@/components/content-engine-tabs";
 
 const initialCmsProviders = [
   { id: "wordpress", name: "WordPress", connected: true, lastSync: "2026-02-18 09:30", postsSynced: 45 },
@@ -131,6 +132,7 @@ export default function SeoCms() {
 
   return (
     <div className="p-6 space-y-6">
+      <ContentEngineTabs />
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">CMS Integration</h1>
       </div>

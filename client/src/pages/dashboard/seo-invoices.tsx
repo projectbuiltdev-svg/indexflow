@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, MoreHorizontal, Eye, Pencil, Send, CheckCircle, Download, Trash2, FileText, Clock, DollarSign, AlertTriangle, Search } from "lucide-react";
+import { ContentEngineTabs } from "@/components/content-engine-tabs";
 
 const initialInvoices = [
   { id: "INV-2026-042", client: "BrightPath Marketing", amount: 2500, tax: 250, total: 2750, status: "Paid", dueDate: "2026-01-15", notes: "" },
@@ -189,6 +190,7 @@ export default function SeoInvoices() {
 
   return (
     <div className="p-6 space-y-6">
+      <ContentEngineTabs />
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Invoices</h1>
         <div className="flex items-center gap-2 flex-wrap">

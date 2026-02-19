@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Pencil, Search, Trash2 } from "lucide-react";
+import { ContentEngineTabs } from "@/components/content-engine-tabs";
 
 const initialPages = [
   { id: 1, title: "Home", url: "/", type: "Landing", seoScore: 92, lastUpdated: "2026-02-15" },
@@ -116,6 +117,7 @@ export default function ContentPages() {
 
   return (
     <div className="p-6 space-y-6">
+      <ContentEngineTabs />
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Pages</h1>
         <Button data-testid="button-add-page" onClick={() => setAddOpen(true)}>
