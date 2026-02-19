@@ -18,14 +18,8 @@ function ClientLayoutInner({ children }: ClientLayoutProps) {
       <div className="flex h-screen w-full">
         <ClientSidebar />
         <div className="flex flex-col flex-1 min-w-0">
-          <header className="flex items-center gap-2 px-4 py-3 border-b sticky top-0 z-50 bg-background">
+          <header className="flex items-center gap-2 px-4 py-2 border-b sticky top-0 z-50 bg-background">
             <SidebarTrigger data-testid="button-client-sidebar-toggle" />
-            <div className="flex-1">
-              <p className="text-sm" data-testid="text-greeting">
-                <span className="text-primary font-semibold">Hello!</span>{" "}
-                <span className="text-emerald-500">How are you Today.</span>
-              </p>
-            </div>
           </header>
           <main className="flex-1 overflow-auto p-6">
             {children}
