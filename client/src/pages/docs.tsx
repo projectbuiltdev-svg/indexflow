@@ -178,14 +178,14 @@ export default function Docs() {
       </ul>
 
       <h2 className="bg-amber-500 text-white p-3 rounded mt-8 text-xl font-bold">5. CLIENT DASHBOARD</h2>
-      <p className="mb-2"><strong>Access:</strong> /client-login &rarr; /select-venue &rarr; /:workspaceId/*</p>
+      <p className="mb-2"><strong>Access:</strong> /client-login &rarr; /select-workspace &rarr; /:workspaceId/*</p>
       
       <h3 className="text-amber-500 border-b border-gray-300 pb-1 mt-6 font-semibold">Core Pages</h3>
       <table className="w-full border-collapse my-4">
         <thead><tr className="bg-gray-100"><th className="border p-2 text-left">Page</th><th className="border p-2 text-left">Route</th><th className="border p-2 text-left">Function</th></tr></thead>
         <tbody>
           <tr><td className="border p-2">Login</td><td className="border p-2 font-mono text-sm">/client-login</td><td className="border p-2">Replit Auth (Google SSO)</td></tr>
-          <tr><td className="border p-2">Venue Select</td><td className="border p-2 font-mono text-sm">/select-venue</td><td className="border p-2">Choose venue to manage</td></tr>
+          <tr><td className="border p-2">Workspace Select</td><td className="border p-2 font-mono text-sm">/select-workspace</td><td className="border p-2">Choose workspace to manage</td></tr>
           <tr><td className="border p-2">Today</td><td className="border p-2 font-mono text-sm">/:workspaceId/today</td><td className="border p-2">Today's bookings &amp; stats</td></tr>
           <tr><td className="border p-2">Calendar</td><td className="border p-2 font-mono text-sm">/:workspaceId/calendar</td><td className="border p-2">Monthly booking view</td></tr>
           <tr><td className="border p-2">Booking Detail</td><td className="border p-2 font-mono text-sm">/:workspaceId/bookings/:id</td><td className="border p-2">View/edit booking</td></tr>
@@ -308,7 +308,7 @@ export default function Docs() {
       <h3 className="text-amber-500 border-b border-gray-300 pb-1 mt-6 font-semibold">Template Previews (Iframe Embeds)</h3>
       <p className="mt-2 mb-2">4 business types &times; 4 styles = 16 template previews</p>
       <table className="w-full border-collapse my-4">
-        <thead><tr className="bg-gray-100"><th className="border p-2 text-left">Venue Type</th><th className="border p-2 text-left">Styles</th></tr></thead>
+        <thead><tr className="bg-gray-100"><th className="border p-2 text-left">Business Type</th><th className="border p-2 text-left">Styles</th></tr></thead>
         <tbody>
           <tr><td className="border p-2">Restaurant</td><td className="border p-2 font-mono text-sm">/preview/restaurant-{"{bold|vibrant|simple|minimalistic}"}</td></tr>
           <tr><td className="border p-2">Cafe</td><td className="border p-2 font-mono text-sm">/preview/cafe-{"{bold|vibrant|simple|minimalistic}"}</td></tr>
@@ -374,7 +374,7 @@ export default function Docs() {
           <ul className="list-disc pl-6">
             <li>users (Replit Auth)</li>
             <li>sessions</li>
-            <li>venues</li>
+            <li>workspaces</li>
             <li>reservations</li>
             <li>contact_messages</li>
             <li>support_tickets</li>

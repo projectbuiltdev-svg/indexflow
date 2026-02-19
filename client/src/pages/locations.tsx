@@ -86,7 +86,7 @@ export default function Locations() {
                             <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                           </div>
                           <p className="text-xs text-muted-foreground mt-2">
-                            {location.restaurantCount} venues
+                            {location.restaurantCount} businesses
                           </p>
                         </CardContent>
                       </Card>
@@ -119,7 +119,7 @@ export default function Locations() {
         <section className="py-12" data-testid="service-links-section">
           <div className="container max-w-6xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-center mb-8">
-              Solutions by Venue Type
+              Solutions by Business Type
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {serviceTypes.map((service) => {

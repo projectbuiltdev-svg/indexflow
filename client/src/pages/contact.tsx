@@ -202,7 +202,7 @@ export default function Contact() {
                         <Input
                           id="email"
                           type="email"
-                          placeholder="john@yourvenue.com"
+                          placeholder="john@youragency.com"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           required
@@ -242,7 +242,7 @@ export default function Contact() {
                           value={formData.venueType}
                           onValueChange={(value) => setFormData({ ...formData, venueType: value })}
                         >
-                          <SelectTrigger id="businessType" data-testid="select-venue-type">
+                          <SelectTrigger id="businessType" data-testid="select-business-type">
                             <SelectValue placeholder="Select business type" />
                           </SelectTrigger>
                           <SelectContent>

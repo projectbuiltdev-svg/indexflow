@@ -30,7 +30,7 @@ import hotelSimple from "@/assets/images/templates/hotel-simple.webp";
 import hotelMinimalistic from "@/assets/images/templates/hotel-minimalistic.webp";
 
 const categoryFilters = [
-  { id: "all", label: "All Venues" },
+  { id: "all", label: "All Templates" },
   { id: "restaurants", label: "Restaurants" },
   { id: "cafes", label: "Cafes" },
   { id: "bars", label: "Bars" },
@@ -174,7 +174,7 @@ const portfolioItems = [
     style: "vibrant",
     title: "Electric Nights",
     tagline: "Where the Party Starts",
-    description: "High-energy design for modern bars and nightlife venues.",
+    description: "High-energy design for modern entertainment businesses.",
     features: ["VIP Booth Booking", "Event Calendar", "Guest List Management"],
     image: barVibrant,
   },
@@ -280,7 +280,7 @@ export default function Gallery() {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2 text-sm text-muted-foreground">
                 <LayoutGrid className="w-4 h-4" />
-                <span>Filter by Venue</span>
+                <span>Filter by Category</span>
               </div>
               <Tabs value={categoryTab} onValueChange={setCategoryTab}>
                 <TabsList className="flex-wrap h-auto">

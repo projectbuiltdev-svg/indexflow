@@ -116,7 +116,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
     : `SEO & Marketing Platform Software in ${location.city}`;
   
   const pageDescription = service
-    ? `${displayService.subheadline}. Serving ${location.restaurantCount} venues in ${location.city}, ${location.country}.`
+    ? `${displayService.subheadline}. Serving ${location.restaurantCount} businesses in ${location.city}, ${location.country}.`
     : `AI-powered content management platform for businesses in ${location.city}. ${location.description}`;
 
   const canonicalUrl = service 
@@ -192,7 +192,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center p-4">
                 <div className="text-3xl font-bold text-primary">{location.restaurantCount}</div>
-                <div className="text-sm text-muted-foreground">Venues in {location.city}</div>
+                <div className="text-sm text-muted-foreground">Businesses in {location.city}</div>
               </div>
               <div className="text-center p-4">
                 <div className="text-3xl font-bold text-primary">24/7</div>
