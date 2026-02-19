@@ -86,7 +86,7 @@ const navGroups: NavGroup[] = [
   {
     label: "Main",
     items: [
-      { title: "Today", path: "/today", icon: LayoutDashboard },
+      { title: "Dashboard Overview", path: "/today", icon: LayoutDashboard },
       { title: "Calls", path: "/twilio/call-logs", icon: PhoneCall },
       { title: "Analytics", path: "/analytics/overview", icon: BarChart3 },
       { title: "Export Data", path: "/analytics/export", icon: Download },
