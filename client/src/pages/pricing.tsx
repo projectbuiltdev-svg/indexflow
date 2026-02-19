@@ -89,11 +89,11 @@ const plans = [
     annualPrice: "$416",
     description: "For agencies reselling under their own brand",
     users: "6 users",
-    workspaces: "100 workspaces",
+    workspaces: "100 workspaces (up to 150)",
     highlight: false,
     features: [
       "6 users",
-      "100 workspaces",
+      "100 workspaces (up to 150)",
       "Full white label branding",
       "Custom domain",
       "Content moderation tools",
@@ -133,7 +133,7 @@ const plans = [
 
 const compareRows = [
   { feature: "Users", solo: "1", pro: "3", whiteLabel: "6", enterprise: "Unlimited" },
-  { feature: "Workspaces", solo: "1", pro: "3 (up to 50)", whiteLabel: "100", enterprise: "Unlimited" },
+  { feature: "Workspaces", solo: "1", pro: "3 (up to 50)", whiteLabel: "100 (up to 150)", enterprise: "Unlimited" },
   { feature: "White label", solo: false, pro: false, whiteLabel: true, enterprise: true },
   { feature: "Custom domain", solo: false, pro: false, whiteLabel: true, enterprise: true },
   { feature: "Super Admin Dashboard", solo: false, pro: false, whiteLabel: false, enterprise: true },
@@ -154,7 +154,7 @@ const faqs = [
   },
   {
     q: "Can I buy additional workspaces?",
-    a: "Yes. On the Professional plan, you can purchase additional workspaces up to 50 total. White Label supports up to 100. Enterprise is unlimited.",
+    a: "Yes. On the Professional plan, you can purchase additional workspaces up to 50 total. White Label supports up to 150. Enterprise is unlimited.",
   },
   {
     q: "How do Rank Tracker credits work?",

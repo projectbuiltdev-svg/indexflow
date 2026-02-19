@@ -2,7 +2,7 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import type { InsertRoomBooking } from "@shared/schema";
-import { insertSupportTicketSchema } from "@shared/schema";
+import { insertSupportTicketSchema, getPlanTier } from "@shared/schema";
 import { getAiResponse, buildWidgetSystemPrompt } from "./ai-chat";
 import fs from "fs";
 import path from "path";
@@ -274,6 +274,40 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/plan-info", async (req, res) => {
+    try {
+      const userId = (req as any).user?.id || "dev-user";
+      const user = await storage.getUser(userId);
+      const planTier = getPlanTier(user?.plan || "solo");
+      const workspaceCount = await storage.countWorkspacesByOwner(userId);
+
+      res.json({
+        plan: planTier.id,
+        planName: planTier.name,
+        price: planTier.price,
+        limits: {
+          maxWorkspaces: planTier.maxWorkspaces === Infinity ? null : planTier.maxWorkspaces,
+          maxUsers: planTier.maxUsers === Infinity ? null : planTier.maxUsers,
+          maxDomains: planTier.maxDomains === Infinity ? null : planTier.maxDomains,
+        },
+        features: {
+          whiteLabel: planTier.whiteLabel,
+          customDomain: planTier.customDomain,
+          teamRoles: planTier.teamRoles,
+          bulkCampaigns: planTier.bulkCampaigns,
+          contentModeration: planTier.contentModeration,
+          apiAccess: planTier.apiAccess,
+          ssoSaml: planTier.ssoSaml,
+        },
+        usage: {
+          workspaces: workspaceCount,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch plan info" });
+    }
+  });
+
   // Venues
   app.get("/api/workspaces", async (req, res) => {
     try {
@@ -309,6 +343,21 @@ export async function registerRoutes(
       if (process.env.NODE_ENV === "production" && (!userId || userId === "dev-user")) {
         return res.status(401).json({ error: "Unauthorized" });
       }
+
+      const user = await storage.getUser(userId);
+      const planTier = getPlanTier(user?.plan || "solo");
+      const currentCount = await storage.countWorkspacesByOwner(userId);
+
+      if (currentCount >= planTier.maxWorkspaces) {
+        return res.status(403).json({
+          error: "workspace_limit_reached",
+          message: `Your ${planTier.name} plan allows up to ${planTier.maxWorkspaces} workspace${planTier.maxWorkspaces === 1 ? "" : "s"}. Please upgrade your plan to create more.`,
+          currentCount,
+          maxAllowed: planTier.maxWorkspaces,
+          plan: planTier.id,
+        });
+      }
+
       const validatedData = insertWorkspaceSchema.parse({ ...req.body, ownerId: userId });
       const venue = await storage.createWorkspace(validatedData);
       res.status(201).json(venue);

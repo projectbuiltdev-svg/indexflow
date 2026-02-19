@@ -141,6 +141,7 @@ export interface IStorage {
   createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
   getWorkspaces(): Promise<Workspace[]>;
   getWorkspacesByOwner(ownerId: string): Promise<Workspace[]>;
+  countWorkspacesByOwner(ownerId: string): Promise<number>;
   getWorkspace(id: string): Promise<Workspace | undefined>;
   createWorkspace(venue: InsertWorkspace): Promise<Workspace>;
   updateWorkspace(id: string, venue: Partial<InsertWorkspace>): Promise<Workspace | undefined>;
@@ -395,6 +396,10 @@ export class MemStorage implements IStorage {
 
   async getWorkspacesByOwner(ownerId: string): Promise<Workspace[]> {
     return Array.from(this.workspaces.values()).filter((v) => v.ownerId === ownerId);
+  }
+
+  async countWorkspacesByOwner(ownerId: string): Promise<number> {
+    return Array.from(this.workspaces.values()).filter((v) => v.ownerId === ownerId).length;
   }
 
   async getWorkspace(id: string): Promise<Workspace | undefined> {
@@ -1555,6 +1560,11 @@ export class DbStorage implements IStorage {
 
   async getWorkspacesByOwner(ownerId: string): Promise<Workspace[]> {
     return db!.select().from(workspaces).where(eq(workspaces.ownerId, ownerId));
+  }
+
+  async countWorkspacesByOwner(ownerId: string): Promise<number> {
+    const result = await db!.select({ count: sql<number>`count(*)::int` }).from(workspaces).where(eq(workspaces.ownerId, ownerId));
+    return result[0]?.count ?? 0;
   }
 
   async getWorkspace(id: string): Promise<Workspace | undefined> {
