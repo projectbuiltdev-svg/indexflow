@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useWorkspace } from "@/lib/workspace-context";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,16 +17,9 @@ import {
 } from "@/components/ui/select";
 import {
   ArrowLeft, Save, Eye, FileText, Image, Tag, X,
-  Calendar, Clock, Maximize2, Sparkles, Globe,
+  Calendar, Clock, Maximize2, Sparkles, Globe, Loader2,
 } from "lucide-react";
-
-const samplePosts: Record<string, any> = {
-  "1": { id: 1, title: "How to Improve Your Local SEO Rankings in 2026", slug: "improve-local-seo-rankings-2026", category: "SEO", schema: "Article", status: "Published", description: "A comprehensive guide to boosting local SEO rankings with actionable strategies for 2026.", tags: ["SEO", "Local SEO", "Rankings"], content: "# How to Improve Your Local SEO Rankings in 2026\n\nLocal SEO continues to evolve rapidly...\n\n## 1. Optimize Your Google Business Profile\n\nMake sure your GBP is complete and accurate.\n\n## 2. Build Local Citations\n\nConsistency across directories matters.\n\n## 3. Earn Local Backlinks\n\nPartner with local businesses and organizations." },
-  "2": { id: 2, title: "Complete Guide to Technical SEO Audits for Agencies", slug: "technical-seo-audits-agencies", category: "Technical SEO", schema: "HowTo", status: "Draft", description: "Step-by-step technical SEO audit process for agency teams.", tags: ["Technical SEO", "Audits", "Agency"], content: "# Complete Guide to Technical SEO Audits\n\nA thorough technical audit is the foundation of any SEO strategy.\n\n## Crawlability\n\nEnsure search engines can access all important pages.\n\n## Core Web Vitals\n\nMeasure and optimize LCP, FID, and CLS." },
-  "3": { id: 3, title: "10 Link Building Strategies That Still Work", slug: "link-building-strategies", category: "Link Building", schema: "Article", status: "Review", description: "Proven link building tactics that continue to deliver results.", tags: ["Link Building", "Backlinks"], content: "# 10 Link Building Strategies That Still Work\n\n## 1. Guest Posting\n\nStill effective when done right.\n\n## 2. Broken Link Building\n\nFind broken links and offer your content as a replacement." },
-  "4": { id: 4, title: "Why Content Marketing Drives Organic Growth", slug: "content-marketing-organic-growth", category: "Content", schema: "BlogPosting", status: "Published", description: "How strategic content marketing fuels sustainable organic traffic growth.", tags: ["Content Marketing", "Growth"], content: "# Why Content Marketing Drives Organic Growth\n\nContent marketing is a long-term investment that compounds over time." },
-  "5": { id: 5, title: "Schema Markup Best Practices for E-Commerce Sites", slug: "schema-markup-ecommerce", category: "Technical SEO", schema: "FAQPage", status: "Scheduled", description: "Implementing structured data for better e-commerce visibility in search.", tags: ["Schema", "E-Commerce", "Structured Data"], content: "# Schema Markup Best Practices for E-Commerce\n\n## Product Schema\n\nAdd Product schema to all product pages.\n\n## FAQ Schema\n\nAdd FAQ schema to category and product pages." },
-};
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function PostEditor() {
   const [, navigate] = useLocation();
@@ -33,22 +27,69 @@ export default function PostEditor() {
   const { selectedWorkspace } = useWorkspace();
   const { toast } = useToast();
   const postId = params?.postId || "";
+  const wsId = selectedWorkspace?.id || params?.workspaceId || "";
   const isNew = postId === "new";
-  const existing = !isNew ? samplePosts[postId] : null;
 
-  const [title, setTitle] = useState(existing?.title || "");
-  const [slug, setSlug] = useState(existing?.slug || "");
-  const [category, setCategory] = useState(existing?.category || "general");
-  const [schemaType, setSchemaType] = useState(existing?.schema || "Article");
-  const [description, setDescription] = useState(existing?.description || "");
-  const [tags, setTags] = useState<string[]>(existing?.tags || []);
+  const { data: allPosts, isLoading } = useQuery<any[]>({
+    queryKey: ["/api/admin/blog/posts", wsId],
+    queryFn: async () => {
+      const res = await fetch(`/api/admin/blog/posts?workspaceId=${wsId}`);
+      if (!res.ok) throw new Error("Failed to fetch posts");
+      return res.json();
+    },
+    enabled: !!wsId && !isNew,
+  });
+
+  const existing = allPosts?.find((p: any) => p.id === postId) || null;
+
+  const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+  const [category, setCategory] = useState("general");
+  const [schemaType, setSchemaType] = useState("Article");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [scheduleDate, setScheduleDate] = useState("");
-  const [content, setContent] = useState(existing?.content || "");
+  const [content, setContent] = useState("");
   const [subTab, setSubTab] = useState<"editor" | "images">("editor");
   const [previewMode, setPreviewMode] = useState<"preview" | "html">("preview");
+  const [initialized, setInitialized] = useState(false);
 
-  const wsId = selectedWorkspace?.id || "";
+  useEffect(() => {
+    if (existing && !initialized) {
+      setTitle(existing.title || "");
+      setSlug(existing.slug || "");
+      setCategory(existing.category || "general");
+      setSchemaType(existing.schemaType || "Article");
+      setDescription(existing.description || "");
+      setTags(existing.tags || []);
+      setContent(existing.mdxContent || "");
+      setInitialized(true);
+    }
+  }, [existing, initialized]);
+
+  const saveMutation = useMutation({
+    mutationFn: async (data: any) => {
+      if (isNew) {
+        return apiRequest("POST", "/api/admin/blog/posts", data);
+      } else {
+        return apiRequest("PUT", `/api/admin/blog/posts/${postId}`, data);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts"] });
+    },
+  });
+
+  const publishMutation = useMutation({
+    mutationFn: async () => {
+      return apiRequest("POST", `/api/admin/blog/posts/${postId}/publish-now`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts"] });
+      toast({ title: "Post published", description: `"${title}" is now live.` });
+    },
+  });
 
   const handleTagKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && tagInput.trim()) {
@@ -58,20 +99,44 @@ export default function PostEditor() {
     }
   };
 
-  const handleSaveDraft = () => {
+  const handleSaveDraft = async () => {
     if (!title.trim()) {
       toast({ title: "Title required", variant: "destructive" });
       return;
     }
-    toast({ title: "Draft saved", description: `"${title}" has been saved as draft.` });
+    const payload: any = {
+      title,
+      slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
+      category,
+      schemaType,
+      description,
+      tags,
+      mdxContent: content,
+      status: "draft",
+      workspaceId: wsId,
+    };
+    try {
+      await saveMutation.mutateAsync(payload);
+      toast({ title: "Draft saved", description: `"${title}" has been saved.` });
+    } catch {
+      toast({ title: "Save failed", variant: "destructive" });
+    }
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (!title.trim()) {
       toast({ title: "Title required", variant: "destructive" });
       return;
     }
-    toast({ title: "Post published", description: `"${title}" is now live.` });
+    if (isNew) {
+      await handleSaveDraft();
+    }
+    try {
+      await publishMutation.mutateAsync();
+      toast({ title: "Post published", description: `"${title}" is now live.` });
+    } catch {
+      toast({ title: "Publish failed", variant: "destructive" });
+    }
   };
 
   const autoSlug = () => {
@@ -79,6 +144,30 @@ export default function PostEditor() {
       setSlug(title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""));
     }
   };
+
+  if (isLoading && !isNew) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!isNew && !isLoading && !existing) {
+    return (
+      <div className="p-6 space-y-4">
+        <Button variant="ghost" onClick={() => navigate(`/${wsId}/content/posts`)} data-testid="button-back-to-posts">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Posts
+        </Button>
+        <Card>
+          <CardContent className="p-6 text-center">
+            <p className="text-muted-foreground">Post not found. It may have been deleted or the ID is invalid.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-4">
@@ -89,16 +178,16 @@ export default function PostEditor() {
         </Button>
         <div className="flex items-center gap-2">
           {existing && (
-            <Badge variant={existing.status === "Published" ? "default" : "secondary"} data-testid="badge-post-status">
+            <Badge variant={existing.status === "published" ? "default" : "secondary"} data-testid="badge-post-status">
               {existing.status}
             </Badge>
           )}
-          <Button variant="outline" onClick={handleSaveDraft} data-testid="button-save-draft">
-            <Save className="h-4 w-4 mr-2" />
+          <Button variant="outline" onClick={handleSaveDraft} disabled={saveMutation.isPending} data-testid="button-save-draft">
+            {saveMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
             Save Draft
           </Button>
-          <Button onClick={handlePublish} data-testid="button-publish-now">
-            <Globe className="h-4 w-4 mr-2" />
+          <Button onClick={handlePublish} disabled={publishMutation.isPending} data-testid="button-publish-now">
+            {publishMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Globe className="h-4 w-4 mr-2" />}
             Publish Now
           </Button>
         </div>

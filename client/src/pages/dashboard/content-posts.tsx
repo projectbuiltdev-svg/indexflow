@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useWorkspace } from "@/lib/workspace-context";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,84 +37,56 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Plus, Layers, Search, MoreHorizontal, Pencil, Eye, Copy, FileDown, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Layers, Search, MoreHorizontal, Pencil, Eye, Copy, FileDown, Trash2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
-const initialPosts = [
-  {
-    id: 1,
-    title: "How to Improve Your Local SEO Rankings in 2026",
-    category: "SEO",
-    status: "Published",
-    words: 2450,
-    images: 6,
-    schema: "Article",
-    publishedDate: "2026-02-10",
-  },
-  {
-    id: 2,
-    title: "Complete Guide to Technical SEO Audits for Agencies",
-    category: "Technical SEO",
-    status: "Draft",
-    words: 3120,
-    images: 8,
-    schema: "HowTo",
-    publishedDate: null,
-  },
-  {
-    id: 3,
-    title: "10 Link Building Strategies That Still Work",
-    category: "Link Building",
-    status: "Review",
-    words: 1890,
-    images: 4,
-    schema: "Article",
-    publishedDate: null,
-  },
-  {
-    id: 4,
-    title: "Why Content Marketing Drives Organic Growth",
-    category: "Content",
-    status: "Published",
-    words: 2780,
-    images: 5,
-    schema: "BlogPosting",
-    publishedDate: "2026-01-28",
-  },
-  {
-    id: 5,
-    title: "Schema Markup Best Practices for E-Commerce Sites",
-    category: "Technical SEO",
-    status: "Scheduled",
-    words: 2100,
-    images: 3,
-    schema: "FAQPage",
-    publishedDate: "2026-02-20",
-  },
-];
+interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  category: string | null;
+  status: string;
+  description: string | null;
+  tags: string[] | null;
+  mdxContent: string | null;
+  schemaType: string | null;
+  publishedAt: string | null;
+  createdAt: string | null;
+  workspaceId: string;
+}
 
 const statusVariant = (status: string) => {
   switch (status) {
-    case "Published":
+    case "published":
       return "default" as const;
-    case "Draft":
+    case "draft":
       return "secondary" as const;
-    case "Review":
+    case "review":
       return "outline" as const;
-    case "Scheduled":
+    case "scheduled":
       return "secondary" as const;
     default:
       return "secondary" as const;
   }
 };
 
-type Post = typeof initialPosts[number];
-
 export default function ContentPosts() {
   const [, navigate] = useLocation();
   const { selectedWorkspace } = useWorkspace();
   const { toast } = useToast();
-  const [posts, setPosts] = useState(initialPosts);
+  const wsId = selectedWorkspace?.id || "";
+
+  const { data: posts = [], isLoading } = useQuery<Post[]>({
+    queryKey: ["/api/admin/blog/posts", wsId],
+    queryFn: async () => {
+      const res = await fetch(`/api/admin/blog/posts?workspaceId=${wsId}`);
+      if (!res.ok) throw new Error("Failed to fetch posts");
+      return res.json();
+    },
+    enabled: !!wsId,
+  });
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -129,12 +102,6 @@ export default function ContentPosts() {
   const [bulkTopics, setBulkTopics] = useState("");
   const [bulkCategory, setBulkCategory] = useState("SEO");
 
-  const [editOpen, setEditOpen] = useState(false);
-  const [editPost, setEditPost] = useState<Post | null>(null);
-  const [editTitle, setEditTitle] = useState("");
-  const [editCategory, setEditCategory] = useState("");
-  const [editSchema, setEditSchema] = useState("");
-
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewPost, setPreviewPost] = useState<Post | null>(null);
 
@@ -144,11 +111,25 @@ export default function ContentPosts() {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
+  const createMutation = useMutation({
+    mutationFn: async (data: any) => apiRequest("POST", "/api/admin/blog/posts", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts", wsId] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => apiRequest("DELETE", `/api/admin/blog/posts/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts", wsId] });
+    },
+  });
+
   const filtered = posts.filter((p) => {
     if (search && !p.title.toLowerCase().includes(search.toLowerCase())) return false;
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
     if (categoryFilter !== "all" && p.category !== categoryFilter) return false;
-    if (schemaFilter !== "all" && p.schema !== schemaFilter) return false;
+    if (schemaFilter !== "all" && p.schemaType !== schemaFilter) return false;
     return true;
   });
 
@@ -156,68 +137,50 @@ export default function ContentPosts() {
   const safeCurrentPage = Math.min(currentPage, totalPages);
   const paginatedPosts = filtered.slice((safeCurrentPage - 1) * postsPerPage, safeCurrentPage * postsPerPage);
 
-  const categories = Array.from(new Set(posts.map((p) => p.category)));
-  const schemas = Array.from(new Set(posts.map((p) => p.schema)));
+  const categories = Array.from(new Set(posts.map((p) => p.category).filter(Boolean))) as string[];
+  const schemas = Array.from(new Set(posts.map((p) => p.schemaType).filter(Boolean))) as string[];
 
-  const handleNewPost = () => {
+  const handleNewPost = async () => {
     if (!newPostTitle.trim()) return;
-    const newId = Math.max(...posts.map((p) => p.id), 0) + 1;
-    setPosts([
-      ...posts,
-      {
-        id: newId,
+    const slug = newPostTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    try {
+      await createMutation.mutateAsync({
         title: newPostTitle,
+        slug,
         category: newPostCategory,
-        status: "Draft",
-        words: 0,
-        images: 0,
-        schema: newPostSchema,
-        publishedDate: null,
-      },
-    ]);
-    setNewPostOpen(false);
-    setNewPostTitle("");
-    setNewPostCategory("SEO");
-    setNewPostSchema("Article");
-    setNewPostContent("");
-    toast({ title: "Post created", description: `"${newPostTitle}" has been created as a draft.` });
+        schemaType: newPostSchema,
+        mdxContent: newPostContent,
+        status: "draft",
+        workspaceId: wsId,
+      });
+      setNewPostOpen(false);
+      setNewPostTitle("");
+      setNewPostCategory("SEO");
+      setNewPostSchema("Article");
+      setNewPostContent("");
+      toast({ title: "Post created", description: `"${newPostTitle}" has been created as a draft.` });
+    } catch {
+      toast({ title: "Failed to create post", variant: "destructive" });
+    }
   };
 
-  const handleBulkGenerate = () => {
+  const handleBulkGenerate = async () => {
     const topics = bulkTopics.split("\n").filter((t) => t.trim());
     if (topics.length === 0) return;
-    const maxId = Math.max(...posts.map((p) => p.id), 0);
-    const newPosts = topics.map((topic, i) => ({
-      id: maxId + i + 1,
-      title: topic.trim(),
-      category: bulkCategory,
-      status: "Draft" as const,
-      words: 0,
-      images: 0,
-      schema: "Article",
-      publishedDate: null,
-    }));
-    setPosts([...posts, ...newPosts]);
-    setBulkOpen(false);
-    setBulkTopics("");
-    setBulkCategory("SEO");
-    toast({ title: "Bulk generation started", description: `${topics.length} posts have been queued.` });
-  };
-
-  const handleEdit = (post: Post) => {
-    setEditPost(post);
-    setEditTitle(post.title);
-    setEditCategory(post.category);
-    setEditSchema(post.schema);
-    setEditOpen(true);
-  };
-
-  const handleEditSave = () => {
-    if (!editPost || !editTitle.trim()) return;
-    setPosts(posts.map((p) => (p.id === editPost.id ? { ...p, title: editTitle, category: editCategory, schema: editSchema } : p)));
-    setEditOpen(false);
-    setEditPost(null);
-    toast({ title: "Post updated", description: `"${editTitle}" has been saved.` });
+    try {
+      await apiRequest("POST", "/api/admin/blog/posts/bulk/create", {
+        topics: topics.map((t) => t.trim()),
+        category: bulkCategory,
+        workspaceId: wsId,
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts", wsId] });
+      setBulkOpen(false);
+      setBulkTopics("");
+      setBulkCategory("SEO");
+      toast({ title: "Bulk generation started", description: `${topics.length} posts have been queued.` });
+    } catch {
+      toast({ title: "Bulk generation failed", variant: "destructive" });
+    }
   };
 
   const handlePreview = (post: Post) => {
@@ -225,23 +188,57 @@ export default function ContentPosts() {
     setPreviewOpen(true);
   };
 
-  const handleDuplicate = (post: Post) => {
-    const newId = Math.max(...posts.map((p) => p.id), 0) + 1;
-    setPosts([...posts, { ...post, id: newId, title: `${post.title} (Copy)`, status: "Draft", publishedDate: null }]);
-    toast({ title: "Post duplicated", description: `A copy of "${post.title}" has been created.` });
+  const handleDuplicate = async (post: Post) => {
+    try {
+      await createMutation.mutateAsync({
+        title: `${post.title} (Copy)`,
+        slug: `${post.slug}-copy`,
+        category: post.category,
+        schemaType: post.schemaType,
+        mdxContent: post.mdxContent,
+        description: post.description,
+        tags: post.tags,
+        status: "draft",
+        workspaceId: wsId,
+      });
+      toast({ title: "Post duplicated", description: `A copy of "${post.title}" has been created.` });
+    } catch {
+      toast({ title: "Duplicate failed", variant: "destructive" });
+    }
   };
 
   const handleExportMDX = (post: Post) => {
+    const blob = new Blob([post.mdxContent || ""], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${post.slug || "post"}.mdx`;
+    a.click();
+    URL.revokeObjectURL(url);
     toast({ title: "MDX exported", description: `"${post.title}" has been exported as MDX.` });
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!deletePost) return;
-    setPosts(posts.filter((p) => p.id !== deletePost.id));
     const title = deletePost.title;
-    setDeleteOpen(false);
-    setDeletePost(null);
-    toast({ title: "Post deleted", description: `"${title}" has been removed.` });
+    try {
+      await deleteMutation.mutateAsync(deletePost.id);
+      setDeleteOpen(false);
+      setDeletePost(null);
+      toast({ title: "Post deleted", description: `"${title}" has been removed.` });
+    } catch {
+      toast({ title: "Delete failed", variant: "destructive" });
+    }
+  };
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleDateString();
+  };
+
+  const wordCount = (content: string | null) => {
+    if (!content) return 0;
+    return content.split(/\s+/).filter(Boolean).length;
   };
 
   return (
@@ -278,10 +275,10 @@ export default function ContentPosts() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="Draft">Draft</SelectItem>
-            <SelectItem value="Review">Review</SelectItem>
-            <SelectItem value="Published">Published</SelectItem>
-            <SelectItem value="Scheduled">Scheduled</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+            <SelectItem value="review">Review</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="scheduled">Scheduled</SelectItem>
           </SelectContent>
         </Select>
         <Select value={categoryFilter} onValueChange={setCategoryFilter}>
@@ -310,125 +307,137 @@ export default function ContentPosts() {
 
       <Card>
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Words</TableHead>
-                <TableHead className="text-right">Images</TableHead>
-                <TableHead>Schema</TableHead>
-                <TableHead>Published Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedPosts.map((post) => (
-                <TableRow key={post.id} data-testid={`row-post-${post.id}`}>
-                  <TableCell className="font-medium max-w-[300px] truncate" data-testid={`text-post-title-${post.id}`}>
-                    <button
-                      className="text-left hover:text-sidebar-primary hover:underline transition-colors cursor-pointer"
-                      onClick={() => navigate(`/${selectedWorkspace?.id}/content/posts/${post.id}/edit`)}
-                      data-testid={`link-post-title-${post.id}`}
-                    >
-                      {post.title}
-                    </button>
-                  </TableCell>
-                  <TableCell data-testid={`text-post-category-${post.id}`}>{post.category}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusVariant(post.status)} data-testid={`badge-post-status-${post.id}`}>
-                      {post.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right" data-testid={`text-post-words-${post.id}`}>
-                    {post.words.toLocaleString()}
-                  </TableCell>
-                  <TableCell className="text-right" data-testid={`text-post-images-${post.id}`}>
-                    {post.images}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" data-testid={`badge-post-schema-${post.id}`}>
-                      {post.schema}
-                    </Badge>
-                  </TableCell>
-                  <TableCell data-testid={`text-post-date-${post.id}`}>
-                    {post.publishedDate || "-"}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" data-testid={`button-post-actions-${post.id}`}>
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem data-testid={`action-edit-${post.id}`} onClick={() => navigate(`/${selectedWorkspace?.id}/content/posts/${post.id}/edit`)}>
-                          <Pencil className="w-4 h-4 mr-2" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem data-testid={`action-preview-${post.id}`} onClick={() => handlePreview(post)}>
-                          <Eye className="w-4 h-4 mr-2" />
-                          Preview
-                        </DropdownMenuItem>
-                        <DropdownMenuItem data-testid={`action-duplicate-${post.id}`} onClick={() => handleDuplicate(post)}>
-                          <Copy className="w-4 h-4 mr-2" />
-                          Duplicate
-                        </DropdownMenuItem>
-                        <DropdownMenuItem data-testid={`action-export-${post.id}`} onClick={() => handleExportMDX(post)}>
-                          <FileDown className="w-4 h-4 mr-2" />
-                          Export MDX
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive" data-testid={`action-delete-${post.id}`} onClick={() => { setDeletePost(post); setDeleteOpen(true); }}>
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          {isLoading ? (
+            <div className="flex items-center justify-center p-12">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Words</TableHead>
+                  <TableHead>Schema</TableHead>
+                  <TableHead>Published Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {paginatedPosts.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      {posts.length === 0 ? "No posts yet. Create your first post to get started." : "No posts match your filters."}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  paginatedPosts.map((post) => (
+                    <TableRow key={post.id} data-testid={`row-post-${post.id}`}>
+                      <TableCell className="font-medium max-w-[300px] truncate" data-testid={`text-post-title-${post.id}`}>
+                        <button
+                          className="text-left hover:text-sidebar-primary hover:underline transition-colors cursor-pointer"
+                          onClick={() => navigate(`/${wsId}/content/posts/${post.id}/edit`)}
+                          data-testid={`link-post-title-${post.id}`}
+                        >
+                          {post.title}
+                        </button>
+                      </TableCell>
+                      <TableCell data-testid={`text-post-category-${post.id}`}>{post.category || "-"}</TableCell>
+                      <TableCell>
+                        <Badge variant={statusVariant(post.status)} data-testid={`badge-post-status-${post.id}`}>
+                          {post.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right" data-testid={`text-post-words-${post.id}`}>
+                        {wordCount(post.mdxContent).toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" data-testid={`badge-post-schema-${post.id}`}>
+                          {post.schemaType || "-"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell data-testid={`text-post-date-${post.id}`}>
+                        {formatDate(post.publishedAt)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" data-testid={`button-post-actions-${post.id}`}>
+                              <MoreHorizontal className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem data-testid={`action-edit-${post.id}`} onClick={() => navigate(`/${wsId}/content/posts/${post.id}/edit`)}>
+                              <Pencil className="w-4 h-4 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem data-testid={`action-preview-${post.id}`} onClick={() => handlePreview(post)}>
+                              <Eye className="w-4 h-4 mr-2" />
+                              Preview
+                            </DropdownMenuItem>
+                            <DropdownMenuItem data-testid={`action-duplicate-${post.id}`} onClick={() => handleDuplicate(post)}>
+                              <Copy className="w-4 h-4 mr-2" />
+                              Duplicate
+                            </DropdownMenuItem>
+                            <DropdownMenuItem data-testid={`action-export-${post.id}`} onClick={() => handleExportMDX(post)}>
+                              <FileDown className="w-4 h-4 mr-2" />
+                              Export MDX
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive" data-testid={`action-delete-${post.id}`} onClick={() => { setDeletePost(post); setDeleteOpen(true); }}>
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-between gap-4 flex-wrap" data-testid="pagination-posts">
-        <p className="text-sm text-muted-foreground">
-          Showing {filtered.length === 0 ? 0 : (safeCurrentPage - 1) * postsPerPage + 1}–{Math.min(safeCurrentPage * postsPerPage, filtered.length)} of {filtered.length} posts
-        </p>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="icon"
-            disabled={safeCurrentPage <= 1}
-            onClick={() => setCurrentPage(safeCurrentPage - 1)}
-            data-testid="button-prev-page"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </Button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      {!isLoading && filtered.length > 0 && (
+        <div className="flex items-center justify-between gap-4 flex-wrap" data-testid="pagination-posts">
+          <p className="text-sm text-muted-foreground">
+            Showing {(safeCurrentPage - 1) * postsPerPage + 1}–{Math.min(safeCurrentPage * postsPerPage, filtered.length)} of {filtered.length} posts
+          </p>
+          <div className="flex items-center gap-1">
             <Button
-              key={page}
-              variant={page === safeCurrentPage ? "default" : "outline"}
+              variant="outline"
               size="icon"
-              onClick={() => setCurrentPage(page)}
-              data-testid={`button-page-${page}`}
+              disabled={safeCurrentPage <= 1}
+              onClick={() => setCurrentPage(safeCurrentPage - 1)}
+              data-testid="button-prev-page"
             >
-              {page}
+              <ChevronLeft className="w-4 h-4" />
             </Button>
-          ))}
-          <Button
-            variant="outline"
-            size="icon"
-            disabled={safeCurrentPage >= totalPages}
-            onClick={() => setCurrentPage(safeCurrentPage + 1)}
-            data-testid="button-next-page"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </Button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant={page === safeCurrentPage ? "default" : "outline"}
+                size="icon"
+                onClick={() => setCurrentPage(page)}
+                data-testid={`button-page-${page}`}
+              >
+                {page}
+              </Button>
+            ))}
+            <Button
+              variant="outline"
+              size="icon"
+              disabled={safeCurrentPage >= totalPages}
+              onClick={() => setCurrentPage(safeCurrentPage + 1)}
+              data-testid="button-next-page"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
 
       <Dialog open={newPostOpen} onOpenChange={setNewPostOpen}>
         <DialogContent data-testid="dialog-new-post">
@@ -475,7 +484,10 @@ export default function ContentPosts() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setNewPostOpen(false)} data-testid="button-cancel-new-post">Cancel</Button>
-            <Button onClick={handleNewPost} data-testid="button-save-new-post">Save</Button>
+            <Button onClick={handleNewPost} disabled={createMutation.isPending} data-testid="button-save-new-post">
+              {createMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+              Save
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -512,52 +524,6 @@ export default function ContentPosts() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent data-testid="dialog-edit-post">
-          <DialogHeader>
-            <DialogTitle>Edit Post</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-post-title">Title</Label>
-              <Input id="edit-post-title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} data-testid="input-edit-post-title" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-post-category">Category</Label>
-              <Select value={editCategory} onValueChange={setEditCategory}>
-                <SelectTrigger data-testid="select-edit-post-category">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="SEO">SEO</SelectItem>
-                  <SelectItem value="Technical SEO">Technical SEO</SelectItem>
-                  <SelectItem value="Link Building">Link Building</SelectItem>
-                  <SelectItem value="Content">Content</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-post-schema">Schema Type</Label>
-              <Select value={editSchema} onValueChange={setEditSchema}>
-                <SelectTrigger data-testid="select-edit-post-schema">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Article">Article</SelectItem>
-                  <SelectItem value="HowTo">HowTo</SelectItem>
-                  <SelectItem value="BlogPosting">BlogPosting</SelectItem>
-                  <SelectItem value="FAQPage">FAQPage</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditOpen(false)} data-testid="button-cancel-edit-post">Cancel</Button>
-            <Button onClick={handleEditSave} data-testid="button-save-edit-post">Save</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
         <DialogContent data-testid="dialog-preview-post">
           <DialogHeader>
@@ -567,14 +533,16 @@ export default function ContentPosts() {
             <div className="space-y-3">
               <div className="flex items-center gap-2 flex-wrap">
                 <Badge variant={statusVariant(previewPost.status)}>{previewPost.status}</Badge>
-                <Badge variant="outline">{previewPost.schema}</Badge>
+                <Badge variant="outline">{previewPost.schemaType || "-"}</Badge>
               </div>
               <div className="grid grid-cols-2 gap-2 text-sm">
-                <div><span className="text-muted-foreground">Category:</span> {previewPost.category}</div>
-                <div><span className="text-muted-foreground">Words:</span> {previewPost.words.toLocaleString()}</div>
-                <div><span className="text-muted-foreground">Images:</span> {previewPost.images}</div>
-                <div><span className="text-muted-foreground">Published:</span> {previewPost.publishedDate || "Not published"}</div>
+                <div><span className="text-muted-foreground">Category:</span> {previewPost.category || "-"}</div>
+                <div><span className="text-muted-foreground">Words:</span> {wordCount(previewPost.mdxContent).toLocaleString()}</div>
+                <div><span className="text-muted-foreground">Published:</span> {formatDate(previewPost.publishedAt)}</div>
               </div>
+              {previewPost.description && (
+                <p className="text-sm text-muted-foreground">{previewPost.description}</p>
+              )}
             </div>
           )}
           <DialogFooter>
@@ -591,7 +559,10 @@ export default function ContentPosts() {
           <p className="text-sm text-muted-foreground">Are you sure you want to delete "{deletePost?.title}"? This action cannot be undone.</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteOpen(false)} data-testid="button-cancel-delete-post">Cancel</Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm} data-testid="button-confirm-delete-post">Delete</Button>
+            <Button variant="destructive" onClick={handleDeleteConfirm} disabled={deleteMutation.isPending} data-testid="button-confirm-delete-post">
+              {deleteMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+              Delete
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
