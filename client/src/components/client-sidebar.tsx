@@ -211,7 +211,7 @@ export function ClientSidebar() {
       data-testid="client-sidebar"
     >
       <div className="px-3 pt-3 pb-1">
-        <img src={indexFlowLogo} alt="indexFlow" className="h-10" data-testid="img-client-logo" />
+        <img src={indexFlowLogo} alt="indexFlow" className="w-full object-contain" data-testid="img-client-logo" />
       </div>
 
       <div className="px-2 pb-1">
