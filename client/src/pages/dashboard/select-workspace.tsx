@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Building2, ChevronRight, Loader2, MapPin, Search, ChevronLeft, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Building2, ChevronRight, Loader2, MapPin, Search, ChevronLeft, ChevronsLeft, ChevronsRight, Briefcase, User, Store, Globe } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -80,15 +80,53 @@ export default function SelectWorkspace() {
     setLocation(`/${workspaceId}/today`);
   };
 
-  const getWorkspaceTypeLabel = (type: string) => {
-    const types: Record<string, string> = {
-      agency: "Agency",
-      "solo-founder": "Solo Founder",
-      "local-business": "Local Business",
-      enterprise: "Enterprise",
-    };
-    return types[type] || type;
+  const typeConfig: Record<string, { label: string; icon: typeof Building2; bg: string; text: string; badge: string }> = {
+    agency: {
+      label: "Agency",
+      icon: Briefcase,
+      bg: "bg-blue-500/10 dark:bg-blue-400/15",
+      text: "text-blue-600 dark:text-blue-400",
+      badge: "bg-blue-500/10 text-blue-700 dark:bg-blue-400/15 dark:text-blue-300 border-blue-200 dark:border-blue-800",
+    },
+    "solo-founder": {
+      label: "Solo Founder",
+      icon: User,
+      bg: "bg-violet-500/10 dark:bg-violet-400/15",
+      text: "text-violet-600 dark:text-violet-400",
+      badge: "bg-violet-500/10 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300 border-violet-200 dark:border-violet-800",
+    },
+    "local-business": {
+      label: "Local Business",
+      icon: Store,
+      bg: "bg-emerald-500/10 dark:bg-emerald-400/15",
+      text: "text-emerald-600 dark:text-emerald-400",
+      badge: "bg-emerald-500/10 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800",
+    },
+    enterprise: {
+      label: "Enterprise",
+      icon: Globe,
+      bg: "bg-amber-500/10 dark:bg-amber-400/15",
+      text: "text-amber-600 dark:text-amber-400",
+      badge: "bg-amber-500/10 text-amber-700 dark:bg-amber-400/15 dark:text-amber-300 border-amber-200 dark:border-amber-800",
+    },
+    "white-label": {
+      label: "White Label",
+      icon: Building2,
+      bg: "bg-rose-500/10 dark:bg-rose-400/15",
+      text: "text-rose-600 dark:text-rose-400",
+      badge: "bg-rose-500/10 text-rose-700 dark:bg-rose-400/15 dark:text-rose-300 border-rose-200 dark:border-rose-800",
+    },
   };
+
+  const getTypeConfig = (type: string) => typeConfig[type] || {
+    label: type,
+    icon: Building2,
+    bg: "bg-muted",
+    text: "text-muted-foreground",
+    badge: "",
+  };
+
+  const getWorkspaceTypeLabel = (type: string) => getTypeConfig(type).label;
 
   return (
     <div className="min-h-screen bg-muted/30 p-4">
@@ -163,35 +201,39 @@ export default function SelectWorkspace() {
               <p className="text-muted-foreground text-sm mt-1">Contact us to add your first workspace.</p>
             </div>
           ) : (
-            paginatedWorkspaces.map((workspace) => (
-              <Card 
-                key={workspace.id} 
-                className="cursor-pointer hover-elevate transition-all"
-                onClick={() => handleSelectWorkspace(workspace.id)}
-                data-testid={`card-workspace-${workspace.id}`}
-              >
-                <CardContent className="p-4 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <Building2 className="w-5 h-5 text-primary" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium truncate">{workspace.name}</span>
-                        <Badge variant="secondary" className="text-xs shrink-0">{getWorkspaceTypeLabel(workspace.type)}</Badge>
+            paginatedWorkspaces.map((workspace) => {
+              const config = getTypeConfig(workspace.type);
+              const TypeIcon = config.icon;
+              return (
+                <Card
+                  key={workspace.id}
+                  className="cursor-pointer hover-elevate transition-all group"
+                  onClick={() => handleSelectWorkspace(workspace.id)}
+                  data-testid={`card-workspace-${workspace.id}`}
+                >
+                  <CardContent className="p-4 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className={`w-10 h-10 rounded-full ${config.bg} flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110`}>
+                        <TypeIcon className={`w-5 h-5 ${config.text}`} />
                       </div>
-                      {(workspace.address || workspace.city) && (
-                        <p className="text-xs text-muted-foreground mt-0.5 truncate flex items-center gap-1">
-                          <MapPin className="w-3 h-3 shrink-0" />
-                          {[workspace.address, workspace.city, workspace.state].filter(Boolean).join(", ")}
-                        </p>
-                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-medium truncate group-hover:text-foreground transition-colors">{workspace.name}</span>
+                          <Badge variant="outline" className={`text-xs shrink-0 ${config.badge}`}>{config.label}</Badge>
+                        </div>
+                        {(workspace.address || workspace.city) && (
+                          <p className="text-xs text-muted-foreground mt-0.5 truncate flex items-center gap-1">
+                            <MapPin className="w-3 h-3 shrink-0" />
+                            {[workspace.address, workspace.city, workspace.state].filter(Boolean).join(", ")}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
-                </CardContent>
-              </Card>
-            ))
+                    <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
+                  </CardContent>
+                </Card>
+              );
+            })
           )}
         </div>
 
