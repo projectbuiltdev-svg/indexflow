@@ -228,7 +228,7 @@ export function ClientSidebar() {
   };
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex items-center px-3 py-2">
           <img src={indexFlowLogo} alt="indexFlow" className="h-14" data-testid="img-client-logo" />

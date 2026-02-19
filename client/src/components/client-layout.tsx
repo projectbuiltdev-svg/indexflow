@@ -14,7 +14,7 @@ interface ClientLayoutProps {
 
 function ClientLayoutInner({ children }: ClientLayoutProps) {
   return (
-    <SidebarProvider open={true} style={sidebarStyle as React.CSSProperties}>
+    <SidebarProvider open={false} style={sidebarStyle as React.CSSProperties}>
       <div className="flex h-screen w-full">
         <ClientSidebar />
         <div className="flex flex-col flex-1 min-w-0">
