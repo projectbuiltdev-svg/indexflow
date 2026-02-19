@@ -141,48 +141,44 @@ export default function Today() {
 
   return (
     <ClientLayout>
-      <div className="space-y-5">
+      <div className="-m-6 p-4 min-h-[calc(100vh-3rem)] flex flex-col gap-3">
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight" data-testid="text-page-title">
+            <h1 className="text-lg font-semibold tracking-tight" data-testid="text-page-title">
               {workspaceName}
             </h1>
-            <p className="text-sm text-muted-foreground mt-0.5" data-testid="text-page-subtitle">
+            <p className="text-xs text-muted-foreground" data-testid="text-page-subtitle">
               Dashboard Overview
             </p>
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="outline" className="gap-1.5" data-testid="badge-status">
-              <CircleDot className="w-3 h-3 text-emerald-500" />
-              All systems healthy
-            </Badge>
-          </div>
+          <Badge variant="outline" className="gap-1.5" data-testid="badge-status">
+            <CircleDot className="w-3 h-3 text-emerald-500" />
+            All systems healthy
+          </Badge>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
           {heroStats.map((stat) => (
-            <Card
+            <div
               key={stat.label}
-              className={`bg-gradient-to-br ${stat.bg} border-0 text-white overflow-visible`}
+              className={`bg-gradient-to-br ${stat.bg} rounded-md text-white p-3.5`}
               data-testid={`card-hero-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}
             >
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className={`p-1.5 rounded-md ${stat.iconBg}`}>
-                    <stat.icon className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="text-xs font-medium text-white/80">{stat.label}</span>
+              <div className="flex items-center gap-1.5 mb-2">
+                <div className={`p-1 rounded ${stat.iconBg}`}>
+                  <stat.icon className="w-3 h-3" />
                 </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-bold tracking-tight">{stat.value}</span>
-                  {stat.suffix && <span className="text-sm text-white/60">{stat.suffix}</span>}
-                </div>
-              </CardContent>
-            </Card>
+                <span className="text-[11px] font-medium text-white/80">{stat.label}</span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold tracking-tight leading-none">{stat.value}</span>
+                {stat.suffix && <span className="text-xs text-white/60">{stat.suffix}</span>}
+              </div>
+            </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
           {moduleStats.map((stat) => {
             const path = selectedWorkspace ? `/${selectedWorkspace.id}/${stat.href}` : `/${stat.href}`;
             return (
@@ -191,23 +187,23 @@ export default function Today() {
                   className="hover-elevate cursor-pointer h-full"
                   data-testid={`card-stat-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}
                 >
-                  <CardContent className="p-3.5">
-                    <div className="flex items-center gap-1.5 mb-1.5">
-                      <stat.icon className={`w-3.5 h-3.5 ${stat.color} shrink-0`} />
-                      <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider truncate">
+                  <CardContent className="p-3">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <stat.icon className={`w-3 h-3 ${stat.color} shrink-0`} />
+                      <span className="text-[9px] text-muted-foreground font-medium uppercase tracking-wider truncate">
                         {stat.module}
                       </span>
                     </div>
-                    <p className="text-xl font-bold tracking-tight" data-testid={`text-stat-value-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>
+                    <p className="text-lg font-bold tracking-tight leading-none" data-testid={`text-stat-value-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>
                       {stat.value}
                     </p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5 truncate" data-testid={`text-stat-label-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>
+                    <p className="text-[10px] text-muted-foreground mt-0.5 truncate" data-testid={`text-stat-label-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}>
                       {stat.label}
                     </p>
-                    <div className="flex items-center gap-1 mt-1.5">
-                      {stat.trend === "up" && <ArrowUpRight className="w-3 h-3 text-emerald-500 shrink-0" />}
-                      {stat.trend === "down" && <ArrowDownRight className="w-3 h-3 text-rose-500 shrink-0" />}
-                      <span className={`text-[10px] font-medium truncate ${stat.trend === "up" ? "text-emerald-600 dark:text-emerald-400" : stat.trend === "down" ? "text-rose-600 dark:text-rose-400" : "text-muted-foreground"}`}>
+                    <div className="flex items-center gap-0.5 mt-1">
+                      {stat.trend === "up" && <ArrowUpRight className="w-2.5 h-2.5 text-emerald-500 shrink-0" />}
+                      {stat.trend === "down" && <ArrowDownRight className="w-2.5 h-2.5 text-rose-500 shrink-0" />}
+                      <span className={`text-[9px] font-medium truncate ${stat.trend === "up" ? "text-emerald-600 dark:text-emerald-400" : stat.trend === "down" ? "text-rose-600 dark:text-rose-400" : "text-muted-foreground"}`}>
                         {stat.change} {stat.changeLabel}
                       </span>
                     </div>
@@ -218,36 +214,36 @@ export default function Today() {
           })}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          <Card className="lg:col-span-7" data-testid="card-recent-activity">
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between gap-2 mb-4">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground" data-testid="text-recent-activity-title">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 flex-1 min-h-0">
+          <Card className="lg:col-span-5" data-testid="card-recent-activity">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground" data-testid="text-recent-activity-title">
                   Recent Activity
                 </h2>
                 <Badge variant="secondary" data-testid="badge-activity-count">
-                  {recentActivity.length} events
+                  {recentActivity.length}
                 </Badge>
               </div>
-              <div className="space-y-0.5">
+              <div>
                 {recentActivity.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 py-2.5 px-2 rounded-md hover-elevate group"
+                    className="flex items-center gap-2.5 py-2 px-1.5 rounded-md hover-elevate"
                     data-testid={`activity-item-${index}`}
                   >
-                    <div className="w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center shrink-0">
-                      <item.icon className={`w-4 h-4 ${item.iconColor}`} />
+                    <div className="w-7 h-7 rounded-md bg-muted/50 flex items-center justify-center shrink-0">
+                      <item.icon className={`w-3.5 h-3.5 ${item.iconColor}`} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium" data-testid={`text-activity-action-${index}`}>
+                      <p className="text-[13px] font-medium leading-tight" data-testid={`text-activity-action-${index}`}>
                         {item.action}
                       </p>
-                      <p className="text-xs text-muted-foreground truncate" data-testid={`text-activity-detail-${index}`}>
+                      <p className="text-[11px] text-muted-foreground truncate" data-testid={`text-activity-detail-${index}`}>
                         {item.detail}
                       </p>
                     </div>
-                    <span className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0">
+                    <span className="text-[10px] text-muted-foreground whitespace-nowrap shrink-0">
                       {item.time}
                     </span>
                   </div>
@@ -256,58 +252,60 @@ export default function Today() {
             </CardContent>
           </Card>
 
-          <div className="lg:col-span-5 space-y-4">
-            <Card data-testid="card-health-scores">
-              <CardContent className="p-5">
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground" data-testid="text-health-title">
-                    Health Scores
-                  </h2>
-                  <div className="relative flex items-center justify-center">
-                    <MiniRing value={87} size={40} strokeWidth={3.5} color="text-emerald-500" />
-                    <span className="absolute text-[10px] font-bold">87</span>
-                  </div>
+          <Card className="lg:col-span-4" data-testid="card-health-scores">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground" data-testid="text-health-title">
+                  Health Scores
+                </h2>
+                <div className="relative flex items-center justify-center">
+                  <MiniRing value={87} size={36} strokeWidth={3} color="text-emerald-500" />
+                  <span className="absolute text-[9px] font-bold">87</span>
                 </div>
-                <div className="space-y-3">
-                  {healthMetrics.map((metric) => (
-                    <div key={metric.label} data-testid={`health-metric-${metric.label.toLowerCase().replace(/\s+/g, "-")}`}>
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="text-xs font-medium">{metric.label}</span>
-                        <span className="text-xs text-muted-foreground font-medium">{metric.value}%</span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-muted/50 overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${metric.color} transition-all duration-500`}
-                          style={{ width: `${metric.value}%` }}
-                        />
-                      </div>
+              </div>
+              <div className="space-y-2.5">
+                {healthMetrics.map((metric) => (
+                  <div key={metric.label} data-testid={`health-metric-${metric.label.toLowerCase().replace(/\s+/g, "-")}`}>
+                    <div className="flex items-center justify-between gap-2 mb-0.5">
+                      <span className="text-[11px] font-medium">{metric.label}</span>
+                      <span className="text-[11px] text-muted-foreground font-medium">{metric.value}%</span>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="h-1.5 rounded-full bg-muted/50 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${metric.color} transition-all duration-500`}
+                        style={{ width: `${metric.value}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
-            <Card data-testid="card-quick-actions">
-              <CardContent className="p-5">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3" data-testid="text-quick-actions-title">
+          <div className="lg:col-span-3">
+            <Card className="h-full" data-testid="card-quick-actions">
+              <CardContent className="p-4">
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3" data-testid="text-quick-actions-title">
                   Quick Actions
                 </h2>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1.5">
                   {[
                     { label: "New Post", icon: FileText, href: "content-engine?tab=posts", color: "text-blue-500" },
                     { label: "Add Keyword", icon: Search, href: "rank-tracker/track-keywords", color: "text-emerald-500" },
                     { label: "View Pipeline", icon: BarChart3, href: "crm/pipeline", color: "text-violet-500" },
-                    { label: "Support", icon: LifeBuoy, href: "support/tickets", color: "text-amber-500" },
+                    { label: "Analytics", icon: BarChart3, href: "analytics/overview", color: "text-amber-500" },
+                    { label: "Support", icon: LifeBuoy, href: "support/tickets", color: "text-cyan-500" },
                   ].map((action) => {
                     const path = selectedWorkspace ? `/${selectedWorkspace.id}/${action.href}` : `/${action.href}`;
                     return (
                       <Link key={action.label} href={path}>
                         <Button
                           variant="outline"
+                          size="sm"
                           className="w-full justify-start gap-2"
                           data-testid={`btn-quick-${action.label.toLowerCase().replace(/\s+/g, "-")}`}
                         >
-                          <action.icon className={`w-4 h-4 ${action.color}`} />
+                          <action.icon className={`w-3.5 h-3.5 ${action.color}`} />
                           {action.label}
                         </Button>
                       </Link>
