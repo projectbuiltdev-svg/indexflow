@@ -238,7 +238,7 @@ export default function Home() {
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight mb-1 bg-gradient-to-r from-white via-white/95 to-white/80 bg-clip-text text-transparent drop-shadow-lg">
               Still Paying for 10+ SEO Tools
             </h1>
-            <div className="mx-auto w-32 sm:w-40 lg:w-52 h-1 rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 mt-5" />
+            <div className="mx-auto w-32 sm:w-40 lg:w-52 h-[2px] rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 mt-5" />
             <img src={indexFlowLogo} alt="IndexFlow" className="h-7 sm:h-8 lg:h-10 mx-auto mt-8 mb-6 drop-shadow-lg" data-testid="hero-logo" />
             <div className="max-w-3xl mx-auto mb-6 space-y-1">
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg">
