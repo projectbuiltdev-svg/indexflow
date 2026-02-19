@@ -1,5 +1,7 @@
 import { type ReactNode } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { PanelLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ClientSidebar } from "@/components/client-sidebar";
 import { WorkspaceProvider } from "@/lib/workspace-context";
 
