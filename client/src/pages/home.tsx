@@ -236,34 +236,53 @@ export default function Home() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 text-center">
           <div className="inline-block backdrop-blur-sm bg-black/15 rounded-2xl px-4 py-6 sm:px-8 sm:py-10 lg:px-12 lg:py-14 mx-2">
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight mb-1 bg-gradient-to-r from-white via-white/95 to-white/80 bg-clip-text text-transparent drop-shadow-lg">
-              Still Paying for 10+ SEO Tools
+              Still Paying for 10+ SEO, Content & Local Tools?
             </h1>
             <div className="mx-auto w-32 sm:w-40 lg:w-52 h-[2px] rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 mt-5" />
             <img src={indexFlowLogo} alt="IndexFlow" className="h-7 sm:h-8 lg:h-10 mx-auto mt-8 mb-6 drop-shadow-lg" data-testid="hero-logo" />
-            <div className="max-w-3xl mx-auto mb-6 space-y-1">
+
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white drop-shadow-lg mb-2">
+              Build, Optimise & Deploy SEO-Ready Content Infrastructure
+            </h2>
+            <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg mb-4">
+              Generate Posts & Pages · Run On-Page Audits · Automated Schema
+            </p>
+
+            <div className="max-w-3xl mx-auto mb-5 space-y-3">
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg">
-                Create Posts & Pages · On-Page SEO Audits · Automated Schema
+                Deploy Directly to Any Domain via<br />
+                <span className="font-semibold text-white">GitHub → Cloudflare</span> (No CMS Required)
               </p>
+
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg">
-                Deploy to any LLM or CMS Instantly · Resell or power your business
+                Optimised for <span className="font-semibold text-white">Google + AI Search</span><br />
+                (OpenAI · Gemini · Perplexity) — Bring Your Own Keys
               </p>
+
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg">
-                Google +AI search (OpenAI · Gemini · Perplexity) · BYOK
+                Smart Internal Linking · Rank Tracking<br />
+                5×5 Local Search Grid · GSC Data Ingestion<br />
+                Lead → Booking Attribution
               </p>
+
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg">
-                Smart Internal Linking · Client Reports · Rank Tracking
-              </p>
-              <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg">
-                Local SEO Grid · CRM + Pipeline · Stripe & PayPal
-              </p>
-              <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg">
-                Twilio Voice · SMS · Website Widget (AI) · Books appt. 24/7
+                Built-In CRM Funnel · Stripe & PayPal Billing<br />
+                AI Voice, SMS & Website Widget<br />
+                Book Appointments 24/7
               </p>
             </div>
+
             <div className="mx-auto w-32 sm:w-40 lg:w-52 h-[2px] rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 mb-4" />
-            <p className="text-[15px] sm:text-lg lg:text-xl max-w-3xl mx-auto mb-4 font-semibold text-white drop-shadow-lg">
-              Whitelabel infrastructure · You handle clients
+
+            <p className="text-[15px] sm:text-lg lg:text-xl max-w-3xl mx-auto mb-1 font-semibold text-white drop-shadow-lg">
+              White-Label Infrastructure from Day One
             </p>
+            <p className="text-[14px] sm:text-base lg:text-lg text-white/80 drop-shadow-lg mb-5">
+              Run it for your own growth<br />
+              <span className="italic">or</span><br />
+              Resell it to unlimited client domains
+            </p>
+
             <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4">
               <Link href="/contact">
                 <Button size="default" className="gap-2 sm:text-base text-sm sm:px-4 px-3" data-testid="button-hero-demo">
@@ -276,8 +295,9 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
+
             <p className="inline-block font-bold text-[17px] sm:text-xl lg:text-2xl bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 bg-clip-text text-transparent drop-shadow-lg animate-[pulse_5s_ease-in-out_infinite]">
-              Agencies · SaaS · Ecommerce · Local Businesses · Solo Founders
+              For Agencies · SaaS Platforms · Ecommerce · Multi-Location Brands · Solo Operators
             </p>
           </div>
         </div>
