@@ -272,33 +272,36 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mx-auto w-32 sm:w-40 lg:w-52 h-[2px] rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 mb-4" />
+            <div className="mx-auto w-32 sm:w-40 lg:w-52 h-[2px] rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 mt-2 mb-8" />
 
-            <p className="text-[15px] sm:text-lg lg:text-xl max-w-3xl mx-auto mb-1 font-semibold text-white drop-shadow-lg">
-              White-Label Infrastructure from Day One
-            </p>
-            <p className="text-[14px] sm:text-base lg:text-lg text-white/80 drop-shadow-lg mb-5">
-              Run it for your own growth<br />
-              <span className="italic">or</span><br />
-              Resell it to unlimited client domains
-            </p>
+            <div className="flex flex-col items-center justify-center space-y-6">
+              <p className="text-[15px] sm:text-lg lg:text-xl max-w-3xl font-semibold text-white drop-shadow-lg">
+                White-Label Infrastructure from Day One
+              </p>
 
-            <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4">
-              <Link href="/contact">
-                <Button size="default" className="gap-2 sm:text-base text-sm sm:px-4 px-3" data-testid="button-hero-demo">
-                  Get Started <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-              <Link href="/pricing">
-                <Button size="default" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 sm:text-base text-sm sm:px-4 px-3" data-testid="button-hero-templates">
-                  <span className="italic">from</span> <span className="font-bold">$99</span>/month
-                </Button>
-              </Link>
+              <p className="text-[14px] sm:text-base lg:text-lg text-white/80 drop-shadow-lg">
+                Run it for your own growth<br />
+                <span className="italic">or</span><br />
+                Resell it to unlimited client domains
+              </p>
+
+              <div className="flex items-center justify-center gap-2 sm:gap-4">
+                <Link href="/contact">
+                  <Button size="default" className="gap-2 sm:text-base text-sm sm:px-4 px-3" data-testid="button-hero-demo">
+                    Get Started <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+                <Link href="/pricing">
+                  <Button size="default" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 sm:text-base text-sm sm:px-4 px-3" data-testid="button-hero-templates">
+                    <span className="italic">from</span> <span className="font-bold">$99</span>/month
+                  </Button>
+                </Link>
+              </div>
+
+              <p className="inline-block font-bold text-[17px] sm:text-xl lg:text-2xl bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 bg-clip-text text-transparent drop-shadow-lg animate-[pulse_5s_ease-in-out_infinite]">
+                For Agencies · SaaS Platforms · Ecommerce · Multi-Location Brands · Solo Operators
+              </p>
             </div>
-
-            <p className="inline-block font-bold text-[17px] sm:text-xl lg:text-2xl bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 bg-clip-text text-transparent drop-shadow-lg animate-[pulse_5s_ease-in-out_infinite]">
-              For Agencies · SaaS Platforms · Ecommerce · Multi-Location Brands · Solo Operators
-            </p>
           </div>
         </div>
       </section>
