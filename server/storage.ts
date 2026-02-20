@@ -131,7 +131,7 @@ import {
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
-import { eq, and, ne, desc, asc, count, max, lte, sql } from "drizzle-orm";
+import { eq, and, ne, desc, asc, count, max, lte, sql, inArray } from "drizzle-orm";
 import { encryptField, decryptField } from "./crypto";
 
 export interface IStorage {
@@ -166,6 +166,7 @@ export interface IStorage {
   getTeamMembers(workspaceId: string): Promise<TeamMember[]>;
   getTeamMember(id: number): Promise<TeamMember | undefined>;
   getTeamMemberByUserAndWorkspace(userId: string, workspaceId: string): Promise<TeamMember | undefined>;
+  countTeamMembersByOwner(ownerId: string): Promise<number>;
   createTeamMember(member: InsertTeamMember): Promise<TeamMember>;
   updateTeamMember(id: number, member: Partial<InsertTeamMember>): Promise<TeamMember | undefined>;
   deleteTeamMember(id: number): Promise<boolean>;
@@ -593,6 +594,14 @@ export class MemStorage implements IStorage {
     return Array.from(this.teamMembers.values()).find(
       (t) => t.userId === userId && t.workspaceId === workspaceId && t.status === "accepted"
     );
+  }
+
+  async countTeamMembersByOwner(ownerId: string): Promise<number> {
+    const ownerWorkspaces = Array.from(this.workspaces.values()).filter((v) => v.ownerId === ownerId);
+    const workspaceIds = new Set(ownerWorkspaces.map((w) => w.id));
+    const members = Array.from(this.teamMembers.values()).filter((t) => workspaceIds.has(t.workspaceId));
+    const uniqueUserIds = new Set(members.map((m) => m.userId || m.email));
+    return uniqueUserIds.size + 1;
   }
 
   async createTeamMember(data: InsertTeamMember): Promise<TeamMember> {
@@ -1681,6 +1690,17 @@ export class DbStorage implements IStorage {
   async getTeamMemberByUserAndWorkspace(userId: string, workspaceId: string): Promise<TeamMember | undefined> {
     const [m] = await db!.select().from(teamMembers).where(and(eq(teamMembers.userId, userId), eq(teamMembers.workspaceId, workspaceId), eq(teamMembers.status, "accepted")));
     return m;
+  }
+
+  async countTeamMembersByOwner(ownerId: string): Promise<number> {
+    const ownerWorkspaceList = await db!.select({ id: workspaces.id }).from(workspaces).where(eq(workspaces.ownerId, ownerId));
+    if (ownerWorkspaceList.length === 0) return 1;
+    const wsIds = ownerWorkspaceList.map((w) => w.id);
+    const result = await db!
+      .select({ count: sql<number>`COUNT(DISTINCT COALESCE(${teamMembers.userId}, ${teamMembers.email}))::int` })
+      .from(teamMembers)
+      .where(inArray(teamMembers.workspaceId, wsIds));
+    return (result[0]?.count ?? 0) + 1;
   }
 
   async createTeamMember(data: InsertTeamMember): Promise<TeamMember> {

@@ -280,6 +280,7 @@ export async function registerRoutes(
       const user = await storage.getUser(userId);
       const planTier = getPlanTier(user?.plan || "solo");
       const workspaceCount = await storage.countWorkspacesByOwner(userId);
+      const seatCount = await storage.countTeamMembersByOwner(userId);
 
       res.json({
         plan: planTier.id,
@@ -301,6 +302,7 @@ export async function registerRoutes(
         },
         usage: {
           workspaces: workspaceCount,
+          users: seatCount,
         },
       });
     } catch (error) {
@@ -629,6 +631,25 @@ export async function registerRoutes(
       if (!await authorizeVenueAccess(req, req.params.workspaceId)) {
         return res.status(403).json({ error: "Forbidden" });
       }
+
+      const workspace = await storage.getWorkspace(req.params.workspaceId);
+      if (!workspace) return res.status(404).json({ error: "Workspace not found" });
+
+      const ownerId = workspace.ownerId || (req as any).user?.id || "dev-user";
+      const owner = await storage.getUser(ownerId);
+      const planTier = getPlanTier(owner?.plan || "solo");
+      const currentSeatCount = await storage.countTeamMembersByOwner(ownerId);
+
+      if (currentSeatCount >= planTier.maxUsers) {
+        return res.status(403).json({
+          error: "user_seat_limit_reached",
+          message: `Your ${planTier.name} plan allows up to ${planTier.maxUsers} user seat${planTier.maxUsers === 1 ? "" : "s"}. Please upgrade your plan to add more team members.`,
+          currentCount: currentSeatCount,
+          maxAllowed: planTier.maxUsers,
+          plan: planTier.id,
+        });
+      }
+
       const validatedData = insertTeamMemberSchema.parse({
         ...req.body,
         workspaceId: req.params.workspaceId,
