@@ -390,12 +390,12 @@ export default function Home2() {
             <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
               <Link href="/contact">
                 <Button size="lg" className="text-base px-8 py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
-                  30 Day Trial $1 &nbsp;→
+                  30 Day Trial $1
                 </Button>
               </Link>
               <Link href="#tools">
                 <Button size="lg" variant="outline" className="text-base px-8 py-4 border-white/30 text-white bg-white/15 backdrop-blur-sm hover:bg-white/25 hover:border-white/50" data-testid="btn-hero-tools">
-                  See All 40+ Tools
+                  → See All 40+ Tools
                 </Button>
               </Link>
             </div>
