@@ -371,25 +371,25 @@ export default function Home2() {
         <HeroVideo />
 
         <div className="relative z-10 flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500/30 to-green-400/30 border border-green-300/40 text-green-200 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide mb-9 animate-[pulse_4s_ease-in-out_infinite] backdrop-blur-sm shadow-lg shadow-green-400/20" data-testid="hero-badge">
-            <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/30 to-sky-400/30 border border-sky-300/40 text-sky-200 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide mb-9 animate-[pulse_4s_ease-in-out_infinite] backdrop-blur-sm shadow-lg shadow-sky-400/20" data-testid="hero-badge">
+            <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
             40+ SEO Tools · One Platform · Zero Middlemen
           </div>
 
           <div className="bg-black/40 backdrop-blur-md rounded-2xl px-8 sm:px-14 py-10 sm:py-14">
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-none tracking-tight max-w-4xl mb-7 text-white" data-testid="hero-heading">
               The revenue chain<br />
-              <span className="text-emerald-400">belongs to you.</span><br />
+              <span className="text-primary">belongs to you.</span><br />
               <span className="text-white/40">Not your tools.</span>
             </h1>
 
             <p className="text-lg sm:text-xl text-white/70 max-w-xl mb-10 leading-relaxed font-light mx-auto" data-testid="hero-sub">
-              <strong className="text-white font-semibold">White Label Agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. <strong className="font-semibold bg-gradient-to-r from-emerald-300 to-green-400 bg-clip-text text-transparent">One login. 40+ tools.</strong> Your brand.
+              <strong className="text-white font-semibold">White Label Agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. <strong className="font-semibold bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">One login. 40+ tools.</strong> Your brand.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
               <Link href="/contact">
-                <Button size="lg" className="text-base px-8 py-4 bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
+                <Button size="lg" className="text-base px-8 py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
                   30 Day Trial $1
                 </Button>
               </Link>
