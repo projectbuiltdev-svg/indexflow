@@ -10,12 +10,7 @@ import { SEO, seoData, combinedHomeSchema } from "@/components/seo";
 
 function HeroVideo() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [showVideo, setShowVideo] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowVideo(true), 500);
-    return () => clearTimeout(timer);
-  }, []);
+  const [showVideo, setShowVideo] = useState(true);
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden bg-slate-900">
