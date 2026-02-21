@@ -5,7 +5,7 @@ import indexFlowLogo from "@assets/image_1771351451425.webp";
 import clientDashImg from "@assets/client_dash_1771696909138.webp";
 import wixLogo from "@assets/image_1771707999263.png";
 import { colorShadows } from "@/lib/color-shadows";
-import { SiWordpress, SiShopify, SiSquarespace, SiWebflow, SiGhost } from "react-icons/si";
+import { SiWordpress, SiShopify, SiSquarespace, SiWebflow, SiGhost, SiReplit } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO, seoData, combinedHomeSchema } from "@/components/seo";
@@ -575,6 +575,8 @@ export default function Home2() {
                     <img key={`wix-${setIndex}`} src={wixLogo} alt="Wix" className="w-8 h-8 flex-shrink-0 opacity-40 grayscale object-contain" />,
                     <SiWebflow key={`wf-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" />,
                     <SiGhost key={`gh-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" />,
+                    <SiReplit key={`rp-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" />,
+                    <svg key={`lv-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>,
                   ])}
                 </div>
               </div>
