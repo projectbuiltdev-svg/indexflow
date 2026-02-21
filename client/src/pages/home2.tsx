@@ -384,7 +384,7 @@ export default function Home2() {
             </h1>
 
             <p className="text-lg sm:text-xl text-white/70 max-w-xl mb-10 leading-relaxed font-light mx-auto" data-testid="hero-sub">
-              IndexFlow is the <strong className="text-white font-semibold">white label agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. <strong className="font-semibold bg-gradient-to-r from-sky-300 to-primary bg-clip-text text-transparent">One login. 40+ tools.</strong> Your brand. Your price. Your profit.
+              IndexFlow is the <strong className="text-white font-semibold">white label agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. <strong className="font-semibold bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">One login. 40+ tools.</strong> Your brand. Your price. Your profit.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
