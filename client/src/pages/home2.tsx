@@ -429,7 +429,7 @@ export default function Home2() {
                 </Button>
               </Link>
             </div>
-            <p className="text-[9px] sm:text-xs text-white font-medium mb-3 sm:mb-5" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
+            <p className="text-[11px] sm:text-sm text-white font-medium mb-3 sm:mb-5" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
 
             <FadeIn className="w-full">
               <div className="relative inline-block mx-auto group" data-testid="hero-stats-slim">
