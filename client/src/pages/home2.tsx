@@ -439,21 +439,16 @@ export default function Home2() {
 
           {/* Hero Stats */}
           <FadeIn className="mt-14 w-full max-w-3xl">
-            <div className="flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 sm:p-8 shadow-lg flex-wrap sm:flex-nowrap gap-6 sm:gap-0" data-testid="hero-stats">
-              {[
-                { num: "11+", label: "Tools Replaced" },
-                { num: "40+", label: "Built-in Tools" },
-                { num: "5", label: "CMS Integrations" },
-                { num: "1 Login", label: "Everything Connected" },
-              ].map((s, i, arr) => (
-                <div key={i} className="flex items-center">
-                  <div className="text-center px-4 sm:px-6">
-                    <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{s.num}</div>
-                    <div className="text-[11px] text-white/50 font-medium uppercase tracking-wide mt-1">{s.label}</div>
-                  </div>
-                  {i < arr.length - 1 && <div className="hidden sm:block w-px h-10 bg-white/20 flex-shrink-0" />}
-                </div>
-              ))}
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-8 py-3 shadow-lg" data-testid="hero-stats">
+              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-bold tracking-wide text-white/90">
+                <span className="flex items-center gap-2">40+ SEO Tools</span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-2">One Platform</span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-2">Zero Middlemen</span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-2">1 Login</span>
+              </div>
             </div>
           </FadeIn>
         </div>
