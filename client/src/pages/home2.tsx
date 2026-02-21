@@ -561,9 +561,9 @@ export default function Home2() {
         <div className="max-w-6xl mx-auto px-6 sm:px-12">
           <FadeIn>
             <div className="text-center">
-              <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">CMS Publish</p>
+              <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">Publish</p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">
-                Instantly to <em className="text-muted-foreground/50 italic">your CMS.</em>
+                Instantly to <em className="text-muted-foreground/50 italic">your LLM or CMS.</em>
               </h2>
               <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-10">
                 {[
