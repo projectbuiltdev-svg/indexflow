@@ -251,10 +251,7 @@ export default function Home() {
 
             <div className="max-w-3xl mx-auto mb-8">
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
-                White label SEO platform built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything.
-              </p>
-              <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed mt-2">
-                One login. 40+ tools. Your brand. Your price. Your profit.
+                White label SEO platform built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. One login. 40+ tools. Your brand. Your price. Your profit.
               </p>
             </div>
 
