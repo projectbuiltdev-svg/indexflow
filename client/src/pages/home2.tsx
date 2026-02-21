@@ -402,15 +402,15 @@ export default function Home2() {
       <SEO {...seoData.home} structuredData={combinedHomeSchema} />
 
       {/* HERO */}
-      <section className="relative flex flex-col items-center justify-center text-center px-6 sm:px-12 py-24 sm:py-32 overflow-hidden" data-testid="hero-section">
+      <section className="relative flex flex-col items-center justify-center text-center px-4 sm:px-12 pt-12 sm:py-32 pb-16 sm:pb-32 overflow-hidden" data-testid="hero-section">
         <HeroVideo />
 
-        <div className="relative z-10 flex flex-col items-center">
-          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-5 sm:px-14 py-8 sm:py-14">
+        <div className="relative z-10 flex flex-col items-center w-full">
+          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-4 sm:px-14 py-6 sm:py-14 w-full max-w-4xl">
             {/* Hero Stats Slim Strip - Top */}
-            <FadeIn className="mb-4 sm:mb-6 w-full">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 sm:px-6 py-1.5 sm:py-2 shadow-lg inline-block mx-auto" data-testid="hero-stats-slim">
-                <div className="flex items-center justify-center gap-x-2 sm:gap-x-4 text-[9px] sm:text-xs font-bold tracking-widest text-white/90 whitespace-nowrap uppercase">
+            <FadeIn className="mb-3 sm:mb-6 w-full">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 sm:px-6 py-1 sm:py-2 shadow-lg inline-block mx-auto" data-testid="hero-stats-slim">
+                <div className="flex items-center justify-center gap-x-1.5 sm:gap-x-4 text-[8px] sm:text-xs font-bold tracking-wider sm:tracking-widest text-white/90 whitespace-nowrap uppercase">
                   <span>40+ SEO Tools</span>
                   <span className="text-white/20">●</span>
                   <span>One Platform</span>
@@ -420,30 +420,30 @@ export default function Home2() {
               </div>
             </FadeIn>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold leading-none tracking-tight max-w-4xl mb-5 sm:mb-7 text-white" data-testid="hero-heading">
+            <h1 className="text-[1.65rem] sm:text-5xl lg:text-7xl font-extrabold leading-[1.15] sm:leading-none tracking-tight max-w-4xl mb-4 sm:mb-7 text-white" data-testid="hero-heading">
               The revenue chain<br />
               <span className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent">belongs to you.</span><br />
               <span className="text-white/40">Not your tools.</span>
             </h1>
 
-            <p className="text-base sm:text-xl text-white/70 max-w-xl mb-8 sm:mb-10 leading-relaxed font-light mx-auto" data-testid="hero-sub">
-              <strong className="text-white font-semibold">White Label Agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. <strong className="font-semibold bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">One login. 40+ tools.</strong> Your brand.
+            <p className="text-sm sm:text-xl text-white/70 max-w-xl mb-6 sm:mb-10 leading-relaxed font-light mx-auto" data-testid="hero-sub">
+              <strong className="text-white font-semibold">White Label Agency OS</strong> for solo founders and agency owners done feeding margin to platforms. <strong className="font-semibold bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">One login. 40+ tools.</strong> Your brand.
             </p>
 
-            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-5">
+            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-5">
               <Link href="/contact">
-                <Button size="default" className="text-sm sm:text-base px-5 sm:px-8 py-2.5 sm:py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold w-full sm:w-auto" data-testid="btn-hero-trial">
+                <Button size="default" className="text-xs sm:text-base px-3 sm:px-8 py-2 sm:py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
                   30 Day Trial $1
                 </Button>
               </Link>
               <Link href="#tools">
-                <Button size="default" variant="outline" className="text-sm sm:text-base px-5 sm:px-8 py-2.5 sm:py-4 border-white/30 text-white bg-white/15 backdrop-blur-sm hover:bg-white/25 hover:border-white/50 w-full sm:w-auto" data-testid="btn-hero-tools">
-                  → See All 40+ Tools
+                <Button size="default" variant="outline" className="text-xs sm:text-base px-3 sm:px-8 py-2 sm:py-4 border-white/30 text-white bg-white/15 backdrop-blur-sm hover:bg-white/25 hover:border-white/50" data-testid="btn-hero-tools">
+                  → All 40+ Tools
                 </Button>
               </Link>
             </div>
-            <p className="text-[10px] sm:text-xs text-white/50" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
-            <p className="text-xs sm:text-sm text-white/60 italic mt-2 sm:mt-3" data-testid="hero-strapline">Try the full platform & tell us what you think? — then choose your plan.</p>
+            <p className="text-[9px] sm:text-xs text-white/50" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
+            <p className="text-[10px] sm:text-sm text-white/60 italic mt-1.5 sm:mt-3" data-testid="hero-strapline">Try the full platform & tell us what you think? — then choose your plan.</p>
           </div>
         </div>
       </section>
