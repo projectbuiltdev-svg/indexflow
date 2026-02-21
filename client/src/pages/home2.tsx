@@ -64,6 +64,13 @@ function FadeIn({ children, className = "" }: { children: React.ReactNode; class
   );
 }
 
+const colorShadows = [
+  "shadow-[0_8px_30px_-4px_rgba(234,179,8,0.35)]",
+  "shadow-[0_8px_30px_-4px_rgba(59,130,246,0.35)]",
+  "shadow-[0_8px_30px_-4px_rgba(34,197,94,0.35)]",
+  "shadow-[0_8px_30px_-4px_rgba(168,85,247,0.35)]",
+];
+
 const marqueeItems = [
   "Programmatic Content Engine",
   "Rank Tracker · 1,000 keywords",
@@ -500,7 +507,7 @@ export default function Home2() {
                 { num: "$34.2k", label: "Pipeline Value — full funnel CRM tracking", color: "bg-purple-500/10 text-purple-600" },
                 { num: "194", label: "AI Interactions — widget chats + Twilio calls", color: "bg-orange-500/10 text-orange-600" },
               ].map((c, i) => (
-                <div key={i} className="bg-card border border-border rounded-xl p-5 flex items-center gap-4 shadow-sm hover:-translate-y-0.5 transition-all">
+                <div key={i} className={`bg-card border border-border rounded-xl p-5 flex items-center gap-4 hover:-translate-y-0.5 transition-all ${colorShadows[i % colorShadows.length]}`}>
                   <span className={`font-extrabold text-xl px-3 py-2 rounded-lg flex-shrink-0 ${c.color}`}>{c.num}</span>
                   <span className="text-xs text-muted-foreground leading-snug">{c.label}</span>
                 </div>
@@ -521,9 +528,9 @@ export default function Home2() {
             <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">Most agencies waste hours every day dealing with these problems. There's a better way.</p>
           </FadeIn>
           <FadeIn>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-2xl overflow-hidden border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {painCards.map((c, i) => (
-                <div key={i} className="bg-card p-8 sm:p-10 hover:bg-accent/30 transition-colors" data-testid={`pain-card-${i}`}>
+                <div key={i} className={`bg-card border border-border rounded-xl p-8 sm:p-10 hover:-translate-y-1 transition-all ${colorShadows[i % colorShadows.length]}`} data-testid={`pain-card-${i}`}>
                   <span className="mb-4 block">{c.icon}</span>
                   <h3 className="font-bold text-lg mb-2">{c.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
@@ -547,7 +554,7 @@ export default function Home2() {
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {solutionCards.map((c, i) => (
-                <div key={i} className="bg-card border border-border rounded-xl p-8 hover:-translate-y-1 hover:shadow-lg hover:border-primary/40 transition-all shadow-sm" data-testid={`solution-card-${i}`}>
+                <div key={i} className={`bg-card border border-border rounded-xl p-8 hover:-translate-y-1 transition-all ${colorShadows[i % colorShadows.length]}`} data-testid={`solution-card-${i}`}>
                   <span className="mb-4 block">{c.icon}</span>
                   <h3 className="font-bold text-lg mb-2">{c.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
@@ -574,8 +581,8 @@ export default function Home2() {
                 Instantly to <em className="text-muted-foreground/50 italic">your CMS.</em>
               </h2>
               <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-10">
-                {["WordPress", "Shopify", "Squarespace", "Wix", "Webflow"].map((cms) => (
-                  <div key={cms} className="bg-card border border-border rounded-xl px-6 py-4 text-center hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg transition-all shadow-sm min-w-[130px]" data-testid={`cms-badge-${cms.toLowerCase()}`}>
+                {["WordPress", "Shopify", "Squarespace", "Wix", "Webflow"].map((cms, i) => (
+                  <div key={cms} className={`bg-card border border-border rounded-xl px-6 py-4 text-center hover:-translate-y-1 transition-all min-w-[130px] ${colorShadows[i % colorShadows.length]}`} data-testid={`cms-badge-${cms.toLowerCase()}`}>
                     <Rocket className="w-6 h-6 text-primary mx-auto mb-2" />
                     <span className="text-sm font-semibold">{cms}</span>
                   </div>
@@ -599,9 +606,9 @@ export default function Home2() {
             <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">No feature gating. Every tier gets the full suite. Here's exactly what you get from day one.</p>
           </FadeIn>
           <FadeIn>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-2xl overflow-hidden border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {toolCategories.map((cat, i) => (
-                <div key={i} className="bg-card p-7 hover:bg-accent/30 transition-colors" data-testid={`tools-cat-${i}`}>
+                <div key={i} className={`bg-card border border-border rounded-xl p-7 hover:-translate-y-1 transition-all ${colorShadows[i % colorShadows.length]}`} data-testid={`tools-cat-${i}`}>
                   <div className="font-bold text-sm mb-4 pb-3 border-b border-border flex items-center">{cat.icon}{cat.label}</div>
                   <ul className="space-y-0">
                     {cat.items.map((item, j) => (
@@ -638,9 +645,9 @@ export default function Home2() {
             <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">See exactly what IndexFlow replaces in your current stack.</p>
           </FadeIn>
           <FadeIn>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-2xl overflow-hidden border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {replaceItems.map((r, i) => (
-                <div key={i} className="bg-card p-6 hover:bg-accent/30 transition-colors" data-testid={`replace-card-${i}`}>
+                <div key={i} className={`bg-card border border-border rounded-xl p-6 hover:-translate-y-1 transition-all ${colorShadows[i % colorShadows.length]}`} data-testid={`replace-card-${i}`}>
                   <span className="text-xs text-muted-foreground line-through block mb-1.5">{r.before}</span>
                   <span className="text-sm font-semibold text-foreground">
                     <span className="text-primary mr-1">→</span>{r.after}
@@ -666,21 +673,13 @@ export default function Home2() {
           </FadeIn>
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {serveCards.map((c, i) => {
-                const shadows = [
-                  "shadow-[0_8px_30px_-4px_rgba(234,179,8,0.35)]",
-                  "shadow-[0_8px_30px_-4px_rgba(59,130,246,0.35)]",
-                  "shadow-[0_8px_30px_-4px_rgba(34,197,94,0.35)]",
-                  "shadow-[0_8px_30px_-4px_rgba(168,85,247,0.35)]",
-                ];
-                return (
-                  <div key={i} className={`bg-card border border-border rounded-xl p-7 text-center hover:-translate-y-1 transition-all flex flex-col items-center ${shadows[i % shadows.length]}`} data-testid={`serve-card-${i}`}>
-                    <span className="mb-3 block">{c.icon}</span>
-                    <h3 className="font-bold text-base mb-2">{c.title}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{c.desc}</p>
-                  </div>
-                );
-              })}
+              {serveCards.map((c, i) => (
+                <div key={i} className={`bg-card border border-border rounded-xl p-7 text-center hover:-translate-y-1 transition-all flex flex-col items-center ${colorShadows[i % colorShadows.length]}`} data-testid={`serve-card-${i}`}>
+                  <span className="mb-3 block">{c.icon}</span>
+                  <h3 className="font-bold text-base mb-2">{c.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{c.desc}</p>
+                </div>
+              ))}
             </div>
           </FadeIn>
         </div>
@@ -697,9 +696,9 @@ export default function Home2() {
             <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">From domain connection to ranking reports in four simple steps.</p>
           </FadeIn>
           <FadeIn>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-2xl overflow-hidden border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {steps.map((s, i) => (
-                <div key={i} className="bg-card p-8 sm:p-10 hover:bg-accent/30 transition-colors" data-testid={`step-card-${i}`}>
+                <div key={i} className={`bg-card border border-border rounded-xl p-8 sm:p-10 hover:-translate-y-1 transition-all ${colorShadows[i % colorShadows.length]}`} data-testid={`step-card-${i}`}>
                   <div className="text-5xl font-extrabold text-primary/15 tracking-tight mb-4 leading-none">{s.num}</div>
                   <h3 className="font-bold text-base mb-2">{s.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
@@ -723,9 +722,9 @@ export default function Home2() {
             <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">From first draft to performance report — every stage managed in one platform.</p>
           </FadeIn>
           <FadeIn>
-            <div className="flex flex-col lg:flex-row items-stretch gap-px bg-border rounded-2xl overflow-hidden border border-border">
+            <div className="flex flex-col lg:flex-row items-stretch gap-5">
               {lifecycleSteps.map((s, i) => (
-                <div key={i} className="bg-card p-7 flex-1 text-center hover:bg-accent/30 transition-colors relative flex flex-col items-center" data-testid={`lifecycle-step-${i}`}>
+                <div key={i} className={`bg-card border border-border rounded-xl p-7 flex-1 text-center hover:-translate-y-1 transition-all relative flex flex-col items-center ${colorShadows[i % colorShadows.length]}`} data-testid={`lifecycle-step-${i}`}>
                   <span className="mb-3 block">{s.icon}</span>
                   <h3 className="font-bold text-base mb-2">{s.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{s.desc}</p>
@@ -752,7 +751,7 @@ export default function Home2() {
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {infraCards.map((c, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-8" data-testid={`infra-card-${i}`}>
+                <div key={i} className={`bg-white/5 border border-white/10 rounded-xl p-8 hover:-translate-y-1 transition-all ${colorShadows[i % colorShadows.length]}`} data-testid={`infra-card-${i}`}>
                   <span className="mb-4 block">{c.icon}</span>
                   <h3 className="font-bold text-lg mb-2 text-white">{c.title}</h3>
                   <p className="text-sm text-white/50 leading-relaxed">{c.desc}</p>
@@ -776,7 +775,7 @@ export default function Home2() {
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {whyCards.map((c, i) => (
-                <div key={i} className="bg-card border border-border rounded-xl p-7 text-center hover:border-primary/40 hover:shadow-lg hover:-translate-y-1 transition-all shadow-sm flex flex-col items-center" data-testid={`why-card-${i}`}>
+                <div key={i} className={`bg-card border border-border rounded-xl p-7 text-center hover:-translate-y-1 transition-all flex flex-col items-center ${colorShadows[i % colorShadows.length]}`} data-testid={`why-card-${i}`}>
                   <span className="mb-3 block">{c.icon}</span>
                   <h3 className="font-bold text-base mb-2">{c.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{c.desc}</p>
@@ -838,7 +837,7 @@ export default function Home2() {
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {testimonials.map((t, i) => (
-                <div key={i} className="bg-card border border-border rounded-xl p-7 shadow-sm hover:shadow-lg transition-shadow" data-testid={`testi-card-${i}`}>
+                <div key={i} className={`bg-card border border-border rounded-xl p-7 hover:-translate-y-1 transition-all ${colorShadows[i % colorShadows.length]}`} data-testid={`testi-card-${i}`}>
                   <div className="text-yellow-400 text-base tracking-wider mb-4">★★★★★</div>
                   <p className="text-sm text-foreground leading-relaxed italic mb-5">{t.quote}</p>
                   <div className="text-xs text-muted-foreground">
@@ -863,9 +862,9 @@ export default function Home2() {
             <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">Start small, grow without limits. No contracts, cancel anytime. Every plan includes all 40+ tools.</p>
           </FadeIn>
           <FadeIn>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {pricingPlans.map((p, i) => (
-                <div key={i} className={`relative bg-card border rounded-2xl p-7 transition-all hover:-translate-y-1 hover:shadow-lg ${p.featured ? "border-primary bg-primary/5 shadow-md" : "border-border shadow-sm"}`} data-testid={`pricing-card-${p.tier.toLowerCase()}`}>
+                <div key={i} className={`relative bg-card border rounded-2xl p-7 transition-all hover:-translate-y-1 ${p.featured ? "border-primary bg-primary/5" : "border-border"} ${colorShadows[i % colorShadows.length]}`} data-testid={`pricing-card-${p.tier.toLowerCase()}`}>
                   {p.featured && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[10px] font-bold tracking-[2px] px-3 py-1 rounded-full uppercase">Most Popular</span>
                   )}
