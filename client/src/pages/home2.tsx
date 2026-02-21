@@ -414,7 +414,7 @@ export default function Home2() {
             </h1>
 
             <p className="text-[13px] sm:text-xl text-white/70 max-w-xl mb-4 sm:mb-6 leading-snug sm:leading-relaxed font-light mx-auto" data-testid="hero-sub">
-              <strong className="text-white font-semibold">White Label Agency operating system</strong><br />built for solo founders& agency owners.
+              <strong className="text-white font-semibold">White Label Agency operating system</strong><br />built for solo teams & agency owners.
             </p>
 
             <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-2 sm:mb-3">
