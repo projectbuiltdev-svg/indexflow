@@ -410,7 +410,6 @@ export default function Home2() {
         <HeroVideo />
 
         <div className="relative z-10 flex flex-col items-center">
-          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-8 sm:px-14 py-10 sm:py-14">
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-none tracking-tight max-w-4xl mb-7 text-white" data-testid="hero-heading">
               The revenue chain<br />
               <span className="text-primary">belongs to you.</span><br />
@@ -435,7 +434,6 @@ export default function Home2() {
             </div>
             <p className="text-xs text-white/50" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
             <p className="text-sm text-white/60 italic mt-3" data-testid="hero-strapline">Try the full platform & tell us what you think? — then choose your plan.</p>
-          </div>
 
           {/* Hero Stats */}
           <FadeIn className="mt-14 w-full max-w-3xl">
