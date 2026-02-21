@@ -452,18 +452,6 @@ export default function Home2() {
         </div>
       </section>
 
-      {/* MARQUEE */}
-      <div className="border-t border-b border-border bg-accent/20 py-4 overflow-hidden" data-testid="marquee-section">
-        <div className="flex gap-14 animate-[marquee_28s_linear_infinite] whitespace-nowrap">
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span key={i} className="text-xs font-semibold text-muted-foreground uppercase tracking-[2px] flex items-center gap-2.5 flex-shrink-0">
-              <span className="text-primary text-[9px]">●</span>
-              {item}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* DASHBOARD SCREENSHOT */}
       <section className="py-20 lg:py-24 bg-gradient-to-br from-background via-accent/5 to-background" data-testid="dashboard-section">
         <div className="max-w-6xl mx-auto px-6 sm:px-12">
