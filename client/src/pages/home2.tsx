@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Check, X, ChevronDown } from "lucide-react";
+import { ArrowRight, Check, X, ChevronDown, FolderOpen, ClipboardList, BarChart3, Link2, FileText, Key, PenTool, Search, Rocket, Users, Receipt, Tag, Globe, Settings, Lock, Plug, Bot, TrendingUp, Megaphone, Laptop, RefreshCw } from "lucide-react";
 import indexFlowLogo from "@assets/image_1771351451425.png";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
@@ -79,26 +79,26 @@ const marqueeItems = [
 ];
 
 const painCards = [
-  { icon: "🗂️", title: "12 Browser Tabs Open", desc: "You're juggling Ahrefs, Jasper, HubSpot, FreshBooks, and 8 other tools just to do your job." },
-  { icon: "📋", title: "Copy-Pasting Between Tools", desc: "Write in Google Docs, paste into WordPress, reformat, re-add images, manually paste JSON-LD." },
-  { icon: "📊", title: "Spreadsheet CRM", desc: "Tracking leads in Google Sheets. Losing deals because you forgot to follow up." },
-  { icon: "🔗", title: "Manual Internal Links", desc: "Going back to add links to old posts. No system for orphan pages or broken links." },
-  { icon: "📑", title: "Building Reports Manually", desc: "Spending Friday pulling data from four tools into a PowerPoint for client presentations." },
-  { icon: "🔑", title: "Juggling API Keys", desc: "Hunting through five dashboards to update an expired key or check usage." },
+  { icon: <FolderOpen className="w-7 h-7 text-primary" />, title: "12 Browser Tabs Open", desc: "You're juggling Ahrefs, Jasper, HubSpot, FreshBooks, and 8 other tools just to do your job." },
+  { icon: <ClipboardList className="w-7 h-7 text-primary" />, title: "Copy-Pasting Between Tools", desc: "Write in Google Docs, paste into WordPress, reformat, re-add images, manually paste JSON-LD." },
+  { icon: <BarChart3 className="w-7 h-7 text-primary" />, title: "Spreadsheet CRM", desc: "Tracking leads in Google Sheets. Losing deals because you forgot to follow up." },
+  { icon: <Link2 className="w-7 h-7 text-primary" />, title: "Manual Internal Links", desc: "Going back to add links to old posts. No system for orphan pages or broken links." },
+  { icon: <FileText className="w-7 h-7 text-primary" />, title: "Building Reports Manually", desc: "Spending Friday pulling data from four tools into a PowerPoint for client presentations." },
+  { icon: <Key className="w-7 h-7 text-primary" />, title: "Juggling API Keys", desc: "Hunting through five dashboards to update an expired key or check usage." },
 ];
 
 const solutionCards = [
-  { icon: "✍️", title: "Programmatic Content Engine", desc: "Bulk AI drafts with quality gates, stock images with auto alt text, schema markup auto-detection. Deploy thousands of SEO-optimised articles automatically to client domains." },
-  { icon: "🔍", title: "SEO Tools Suite", desc: "Rank Tracker, Local Search Grid (5x5), On-Page Auditor, Link Builder, Post Validator — all built in. 1,000 keywords tracked weekly." },
-  { icon: "🚀", title: "CMS Integration", desc: "Publish to WordPress, Shopify, Webflow, Ghost, or Wix with one click. Formatted perfectly. No copy-paste, no reformatting." },
-  { icon: "👥", title: "Lead to Booking CRM", desc: "Full-funnel attribution from organic impression to booked appointment. Contacts, deals, customisable kanban stages. Every workspace has its own isolated CRM." },
-  { icon: "🧾", title: "Invoicing & Reports", desc: "Line items, multi-currency, status tracking. Content and SEO reports with saved snapshots. Client-ready in minutes, not hours." },
-  { icon: "🏷️", title: "White-Label Deployment", desc: "Deploy across unlimited client domains via Cloudflare's edge network. Custom SSL, zero downtime. Your logo, your domain, your brand. Bring your own API keys." },
+  { icon: <PenTool className="w-7 h-7 text-primary" />, title: "Programmatic Content Engine", desc: "Bulk AI drafts with quality gates, stock images with auto alt text, schema markup auto-detection. Deploy thousands of SEO-optimised articles automatically to client domains." },
+  { icon: <Search className="w-7 h-7 text-primary" />, title: "SEO Tools Suite", desc: "Rank Tracker, Local Search Grid (5x5), On-Page Auditor, Link Builder, Post Validator — all built in. 1,000 keywords tracked weekly." },
+  { icon: <Rocket className="w-7 h-7 text-primary" />, title: "CMS Integration", desc: "Publish to WordPress, Shopify, Webflow, Ghost, or Wix with one click. Formatted perfectly. No copy-paste, no reformatting." },
+  { icon: <Users className="w-7 h-7 text-primary" />, title: "Lead to Booking CRM", desc: "Full-funnel attribution from organic impression to booked appointment. Contacts, deals, customisable kanban stages. Every workspace has its own isolated CRM." },
+  { icon: <Receipt className="w-7 h-7 text-primary" />, title: "Invoicing & Reports", desc: "Line items, multi-currency, status tracking. Content and SEO reports with saved snapshots. Client-ready in minutes, not hours." },
+  { icon: <Tag className="w-7 h-7 text-primary" />, title: "White-Label Deployment", desc: "Deploy across unlimited client domains via Cloudflare's edge network. Custom SSL, zero downtime. Your logo, your domain, your brand. Bring your own API keys." },
 ];
 
 const toolCategories = [
   {
-    label: "✍️ Programmatic Content Engine",
+    icon: <PenTool className="w-4 h-4 inline-block mr-1.5" />, label: "Programmatic Content Engine",
     items: [
       { text: "AI Post Generator", bold: true, suffix: " — bulk drafts at scale" },
       { text: "Post Editor" },
@@ -110,7 +110,7 @@ const toolCategories = [
     ],
   },
   {
-    label: "🔍 SEO Tools",
+    icon: <Search className="w-4 h-4 inline-block mr-1.5" />, label: "SEO Tools",
     items: [
       { text: "Internal Link Builder" },
       { text: "Link Health Monitor" },
@@ -123,7 +123,7 @@ const toolCategories = [
     ],
   },
   {
-    label: "📈 Rank Tracker",
+    icon: <TrendingUp className="w-4 h-4 inline-block mr-1.5" />, label: "Rank Tracker",
     items: [
       { text: "Rank Tracker", bold: true, suffix: " — 1,000 keywords weekly" },
       { text: "Local Search Grid (5x5)", bold: true, suffix: " — see where you rank" },
@@ -134,7 +134,7 @@ const toolCategories = [
     ],
   },
   {
-    label: "👥 CRM & Pipeline",
+    icon: <Users className="w-4 h-4 inline-block mr-1.5" />, label: "CRM & Pipeline",
     items: [
       { text: "Lead to Booking CRM" },
       { text: "Contacts Manager" },
@@ -143,7 +143,7 @@ const toolCategories = [
     ],
   },
   {
-    label: "🤖 AI & Communications",
+    icon: <Bot className="w-4 h-4 inline-block mr-1.5" />, label: "AI & Communications",
     items: [
       { text: "AI Widget — website chat" },
       { text: "Widget Monitoring" },
@@ -154,7 +154,7 @@ const toolCategories = [
     ],
   },
   {
-    label: "🔌 Connections (BYOK)",
+    icon: <Plug className="w-4 h-4 inline-block mr-1.5" />, label: "Connections (BYOK)",
     items: [
       { text: "AI Provider Connections" },
       { text: "Image Bank Connections" },
@@ -163,7 +163,7 @@ const toolCategories = [
     ],
   },
   {
-    label: "📊 Analytics & Reporting",
+    icon: <BarChart3 className="w-4 h-4 inline-block mr-1.5" />, label: "Analytics & Reporting",
     items: [
       { text: "Analytics Overview" },
       { text: "Export Data" },
@@ -172,7 +172,7 @@ const toolCategories = [
     ],
   },
   {
-    label: "⚙️ Settings & Admin",
+    icon: <Settings className="w-4 h-4 inline-block mr-1.5" />, label: "Settings & Admin",
     items: [
       { text: "Team & Invites" },
       { text: "White Label Branding" },
@@ -196,10 +196,10 @@ const replaceItems = [
 ];
 
 const serveCards = [
-  { icon: "📈", title: "SEO Agencies", desc: "Rank tracking, local search grids, on-page audits, GSC Ingestion Layer" },
-  { icon: "✍️", title: "Content Agencies", desc: "Bulk AI drafts, quality gates, CMS publishing, content reporting" },
-  { icon: "📣", title: "Digital Marketing Agencies", desc: "Full-service SEO, content, CRM, invoicing and reporting" },
-  { icon: "🧑‍💻", title: "Freelancers & Consultants", desc: "Professional tools at solo pricing. White label from day one." },
+  { icon: <TrendingUp className="w-7 h-7 text-primary" />, title: "SEO Agencies", desc: "Rank tracking, local search grids, on-page audits, GSC Ingestion Layer" },
+  { icon: <PenTool className="w-7 h-7 text-primary" />, title: "Content Agencies", desc: "Bulk AI drafts, quality gates, CMS publishing, content reporting" },
+  { icon: <Megaphone className="w-7 h-7 text-primary" />, title: "Digital Marketing Agencies", desc: "Full-service SEO, content, CRM, invoicing and reporting" },
+  { icon: <Laptop className="w-7 h-7 text-primary" />, title: "Freelancers & Consultants", desc: "Professional tools at solo pricing. White label from day one." },
 ];
 
 const steps = [
@@ -210,24 +210,24 @@ const steps = [
 ];
 
 const lifecycleSteps = [
-  { icon: "✍️", title: "Create", desc: "AI-powered bulk content generation with quality gates" },
-  { icon: "🔍", title: "Optimise", desc: "On-page SEO audits, schema markup, internal linking" },
-  { icon: "🚀", title: "Publish", desc: "One-click publish to 5 CMS platforms" },
-  { icon: "📈", title: "Monitor", desc: "Rank tracking, local search grid, GSC ingestion" },
-  { icon: "📊", title: "Report", desc: "Content & SEO reports with saved snapshots" },
+  { icon: <PenTool className="w-6 h-6 text-primary" />, title: "Create", desc: "AI-powered bulk content generation with quality gates" },
+  { icon: <Search className="w-6 h-6 text-primary" />, title: "Optimise", desc: "On-page SEO audits, schema markup, internal linking" },
+  { icon: <Rocket className="w-6 h-6 text-primary" />, title: "Publish", desc: "One-click publish to 5 CMS platforms" },
+  { icon: <TrendingUp className="w-6 h-6 text-primary" />, title: "Monitor", desc: "Rank tracking, local search grid, GSC ingestion" },
+  { icon: <BarChart3 className="w-6 h-6 text-primary" />, title: "Report", desc: "Content & SEO reports with saved snapshots" },
 ];
 
 const infraCards = [
-  { icon: "🌐", title: "Cloudflare Edge", desc: "Global CDN with Custom Hostnames and automatic SSL provisioning for every client domain. Zero downtime, global performance." },
-  { icon: "⚙️", title: "GitHub Pipeline", desc: "Automated Git-based deployments. Push content, it's live globally within seconds. No config, no DevOps required." },
-  { icon: "🔒", title: "Enterprise Security", desc: "SOC 2 compliant infrastructure. Data isolation per tenant, encrypted at rest and in transit." },
+  { icon: <Globe className="w-7 h-7 text-primary" />, title: "Cloudflare Edge", desc: "Global CDN with Custom Hostnames and automatic SSL provisioning for every client domain. Zero downtime, global performance." },
+  { icon: <Settings className="w-7 h-7 text-primary" />, title: "GitHub Pipeline", desc: "Automated Git-based deployments. Push content, it's live globally within seconds. No config, no DevOps required." },
+  { icon: <Lock className="w-7 h-7 text-primary" />, title: "Enterprise Security", desc: "SOC 2 compliant infrastructure. Data isolation per tenant, encrypted at rest and in transit." },
 ];
 
 const whyCards = [
-  { icon: "🔌", title: "One Platform", desc: "Stop juggling tools. Content, SEO, CRM, invoicing, publishing — all connected. All in a single place." },
-  { icon: "🏷️", title: "White Label Ready", desc: "Your brand, your domain, your clients. They never see IndexFlow. 100% of the revenue chain belongs to you." },
-  { icon: "🤖", title: "AI-Powered at Scale", desc: "Generate 40 service pages/posts per workspace = one domain every month. Quality gates enforce standards automatically." },
-  { icon: "🔄", title: "Full Lifecycle Coverage", desc: "Create, optimise, publish, monitor, report. Before and after publishing." },
+  { icon: <Plug className="w-7 h-7 text-primary" />, title: "One Platform", desc: "Stop juggling tools. Content, SEO, CRM, invoicing, publishing — all connected. All in a single place." },
+  { icon: <Tag className="w-7 h-7 text-primary" />, title: "White Label Ready", desc: "Your brand, your domain, your clients. They never see IndexFlow. 100% of the revenue chain belongs to you." },
+  { icon: <Bot className="w-7 h-7 text-primary" />, title: "AI-Powered at Scale", desc: "Generate 40 service pages/posts per workspace = one domain every month. Quality gates enforce standards automatically." },
+  { icon: <RefreshCw className="w-7 h-7 text-primary" />, title: "Full Lifecycle Coverage", desc: "Create, optimise, publish, monitor, report. Before and after publishing." },
 ];
 
 const testimonials = [
@@ -430,7 +430,7 @@ export default function Home2() {
         <div className="flex gap-14 animate-[marquee_28s_linear_infinite] whitespace-nowrap">
           {[...marqueeItems, ...marqueeItems].map((item, i) => (
             <span key={i} className="text-xs font-semibold text-muted-foreground uppercase tracking-[2px] flex items-center gap-2.5 flex-shrink-0">
-              <span className="text-red-500 text-[9px]">✦</span>
+              <span className="text-primary text-[9px]">●</span>
               {item}
             </span>
           ))}
@@ -503,7 +503,7 @@ export default function Home2() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-2xl overflow-hidden border border-border">
               {painCards.map((c, i) => (
                 <div key={i} className="bg-card p-8 sm:p-10 hover:bg-accent/30 transition-colors" data-testid={`pain-card-${i}`}>
-                  <span className="text-3xl mb-4 block">{c.icon}</span>
+                  <span className="mb-4 block">{c.icon}</span>
                   <h3 className="font-bold text-lg mb-2">{c.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
                 </div>
@@ -527,7 +527,7 @@ export default function Home2() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {solutionCards.map((c, i) => (
                 <div key={i} className="bg-card border border-border rounded-xl p-8 hover:-translate-y-1 hover:shadow-lg hover:border-primary/40 transition-all shadow-sm" data-testid={`solution-card-${i}`}>
-                  <span className="text-2xl mb-4 block">{c.icon}</span>
+                  <span className="mb-4 block">{c.icon}</span>
                   <h3 className="font-bold text-lg mb-2">{c.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
                 </div>
@@ -559,7 +559,7 @@ export default function Home2() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-2xl overflow-hidden border border-border">
               {toolCategories.map((cat, i) => (
                 <div key={i} className="bg-card p-7 hover:bg-accent/30 transition-colors" data-testid={`tools-cat-${i}`}>
-                  <div className="font-bold text-sm mb-4 pb-3 border-b border-border">{cat.label}</div>
+                  <div className="font-bold text-sm mb-4 pb-3 border-b border-border flex items-center">{cat.icon}{cat.label}</div>
                   <ul className="space-y-0">
                     {cat.items.map((item, j) => (
                       <li key={j} className="text-xs text-muted-foreground py-1.5 border-b border-border/30 last:border-b-0 flex items-start gap-2">
@@ -624,8 +624,8 @@ export default function Home2() {
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {serveCards.map((c, i) => (
-                <div key={i} className="bg-card border border-border rounded-xl p-7 text-center hover:border-primary/40 hover:shadow-md transition-all" data-testid={`serve-card-${i}`}>
-                  <span className="text-3xl mb-3 block">{c.icon}</span>
+                <div key={i} className="bg-card border border-border rounded-xl p-7 text-center hover:border-primary/40 hover:shadow-md transition-all flex flex-col items-center" data-testid={`serve-card-${i}`}>
+                  <span className="mb-3 block">{c.icon}</span>
                   <h3 className="font-bold text-base mb-2">{c.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{c.desc}</p>
                 </div>
@@ -674,8 +674,8 @@ export default function Home2() {
           <FadeIn>
             <div className="flex flex-col lg:flex-row items-stretch gap-px bg-border rounded-2xl overflow-hidden border border-border">
               {lifecycleSteps.map((s, i) => (
-                <div key={i} className="bg-card p-7 flex-1 text-center hover:bg-accent/30 transition-colors relative" data-testid={`lifecycle-step-${i}`}>
-                  <span className="text-2xl mb-3 block">{s.icon}</span>
+                <div key={i} className="bg-card p-7 flex-1 text-center hover:bg-accent/30 transition-colors relative flex flex-col items-center" data-testid={`lifecycle-step-${i}`}>
+                  <span className="mb-3 block">{s.icon}</span>
                   <h3 className="font-bold text-base mb-2">{s.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{s.desc}</p>
                   {i < lifecycleSteps.length - 1 && (
@@ -702,7 +702,7 @@ export default function Home2() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {infraCards.map((c, i) => (
                 <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-8" data-testid={`infra-card-${i}`}>
-                  <span className="text-2xl mb-4 block">{c.icon}</span>
+                  <span className="mb-4 block">{c.icon}</span>
                   <h3 className="font-bold text-lg mb-2 text-white">{c.title}</h3>
                   <p className="text-sm text-white/50 leading-relaxed">{c.desc}</p>
                 </div>
@@ -725,8 +725,8 @@ export default function Home2() {
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {whyCards.map((c, i) => (
-                <div key={i} className="bg-card border border-border rounded-xl p-7 text-center hover:border-primary/40 hover:shadow-lg hover:-translate-y-1 transition-all shadow-sm" data-testid={`why-card-${i}`}>
-                  <span className="text-3xl mb-3 block">{c.icon}</span>
+                <div key={i} className="bg-card border border-border rounded-xl p-7 text-center hover:border-primary/40 hover:shadow-lg hover:-translate-y-1 transition-all shadow-sm flex flex-col items-center" data-testid={`why-card-${i}`}>
+                  <span className="mb-3 block">{c.icon}</span>
                   <h3 className="font-bold text-base mb-2">{c.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{c.desc}</p>
                 </div>
