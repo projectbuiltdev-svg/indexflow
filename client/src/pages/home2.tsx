@@ -390,7 +390,7 @@ export default function Home2() {
             <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
               <Link href="/contact">
                 <Button size="lg" className="text-base px-8 py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
-                  30 Day Trial — $1 &nbsp;→&nbsp; I Want This!
+                  30 Day Trial — $1 &nbsp;→
                 </Button>
               </Link>
               <Link href="#tools">
