@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Check, X, ChevronDown, FolderOpen, ClipboardList, BarChart3, Link2, FileText, Key, PenTool, Search, Rocket, Users, Receipt, Tag, Globe, Settings, Lock, Plug, Bot, TrendingUp, Megaphone, Laptop, RefreshCw } from "lucide-react";
+import { ArrowRight, Check, X, ChevronDown, FolderOpen, ClipboardList, BarChart3, Link2, FileText, Key, PenTool, Search, Rocket, Users, Receipt, Tag, Globe, Settings, Lock, Plug, Bot, TrendingUp, Megaphone, Laptop, RefreshCw, Wrench, Layers, ShieldCheck } from "lucide-react";
 import indexFlowLogo from "@assets/image_1771351451425.webp";
 import clientDashImg from "@assets/client_dash_1771696909138.webp";
 import { colorShadows } from "@/lib/color-shadows";
@@ -437,17 +437,17 @@ export default function Home2() {
                 <div className="relative bg-gradient-to-r from-sky-500/90 via-blue-600/90 to-indigo-600/90 border border-white/15 rounded-full px-4 sm:px-8 py-1.5 sm:py-2.5 shadow-[0_6px_24px_rgba(234,179,8,0.30),0_2px_8px_rgba(56,189,248,0.25)]">
                   <div className="flex items-center justify-center gap-x-2 sm:gap-x-5 text-[9px] sm:text-[13px] font-semibold tracking-wider sm:tracking-[0.15em] text-white whitespace-nowrap uppercase">
                     <span className="flex items-center gap-1 sm:gap-1.5">
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-400 shadow-[0_0_6px_rgba(250,204,21,0.6)]" />
+                      <Wrench className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.6)]" />
                       40+ SEO Tools
                     </span>
                     <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
                     <span className="flex items-center gap-1 sm:gap-1.5">
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-sky-300 shadow-[0_0_6px_rgba(125,211,252,0.6)]" />
+                      <Layers className="w-3 h-3 sm:w-4 sm:h-4 text-sky-300 drop-shadow-[0_0_4px_rgba(125,211,252,0.6)]" />
                       One Platform
                     </span>
                     <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
                     <span className="flex items-center gap-1 sm:gap-1.5">
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]" />
+                      <ShieldCheck className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.6)]" />
                       Zero Middlemen
                     </span>
                   </div>
