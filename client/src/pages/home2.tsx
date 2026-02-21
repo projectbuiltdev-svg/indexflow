@@ -23,6 +23,7 @@ function HeroVideo() {
             frameBorder="0"
             allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
+            loading="eager"
             style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "177.78vh", minWidth: "100%", height: "56.25vw", minHeight: "100%", border: 0, background: "#0f172a" }}
             title="indexFlow"
             data-testid="hero-video"
