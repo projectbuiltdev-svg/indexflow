@@ -376,30 +376,32 @@ export default function Home2() {
             40+ SEO Tools · One Platform · Zero Middlemen
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-none tracking-tight max-w-4xl mb-7 text-white" data-testid="hero-heading">
-            The revenue chain<br />
-            <span className="text-primary">belongs to you.</span><br />
-            <span className="text-white/40">Not your tools.</span>
-          </h1>
+          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-8 sm:px-14 py-10 sm:py-14">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-none tracking-tight max-w-4xl mb-7 text-white" data-testid="hero-heading">
+              The revenue chain<br />
+              <span className="text-primary">belongs to you.</span><br />
+              <span className="text-white/40">Not your tools.</span>
+            </h1>
 
-          <p className="text-lg sm:text-xl text-white/70 max-w-xl mb-10 leading-relaxed font-light" data-testid="hero-sub">
-            IndexFlow is the <strong className="text-white font-semibold">white label agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. One login. 40+ tools. Your brand. Your price. Your profit.
-          </p>
+            <p className="text-lg sm:text-xl text-white/70 max-w-xl mb-10 leading-relaxed font-light mx-auto" data-testid="hero-sub">
+              IndexFlow is the <strong className="text-white font-semibold">white label agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. One login. 40+ tools. Your brand. Your price. Your profit.
+            </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
-            <Link href="/contact">
-              <Button size="lg" className="text-base px-8 py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
-                30 Day Trial — $1 &nbsp;→&nbsp; I Want This!
-              </Button>
-            </Link>
-            <Link href="#tools">
-              <Button size="lg" variant="outline" className="text-base px-8 py-4 border-white/30 text-white hover:border-primary/50 hover:bg-white/10" data-testid="btn-hero-tools">
-                See All 40+ Tools
-              </Button>
-            </Link>
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
+              <Link href="/contact">
+                <Button size="lg" className="text-base px-8 py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
+                  30 Day Trial — $1 &nbsp;→&nbsp; I Want This!
+                </Button>
+              </Link>
+              <Link href="#tools">
+                <Button size="lg" variant="outline" className="text-base px-8 py-4 border-white/30 text-white hover:border-primary/50 hover:bg-white/10" data-testid="btn-hero-tools">
+                  See All 40+ Tools
+                </Button>
+              </Link>
+            </div>
+            <p className="text-xs text-white/50" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
+            <p className="text-sm text-white/60 italic mt-3" data-testid="hero-strapline">Try the full platform for 30 days. Just $1 today — then choose your plan.</p>
           </div>
-          <p className="text-xs text-white/50" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
-          <p className="text-sm text-white/60 italic mt-3" data-testid="hero-strapline">Try the full platform for 30 days. Just $1 today — then choose your plan.</p>
 
           {/* Hero Stats */}
           <FadeIn className="mt-14 w-full max-w-3xl">
