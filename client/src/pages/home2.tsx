@@ -410,6 +410,7 @@ export default function Home2() {
         <HeroVideo />
 
         <div className="relative z-10 flex flex-col items-center">
+          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-8 sm:px-14 py-10 sm:py-14">
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-none tracking-tight max-w-4xl mb-7 text-white" data-testid="hero-heading">
               The revenue chain<br />
               <span className="text-primary">belongs to you.</span><br />
@@ -434,25 +435,41 @@ export default function Home2() {
             </div>
             <p className="text-xs text-white/50" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
             <p className="text-sm text-white/60 italic mt-3" data-testid="hero-strapline">Try the full platform & tell us what you think? — then choose your plan.</p>
+          </div>
 
           {/* Hero Stats */}
           <FadeIn className="mt-14 w-full max-w-3xl">
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-8 py-3 shadow-lg" data-testid="hero-stats">
-              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-bold tracking-wide text-white/90">
-                <span className="flex items-center gap-2">40+ SEO Tools</span>
-                <span className="text-white/20">•</span>
-                <span className="flex items-center gap-2">One Platform</span>
-                <span className="text-white/20">•</span>
-                <span className="flex items-center gap-2">Zero Middlemen</span>
-                <span className="text-white/20">•</span>
-                <span className="flex items-center gap-2">1 Login</span>
-              </div>
+            <div className="flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 sm:p-8 shadow-lg flex-wrap sm:flex-nowrap gap-6 sm:gap-0" data-testid="hero-stats">
+              {[
+                { num: "11+", label: "Tools Replaced" },
+                { num: "40+", label: "Built-in Tools" },
+                { num: "5", label: "CMS Integrations" },
+                { num: "1 Login", label: "Everything Connected" },
+              ].map((s, i, arr) => (
+                <div key={i} className="flex items-center">
+                  <div className="text-center px-4 sm:px-6">
+                    <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{s.num}</div>
+                    <div className="text-[11px] text-white/50 font-medium uppercase tracking-wide mt-1">{s.label}</div>
+                  </div>
+                  {i < arr.length - 1 && <div className="hidden sm:block w-px h-10 bg-white/20 flex-shrink-0" />}
+                </div>
+              ))}
             </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* DASHBOARD SCREENSHOT */}
+      {/* MARQUEE */}
+      <div className="border-t border-b border-border bg-accent/20 py-4 overflow-hidden" data-testid="marquee-section">
+        <div className="flex gap-14 animate-[marquee_28s_linear_infinite] whitespace-nowrap">
+          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span key={i} className="text-xs font-semibold text-muted-foreground uppercase tracking-[2px] flex items-center gap-2.5 flex-shrink-0">
+              <span className="text-primary text-[9px]">●</span>
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
       <section className="py-20 lg:py-24 bg-gradient-to-br from-background via-accent/5 to-background" data-testid="dashboard-section">
         <div className="max-w-6xl mx-auto px-6 sm:px-12">
           <FadeIn>
