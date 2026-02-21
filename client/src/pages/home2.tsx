@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Check, X, ChevronDown, FolderOpen, ClipboardList, BarChart3, Link2, FileText, Key, PenTool, Search, Rocket, Users, Receipt, Tag, Globe, Settings, Lock, Plug, Bot, TrendingUp, Megaphone, Laptop, RefreshCw } from "lucide-react";
 import indexFlowLogo from "@assets/image_1771351451425.png";
+import clientDashImg from "@assets/client_dash_1771696909138.png";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO, seoData, combinedHomeSchema } from "@/components/seo";
@@ -342,6 +343,43 @@ const faqItemsCol2 = [
   { q: "How fast does Google index content published through IndexFlow?", a: "Typically within hours, not weeks. IndexFlow includes Google Indexing Automation that submits new and updated pages directly to Google's indexing API on publish. Most platforms leave pages to be discovered by Googlebot on its own schedule — which can take weeks. IndexFlow skips the queue." },
 ];
 
+function DashboardPreview() {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div className="border border-border rounded-xl overflow-hidden shadow-2xl shadow-primary/10" data-testid="dashboard-preview">
+      <div className="bg-muted/50 px-4 py-3 flex items-center gap-3 border-b border-border">
+        <div className="flex gap-1.5">
+          <span className="w-3 h-3 rounded-full bg-red-400" />
+          <span className="w-3 h-3 rounded-full bg-yellow-400" />
+          <span className="w-3 h-3 rounded-full bg-green-400" />
+        </div>
+        <div className="bg-card border border-border rounded-md px-4 py-1 text-xs text-muted-foreground max-w-xs">
+          app.youragency.com/dashboard
+        </div>
+      </div>
+      <div className="relative bg-card">
+        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${expanded ? "max-h-[2000px]" : "max-h-[400px]"}`}>
+          <img src={clientDashImg} alt="IndexFlow Client Dashboard" className="w-full h-auto" />
+        </div>
+        {!expanded && (
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-card to-transparent" />
+        )}
+        <div className={`${expanded ? "mt-0" : "absolute bottom-4 left-0 right-0"} flex justify-center z-10`}>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg hover:shadow-primary/30 transition-all hover:-translate-y-0.5"
+            data-testid="btn-expand-dashboard"
+          >
+            {expanded ? "Collapse" : "Expand Full Dashboard"}
+            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`} />
+          </button>
+        </div>
+        {expanded && <div className="h-4" />}
+      </div>
+    </div>
+  );
+}
+
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -451,24 +489,7 @@ export default function Home2() {
           </FadeIn>
 
           <FadeIn>
-            <div className="border border-border rounded-xl overflow-hidden shadow-2xl shadow-primary/10">
-              <div className="bg-muted/50 px-4 py-3 flex items-center gap-3 border-b border-border">
-                <div className="flex gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-red-400" />
-                  <span className="w-3 h-3 rounded-full bg-yellow-400" />
-                  <span className="w-3 h-3 rounded-full bg-green-400" />
-                </div>
-                <div className="bg-card border border-border rounded-md px-4 py-1 text-xs text-muted-foreground max-w-xs">
-                  app.youragency.com/dashboard
-                </div>
-              </div>
-              <div className="bg-card p-8 sm:p-12 text-center">
-                <div className="text-muted-foreground text-sm">
-                  <img src={indexFlowLogo} alt="IndexFlow Dashboard" className="h-10 mx-auto mb-4 opacity-60" />
-                  <p>Dashboard preview — your brand, your data, your clients</p>
-                </div>
-              </div>
-            </div>
+            <DashboardPreview />
           </FadeIn>
 
           <FadeIn className="mt-6">
