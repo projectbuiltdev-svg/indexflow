@@ -4,6 +4,7 @@ import { ArrowRight, Check, X, ChevronDown, FolderOpen, ClipboardList, BarChart3
 import indexFlowLogo from "@assets/image_1771351451425.webp";
 import clientDashImg from "@assets/client_dash_1771696909138.webp";
 import { colorShadows } from "@/lib/color-shadows";
+import { SiWordpress, SiShopify, SiSquarespace, SiWix, SiWebflow, SiGhost } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO, seoData, combinedHomeSchema } from "@/components/seo";
@@ -565,10 +566,17 @@ export default function Home2() {
                 Instantly to <em className="text-muted-foreground/50 italic">your CMS.</em>
               </h2>
               <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-10">
-                {["WordPress", "Shopify", "Squarespace", "Wix", "Webflow", "Ghost"].map((cms, i) => (
-                  <div key={cms} className={`bg-card border border-border rounded-xl px-6 py-4 text-center hover:-translate-y-1 transition-all min-w-[130px] ${colorShadows[i % colorShadows.length]}`} data-testid={`cms-badge-${cms.toLowerCase()}`}>
-                    <Rocket className="w-6 h-6 text-primary mx-auto mb-2" />
-                    <span className="text-sm font-semibold">{cms}</span>
+                {[
+                  { name: "WordPress", icon: <SiWordpress className="w-6 h-6 mx-auto mb-2" style={{ color: "#21759B" }} /> },
+                  { name: "Shopify", icon: <SiShopify className="w-6 h-6 mx-auto mb-2" style={{ color: "#96BF48" }} /> },
+                  { name: "Squarespace", icon: <SiSquarespace className="w-6 h-6 mx-auto mb-2" style={{ color: "#222222" }} /> },
+                  { name: "Wix", icon: <SiWix className="w-6 h-6 mx-auto mb-2" style={{ color: "#0C6EFC" }} /> },
+                  { name: "Webflow", icon: <SiWebflow className="w-6 h-6 mx-auto mb-2" style={{ color: "#4353FF" }} /> },
+                  { name: "Ghost", icon: <SiGhost className="w-6 h-6 mx-auto mb-2" style={{ color: "#15171A" }} /> },
+                ].map((cms, i) => (
+                  <div key={cms.name} className={`bg-card border border-border rounded-xl px-6 py-4 text-center hover:-translate-y-1 transition-all min-w-[130px] ${colorShadows[i % colorShadows.length]}`} data-testid={`cms-badge-${cms.name.toLowerCase()}`}>
+                    {cms.icon}
+                    <span className="text-sm font-semibold">{cms.name}</span>
                   </div>
                 ))}
               </div>
