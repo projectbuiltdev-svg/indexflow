@@ -564,6 +564,28 @@ export default function Home2() {
         </div>
       </section>
 
+      {/* CMS PUBLISH */}
+      <section className="py-16 lg:py-20 bg-accent/20" data-testid="cms-section">
+        <div className="max-w-6xl mx-auto px-6 sm:px-12">
+          <FadeIn>
+            <div className="text-center">
+              <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">CMS Publish</p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">
+                Instantly to <em className="text-muted-foreground/50 italic">your CMS.</em>
+              </h2>
+              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-10">
+                {["WordPress", "Shopify", "Squarespace", "Wix", "Webflow"].map((cms) => (
+                  <div key={cms} className="bg-card border border-border rounded-xl px-6 py-4 text-center hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg transition-all shadow-sm min-w-[130px]" data-testid={`cms-badge-${cms.toLowerCase()}`}>
+                    <Rocket className="w-6 h-6 text-primary mx-auto mb-2" />
+                    <span className="text-sm font-semibold">{cms}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       <div className="max-w-6xl mx-auto h-px bg-border" />
 
       {/* 40+ TOOLS */}
