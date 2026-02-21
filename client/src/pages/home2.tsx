@@ -565,7 +565,7 @@ export default function Home2() {
                 Instantly to <em className="text-muted-foreground/50 italic">your CMS.</em>
               </h2>
               <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-10">
-                {["WordPress", "Shopify", "Squarespace", "Wix", "Webflow"].map((cms, i) => (
+                {["WordPress", "Shopify", "Squarespace", "Wix", "Webflow", "Ghost"].map((cms, i) => (
                   <div key={cms} className={`bg-card border border-border rounded-xl px-6 py-4 text-center hover:-translate-y-1 transition-all min-w-[130px] ${colorShadows[i % colorShadows.length]}`} data-testid={`cms-badge-${cms.toLowerCase()}`}>
                     <Rocket className="w-6 h-6 text-primary mx-auto mb-2" />
                     <span className="text-sm font-semibold">{cms}</span>
