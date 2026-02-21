@@ -406,7 +406,7 @@ export default function Home2() {
         <HeroVideo />
 
         <div className="relative z-10 flex flex-col items-center w-full">
-          <div className="bg-black/20 sm:bg-black/40 backdrop-blur-md rounded-2xl px-4 sm:px-14 py-6 sm:py-14 w-full max-w-4xl">
+          <div className="bg-black/20 backdrop-blur-md rounded-2xl px-4 sm:px-14 py-6 sm:py-14 w-full max-w-4xl">
             {/* Hero Stats Slim Strip - Top */}
             <FadeIn className="mb-3 sm:mb-6 w-full">
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 sm:px-6 py-1 sm:py-2 shadow-lg inline-block mx-auto" data-testid="hero-stats-slim">
