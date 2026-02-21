@@ -249,9 +249,18 @@ export default function Home() {
             <div className="mx-auto w-32 sm:w-40 lg:w-52 h-[2px] rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 mb-6" />
             <img src={indexFlowLogo} alt="IndexFlow" className="h-7 sm:h-8 lg:h-10 mx-auto mb-6 drop-shadow-lg" data-testid="hero-logo" />
 
-            <div className="max-w-3xl mx-auto mb-8">
+            <div className="max-w-3xl mx-auto mb-8 space-y-1">
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
-                White label SEO platform built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. One login. 40+ tools. Your brand. Your price. Your profit.
+                IndexFlow is the white label SEO platform built for solo founders
+              </p>
+              <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
+                and agency owners who are done feeding margin to platforms
+              </p>
+              <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
+                that take a cut of everything.
+              </p>
+              <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
+                One login. 30+ tools. Your brand. Your price. Your profit.
               </p>
             </div>
 
