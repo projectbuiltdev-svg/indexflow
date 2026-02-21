@@ -566,19 +566,17 @@ export default function Home2() {
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">
                 Instantly to <em className="text-muted-foreground/50 italic">your LLM or CMS.</em>
               </h2>
-              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-10">
-                {[
-                  { name: "WordPress", icon: <SiWordpress className="w-6 h-6 mx-auto mb-2" style={{ color: "#21759B" }} /> },
-                  { name: "Shopify", icon: <SiShopify className="w-6 h-6 mx-auto mb-2" style={{ color: "#96BF48" }} /> },
-                  { name: "Squarespace", icon: <SiSquarespace className="w-6 h-6 mx-auto mb-2" style={{ color: "#222222" }} /> },
-                  { name: "Wix", icon: <img src={wixLogo} alt="Wix" className="w-6 h-6 mx-auto mb-2 object-contain" /> },
-                  { name: "Webflow", icon: <SiWebflow className="w-6 h-6 mx-auto mb-2" style={{ color: "#4353FF" }} /> },
-                  { name: "Ghost", icon: <SiGhost className="w-6 h-6 mx-auto mb-2" style={{ color: "#15171A" }} /> },
-                ].map((cms, i) => (
-                  <div key={cms.name} className={`bg-card border border-border rounded-xl px-6 py-4 text-center hover:-translate-y-1 transition-all min-w-[60px] ${colorShadows[i % colorShadows.length]}`} data-testid={`cms-badge-${cms.name.toLowerCase()}`}>
-                    {cms.icon}
-                  </div>
-                ))}
+              <div className="overflow-hidden mt-10">
+                <div className="flex gap-12 animate-[marquee_20s_linear_infinite] whitespace-nowrap">
+                  {[...Array(2)].flatMap((_, setIndex) => [
+                    <SiWordpress key={`wp-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" />,
+                    <SiShopify key={`sh-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" />,
+                    <SiSquarespace key={`sq-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" />,
+                    <img key={`wix-${setIndex}`} src={wixLogo} alt="Wix" className="w-8 h-8 flex-shrink-0 opacity-40 grayscale object-contain" />,
+                    <SiWebflow key={`wf-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" />,
+                    <SiGhost key={`gh-${setIndex}`} className="w-8 h-8 flex-shrink-0 opacity-40 grayscale" />,
+                  ])}
+                </div>
               </div>
             </div>
           </FadeIn>
