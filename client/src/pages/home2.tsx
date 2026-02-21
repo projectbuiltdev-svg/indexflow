@@ -407,8 +407,31 @@ export default function Home2() {
 
         <div className="relative z-10 flex flex-col items-center w-full">
           <div className="bg-black/10 sm:bg-black/20 backdrop-blur-md rounded-2xl px-4 sm:px-14 py-6 sm:py-14 w-full max-w-4xl">
-            {/* Hero Stats Slim Strip - Top */}
-            <FadeIn className="mb-3 sm:mb-6 w-full">
+            <h1 className="text-[1.5rem] sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] sm:leading-none tracking-tight max-w-4xl mb-4 sm:mb-7 text-white" data-testid="hero-heading">
+              The revenue chain<br />
+              <span className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent">belongs to you.</span><br />
+              <span className="text-white/40">Not your tools.</span>
+            </h1>
+
+            <p className="text-[13px] sm:text-xl text-white/70 max-w-xl mb-6 sm:mb-10 leading-snug sm:leading-relaxed font-light mx-auto" data-testid="hero-sub">
+              <strong className="text-white font-semibold">White Label Agency operating system</strong> built for solo founders and agency owners.
+            </p>
+
+            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-5">
+              <Link href="/contact">
+                <Button size="default" className="text-xs sm:text-base px-3 sm:px-8 py-2 sm:py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
+                  30 Day Trial $1
+                </Button>
+              </Link>
+              <Link href="#tools">
+                <Button size="default" variant="outline" className="text-xs sm:text-base px-3 sm:px-8 py-2 sm:py-4 border-white/30 text-white bg-white/15 backdrop-blur-sm hover:bg-white/25 hover:border-white/50" data-testid="btn-hero-tools">
+                  → All 40+ Tools
+                </Button>
+              </Link>
+            </div>
+            <p className="text-[9px] sm:text-xs text-white font-medium mb-4 sm:mb-6" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
+
+            <FadeIn className="w-full">
               <div className="relative inline-block mx-auto group" data-testid="hero-stats-slim">
                 <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400/30 via-sky-400/20 to-indigo-400/30 rounded-full blur-lg animate-pulse" />
                 <div className="relative bg-gradient-to-r from-sky-500/90 via-blue-600/90 to-indigo-600/90 border border-white/15 rounded-full px-4 sm:px-8 py-1.5 sm:py-2.5 shadow-[0_6px_24px_rgba(234,179,8,0.30),0_2px_8px_rgba(56,189,248,0.25)]">
@@ -431,31 +454,6 @@ export default function Home2() {
                 </div>
               </div>
             </FadeIn>
-
-            <h1 className="text-[1.5rem] sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] sm:leading-none tracking-tight max-w-4xl mb-4 sm:mb-7 text-white" data-testid="hero-heading">
-              The revenue chain<br />
-              <span className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent">belongs to you.</span><br />
-              <span className="text-white/40">Not your tools.</span>
-            </h1>
-
-            <p className="text-[13px] sm:text-xl text-white/70 max-w-xl mb-6 sm:mb-10 leading-snug sm:leading-relaxed font-light mx-auto" data-testid="hero-sub">
-              <strong className="text-white font-semibold">White Label Agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. <strong className="font-semibold bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">One login. 40+ tools.</strong> Your brand.
-            </p>
-
-            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-5">
-              <Link href="/contact">
-                <Button size="default" className="text-xs sm:text-base px-3 sm:px-8 py-2 sm:py-4 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
-                  30 Day Trial $1
-                </Button>
-              </Link>
-              <Link href="#tools">
-                <Button size="default" variant="outline" className="text-xs sm:text-base px-3 sm:px-8 py-2 sm:py-4 border-white/30 text-white bg-white/15 backdrop-blur-sm hover:bg-white/25 hover:border-white/50" data-testid="btn-hero-tools">
-                  → All 40+ Tools
-                </Button>
-              </Link>
-            </div>
-            <p className="text-[9px] sm:text-xs text-white font-medium" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
-            <p className="text-[10px] sm:text-sm text-white italic mt-1.5 sm:mt-3" data-testid="hero-strapline">Try the full platform & tell us what you think? — then choose your plan.</p>
           </div>
         </div>
       </section>
