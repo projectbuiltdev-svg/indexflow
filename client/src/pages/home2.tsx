@@ -6,6 +6,37 @@ import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO, seoData, combinedHomeSchema } from "@/components/seo";
 
+function HeroVideo() {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowVideo(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 w-full h-full overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-green-950 to-slate-900" />
+      {showVideo && (
+        <div className="absolute inset-0" style={{ padding: "56.25% 0 0 0", position: "relative" }}>
+          <iframe
+            ref={iframeRef}
+            src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "177.78vh", minWidth: "100%", height: "56.25vw", minHeight: "100%", border: 0 }}
+            title="indexFlow"
+            data-testid="hero-video"
+          />
+        </div>
+      )}
+      <div className="absolute inset-0 bg-black/50" />
+    </div>
+  );
+}
+
 function useInView(ref: React.RefObject<HTMLElement | null>) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -337,23 +368,23 @@ export default function Home2() {
       <SEO {...seoData.home} structuredData={combinedHomeSchema} />
 
       {/* HERO */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 sm:px-12 py-32 overflow-hidden bg-gradient-to-br from-background via-accent/5 to-background" data-testid="hero-section">
-        <div className="absolute w-[900px] h-[900px] rounded-full bg-primary/10 blur-3xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 sm:px-12 py-32 overflow-hidden" data-testid="hero-section">
+        <HeroVideo />
 
         <div className="relative z-10 flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 text-primary px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide mb-9" data-testid="hero-badge">
+          <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 text-primary px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide mb-9 backdrop-blur-sm" data-testid="hero-badge">
             <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
             40+ SEO Tools · One Platform · Zero Middlemen
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-none tracking-tight max-w-4xl mb-7" data-testid="hero-heading">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-none tracking-tight max-w-4xl mb-7 text-white" data-testid="hero-heading">
             The revenue chain<br />
             <span className="text-primary">belongs to you.</span><br />
-            <span className="text-muted-foreground/50">Not your tools.</span>
+            <span className="text-white/40">Not your tools.</span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mb-10 leading-relaxed font-light" data-testid="hero-sub">
-            IndexFlow is the <strong className="text-foreground font-semibold">white label agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. One login. 40+ tools. Your brand. Your price. Your profit.
+          <p className="text-lg sm:text-xl text-white/70 max-w-xl mb-10 leading-relaxed font-light" data-testid="hero-sub">
+            IndexFlow is the <strong className="text-white font-semibold">white label agency operating system</strong> built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything. One login. 40+ tools. Your brand. Your price. Your profit.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
@@ -363,17 +394,17 @@ export default function Home2() {
               </Button>
             </Link>
             <Link href="#tools">
-              <Button size="lg" variant="outline" className="text-base px-8 py-4 border-border hover:border-primary/50 hover:bg-primary/5" data-testid="btn-hero-tools">
+              <Button size="lg" variant="outline" className="text-base px-8 py-4 border-white/30 text-white hover:border-primary/50 hover:bg-white/10" data-testid="btn-hero-tools">
                 See All 40+ Tools
               </Button>
             </Link>
           </div>
-          <p className="text-xs text-muted-foreground" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
-          <p className="text-sm text-muted-foreground italic mt-3" data-testid="hero-strapline">Try the full platform for 30 days. Just $1 today — then choose your plan.</p>
+          <p className="text-xs text-white/50" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
+          <p className="text-sm text-white/60 italic mt-3" data-testid="hero-strapline">Try the full platform for 30 days. Just $1 today — then choose your plan.</p>
 
           {/* Hero Stats */}
           <FadeIn className="mt-14 w-full max-w-3xl">
-            <div className="flex items-center justify-center bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-lg flex-wrap sm:flex-nowrap gap-6 sm:gap-0" data-testid="hero-stats">
+            <div className="flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 sm:p-8 shadow-lg flex-wrap sm:flex-nowrap gap-6 sm:gap-0" data-testid="hero-stats">
               {[
                 { num: "11+", label: "Tools Replaced" },
                 { num: "40+", label: "Built-in Tools" },
@@ -382,10 +413,10 @@ export default function Home2() {
               ].map((s, i, arr) => (
                 <div key={i} className="flex items-center">
                   <div className="text-center px-4 sm:px-6">
-                    <div className="text-2xl sm:text-3xl font-extrabold tracking-tight">{s.num}</div>
-                    <div className="text-[11px] text-muted-foreground font-medium uppercase tracking-wide mt-1">{s.label}</div>
+                    <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{s.num}</div>
+                    <div className="text-[11px] text-white/50 font-medium uppercase tracking-wide mt-1">{s.label}</div>
                   </div>
-                  {i < arr.length - 1 && <div className="hidden sm:block w-px h-10 bg-border flex-shrink-0" />}
+                  {i < arr.length - 1 && <div className="hidden sm:block w-px h-10 bg-white/20 flex-shrink-0" />}
                 </div>
               ))}
             </div>
