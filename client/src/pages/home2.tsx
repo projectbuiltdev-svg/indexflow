@@ -564,7 +564,7 @@ export default function Home2() {
             <div className="text-center">
               <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">Publish</p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">
-                Instantly to <em className="text-muted-foreground/50 italic">your LLM or CMS.</em>
+                Instantly to <em className="text-muted-foreground/50 italic">any LLM or CMS.</em>
               </h2>
               <div className="overflow-hidden mt-10">
                 <div className="flex gap-12 animate-[marquee_20s_linear_infinite] whitespace-nowrap">
