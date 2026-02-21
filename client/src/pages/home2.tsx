@@ -400,7 +400,7 @@ export default function Home2() {
               </Link>
             </div>
             <p className="text-xs text-white/50" data-testid="hero-note">No contracts · No setup fees · Cancel anytime</p>
-            <p className="text-sm text-white/60 italic mt-3" data-testid="hero-strapline">Try the full platform for 30 days. Just $1 today — then choose your plan.</p>
+            <p className="text-sm text-white/60 italic mt-3" data-testid="hero-strapline">Try the full platform for 30 days. Tell us what you think? — then choose your plan.</p>
           </div>
 
           {/* Hero Stats */}
