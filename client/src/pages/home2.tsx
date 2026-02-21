@@ -394,7 +394,7 @@ export default function Home2() {
                 </Button>
               </Link>
               <Link href="#tools">
-                <Button size="lg" variant="outline" className="text-base px-8 py-4 border-white/30 text-white hover:border-primary/50 hover:bg-white/10" data-testid="btn-hero-tools">
+                <Button size="lg" variant="outline" className="text-base px-8 py-4 border-white/30 text-white bg-white/15 backdrop-blur-sm hover:bg-white/25 hover:border-white/50" data-testid="btn-hero-tools">
                   See All 40+ Tools
                 </Button>
               </Link>
