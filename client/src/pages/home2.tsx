@@ -575,9 +575,8 @@ export default function Home2() {
                   { name: "Webflow", icon: <SiWebflow className="w-6 h-6 mx-auto mb-2" style={{ color: "#4353FF" }} /> },
                   { name: "Ghost", icon: <SiGhost className="w-6 h-6 mx-auto mb-2" style={{ color: "#15171A" }} /> },
                 ].map((cms, i) => (
-                  <div key={cms.name} className={`bg-card border border-border rounded-xl px-6 py-4 text-center hover:-translate-y-1 transition-all min-w-[130px] ${colorShadows[i % colorShadows.length]}`} data-testid={`cms-badge-${cms.name.toLowerCase()}`}>
+                  <div key={cms.name} className={`bg-card border border-border rounded-xl px-6 py-4 text-center hover:-translate-y-1 transition-all min-w-[60px] ${colorShadows[i % colorShadows.length]}`} data-testid={`cms-badge-${cms.name.toLowerCase()}`}>
                     {cms.icon}
-                    <span className="text-sm font-semibold">{cms.name}</span>
                   </div>
                 ))}
               </div>
