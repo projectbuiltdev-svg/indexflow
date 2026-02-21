@@ -425,7 +425,7 @@ export default function Home2() {
               </Link>
               <Link href="#tools">
                 <Button size="default" variant="outline" className="text-xs sm:text-base px-3 sm:px-8 py-2 sm:py-4 border-white/30 text-white bg-white/15 backdrop-blur-sm hover:bg-white/25 hover:border-white/50" data-testid="btn-hero-tools">
-                  → 40+ Tools 1Login
+                  40+ Tools → One Login
                 </Button>
               </Link>
             </div>
