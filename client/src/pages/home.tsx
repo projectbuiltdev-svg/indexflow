@@ -257,10 +257,10 @@ export default function Home() {
                 and agency owners who are done feeding margin to platforms
               </p>
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
-                that take a cut of everything.
+                that take a cut of everything. One login. 30+ tools.
               </p>
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
-                One login. 30+ tools. Your brand. Your price. Your profit.
+                Your brand. Your price. Your profit.
               </p>
             </div>
 
