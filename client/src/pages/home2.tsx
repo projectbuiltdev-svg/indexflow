@@ -412,13 +412,13 @@ export default function Home2() {
         <div className="relative z-10 flex flex-col items-center">
           <div className="bg-black/40 backdrop-blur-md rounded-2xl px-8 sm:px-14 py-10 sm:py-14">
             {/* Hero Stats Slim Strip - Top */}
-            <FadeIn className="mb-8 w-full">
+            <FadeIn className="mb-6 w-full">
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2 shadow-lg inline-block mx-auto" data-testid="hero-stats-slim">
-                <div className="flex items-center justify-center gap-x-4 text-xs font-bold tracking-wide text-white/90 whitespace-nowrap">
+                <div className="flex items-center justify-center gap-x-4 text-[10px] sm:text-xs font-bold tracking-widest text-white/90 whitespace-nowrap uppercase">
                   <span>40+ SEO Tools</span>
-                  <span className="text-white/20">•</span>
+                  <span className="text-white/20">●</span>
                   <span>One Platform</span>
-                  <span className="text-white/20">•</span>
+                  <span className="text-white/20">●</span>
                   <span>Zero Middlemen</span>
                 </div>
               </div>
