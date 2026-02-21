@@ -927,37 +927,47 @@ export default function Home2() {
       </section>
 
       {/* CTA */}
-      <section className="py-32 lg:py-40 text-center relative overflow-hidden bg-gradient-to-br from-[#0D1B2A] to-[#1A3A52]" data-testid="cta-section">
+      <section className="py-32 lg:py-40 text-center relative overflow-hidden" data-testid="cta-section">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0D1B2A] via-[#112940] to-[#1A3A52]" />
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "40px 40px" }} />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[100px]" />
+
         <div className="relative z-10 max-w-4xl mx-auto px-6">
           <FadeIn>
-            <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">Get Started</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5 text-white">
+            <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-6">Get Started</p>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-white">
               Stop feeding the machine.<br />
-              <em className="text-white/30 italic">Start owning the revenue.</em>
+              <span className="bg-gradient-to-r from-primary via-sky-300 to-primary bg-clip-text text-transparent">Start owning the revenue.</span>
             </h2>
-            <p className="text-lg text-white/50 max-w-md mx-auto mb-12">
+            <p className="text-lg sm:text-xl text-white/60 max-w-lg mx-auto mb-12 leading-relaxed font-light">
               30-day free trial on Pro. No credit card. No commitment. Just 30 days to prove it pays for itself.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <Link href="/contact">
-                <Button size="lg" className="text-base px-8 py-4 shadow-lg shadow-primary/30">Start Free Trial — Pro Tier →</Button>
+                <Button size="lg" className="text-base px-10 py-5 shadow-xl shadow-primary/40 hover:shadow-primary/60 hover:-translate-y-1 transition-all font-bold rounded-xl">
+                  Start Free Trial — Pro Tier →
+                </Button>
               </Link>
               <Link href="/contact">
-                <Button size="lg" variant="outline" className="text-base px-8 py-4 border-white/20 text-white hover:bg-white/5">Book a Demo</Button>
+                <Button size="lg" variant="outline" className="text-base px-10 py-5 border-white/20 text-white bg-white/5 backdrop-blur-sm hover:bg-white/15 hover:border-white/40 hover:-translate-y-1 transition-all rounded-xl">
+                  Book a Demo
+                </Button>
               </Link>
             </div>
           </FadeIn>
-          <FadeIn className="mt-14">
-            <div className="flex flex-wrap justify-center gap-12">
+
+          <FadeIn className="mt-16">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
               {[
-                { num: "40+", label: "Built-in tools" },
-                { num: "$99", label: "Starting price" },
-                { num: "5 CMS", label: "Integrations" },
-                { num: "30 days", label: "Free trial" },
+                { num: "40+", label: "Built-in tools", shadow: colorShadows[0] },
+                { num: "$99", label: "Starting price", shadow: colorShadows[1] },
+                { num: "5 CMS", label: "Integrations", shadow: colorShadows[2] },
+                { num: "30 days", label: "Free trial", shadow: colorShadows[3] },
               ].map((s, i) => (
-                <div key={i} className="text-center">
-                  <div className="text-3xl font-extrabold text-primary tracking-tight">{s.num}</div>
-                  <div className="text-xs text-white/40 mt-1">{s.label}</div>
+                <div key={i} className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 text-center hover:-translate-y-1 transition-all ${s.shadow}`}>
+                  <div className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight leading-none">{s.num}</div>
+                  <div className="text-[11px] text-white/50 font-medium uppercase tracking-wide mt-2">{s.label}</div>
                 </div>
               ))}
             </div>
