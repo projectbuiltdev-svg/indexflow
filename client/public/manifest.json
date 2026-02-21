@@ -1,0 +1,17 @@
+{
+  "name": "indexFlow",
+  "short_name": "indexFlow",
+  "description": "White-Label SEO & Content Management Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0ea5e9",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
