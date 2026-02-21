@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ArrowRight, Check, X, ChevronDown, FolderOpen, ClipboardList, BarChart3, Link2, FileText, Key, PenTool, Search, Rocket, Users, Receipt, Tag, Globe, Settings, Lock, Plug, Bot, TrendingUp, Megaphone, Laptop, RefreshCw } from "lucide-react";
 import indexFlowLogo from "@assets/image_1771351451425.png";
 import clientDashImg from "@assets/client_dash_1771696909138.png";
+import { colorShadows } from "@/lib/color-shadows";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO, seoData, combinedHomeSchema } from "@/components/seo";
@@ -63,13 +64,6 @@ function FadeIn({ children, className = "" }: { children: React.ReactNode; class
     </div>
   );
 }
-
-const colorShadows = [
-  "shadow-[0_6px_24px_-6px_rgba(234,179,8,0.18)]",
-  "shadow-[0_6px_24px_-6px_rgba(59,130,246,0.18)]",
-  "shadow-[0_6px_24px_-6px_rgba(244,63,94,0.16)]",
-  "shadow-[0_6px_24px_-6px_rgba(148,163,184,0.22)]",
-];
 
 const marqueeItems = [
   "Programmatic Content Engine",
