@@ -251,13 +251,13 @@ export default function Home() {
 
             <div className="max-w-3xl mx-auto mb-8 space-y-1">
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
-                IndexFlow is the white label SEO platform built for solo founders
+                IndexFlow is the <span className="font-bold text-white">White Label SEO platform</span> built for solo founders
               </p>
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
                 and agency owners who are done feeding margin to platforms
               </p>
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
-                that take a cut of everything. One login. 30+ tools.
+                that take a cut of everything. <span className="font-bold text-white">One login. 40+ tools.</span>
               </p>
               <p className="text-[14px] sm:text-base lg:text-lg text-white/90 drop-shadow-lg leading-relaxed">
                 Your brand. Your price. Your profit.
