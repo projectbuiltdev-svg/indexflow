@@ -65,10 +65,10 @@ function FadeIn({ children, className = "" }: { children: React.ReactNode; class
 }
 
 const colorShadows = [
-  "shadow-[0_8px_30px_-4px_rgba(234,179,8,0.35)]",
-  "shadow-[0_8px_30px_-4px_rgba(59,130,246,0.35)]",
-  "shadow-[0_8px_30px_-4px_rgba(34,197,94,0.35)]",
-  "shadow-[0_8px_30px_-4px_rgba(168,85,247,0.35)]",
+  "shadow-[0_6px_24px_-6px_rgba(234,179,8,0.18)]",
+  "shadow-[0_6px_24px_-6px_rgba(59,130,246,0.18)]",
+  "shadow-[0_6px_24px_-6px_rgba(244,63,94,0.16)]",
+  "shadow-[0_6px_24px_-6px_rgba(148,163,184,0.22)]",
 ];
 
 const marqueeItems = [
