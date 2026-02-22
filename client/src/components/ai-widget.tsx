@@ -552,23 +552,24 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                   </Button>
                 </div>
               )}
-              <div className="flex gap-2">
+              <div className="flex gap-1.5 items-center">
                 <Button
                   variant={isListening ? "destructive" : "outline"}
                   size="icon"
                   onClick={handleVoiceToggle}
-                  className={isListening ? "animate-pulse" : ""}
+                  className={`h-8 w-8 flex-shrink-0 ${isListening ? "animate-pulse" : ""}`}
                   data-testid="button-voice-toggle"
                 >
-                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                  {isListening ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => {}}
+                  className="h-8 w-8 flex-shrink-0"
                   data-testid="button-upload-file"
                 >
-                  <Paperclip className="w-4 h-4" />
+                  <Paperclip className="w-3.5 h-3.5" />
                 </Button>
                 <input
                   type="text"
@@ -577,15 +578,17 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                   onKeyDown={handleKeyPress}
                   placeholder={isListening ? "Listening..." : "Type a message..."}
                   disabled={isListening}
-                  className="flex-1 px-3 py-2 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="flex-1 min-w-0 px-2.5 py-1.5 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary"
                   data-testid="input-chat-message"
                 />
                 <Button 
                   onClick={() => handleSendMessage()} 
                   disabled={!inputText.trim() || isListening}
+                  size="icon"
+                  className="h-8 w-8 flex-shrink-0"
                   data-testid="button-send-message"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-3.5 h-3.5" />
                 </Button>
               </div>
               <p className="text-xs text-center text-muted-foreground mt-2">
