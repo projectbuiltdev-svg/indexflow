@@ -59,7 +59,7 @@ export default function About() {
         </div>
       </section>
 
-      <DoubleTicker />
+      <DoubleTicker cmsFirst />
 
       <section className="py-16 lg:py-20 bg-muted/30 border-y border-border/50">
         <div className="max-w-3xl mx-auto px-6 sm:px-10">
