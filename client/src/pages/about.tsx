@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO, seoData } from "@/components/seo";
 import { ClosingCTA } from "@/components/closing-cta";
+import { DoubleTicker } from "@/components/double-ticker";
 
 export default function About() {
   return (
@@ -57,6 +58,8 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      <DoubleTicker />
 
       <section className="py-16 lg:py-20 bg-muted/30 border-y border-border/50">
         <div className="max-w-3xl mx-auto px-6 sm:px-10">
