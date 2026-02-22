@@ -511,22 +511,22 @@ export default function Home2() {
         <div className="max-w-6xl mx-auto px-6 sm:px-12">
           <FadeIn>
             <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">The Pain Problem</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-8 text-white">Sound familiar?</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-14">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">Sound familiar?</h2>
+            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">Most agencies juggle five tools, five logins, five invoices. It adds up fast.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-14">
               {[
-                { label: "Content Platforms", value: "+++", color: "text-rose-400", shadow: "shadow-rose-500/20" },
-                { label: "Rank Tracker Costs", value: "$$", color: "text-blue-400", shadow: "shadow-blue-500/20" },
-                { label: "Local Grid Search", value: "$$ cost", color: "text-emerald-400", shadow: "shadow-emerald-500/20" },
-                { label: "Reporting Tools", value: "+ $$ p/mo", color: "text-amber-400", shadow: "shadow-amber-500/20" },
-                { label: "Agency Overheads", value: "+ $$", color: "text-violet-400", shadow: "shadow-violet-500/20" },
+                { label: "Content Platforms", value: "+++" },
+                { label: "Rank Tracker Costs", value: "$$" },
+                { label: "Local Grid Search", value: "$$ cost" },
+                { label: "Reporting Tools", value: "+ $$ p/mo" },
+                { label: "Agency Overheads", value: "+ $$" },
               ].map((item, idx) => (
-                <div key={idx} className={`bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center transition-all duration-300 hover:-translate-y-1 shadow-lg ${item.shadow}`}>
-                  <p className="text-[10px] sm:text-xs text-white/40 uppercase tracking-[0.2em] mb-4 font-bold">{item.label}</p>
-                  <p className={`text-xl sm:text-3xl font-mono ${item.color} font-black tracking-tighter drop-shadow-sm`}>{item.value}</p>
+                <div key={idx} className="border border-border rounded-xl p-5 text-center">
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">{item.label}</p>
+                  <p className="text-xl font-mono font-semibold text-foreground/70">{item.value}</p>
                 </div>
               ))}
             </div>
-            <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">Most agencies waste hours every day dealing with these problems. There's a better way.</p>
           </FadeIn>
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
