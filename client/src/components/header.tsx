@@ -336,7 +336,7 @@ export function Header() {
             <nav className="hidden lg:flex items-center gap-0.5">
               <NavDropdown
                 label="Features"
-                items={featureItems.slice(0, 6)}
+                items={featureItems}
                 location={location}
                 testId="link-nav-features"
                 footer={{ label: "View all features", href: "/platform/content-engine" }}
@@ -428,7 +428,7 @@ export function Header() {
             <nav className="py-3 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-0.5">
               <MobileDropdown
                 label="Features"
-                items={featureItems.slice(0, 6)}
+                items={featureItems}
                 location={location}
                 isOpen={openMobileDropdown === "features"}
                 onToggle={() => toggleMobileDropdown("features")}
