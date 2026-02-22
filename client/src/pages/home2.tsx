@@ -514,7 +514,7 @@ export default function Home2() {
           <FadeIn>
             <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">The Pain Problem</p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">Sound familiar?</h2>
-            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">Multiple tools. Infinite logins. Juggling Tabs. 100% Frustration.</p>
+            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">Multiple tools. Infinite logins. Spiralling Costs. 100% Frustration.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-14">
               {[
                 { icon: <PenTool className="w-5 h-5 text-muted-foreground" />, label: "Multi Platforms" },
