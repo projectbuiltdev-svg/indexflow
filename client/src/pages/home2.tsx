@@ -635,6 +635,8 @@ export default function Home2() {
         </div>
       </section>
 
+      <div className="max-w-6xl mx-auto h-px bg-border" />
+
       {/* WHAT YOU REPLACE */}
       <section className="py-20 lg:py-24" data-testid="replace-section">
         <div className="max-w-6xl mx-auto px-6 sm:px-12">
@@ -986,7 +988,7 @@ export default function Home2() {
           <FadeIn>
             <div className="text-center mb-14">
               <h2 className="text-3xl font-bold mb-3">What You Replace</h2>
-              <p className="text-lg text-muted-foreground">One login instead of eleven plus.</p>
+              <p className="text-lg text-muted-foreground">One login instead of eleven.</p>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {replaceItems.map((r, i) => (
