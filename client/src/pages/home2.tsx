@@ -219,8 +219,8 @@ const lifecycleSteps = [
 ];
 
 const infraCards = [
-  { icon: <Globe className="w-7 h-7 text-primary" />, title: "Cloudflare Edge", desc: "Global CDN with Custom Hostnames and automatic SSL provisioning for every client domain. Zero downtime, global performance." },
-  { icon: <Settings className="w-7 h-7 text-primary" />, title: "GitHub Pipeline", desc: "Automated Git-based deployments. Push content, it's live globally within seconds. No config, no DevOps required." },
+  { icon: <SiCloudflare className="w-7 h-7 text-[#F6821F]" />, title: "Cloudflare Edge", desc: "Global CDN with Custom Hostnames and automatic SSL provisioning for every client domain. Zero downtime, global performance." },
+  { icon: <SiGithub className="w-7 h-7 text-white" />, title: "GitHub Pipeline", desc: "Automated Git-based deployments. Push content, it's live globally within seconds. No config, no DevOps required." },
   { icon: <Lock className="w-7 h-7 text-primary" />, title: "Enterprise Security", desc: "SOC 2 compliant infrastructure. Data isolation per tenant, encrypted at rest and in transit." },
 ];
 
@@ -760,10 +760,6 @@ export default function Home2() {
               Built on enterprise <em className="text-white/30 italic">infrastructure.</em>
             </h2>
             <p className="text-lg text-white/50 max-w-xl mb-10 leading-relaxed">SOC 2 compliant. Cloudflare edge. GitHub pipeline. The infrastructure Fortune 500 companies pay millions for — available from $99/month.</p>
-            <div className="flex items-center gap-6 mb-14">
-              <SiCloudflare className="w-8 h-8 text-white/30" />
-              <SiGithub className="w-8 h-8 text-white/30" />
-            </div>
           </FadeIn>
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
