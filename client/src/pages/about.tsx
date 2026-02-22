@@ -60,35 +60,6 @@ export default function About() {
         </div>
       </section>
 
-      <section className="pb-16 lg:pb-20">
-        <div className="max-w-3xl mx-auto px-6 sm:px-10">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary font-extrabold text-2xl italic" data-testid="avatar-founder">
-              d
-            </div>
-            <div>
-              <p className="font-bold text-base" data-testid="text-founder-name">dENVER</p>
-              <p className="text-sm text-muted-foreground">Founder, IndexFlow</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-6 mb-16">
-            <div className="text-center p-5 bg-card border border-border rounded-xl shadow-[0_6px_24px_-6px_rgba(59,130,246,0.18)]" data-testid="stat-tools">
-              <p className="text-3xl font-extrabold tracking-tight text-primary">40+</p>
-              <p className="text-xs text-muted-foreground mt-1 font-medium">Integrated Tools</p>
-            </div>
-            <div className="text-center p-5 bg-card border border-border rounded-xl shadow-[0_6px_24px_-6px_rgba(234,179,8,0.18)]" data-testid="stat-customer">
-              <p className="text-3xl font-extrabold tracking-tight text-primary">#1</p>
-              <p className="text-xs text-muted-foreground mt-1 font-medium">Customer: The Founder</p>
-            </div>
-            <div className="text-center p-5 bg-card border border-border rounded-xl shadow-[0_6px_24px_-6px_rgba(244,63,94,0.16)]" data-testid="stat-fluff">
-              <p className="text-3xl font-extrabold tracking-tight text-primary">0</p>
-              <p className="text-xs text-muted-foreground mt-1 font-medium">Generic AI Fluff</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="py-16 lg:py-20 bg-muted/30 border-y border-border/50">
         <div className="max-w-3xl mx-auto px-6 sm:px-10">
           <div className="flex items-center gap-3 mb-6">
