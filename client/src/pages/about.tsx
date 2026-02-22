@@ -102,11 +102,11 @@ export default function About() {
           <p className="text-sm font-semibold text-foreground mb-4">Sound familiar?</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
             {[
-              { icon: FileText, label: "Content Platforms" },
-              { icon: BarChart3, label: "Rank Tracker Costs" },
-              { icon: Grid3X3, label: "Local Grid Scanners" },
+              { icon: FileText, label: "Content Platforms (Zero ROI)" },
+              { icon: BarChart3, label: "Rank Tracker Costs $$" },
+              { icon: Grid3X3, label: "Local Grid Search $$ cost" },
               { icon: ClipboardList, label: "Reporting Tools + $$ p/mo" },
-              { icon: Sparkles, label: "Agency Overheads +" },
+              { icon: Sparkles, label: "Agency Overheads + $$" },
             ].map((item) => (
               <div key={item.label} className="flex flex-col items-center gap-2 p-4 bg-card border border-border rounded-xl text-center shadow-[0_6px_24px_-6px_rgba(148,163,184,0.22)]">
                 <item.icon className="w-5 h-5 text-muted-foreground" />
