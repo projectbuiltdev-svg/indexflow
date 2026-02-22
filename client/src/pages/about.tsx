@@ -106,7 +106,7 @@ export default function About() {
               { icon: BarChart3, label: "Rank Trackers" },
               { icon: Grid3X3, label: "Local Grid Scanners" },
               { icon: ClipboardList, label: "Reporting Tools" },
-              { icon: Sparkles, label: "Rank Tracker Costs" },
+              { icon: Sparkles, label: "AI Overheads" },
             ].map((item) => (
               <div key={item.label} className="flex flex-col items-center gap-2 p-4 bg-card border border-border rounded-xl text-center shadow-[0_6px_24px_-6px_rgba(148,163,184,0.22)]">
                 <item.icon className="w-5 h-5 text-muted-foreground" />
