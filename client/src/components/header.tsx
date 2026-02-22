@@ -361,8 +361,7 @@ export function Header() {
                 testId="link-nav-features"
                 columns={[
                   { label: "Content Engine", items: contentEngineItems },
-                  { label: "Rank Tracker", items: rankTrackerItems },
-                  { label: "Voice, SMS & Web", items: voiceSmsWebItems },
+                  { label: "Rank Tracker & Voice", items: [...rankTrackerItems, ...voiceSmsWebItems] },
                 ]}
                 footer={{ label: "View all features", href: "/platform/content-engine" }}
               />
