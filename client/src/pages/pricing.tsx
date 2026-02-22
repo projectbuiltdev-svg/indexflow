@@ -62,7 +62,7 @@ const plans = [
       "Priority onboarding call",
       "Dedicated account manager",
     ],
-    cta: "Get Started",
+    cta: "Start Free 30-Day Trial",
     ctaLink: "/contact",
     icon: Building2,
   },
