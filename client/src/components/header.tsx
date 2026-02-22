@@ -336,15 +336,12 @@ export function Header() {
             <nav className="hidden lg:flex items-center gap-0.5">
               <NavDropdown
                 label="Features"
-                items={[]}
+                items={featureItems.slice(0, 6)}
                 location={location}
                 testId="link-nav-features"
-                columns={[
-                  { label: "SEO Tools", items: featureItems.slice(0, 6) },
-                  { label: "Platform", items: featureItems.slice(6) },
-                ]}
                 footer={{ label: "View all features", href: "/platform/content-engine" }}
               />
+              <NavLink href="/platform/seo" label="Platform" location={location} testId="link-nav-platform" />
               <NavDropdown
                 label="Solutions"
                 items={solutionItems}
@@ -425,17 +422,26 @@ export function Header() {
             <nav className="py-3 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-0.5">
               <MobileDropdown
                 label="Features"
-                items={[]}
+                items={featureItems.slice(0, 6)}
                 location={location}
                 isOpen={openMobileDropdown === "features"}
                 onToggle={() => toggleMobileDropdown("features")}
                 onNavigate={() => setIsOpen(false)}
                 testId="link-mobile-features"
-                sections={[
-                  { label: "SEO Tools", items: featureItems.slice(0, 6) },
-                  { label: "Platform", items: featureItems.slice(6) },
-                ]}
               />
+              <Link href="/platform/seo">
+                <button
+                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
+                    location.startsWith("/platform")
+                      ? "text-primary bg-primary/5"
+                      : "text-foreground/80 hover:text-foreground hover:bg-muted/50"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                  data-testid="link-mobile-platform"
+                >
+                  Platform
+                </button>
+              </Link>
               <MobileDropdown
                 label="Solutions"
                 items={solutionItems}
