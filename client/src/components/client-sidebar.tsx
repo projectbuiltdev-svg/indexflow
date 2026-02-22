@@ -133,8 +133,8 @@ const navGroups: NavGroup[] = [
     label: "Widget",
     collapsible: true,
     items: [
-      { title: "Monitoring", path: "/widget/monitoring", icon: Activity },
-      { title: "Widget Code", path: "/widget/code", icon: Code },
+      { title: "Website Widget (AI)", path: "/widget/monitoring", icon: Activity },
+      { title: "Widget Code Embed", path: "/widget/code", icon: Code },
     ],
   },
   {

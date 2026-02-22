@@ -1,16 +1,36 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, LogIn, ArrowRight, ChevronDown, FileText, Search, TrendingUp, Grid3X3, Code, Link2, ClipboardCheck, Layout, Users, Receipt, Bot, Palette, Briefcase, Building2, Rocket, User, Globe, Mail, Handshake, GraduationCap, BookOpen, HelpCircle, Newspaper, BarChart3, Radio, Moon, Sun } from "lucide-react";
+import { Menu, X, LogIn, ArrowRight, ChevronDown, FileText, Search, TrendingUp, Grid3X3, Code, Link2, ClipboardCheck, Layout, Users, Receipt, Bot, Palette, Briefcase, Building2, Rocket, User, Globe, Mail, Handshake, GraduationCap, BookOpen, HelpCircle, Newspaper, BarChart3, Radio, Moon, Sun, Mic, Phone, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import indexFlowLogo from "@assets/image_1771351451425.webp";
 
-const featureItems = [
+const contentEngineItems = [
   { href: "/platform/content-engine", label: "Content Engine", icon: FileText, desc: "AI-powered blog & content creation" },
-  { href: "/platform/rank-tracking", label: "Rank Tracker", icon: TrendingUp, desc: "Monitor 1000+ keywords on Google" },
-  { href: "/platform/local-search-grid", label: "Local Search Grid", icon: Grid3X3, desc: "See where you rank across the map" },
   { href: "/platform/schema-markup", label: "Schema Markup", icon: Code, desc: "Structured data for rich results" },
   { href: "/platform/link-builder", label: "Link Builder", icon: Link2, desc: "Internal & external link management" },
   { href: "/platform/seo-audit", label: "On-Page SEO Audit", icon: ClipboardCheck, desc: "Automated page-level SEO checks" },
+  { href: "/platform/cms-integration", label: "CMS Integration", icon: Layout, desc: "Connect your existing CMS" },
+  { href: "/platform/crm-pipeline", label: "CRM & Pipeline", icon: Users, desc: "Manage leads and deals" },
+  { href: "/platform/invoices-reports", label: "Invoices & Reports", icon: Receipt, desc: "Billing and performance reports" },
+  { href: "/platform/white-label", label: "White Label", icon: Palette, desc: "Your brand, your platform" },
+  { href: "/platform/content-marketing", label: "Content Marketing", icon: FileText, desc: "Plan & execute content strategy" },
+  { href: "/platform/byok", label: "BYOK", icon: Code, desc: "Bring your own API keys" },
+];
+
+const rankTrackerItems = [
+  { href: "/platform/rank-tracking", label: "Track Keywords", icon: TrendingUp, desc: "Monitor 1000+ keywords on Google" },
+  { href: "/platform/local-search-grid", label: "Local Search Grid", icon: Grid3X3, desc: "See where you rank across the map" },
+  { href: "/platform/search-console", label: "GSC", icon: Search, desc: "Google Search Console integration" },
+];
+
+const voiceSmsWebItems = [
+  { href: "/platform/ai-widget-voice", label: "Website Widget (AI)", icon: Bot, desc: "AI-powered website chat widget" },
+  { href: "/platform/twilio", label: "Twilio SMS Voice", icon: Phone, desc: "SMS & voice automation" },
+];
+
+const featureItems = [...contentEngineItems, ...rankTrackerItems, ...voiceSmsWebItems];
+
+const platformItems = [
   { href: "/platform/cms-integration", label: "CMS Integration", icon: Layout, desc: "Connect your existing CMS" },
   { href: "/platform/crm-pipeline", label: "CRM & Pipeline", icon: Users, desc: "Manage leads and deals" },
   { href: "/platform/invoices-reports", label: "Invoices & Reports", icon: Receipt, desc: "Billing and performance reports" },
@@ -336,14 +356,19 @@ export function Header() {
             <nav className="hidden lg:flex items-center gap-0.5">
               <NavDropdown
                 label="Features"
-                items={featureItems}
+                items={[]}
                 location={location}
                 testId="link-nav-features"
+                columns={[
+                  { label: "Content Engine", items: contentEngineItems },
+                  { label: "Rank Tracker", items: rankTrackerItems },
+                  { label: "Voice, SMS & Web", items: voiceSmsWebItems },
+                ]}
                 footer={{ label: "View all features", href: "/platform/content-engine" }}
               />
               <NavDropdown
                 label="Platform"
-                items={featureItems.slice(6)}
+                items={platformItems}
                 location={location}
                 testId="link-nav-platform"
                 footer={{ label: "View all platform features", href: "/platform/seo" }}
@@ -428,16 +453,21 @@ export function Header() {
             <nav className="py-3 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-0.5">
               <MobileDropdown
                 label="Features"
-                items={featureItems}
+                items={[]}
                 location={location}
                 isOpen={openMobileDropdown === "features"}
                 onToggle={() => toggleMobileDropdown("features")}
                 onNavigate={() => setIsOpen(false)}
                 testId="link-mobile-features"
+                sections={[
+                  { label: "Content Engine", items: contentEngineItems },
+                  { label: "Rank Tracker", items: rankTrackerItems },
+                  { label: "Voice, SMS & Web", items: voiceSmsWebItems },
+                ]}
               />
               <MobileDropdown
                 label="Platform"
-                items={featureItems.slice(6)}
+                items={platformItems}
                 location={location}
                 isOpen={openMobileDropdown === "platform"}
                 onToggle={() => toggleMobileDropdown("platform")}
