@@ -102,7 +102,7 @@ export default function About() {
           <p className="text-sm font-semibold text-foreground mb-4">Sound familiar?</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
             {[
-              { icon: FileText, label: "Content Platforms + $ p/mo" },
+              { icon: FileText, label: "Content Platforms +++" },
               { icon: BarChart3, label: "Rank Tracker Costs $$" },
               { icon: Grid3X3, label: "Local Grid Search $$ cost" },
               { icon: ClipboardList, label: "Reporting Tools + $$ p/mo" },
