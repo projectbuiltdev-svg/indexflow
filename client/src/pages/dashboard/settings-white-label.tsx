@@ -4,17 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Info, Upload } from "lucide-react";
+import { Info, Upload, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useWorkspace } from "@/lib/workspace-context";
 
 export default function SettingsWhiteLabel() {
   const { toast } = useToast();
+  const { selectedWorkspace } = useWorkspace();
+
+  const plan = selectedWorkspace?.plan?.toLowerCase() || "solo";
+  const isAgencyOrEnterprise = plan === "agency" || plan === "white_label" || plan === "white-label" || plan === "enterprise" || plan === "complete";
 
   const [brandName, setBrandName] = useState("My Agency");
   const [primaryColor, setPrimaryColor] = useState("#3B82F6");
   const [customDomain, setCustomDomain] = useState("app.myagency.com");
   const [supportEmail, setSupportEmail] = useState("support@myagency.com");
   const [customLogin, setCustomLogin] = useState(false);
+  const [removeWidgetBranding, setRemoveWidgetBranding] = useState(false);
 
   return (
     <div className="p-6 space-y-6">
@@ -91,6 +97,45 @@ export default function SettingsWhiteLabel() {
               <p className="text-xs text-muted-foreground">Use your branding on the login page</p>
             </div>
             <Switch id="custom-login" checked={customLogin} onCheckedChange={setCustomLogin} data-testid="switch-custom-login" />
+          </div>
+
+          <div className="border-t pt-6">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="remove-widget-branding">Remove Widget Branding</Label>
+                  {!isAgencyOrEnterprise && (
+                    <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground border">
+                      <Lock className="w-3 h-3" />
+                      Agency & Enterprise
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Hide the "powered by indexFlow" badge from your AI widget
+                </p>
+              </div>
+              {isAgencyOrEnterprise ? (
+                <Switch
+                  id="remove-widget-branding"
+                  checked={removeWidgetBranding}
+                  onCheckedChange={setRemoveWidgetBranding}
+                  data-testid="switch-remove-widget-branding"
+                />
+              ) : (
+                <Switch
+                  id="remove-widget-branding"
+                  checked={false}
+                  disabled
+                  data-testid="switch-remove-widget-branding"
+                />
+              )}
+            </div>
+            {!isAgencyOrEnterprise && (
+              <p className="text-xs text-amber-600 dark:text-amber-400 mt-2" data-testid="text-branding-upgrade">
+                Upgrade to White Label Agency ($499/mo) or Enterprise to remove indexFlow branding from your widget.
+              </p>
+            )}
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
