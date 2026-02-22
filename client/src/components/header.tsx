@@ -55,7 +55,7 @@ const resourceItems = [
 ];
 
 const companyItems = [
-  { href: "/about", label: "About", icon: Globe, desc: "Our mission & story" },
+  { href: "/about", label: "Founder Statement", icon: Globe, desc: "Our mission & story" },
   { href: "/contact", label: "Contact", icon: Mail, desc: "Get in touch with us" },
 ];
 
