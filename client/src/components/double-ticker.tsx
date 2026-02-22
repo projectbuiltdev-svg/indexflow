@@ -28,7 +28,7 @@ export function DoubleTicker() {
         <div className="flex gap-14 animate-[marquee_40s_linear_infinite] whitespace-nowrap">
           {[...marqueeItems.slice(0, 9), ...marqueeItems.slice(0, 9), ...marqueeItems.slice(0, 9)].map((item, i) => (
             <span key={i} className="text-xs font-semibold text-muted-foreground uppercase tracking-[2px] flex items-center gap-2.5 flex-shrink-0">
-              <span className="text-primary text-[9px]">●</span>
+              <span className="text-red-500 text-[9px]">●</span>
               {item}
             </span>
           ))}
@@ -36,7 +36,7 @@ export function DoubleTicker() {
         <div className="flex gap-14 animate-[marqueeReverse_40s_linear_infinite] whitespace-nowrap">
           {[...marqueeItems.slice(9), ...marqueeItems.slice(9), ...marqueeItems.slice(9)].map((item, i) => (
             <span key={i} className="text-xs font-semibold text-muted-foreground uppercase tracking-[2px] flex items-center gap-2.5 flex-shrink-0">
-              <span className="text-primary text-[9px]">●</span>
+              <span className="text-red-500 text-[9px]">●</span>
               {item}
             </span>
           ))}
