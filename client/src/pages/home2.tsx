@@ -512,7 +512,7 @@ export default function Home2() {
           <FadeIn>
             <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">The Pain Problem</p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">Sound familiar?</h2>
-            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">Most agencies juggle five tools, five logins, five invoices. It adds up fast.</p>
+            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">Five tools. Five logins. Five invoices. One frustrated agency.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-14">
               {[
                 { label: "Content Platforms", value: "+++" },
