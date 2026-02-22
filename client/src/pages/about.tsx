@@ -37,21 +37,22 @@ export default function About() {
               data-testid="hero-video-founder"
             />
             <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-              <div className="bg-black/40 backdrop-blur-md rounded-xl px-8 py-6 sm:px-10 sm:py-8 text-center max-w-lg">
-                <p className="text-white text-xl sm:text-2xl lg:text-3xl font-extrabold leading-tight mb-1">
+              <div className="bg-black/20 backdrop-blur-sm rounded-2xl px-10 py-8 sm:px-14 sm:py-10 text-center max-w-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+                <p className="text-white/90 text-lg sm:text-xl lg:text-2xl font-medium tracking-wide uppercase mb-2">
                   The revenue chain
                 </p>
-                <p className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-tight mb-1">
-                  <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">belongs to you.</span>
+                <p className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight mb-3">
+                  <span className="bg-gradient-to-r from-yellow-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">belongs to you.</span>
                 </p>
-                <p className="text-white/60 text-lg sm:text-xl lg:text-2xl font-semibold italic">
+                <div className="w-12 h-px bg-white/20 mx-auto mb-3" />
+                <p className="text-white/50 text-base sm:text-lg lg:text-xl font-light italic tracking-wide">
                   Not your Seo tools.
                 </p>
-                <div className="flex items-center justify-center gap-3 mt-5 text-white/80 text-xs sm:text-sm font-medium tracking-wide">
+                <div className="flex items-center justify-center gap-4 mt-6 text-white/70 text-xs sm:text-sm font-medium tracking-widest uppercase">
                   <span>40+ SEO Tools</span>
-                  <span className="text-white/30">|</span>
+                  <span className="w-1 h-1 rounded-full bg-amber-400/60" />
                   <span>One Platform</span>
-                  <span className="text-white/30">|</span>
+                  <span className="w-1 h-1 rounded-full bg-amber-400/60" />
                   <span>Zero Middlemen</span>
                 </div>
               </div>
