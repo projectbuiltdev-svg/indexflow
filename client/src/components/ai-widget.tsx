@@ -553,17 +553,15 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                 </div>
               )}
               <div className="flex gap-2">
-                {sttSupported && (
-                  <Button
-                    variant={isListening ? "destructive" : "outline"}
-                    size="icon"
-                    onClick={handleVoiceToggle}
-                    className={isListening ? "animate-pulse" : ""}
-                    data-testid="button-voice-toggle"
-                  >
-                    {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                  </Button>
-                )}
+                <Button
+                  variant={isListening ? "destructive" : "outline"}
+                  size="icon"
+                  onClick={handleVoiceToggle}
+                  className={isListening ? "animate-pulse" : ""}
+                  data-testid="button-voice-toggle"
+                >
+                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </Button>
                 <Button
                   variant="outline"
                   size="icon"
