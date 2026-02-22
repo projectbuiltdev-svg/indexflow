@@ -40,7 +40,7 @@ export default function About() {
 
           <div className="grid grid-cols-3 gap-6 mb-16">
             <div className="text-center p-5 bg-card border border-border rounded-xl shadow-[0_6px_24px_-6px_rgba(59,130,246,0.18)]" data-testid="stat-tools">
-              <p className="text-3xl font-extrabold tracking-tight text-primary">30+</p>
+              <p className="text-3xl font-extrabold tracking-tight text-primary">40+</p>
               <p className="text-xs text-muted-foreground mt-1 font-medium">Integrated Tools</p>
             </div>
             <div className="text-center p-5 bg-card border border-border rounded-xl shadow-[0_6px_24px_-6px_rgba(234,179,8,0.18)]" data-testid="stat-customer">
@@ -156,7 +156,7 @@ export default function About() {
             You don't need more tools. You need the right system.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed mb-10">
-            30+ tools. One platform. Built by an agency, for agencies.
+            40+ tools. One platform. Built by an agency, for agencies.
           </p>
 
           <div className="bg-card border border-border rounded-2xl p-8 sm:p-10 shadow-[0_6px_24px_-6px_rgba(59,130,246,0.18)]">
