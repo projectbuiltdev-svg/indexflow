@@ -511,22 +511,13 @@ export default function Home2() {
         <div className="max-w-6xl mx-auto px-6 sm:px-12">
           <FadeIn>
             <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">The Pain Problem</p>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-8 text-white/90">Sound familiar?</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-12">
-              {[
-                { label: "Content Platforms", value: "+++" },
-                { label: "Rank Tracker Costs", value: "$$" },
-                { label: "Local Grid Search", value: "$$ cost" },
-                { label: "Reporting Tools", value: "+ $$ p/mo" },
-                { label: "Agency Overheads", value: "+ $$" },
-              ].map((item, idx) => (
-                <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
-                  <p className="text-[10px] text-white/40 uppercase tracking-widest mb-2">{item.label}</p>
-                  <p className="text-lg font-mono text-white/80">{item.value}</p>
-                </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">Sound familiar?</h2>
+            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">Five subscriptions. Five logins. Five invoices. One frustrated agency.</p>
+            <div className="flex flex-wrap gap-2 mb-14">
+              {["Content tools", "Rank trackers", "Grid search", "Reporting", "CRM overhead"].map((tag, idx) => (
+                <span key={idx} className="text-xs font-medium text-muted-foreground border border-border rounded-full px-4 py-1.5">{tag}</span>
               ))}
             </div>
-            <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">Most agencies waste hours every day dealing with these problems. There's a better way.</p>
           </FadeIn>
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
