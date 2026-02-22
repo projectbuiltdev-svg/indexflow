@@ -405,7 +405,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                 )}
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="text-xs opacity-80">Always here to help! 24/7</p>
+                    <p className="text-xs opacity-80">Help Desk 24/7</p>
                     {ttsSupported && (
                       <button
                         onClick={toggleAutoSpeak}
