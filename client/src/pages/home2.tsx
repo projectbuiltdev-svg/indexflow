@@ -517,11 +517,11 @@ export default function Home2() {
             <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">Multiple tools. Infinite logins. Juggling Tabs. One frustrated agency.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-14">
               {[
-                { label: "Content Platforms", value: "+++" },
-                { label: "Rank Tracker Costs", value: "$$" },
-                { label: "Local Grid Search", value: "$$ cost" },
-                { label: "Reporting Tools", value: "+ $$ p/mo" },
-                { label: "Agency Overheads", value: "+ $$" },
+                { label: "Content Platforms", value: "Juggling tools" },
+                { label: "Rank Tracker Costs", value: "$$ cost add up" },
+                { label: "Local Grid Search", value: "$$ cost p/mo" },
+                { label: "Reporting Tools", value: "$$ cost p/mo" },
+                { label: "Agency Overheads", value: "$$ increase p/mo" },
               ].map((item, idx) => (
                 <div key={idx} className="border border-border rounded-xl p-5 text-center">
                   <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">{item.label}</p>
