@@ -404,7 +404,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                   />
                 )}
                 <div>
-                  <p className="text-xs opacity-80"><span className="bg-gradient-to-r from-blue-200 via-blue-100 to-cyan-200 bg-clip-text text-transparent font-semibold">Talk<em className="font-bold not-italic text-red-400">2</em>us</span> | <strong>Help Desk</strong> 24/7</p>
+                  <p className="text-xs opacity-80"><span className="bg-gradient-to-r from-blue-200 via-blue-100 to-cyan-200 bg-clip-text text-transparent font-bold">Talk<em className="font-extrabold not-italic text-red-400">2</em>us</span> | <strong>Help Desk</strong> 24/7</p>
                 </div>
               </div>
               <Button 
