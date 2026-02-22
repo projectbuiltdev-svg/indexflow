@@ -501,7 +501,7 @@ export default function Home2() {
 
       {/* MARQUEE */}
       <div className="border-t border-b border-border bg-accent/20 py-4 overflow-hidden" data-testid="marquee-section">
-        <div className="flex gap-14 animate-[marquee_25s_linear_infinite] whitespace-nowrap">
+        <div className="flex gap-14 animate-[marquee_30s_linear_infinite] whitespace-nowrap">
           {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
             <span key={i} className="text-xs font-semibold text-muted-foreground uppercase tracking-[2px] flex items-center gap-2.5 flex-shrink-0">
               <span className="text-primary text-[9px]">●</span>
