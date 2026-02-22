@@ -20,9 +20,23 @@ export default function About() {
             Refined by<br />
             <span className="text-muted-foreground/50 italic">necessity.</span>
           </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl" data-testid="text-intro">
+          <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl mb-12" data-testid="text-intro">
             IndexFlow wasn't built to disrupt an industry — it was built to fix a real agency problem, by someone who was tired of waiting for a better tool to exist.
           </p>
+
+          <div className="relative w-full rounded-xl overflow-hidden shadow-2xl" style={{ paddingBottom: "56.25%" }}>
+            <iframe
+              src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              loading="eager"
+              className="absolute inset-0 w-full h-full"
+              style={{ border: 0 }}
+              title="indexFlow"
+              data-testid="hero-video-founder"
+            />
+          </div>
         </div>
       </section>
 
