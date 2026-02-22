@@ -257,6 +257,7 @@ function Router() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/home-archive" component={HomeArchive} />
+        <Route path="/founder-statement" component={About} />
         <Route path="/how-it-works" component={About} />
         <Route path="/solutions/seo-agencies" component={SolutionsRestaurants} />
         <Route path="/solutions/content-agencies" component={SolutionsCafes} />

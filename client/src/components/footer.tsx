@@ -27,7 +27,7 @@ const resourceLinks = [
 ];
 
 const companyLinks = [
-  { href: "/about", label: "About" },
+  { href: "/founder-statement", label: "Founder Statement" },
   { href: "/contact", label: "Contact" },
   { href: "/partners", label: "Partners" },
   { href: "/careers", label: "Careers" },
