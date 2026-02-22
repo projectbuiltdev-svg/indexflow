@@ -517,8 +517,8 @@ export default function Home2() {
             <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">Multiple tools. Infinite logins. Juggling Tabs. One frustrated agency.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-14">
               {[
-                { icon: <PenTool className="w-5 h-5 text-primary" />, label: "Content Platforms" },
-                { icon: <Search className="w-5 h-5 text-primary" />, label: "Rank Tracker Costs" },
+                { icon: <PenTool className="w-5 h-5 text-primary" />, label: "Multi Platforms" },
+                { icon: <Search className="w-5 h-5 text-primary" />, label: "Rank Tracking" },
                 { icon: <Globe className="w-5 h-5 text-primary" />, label: "Local Grid Search" },
                 { icon: <BarChart3 className="w-5 h-5 text-primary" />, label: "Reporting Tools" },
                 { icon: <Receipt className="w-5 h-5 text-primary" />, label: "Agency Overheads" },
