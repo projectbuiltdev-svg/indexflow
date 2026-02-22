@@ -80,12 +80,12 @@ const marqueeItems = [
 ];
 
 const painCards = [
-  { icon: <FolderOpen className="w-7 h-7 text-primary" />, title: "12 Browser Tabs Open", desc: "You're juggling Ahrefs, Jasper, HubSpot, FreshBooks, and 8 other tools just to do your job." },
-  { icon: <ClipboardList className="w-7 h-7 text-primary" />, title: "Copy-Pasting Between Tools", desc: "Write in Google Docs, paste into WordPress, reformat, re-add images, manually paste JSON-LD." },
-  { icon: <BarChart3 className="w-7 h-7 text-primary" />, title: "Spreadsheet CRM", desc: "Tracking leads in Google Sheets. Losing deals because you forgot to follow up." },
-  { icon: <Link2 className="w-7 h-7 text-primary" />, title: "Manual Internal Links", desc: "Going back to add links to old posts. No system for orphan pages or broken links." },
-  { icon: <FileText className="w-7 h-7 text-primary" />, title: "Building Reports Manually", desc: "Spending Friday pulling data from four tools into a PowerPoint for client presentations." },
-  { icon: <Key className="w-7 h-7 text-primary" />, title: "Juggling API Keys", desc: "Hunting through five dashboards to update an expired key or check usage." },
+  { icon: <FolderOpen className="w-7 h-7 text-rose-500" />, title: "12 Browser Tabs Open", desc: "You're juggling Ahrefs, Jasper, HubSpot, FreshBooks, and 8 other tools just to do your job." },
+  { icon: <ClipboardList className="w-7 h-7 text-amber-500" />, title: "Copy-Pasting Between Tools", desc: "Write in Google Docs, paste into WordPress, reformat, re-add images, manually paste JSON-LD." },
+  { icon: <BarChart3 className="w-7 h-7 text-emerald-500" />, title: "Spreadsheet CRM", desc: "Tracking leads in Google Sheets. Losing deals because you forgot to follow up." },
+  { icon: <Link2 className="w-7 h-7 text-violet-500" />, title: "Manual Internal Links", desc: "Going back to add links to old posts. No system for orphan pages or broken links." },
+  { icon: <FileText className="w-7 h-7 text-sky-500" />, title: "Building Reports Manually", desc: "Spending Friday pulling data from four tools into a PowerPoint for client presentations." },
+  { icon: <Key className="w-7 h-7 text-orange-500" />, title: "Juggling API Keys", desc: "Hunting through five dashboards to update an expired key or check usage." },
 ];
 
 const solutionCards = [
