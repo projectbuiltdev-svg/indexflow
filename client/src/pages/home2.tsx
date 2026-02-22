@@ -423,7 +423,7 @@ export default function Home2() {
             <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-2 sm:mb-3">
               <Link href="/contact">
                 <Button size="default" className="text-xs sm:text-base px-3 sm:px-8 py-2 sm:py-4 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 hover:from-sky-400 hover:via-blue-400 hover:to-indigo-400 text-white border-0 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:-translate-y-0.5 font-bold" data-testid="btn-hero-trial">
-                  30 Day Trial $1
+                  <Rocket className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5" /> 30 Day Trial $1
                 </Button>
               </Link>
               <Link href="#tools">
