@@ -397,11 +397,11 @@ export default function Pricing() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
               <h2 className="text-3xl lg:text-4xl font-bold mb-3" data-testid="text-serve-title">
-                Who We Serve
+                Who We Serve — IndexFlow scales with you.
               </h2>
               <p className="text-lg text-muted-foreground max-w-xl mx-auto">
                 Built for agencies & solo teams.<br />
-                Whether you're a solo freelancer or a 50-person agency — IndexFlow scales with you.
+                Whether you're a solo freelancer or a 50-person agency
               </p>
             </div>
 
