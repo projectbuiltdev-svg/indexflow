@@ -87,6 +87,124 @@ const plans = [
   },
 ];
 
+const toolCategories = [
+  {
+    title: "Programmatic Content Engine",
+    items: [
+      "AI Post Generator — bulk drafts at scale",
+      "Post Editor",
+      "Pages Builder",
+      "Campaign Manager",
+      "Content Moderation & Quality Gates",
+      "Stock Images with auto alt text",
+      "CMS Integration — WordPress, Webflow, Shopify, Ghost, Wix",
+    ],
+  },
+  {
+    title: "SEO Tools",
+    items: [
+      "Internal Link Builder",
+      "Link Health Monitor",
+      "Post Validator — per-post SEO scoring",
+      "On-Page Auditor",
+      "Site Profiler",
+      "Schema Markup Generator",
+      "SEO Health Dashboard",
+      "SEO Reports",
+    ],
+  },
+  {
+    title: "Rank Tracker",
+    items: [
+      "Rank Tracker — 1,000 keywords weekly",
+      "Local Search Grid (5x5) — see where you rank",
+      "GSC Ingestion Layer",
+      "Competitor Keyword Spy",
+      "SERP Preview Tool",
+      "Keyword Gap Analysis",
+    ],
+  },
+  {
+    title: "CRM & Pipeline",
+    items: [
+      "Lead to Booking CRM",
+      "Contacts Manager",
+      "Deal Pipeline (Kanban)",
+      "Full-Funnel Attribution",
+    ],
+  },
+  {
+    title: "AI & Communications",
+    items: [
+      "AI Widget — website chat",
+      "Widget Monitoring",
+      "Widget Code Generator",
+      "Twilio Voice",
+      "Twilio SMS",
+      "Twilio Call Logs",
+    ],
+  },
+  {
+    title: "Connections (BYOK)",
+    items: [
+      "AI Provider Connections",
+      "Image Bank Connections",
+      "Payment Connections",
+      "Twilio Account Connection",
+    ],
+  },
+  {
+    title: "Analytics & Reporting",
+    items: [
+      "Analytics Overview",
+      "Export Data",
+      "SEO Reports with snapshots",
+      "Invoicing — line items, multi-currency",
+    ],
+  },
+  {
+    title: "Settings & Admin",
+    items: [
+      "Team & Invites",
+      "White Label Branding",
+      "Billing & Usage",
+      "Setup Guide",
+      "AI Training / Knowledge Base",
+      "AI Channels",
+    ],
+  },
+];
+
+const replacements = [
+  { from: "Ahrefs / SEMrush", to: "Rank Tracker + Local Search Grid" },
+  { from: "SurferSEO / Clearscope", to: "Quality Gates + Post Validator" },
+  { from: "Jasper / Copy.ai", to: "Content Engine with GPT-4o" },
+  { from: "HubSpot / Pipedrive", to: "Lead to Booking CRM" },
+  { from: "FreshBooks / QuickBooks", to: "Invoice Builder" },
+  { from: "Intercom / Drift", to: "AI Widget" },
+  { from: "LinkWhisper", to: "Cross-Post Link Builder" },
+  { from: "Screaming Frog", to: "On-Page SEO Auditor" },
+];
+
+const audiences = [
+  {
+    title: "SEO Agencies",
+    description: "Rank tracking, local search grids, on-page audits, GSC Ingestion Layer",
+  },
+  {
+    title: "Content Agencies",
+    description: "Bulk AI drafts, quality gates, CMS publishing, content reporting",
+  },
+  {
+    title: "Digital Marketing Agencies",
+    description: "Full-service SEO, content, CRM, invoicing and reporting",
+  },
+  {
+    title: "Freelancers & Consultants",
+    description: "Professional tools at solo pricing. White label from day one.",
+  },
+];
+
 export default function Pricing() {
   return (
     <Layout>
@@ -168,6 +286,105 @@ export default function Pricing() {
                   Start Free Trial <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
               </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 lg:py-28 bg-accent/40">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-3" data-testid="text-everything-title">
+                Everything In The Box
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+                40+ tools. One subscription.<br />
+                No feature gating. Every tier gets the full suite. Here's exactly what you get from day one.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {toolCategories.map((cat, i) => (
+                <Card key={cat.title} className={`transition-all hover:-translate-y-1 ${colorShadows[i % colorShadows.length]}`} data-testid={`card-tools-${i}`}>
+                  <CardContent className="p-6">
+                    <h3 className="font-semibold text-base mb-4">{cat.title}</h3>
+                    <ul className="space-y-2">
+                      {cat.items.map((item, j) => (
+                        <li key={j} className="flex items-start gap-2 text-sm text-muted-foreground">
+                          <ArrowRight className="w-3.5 h-3.5 text-primary flex-shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="mt-14 text-center">
+              <div className="inline-flex items-baseline gap-2">
+                <span className="text-5xl font-bold">40+</span>
+                <span className="text-muted-foreground text-sm max-w-md text-left leading-snug">
+                  tools across 8 categories — content · SEO · CRM · AI · comms · analytics · white label · admin
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-3">
+                Solo · Pro · Agency · Enterprise — every plan, full access
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 lg:py-28">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-3" data-testid="text-replace-title">
+                What You Replace
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+                One login instead of eleven.<br />
+                See exactly what IndexFlow replaces in your current stack.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              {replacements.map((r, i) => (
+                <Card key={i} className={`transition-all hover:-translate-y-1 ${colorShadows[i % colorShadows.length]}`} data-testid={`card-replace-${i}`}>
+                  <CardContent className="p-5 flex items-start gap-4">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-muted-foreground line-through decoration-muted-foreground/40">{r.from}</p>
+                      <p className="text-sm font-semibold mt-1 flex items-center gap-1.5">
+                        <ArrowRight className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                        {r.to}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 lg:py-28 bg-accent/40">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-3" data-testid="text-serve-title">
+                Who We Serve
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+                Built for agencies & solo teams.<br />
+                Whether you're a solo freelancer or a 50-person agency — IndexFlow scales with you.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6">
+              {audiences.map((a, i) => (
+                <Card key={a.title} className={`transition-all hover:-translate-y-1 ${colorShadows[i % colorShadows.length]}`} data-testid={`card-audience-${i}`}>
+                  <CardContent className="p-6">
+                    <h3 className="font-semibold text-base mb-2">{a.title}</h3>
+                    <p className="text-sm text-muted-foreground">{a.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </section>

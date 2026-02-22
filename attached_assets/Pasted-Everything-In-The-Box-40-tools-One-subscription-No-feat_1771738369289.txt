@@ -1,0 +1,98 @@
+Everything In The Box
+
+40+ tools. One subscription.
+No feature gating. Every tier gets the full suite. Here's exactly what you get from day one.
+
+Programmatic Content Engine
+AI Post Generator — bulk drafts at scale
+Post Editor
+Pages Builder
+Campaign Manager
+Content Moderation & Quality Gates
+Stock Images with auto alt text
+CMS Integration — WordPress, Webflow, Shopify, Ghost, Wix
+SEO Tools
+Internal Link Builder
+Link Health Monitor
+Post Validator — per-post SEO scoring
+On-Page Auditor
+Site Profiler
+Schema Markup Generator
+SEO Health Dashboard
+SEO Reports
+Rank Tracker
+Rank Tracker — 1,000 keywords weekly
+Local Search Grid (5x5) — see where you rank
+GSC Ingestion Layer
+Competitor Keyword Spy
+SERP Preview Tool
+Keyword Gap Analysis
+CRM & Pipeline
+Lead to Booking CRM
+Contacts Manager
+Deal Pipeline (Kanban)
+Full-Funnel Attribution
+AI & Communications
+AI Widget — website chat
+Widget Monitoring
+Widget Code Generator
+Twilio Voice
+Twilio SMS
+Twilio Call Logs
+Connections (BYOK)
+AI Provider Connections
+Image Bank Connections
+Payment Connections
+Twilio Account Connection
+Analytics & Reporting
+Analytics Overview
+Export Data
+SEO Reports with snapshots
+Invoicing — line items, multi-currency
+Settings & Admin
+Team & Invites
+White Label Branding
+Billing & Usage
+Setup Guide
+AI Training / Knowledge Base
+AI Channels
+40+
+tools across 8 categories — content · SEO · CRM · AI · comms · analytics · white label · admin
+Solo · Pro · Agency · Enterprise — every plan, full access
+What You Replace
+
+One login instead of eleven.
+See exactly what IndexFlow replaces in your current stack.
+
+Ahrefs / SEMrush
+→Rank Tracker + Local Search Grid
+SurferSEO / Clearscope
+→Quality Gates + Post Validator
+Jasper / Copy.ai
+→Content Engine with GPT-4o
+HubSpot / Pipedrive
+→Lead to Booking CRM
+FreshBooks / QuickBooks
+→Invoice Builder
+Intercom / Drift
+→AI Widget
+LinkWhisper
+→Cross-Post Link Builder
+Screaming Frog
+→On-Page SEO Auditor
+Who We Serve
+
+Built for agencies & solo teams.
+Whether you're a solo freelancer or a 50-person agency — IndexFlow scales with you.
+
+SEO Agencies
+Rank tracking, local search grids, on-page audits, GSC Ingestion Layer
+
+Content Agencies
+Bulk AI drafts, quality gates, CMS publishing, content reporting
+
+Digital Marketing Agencies
+Full-service SEO, content, CRM, invoicing and reporting
+
+Freelancers & Consultants
+Professional tools at solo pricing. White label from day one.
