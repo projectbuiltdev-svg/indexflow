@@ -65,18 +65,23 @@ function FadeIn({ children, className = "" }: { children: React.ReactNode; class
 }
 
 const marqueeItems = [
-  "Programmatic Content Engine",
-  "Rank Tracker · 1,000 keywords",
-  "Local Search Grid (5x5)",
-  "Lead to Booking CRM",
-  "Invoice Builder",
-  "AI Widget",
-  "Twilio Voice & SMS",
-  "True White Label",
-  "GSC Ingestion Layer",
-  "Cloudflare Edge Deployment",
-  "SOC 2 Compliant",
-  "BYOK",
+  "Content Engine | Deploy to LLM | CMS instantly",
+  "Pages | Posts | Articles | Listicles",
+  "Link Builder | Internal | External",
+  "Post Validator | On-Page Auditor | Site Profiler",
+  "Schema Markup Generator",
+  "Rank Tracker | Local Search Grid | GSC Ingestion Layer",
+  "Competitor Keyword Spy",
+  "SERP Preview Tool",
+  "Keyword Gap Analysis",
+  "CRM | Pipeline | Lead to Booking",
+  "AI Website Widget",
+  "Twilio Voice SMS",
+  "BYOK AI Connections",
+  "Image Bank (ai)",
+  "White Label Branding",
+  "Client Reports",
+  "Invoice engine powered by Stripe/Paypal",
 ];
 
 const painCards = [
