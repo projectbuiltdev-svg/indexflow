@@ -14,13 +14,8 @@ export default function About() {
       <section className="pt-24 pb-16 lg:pt-32 lg:pb-20">
         <div className="max-w-3xl mx-auto px-6 sm:px-10">
           <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-6" data-testid="text-label">IndexFlow Founder Statement</p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-2" data-testid="text-heading">
-            Built from<br />
-            <span className="text-muted-foreground/50 italic">frustration.</span>
-          </h1>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-8">
-            Refined by<br />
-            <span className="text-muted-foreground/50 italic">necessity.</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-8" data-testid="text-heading">
+            Built from <span className="text-muted-foreground/50 italic">frustration.</span> Refined by <span className="text-muted-foreground/50 italic">necessity.</span>
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl mb-12" data-testid="text-intro">
             IndexFlow wasn't built to disrupt an industry — it was built to fix a real agency problem, by someone who was tired of waiting for a better tool to exist.
