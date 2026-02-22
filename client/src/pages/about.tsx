@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowRight, BookOpen, Wrench, Lightbulb, FileText, BarChart3, Grid3X3, ClipboardList, Sparkles, Heart } from "lucide-react";
+import { ArrowRight, Phone, Wrench, Lightbulb, FileText, BarChart3, Grid3X3, ClipboardList, Sparkles, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO, seoData } from "@/components/seo";
@@ -178,17 +178,18 @@ export default function About() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link href="/">
-                <Button className="gap-2 w-full sm:w-auto" data-testid="button-visit-indexflow">
-                  Visit IndexFlow <ArrowRight className="w-4 h-4" />
+              <Link href="/pricing">
+                <Button className="gap-2 w-full sm:w-auto" data-testid="button-trial">
+                  30 Day Trial $1 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link href="/docs">
-                <Button variant="outline" className="gap-2 w-full sm:w-auto" data-testid="button-read-docs">
-                  <BookOpen className="w-4 h-4" /> Read the Docs
+              <Link href="/contact">
+                <Button variant="outline" className="gap-2 w-full sm:w-auto" data-testid="button-discovery-call">
+                  <Phone className="w-4 h-4" /> Discovery Call
                 </Button>
               </Link>
             </div>
+            <p className="text-xs text-muted-foreground mt-4">No contracts · No setup fees · Cancel anytime</p>
           </div>
         </div>
       </section>
