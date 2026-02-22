@@ -384,7 +384,7 @@ export function Header() {
                 testId="link-nav-resources"
               />
               <NavDropdown
-                label="Company"
+                label="Why IndexFlow"
                 items={companyItems}
                 location={location}
                 testId="link-nav-company"
@@ -502,7 +502,7 @@ export function Header() {
                 testId="link-mobile-resources"
               />
               <MobileDropdown
-                label="Company"
+                label="Why IndexFlow"
                 items={companyItems}
                 location={location}
                 isOpen={openMobileDropdown === "company"}
