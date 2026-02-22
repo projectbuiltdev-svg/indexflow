@@ -161,10 +161,10 @@ export default function About() {
 
           <div className="bg-card border border-border rounded-2xl p-8 sm:p-10 shadow-[0_6px_24px_-6px_rgba(59,130,246,0.18)]">
             <p className="text-base text-muted-foreground leading-relaxed mb-6">
-              IndexFlow was a frustration turned product, an internal tool turned platform, and an agency problem turned into something I hope transforms how other agencies work.
+              Built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything.
             </p>
             <p className="text-base text-foreground leading-relaxed mb-8 italic">
-              I hope other agencies get as much value from it as we do.
+              I hope your teams get as much value from IndexFlow as we do in-house.
             </p>
 
             <div className="flex items-center gap-4 mb-8 pt-6 border-t border-border/50">
