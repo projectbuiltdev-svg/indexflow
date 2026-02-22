@@ -404,23 +404,7 @@ export function AIWidget({ workspaceId, logoUrl }: AIWidgetProps = {}) {
                   />
                 )}
                 <div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-xs opacity-80"><strong>Help Desk</strong> 24/7</p>
-                    {ttsSupported && (
-                      <button
-                        onClick={toggleAutoSpeak}
-                        className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full transition-all border ${
-                          autoSpeak 
-                            ? "bg-primary-foreground/25 text-primary-foreground border-green-400/40 shadow-[0_0_8px_rgba(34,197,94,0.35)] animate-pulse" 
-                            : "bg-primary-foreground/10 text-primary-foreground/70 border-green-400/25 shadow-[0_0_6px_rgba(34,197,94,0.2)] hover:bg-primary-foreground/15"
-                        }`}
-                        data-testid="button-toggle-auto-speak"
-                      >
-                        {autoSpeak ? <Volume2 className="w-3 h-3" /> : <VolumeX className="w-3 h-3" />}
-                        <span>{autoSpeak ? "Voice" : "Voice"}</span>
-                      </button>
-                    )}
-                  </div>
+                  <p className="text-xs opacity-80"><strong>Help Desk</strong> 24/7</p>
                 </div>
               </div>
               <Button 
