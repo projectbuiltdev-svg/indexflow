@@ -23,7 +23,7 @@ const plans = [
       "Rank Tracker — 1,000 keywords",
       "Email support",
     ],
-    cta: "Get Started",
+    cta: "Start Free 14-Day Trial $1",
     ctaLink: "/contact",
     icon: Users,
   },
