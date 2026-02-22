@@ -511,7 +511,21 @@ export default function Home2() {
         <div className="max-w-6xl mx-auto px-6 sm:px-12">
           <FadeIn>
             <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-4">The Pain Problem</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">Sound familiar?</h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5 text-slate-400">Sound familiar?</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-14">
+              {[
+                { label: "Content Platforms", value: "+++" },
+                { label: "Rank Tracker Costs", value: "$$" },
+                { label: "Local Grid Search", value: "$$ cost" },
+                { label: "Reporting Tools", value: "+ $$ p/mo" },
+                { label: "Agency Overheads", value: "+ $$" },
+              ].map((item, idx) => (
+                <div key={idx} className="bg-slate-800/20 backdrop-blur-sm border border-slate-700/30 rounded-lg p-3 sm:p-4 text-center group hover:border-slate-600/50 transition-colors">
+                  <p className="text-[10px] sm:text-xs text-slate-500 uppercase tracking-wider mb-1 group-hover:text-slate-400 transition-colors">{item.label}</p>
+                  <p className="text-sm sm:text-lg font-mono text-slate-400 group-hover:text-slate-300 transition-colors">{item.value}</p>
+                </div>
+              ))}
+            </div>
             <p className="text-lg text-muted-foreground max-w-xl mb-14 leading-relaxed">Most agencies waste hours every day dealing with these problems. There's a better way.</p>
           </FadeIn>
           <FadeIn>
