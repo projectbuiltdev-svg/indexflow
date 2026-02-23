@@ -450,7 +450,7 @@ export default function Home2() {
                     <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
                     <span className="flex items-center gap-1 sm:gap-1.5">
                       <Layers className="w-3 h-3 sm:w-4 sm:h-4 text-sky-300 drop-shadow-[0_0_4px_rgba(125,211,252,0.6)]" />
-                      One Platform
+                      One Subscription
                     </span>
                     <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
                     <span className="flex items-center gap-1 sm:gap-1.5">
