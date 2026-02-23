@@ -13,26 +13,28 @@ import { ClosingCTA } from "@/components/closing-cta";
 
 function HeroVideo() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [showVideo, setShowVideo] = useState(true);
+  const [videoReady, setVideoReady] = useState(false);
 
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden bg-slate-900">
+    <div className="absolute inset-0 w-full h-full overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
-      {showVideo && (
-        <div className="absolute inset-0">
-          <iframe
-            ref={iframeRef}
-            src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1&quality=auto&preload=auto"
-            frameBorder="0"
-            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            loading="eager"
-            style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "177.78vh", minWidth: "100%", height: "56.25vw", minHeight: "100%", border: 0, background: "#0f172a" }}
-            title="indexFlow"
-            data-testid="hero-video"
-          />
-        </div>
-      )}
+      <div
+        className="absolute inset-0 transition-opacity duration-700"
+        style={{ opacity: videoReady ? 1 : 0 }}
+      >
+        <iframe
+          ref={iframeRef}
+          src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1&quality=auto&preload=auto"
+          frameBorder="0"
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          loading="eager"
+          onLoad={() => setVideoReady(true)}
+          style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "177.78vh", minWidth: "100%", height: "56.25vw", minHeight: "100%", border: 0 }}
+          title="indexFlow"
+          data-testid="hero-video"
+        />
+      </div>
     </div>
   );
 }
