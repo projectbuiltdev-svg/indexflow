@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowRight, Phone, Wrench, Lightbulb, FileText, BarChart3, Grid3X3, ClipboardList, Sparkles, Heart } from "lucide-react";
+import { ArrowRight, Phone, Wrench, Layers, ShieldCheck, Lightbulb, FileText, BarChart3, Grid3X3, ClipboardList, Sparkles, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO, seoData } from "@/components/seo";
@@ -23,10 +23,9 @@ export default function About() {
 
           <div className="relative w-full rounded-xl overflow-hidden shadow-2xl" style={{ paddingBottom: "56.25%" }}>
             <iframe
-              src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
+              src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1&playsinline=1"
               frameBorder="0"
-              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
               loading="eager"
               className="absolute inset-0 w-full h-full"
               style={{ border: 0 }}
@@ -41,12 +40,21 @@ export default function About() {
                 <p className="text-white/40 text-sm sm:text-base font-normal italic mt-1">
                   Not your Seo tools.
                 </p>
-                <div className="flex items-center justify-center gap-3 mt-3 text-white/50 text-[10px] sm:text-xs font-medium tracking-wider uppercase">
-                  <span>40+ SEO Tools</span>
-                  <span className="text-amber-400/40">·</span>
-                  <span>One Platform</span>
-                  <span className="text-amber-400/40">·</span>
-                  <span>Zero Middlemen</span>
+                <div className="flex items-center justify-center gap-x-3 sm:gap-x-5 mt-3 text-[10px] sm:text-xs font-semibold tracking-wider text-white uppercase">
+                  <span className="flex items-center gap-1 sm:gap-1.5">
+                    <Wrench className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.6)]" />
+                    40+ SEO Tools
+                  </span>
+                  <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
+                  <span className="flex items-center gap-1 sm:gap-1.5">
+                    <Layers className="w-3 h-3 sm:w-4 sm:h-4 text-sky-300 drop-shadow-[0_0_4px_rgba(125,211,252,0.6)]" />
+                    One Subscription
+                  </span>
+                  <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
+                  <span className="flex items-center gap-1 sm:gap-1.5">
+                    <ShieldCheck className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.6)]" />
+                    Zero Middlemen
+                  </span>
                 </div>
               </div>
             </div>
