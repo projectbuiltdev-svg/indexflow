@@ -30,9 +30,10 @@ export default function About() {
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
             />
+            <div className="absolute inset-0 bg-black/10" />
             <div
               className="absolute inset-0"
-              style={{ opacity: iframeLoaded ? 1 : 0, transition: "opacity 2.5s ease-in" }}
+              style={{ opacity: iframeLoaded ? 1 : 0, transition: "opacity 3s cubic-bezier(0.4, 0, 0.2, 1)" }}
             >
               <iframe
                 src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1&playsinline=1"
