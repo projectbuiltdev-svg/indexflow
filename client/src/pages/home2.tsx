@@ -12,30 +12,19 @@ import { SEO, seoData, combinedHomeSchema } from "@/components/seo";
 import { ClosingCTA } from "@/components/closing-cta";
 
 function HeroVideo() {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setReady(true), 800);
-    return () => clearTimeout(t);
-  }, []);
-
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
-      <div
-        className="absolute inset-0 transition-opacity duration-700"
-        style={{ opacity: ready ? 1 : 0 }}
-      >
-        <iframe
-          src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1&quality=auto&playsinline=1"
-          frameBorder="0"
-          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-          loading="eager"
-          style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "177.78vh", minWidth: "100%", height: "56.25vw", minHeight: "100%", border: 0 }}
-          title="indexFlow"
-          data-testid="hero-video"
-        />
-      </div>
+      <iframe
+        src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1&playsinline=1"
+        frameBorder="0"
+        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+        loading="eager"
+        className="absolute"
+        style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "177.78vh", minWidth: "100%", height: "56.25vw", minHeight: "100%", border: 0 }}
+        title="indexFlow"
+        data-testid="hero-video"
+      />
     </div>
   );
 }
