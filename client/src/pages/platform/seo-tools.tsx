@@ -67,7 +67,7 @@ export default function SeoToolsPage() {
         description="Automated post-processing validation, cross-post link building, schema markup auto-detection, on-page auditing, and duplicate content detection — built into every IndexFlow workspace."
         canonicalUrl="/platform/seo-tools"
       />
-      <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-emerald-500/10 via-green-500/5 to-transparent">
+      <section className="relative pt-6 pb-20 lg:pt-10 lg:pb-28 bg-gradient-to-br from-emerald-500/10 via-green-500/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4" data-testid="badge-seo-tools">

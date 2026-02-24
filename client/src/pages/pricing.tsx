@@ -248,7 +248,7 @@ export default function Pricing() {
     <Layout>
       <SEO {...seoData.pricing} />
       <div className="min-h-screen">
-        <section className="py-20 lg:py-28">
+        <section className="pt-6 pb-20 lg:pt-10 lg:pb-28">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h1 className="text-4xl lg:text-5xl font-bold mb-4" data-testid="text-pricing-title">

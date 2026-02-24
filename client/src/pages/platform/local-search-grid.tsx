@@ -234,7 +234,7 @@ export default function LocalSearchGridPage() {
     <Layout>
       <SEO {...seoData.localSearchGrid} />
 
-      <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-transparent overflow-hidden">
+      <section className="relative pt-6 pb-20 lg:pt-10 lg:pb-28 bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-transparent overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">

@@ -258,7 +258,7 @@ export default function Gallery() {
   return (
     <Layout>
       <SEO {...seoData.portfolio} />
-      <section className="bg-gradient-to-b from-blue-500/20 to-background pt-24 pb-16 lg:pt-28 lg:pb-20">
+      <section className="bg-gradient-to-b from-blue-500/20 to-background pt-6 pb-16 lg:pt-10 lg:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="secondary" className="mb-4">Template Gallery</Badge>
           <h1 className="text-4xl lg:text-5xl font-bold mb-4">

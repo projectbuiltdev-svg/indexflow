@@ -63,7 +63,7 @@ export default function AiConciergePage() {
   return (
     <Layout>
       <SEO {...seoData.aiConcierge} />
-      <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-transparent">
+      <section className="relative pt-6 pb-20 lg:pt-10 lg:pb-28 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4">

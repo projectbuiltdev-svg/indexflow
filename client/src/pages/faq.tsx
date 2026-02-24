@@ -54,7 +54,7 @@ export default function FAQ() {
   return (
     <Layout>
       <SEO {...seoData.faq} structuredData={faqStructuredData} />
-      <section className="py-16 lg:py-24">
+      <section className="pt-4 pb-16 lg:pt-8 lg:pb-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">FAQ</Badge>

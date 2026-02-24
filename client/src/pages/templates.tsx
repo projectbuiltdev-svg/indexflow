@@ -86,7 +86,7 @@ export default function Templates() {
   return (
     <Layout>
       <SEO {...seoData.templates} />
-      <section className="bg-gradient-to-b from-accent/30 to-background py-16 lg:py-20">
+      <section className="bg-gradient-to-b from-accent/30 to-background pt-4 pb-16 lg:pt-8 lg:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="secondary" className="mb-4" data-testid="badge-template-library">Workspace Templates</Badge>
           <h1 className="text-4xl lg:text-5xl font-bold mb-4" data-testid="text-templates-title">
