@@ -548,7 +548,7 @@ export function Header() {
             />
             <span className="text-gray-500">|</span>
             <Link href="/contact" className="text-gray-200/90 hover:text-white transition-colors" data-testid="link-topbar-demo">
-              Book a Demo
+              Discovery call
             </Link>
             <span className="text-gray-500">|</span>
             <Link href="/select-workspace" className="text-gray-200/90 hover:text-white transition-colors flex items-center gap-1" data-testid="link-topbar-login">
