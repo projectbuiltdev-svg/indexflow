@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense, type ComponentType } from "react";
+import { useState, useEffect, lazy, Suspense, type ComponentType } from "react";
 import { Switch, Route, useLocation, Redirect } from "wouter";
 import type { AdminRole } from "@shared/schema";
 import { adminRolePermissions } from "@shared/schema";
@@ -501,6 +501,7 @@ export function AppRoutes() {
 
 function AppContent() {
   const [location] = useLocation();
+  const [mounted, setMounted] = useState(false);
   const isAppRoute = location.startsWith("/client-login") || 
                       location.startsWith("/select-workspace") || 
                       location.startsWith("/preview/") ||
@@ -531,13 +532,17 @@ function AppContent() {
                       location.includes("/connections/");
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
 
   return (
     <>
       <AppRoutes />
-      {!isAppRoute && <AIWidget />}
+      {mounted && !isAppRoute && <AIWidget />}
     </>
   );
 }
