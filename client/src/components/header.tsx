@@ -100,6 +100,50 @@ const languages = [
   { code: "nl", label: "Nederlands", flag: "🇳🇱" },
 ];
 
+function TopbarDropdown({ label, links, testId }: { label: string; links: { href: string; label: string }[]; testId: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const handleEsc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleEsc);
+    return () => { document.removeEventListener("mousedown", handleClick); document.removeEventListener("keydown", handleEsc); };
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="text-gray-200/90 hover:text-white transition-colors flex items-center gap-1 outline-none focus:outline-none"
+        data-testid={`button-${testId}`}
+      >
+        {label}
+        <ChevronDown className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="absolute left-0 top-full mt-1 w-48 bg-[#0d1d33] border border-gray-700/50 rounded-md shadow-xl py-1 z-[200]">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="block px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+              onClick={() => setOpen(false)}
+              data-testid={`${testId}-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function LanguageDropdown() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(() => {
@@ -395,6 +439,30 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
           <span className="tracking-wide text-gray-200/90">40+ SEO tools | Keep 100% of the revenue chain</span>
           <div className="flex items-center gap-4">
+            <TopbarDropdown
+              label="Compare"
+              links={[
+                { href: "/comparisons/semrush", label: "vs SEMrush" },
+                { href: "/comparisons/ahrefs", label: "vs Ahrefs" },
+                { href: "/comparisons/best-seo-platforms", label: "Best SEO Platforms" },
+                { href: "/comparisons/pricing", label: "Pricing Comparison" },
+                { href: "/comparisons/platform", label: "Platform Comparison" },
+              ]}
+              testId="topbar-compare"
+            />
+            <span className="text-gray-500">|</span>
+            <TopbarDropdown
+              label="Explore"
+              links={[
+                { href: "/case-studies", label: "Case Studies" },
+                { href: "/testimonials", label: "Testimonials" },
+                { href: "/pricing", label: "Pricing" },
+                { href: "/blog", label: "Blog" },
+                { href: "/docs", label: "Documentation" },
+              ]}
+              testId="topbar-explore"
+            />
+            <span className="text-gray-500">|</span>
             <Link href="/contact" className="text-gray-200/90 hover:text-white transition-colors" data-testid="link-topbar-demo">
               Book a Demo
             </Link>
