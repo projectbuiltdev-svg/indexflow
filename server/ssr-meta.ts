@@ -2,7 +2,7 @@ import { type Request, type Response, type NextFunction } from "express";
 
 const BASE_URL = "https://indexflow.cloud";
 
-const routeMeta: Record<string, { title: string; description: string; canonical?: string; ogType?: string }> = {
+export const routeMeta: Record<string, { title: string; description: string; canonical?: string; ogType?: string }> = {
   "/": {
     title: "indexFlow - Done-For-You SEO and Content Marketing Platform",
     description: "All-in-one SEO, content marketing, and AI-powered platform for agencies. Get more clients with zero effort.",
@@ -311,11 +311,11 @@ const routeMeta: Record<string, { title: string; description: string; canonical?
   },
 };
 
-function escapeHtml(str: string): string {
+export function escapeHtml(str: string): string {
   return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function injectMeta(html: string, meta: { title: string; description: string; canonical?: string; ogType?: string }): string {
+export function injectMeta(html: string, meta: { title: string; description: string; canonical?: string; ogType?: string }): string {
   if (meta.title) {
     html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(meta.title)}</title>`);
     html = html.replace(
