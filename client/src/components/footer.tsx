@@ -21,7 +21,7 @@ const businessToolLinks = [
   { href: "/platform/invoices-reports", label: "Invoicing & Reports" },
   { href: "/platform/ai-widget-voice", label: "AI Website Widget" },
   { href: "/platform/white-label", label: "White Label Agency" },
-  { href: "/platform/byok", label: "BYOK (AI) 100% control" },
+  { href: "/platform/byok", label: "BYOK 100% client control" },
   { href: "/platform/twilio", label: "Twilio SMS & Voice" },
 ];
 
