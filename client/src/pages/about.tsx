@@ -181,13 +181,10 @@ export default function About() {
             You don't need more tools. You need the right system.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed mb-10">
-            40+ Seo tools. One platform. One subscription. Built by an Agency, for agencies & solo teams.
+            40+ Seo tools. One platform. One subscription. Built by an Agency, for agencies & solo teams, who are done feeding margin to platforms that take a cut of everything.
           </p>
 
           <div className="bg-card border border-border rounded-2xl p-8 sm:p-10 shadow-[0_6px_24px_-6px_rgba(59,130,246,0.18)]">
-            <p className="text-base text-muted-foreground leading-relaxed mb-6">
-              Built for solo founders and agency owners who are done feeding margin to platforms that take a cut of everything.
-            </p>
             <p className="text-base text-foreground leading-relaxed mb-8 italic">
               I hope your teams get as much value from IndexFlow as we do in-house.
             </p>
