@@ -41,6 +41,14 @@ const resourceItems = [
   { href: "/case-studies", label: "Case Studies", icon: BarChart3, desc: "Client success stories" },
 ];
 
+const compareItems = [
+  { href: "/comparisons/semrush", label: "vs SEMrush", icon: BarChart3, desc: "Side-by-side feature comparison" },
+  { href: "/comparisons/ahrefs", label: "vs Ahrefs", icon: TrendingUp, desc: "See how we stack up" },
+  { href: "/comparisons/best-seo-platforms", label: "Best SEO Platforms", icon: Search, desc: "Top platforms ranked" },
+  { href: "/comparisons/pricing", label: "Pricing Comparison", icon: Receipt, desc: "Compare costs & value" },
+  { href: "/comparisons/platform", label: "Platform Comparison", icon: Layout, desc: "Full feature breakdown" },
+];
+
 const companyItems = [
   { href: "/founder-statement", label: "Founder Statement", icon: Globe, desc: "Our mission & story" },
   { href: "/contact", label: "Contact", icon: Mail, desc: "Get in touch with us" },
@@ -535,18 +543,6 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
           <span className="tracking-wide text-gray-200/90">40+ SEO tools | Keep 100% of the revenue chain</span>
           <div className="flex items-center gap-4">
-            <TopbarDropdown
-              label="Compare"
-              links={[
-                { href: "/comparisons/semrush", label: "vs SEMrush" },
-                { href: "/comparisons/ahrefs", label: "vs Ahrefs" },
-                { href: "/comparisons/best-seo-platforms", label: "Best SEO Platforms" },
-                { href: "/comparisons/pricing", label: "Pricing Comparison" },
-                { href: "/comparisons/platform", label: "Platform Comparison" },
-              ]}
-              testId="topbar-compare"
-            />
-            <span className="text-gray-500">|</span>
             <Link href="/contact" className="text-gray-200/90 hover:text-white transition-colors" data-testid="link-topbar-demo">
               Discovery Call
             </Link>
@@ -591,6 +587,12 @@ export function Header() {
                 footer={{ label: "Compare plans", href: "/pricing" }}
               />
               <NavLink href="/pricing" label="Pricing" location={location} testId="link-nav-pricing" />
+              <NavDropdown
+                label="Compare"
+                items={compareItems}
+                location={location}
+                testId="link-nav-compare"
+              />
               <NavDropdown
                 label="Resources"
                 items={resourceItems}
@@ -679,6 +681,15 @@ export function Header() {
                 testId="link-mobile-solutions"
               />
               <MobileSimpleLink href="/pricing" label="Pricing" location={location} onClick={() => setIsOpen(false)} testId="link-mobile-pricing" />
+              <MobileSimpleDropdown
+                label="Compare"
+                links={compareItems.map(i => ({ href: i.href, label: i.label }))}
+                location={location}
+                isOpen={openMobileDropdown === "compare"}
+                onToggle={() => toggleMobileDropdown("compare")}
+                onNavigate={() => setIsOpen(false)}
+                testId="link-mobile-compare"
+              />
               <MobileSimpleDropdown
                 label="Resources"
                 links={[
