@@ -20,7 +20,7 @@ function HeroVideo() {
         src="/hero-poster.jpg"
         alt=""
         className="absolute inset-0 w-full h-full object-cover"
-        fetchPriority="high"
+        loading="eager"
       />
       <div className="absolute inset-0 bg-black/10" />
       <div
