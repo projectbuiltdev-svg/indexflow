@@ -329,13 +329,13 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="hidden lg:block bg-[#0a1628] text-gray-400 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
-          <span className="tracking-wide bg-gradient-to-r from-white/50 via-white to-white/50 bg-clip-text text-transparent">Agency Operating System — SEO, Content, CRM & White Label</span>
+          <span className="tracking-wide text-gray-200/90">Agency Operating System — SEO, Content, CRM & White Label</span>
           <div className="flex items-center gap-4">
-            <Link href="/contact" className="hover:text-white transition-colors" data-testid="link-topbar-demo">
+            <Link href="/contact" className="text-gray-200/90 hover:text-white transition-colors" data-testid="link-topbar-demo">
               Book a Demo
             </Link>
-            <span className="text-gray-700">|</span>
-            <Link href="/select-workspace" className="hover:text-white transition-colors flex items-center gap-1" data-testid="link-topbar-login">
+            <span className="text-gray-500">|</span>
+            <Link href="/select-workspace" className="text-gray-200/90 hover:text-white transition-colors flex items-center gap-1" data-testid="link-topbar-login">
               <LogIn className="w-3 h-3" />
               Log In
             </Link>
