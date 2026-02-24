@@ -47,11 +47,8 @@ const solutionItems = [
 
 const resourceItems = [
   { href: "/docs", label: "Documentation", icon: BookOpen, desc: "Setup guides & platform docs" },
-  { href: "/docs/api", label: "API Reference", icon: Code, desc: "REST API documentation" },
   { href: "/blog", label: "Blog", icon: Newspaper, desc: "Industry insights & tips" },
   { href: "/case-studies", label: "Case Studies", icon: BarChart3, desc: "Client success stories" },
-  { href: "/changelog", label: "Changelog", icon: Rocket, desc: "Latest updates & releases" },
-  { href: "/status", label: "Status Page", icon: Radio, desc: "System uptime & incidents" },
 ];
 
 const companyItems = [
