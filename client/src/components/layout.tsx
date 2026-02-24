@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { Header } from "./header";
 import { Footer } from "./footer";
+import { Breadcrumbs } from "./breadcrumbs";
 
 function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -40,6 +41,7 @@ export function Layout({ children }: { children: ReactNode }) {
       `}</style>
       <Header />
       <main className="flex-1 pt-14 lg:pt-24">
+        <Breadcrumbs />
         {children}
       </main>
       <Footer />
