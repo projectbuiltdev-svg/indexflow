@@ -5,8 +5,6 @@ import indexFlowLogo from "@assets/image_1771351451425.webp";
 const productLinks = [
   { href: "/platform/content-engine", label: "Features" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/templates", label: "Templates" },
-  { href: "/roadmap", label: "Roadmap" },
 ];
 
 const solutionLinks = [
