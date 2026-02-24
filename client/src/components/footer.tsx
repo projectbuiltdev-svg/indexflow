@@ -3,7 +3,20 @@ import { SiLinkedin, SiX, SiGithub } from "react-icons/si";
 import indexFlowLogo from "@assets/image_1771351451425.webp";
 
 const productLinks = [
-  { href: "/platform/content-engine", label: "Features" },
+  { href: "/platform/content-engine", label: "Content Engine" },
+  { href: "/platform/schema-markup", label: "Schema Markup" },
+  { href: "/platform/link-builder", label: "Link Builder" },
+  { href: "/platform/seo-audit", label: "On-Page SEO Audit" },
+  { href: "/platform/cms-integration", label: "CMS Integration" },
+  { href: "/platform/rank-tracking", label: "Track Keywords" },
+  { href: "/platform/local-search-grid", label: "Local Search Grid" },
+  { href: "/platform/search-console", label: "Google Search Console" },
+  { href: "/platform/crm-pipeline", label: "CRM & Pipeline" },
+  { href: "/platform/invoices-reports", label: "Invoicing & Reports" },
+  { href: "/platform/ai-widget-voice", label: "AI Widget" },
+  { href: "/platform/white-label", label: "White Label" },
+  { href: "/platform/byok", label: "BYOK" },
+  { href: "/platform/twilio", label: "Twilio SMS & Voice" },
   { href: "/pricing", label: "Pricing" },
 ];
 
@@ -61,7 +74,7 @@ export function Footer() {
   return (
     <footer className="bg-muted/40 dark:bg-muted/20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr] gap-10 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] gap-10 lg:gap-8">
           <div className="lg:pr-8">
             <Link href="/" className="inline-block mb-4" data-testid="link-footer-logo">
               <img
@@ -86,7 +99,22 @@ export function Footer() {
             </div>
           </div>
 
-          <FooterColumn title="Product" links={productLinks} />
+          <div>
+            <h4 className="font-semibold mb-4 text-sm text-foreground">Product</h4>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
+              {productLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                  data-testid={`link-footer-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <FooterColumn title="Solutions" links={solutionLinks} />
           <FooterColumn title="Resources" links={resourceLinks} />
           <FooterColumn title="Legal" links={legalLinks} />
