@@ -80,18 +80,13 @@ export function Footer() {
   return (
     <footer className="bg-muted/40 dark:bg-muted/20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 lg:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 lg:gap-8">
           <FooterColumn title="Content & SEO" links={contentSeoLinks} />
           <FooterColumn title="Rank Intelligence" links={rankIntelLinks} />
           <FooterColumn title="Business Tools" links={businessToolLinks} />
           <FooterColumn title="Solutions" links={solutionLinks} />
-
-          <div>
-            <FooterColumn title="Resources" links={resourceLinks} />
-            <div className="mt-8">
-              <FooterColumn title="Legal" links={legalLinks} />
-            </div>
-          </div>
+          <FooterColumn title="Resources" links={resourceLinks} />
+          <FooterColumn title="Legal" links={legalLinks} />
         </div>
 
         <div className="border-t border-border/50 mt-12 pt-6">
