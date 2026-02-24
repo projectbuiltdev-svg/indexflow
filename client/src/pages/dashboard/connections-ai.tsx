@@ -24,6 +24,7 @@ const openaiFeatures = [
   "Knowledge base question answering",
   "SEO content optimization",
   "Meta title & description generation",
+  "Twilio Voice (AI) 24/7 customer service assistant",
 ];
 
 const setupSteps = [
