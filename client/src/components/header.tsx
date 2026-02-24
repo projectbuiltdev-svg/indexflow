@@ -329,7 +329,7 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="hidden lg:block bg-gray-950 text-gray-400 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
-          <span className="tracking-wide">Agency Operating System — SEO, Content, CRM & White Label</span>
+          <span className="tracking-wide bg-gradient-to-r from-white/50 via-white to-white/50 bg-clip-text text-transparent">Agency Operating System — SEO, Content, CRM & White Label</span>
           <div className="flex items-center gap-4">
             <Link href="/contact" className="hover:text-white transition-colors" data-testid="link-topbar-demo">
               Book a Demo
