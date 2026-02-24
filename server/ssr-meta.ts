@@ -1,9 +1,4 @@
-import { renderToString } from "react-dom/server";
-import { Router } from "wouter";
-import { memoryLocation } from "wouter/memory-location";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster } from "@/components/ui/toaster";
+import { type Request, type Response, type NextFunction } from "express";
 
 const BASE_URL = "https://indexflow.cloud";
 
@@ -119,6 +114,11 @@ const routeMeta: Record<string, { title: string; description: string; canonical?
     description: "AI-powered content creation and blog management for agencies.",
     canonical: `${BASE_URL}/platform/content-engine`,
   },
+  "/platform/content-marketing": {
+    title: "Content Engine - indexFlow Platform",
+    description: "AI-powered content creation and blog management for agencies.",
+    canonical: `${BASE_URL}/platform/content-marketing`,
+  },
   "/platform/dashboard": {
     title: "Client Dashboard - indexFlow Platform",
     description: "Powerful dashboard to manage your workspace's content, analytics, and SEO.",
@@ -129,10 +129,20 @@ const routeMeta: Record<string, { title: string; description: string; canonical?
     description: "Publish directly to WordPress, Webflow, Shopify, Ghost, and Wix from one dashboard.",
     canonical: `${BASE_URL}/platform/cms-integration`,
   },
+  "/platform/hospitality-websites": {
+    title: "CMS Integration - indexFlow Platform",
+    description: "Publish directly to WordPress, Webflow, Shopify, Ghost, and Wix from one dashboard.",
+    canonical: `${BASE_URL}/platform/hospitality-websites`,
+  },
   "/platform/crm-pipeline": {
     title: "CRM & Pipeline - indexFlow Platform",
     description: "Client relationship management and sales pipeline built for agencies.",
     canonical: `${BASE_URL}/platform/crm-pipeline`,
+  },
+  "/platform/integrations": {
+    title: "CRM & Pipeline - indexFlow Platform",
+    description: "Client relationship management and sales pipeline built for agencies.",
+    canonical: `${BASE_URL}/platform/integrations`,
   },
   "/platform/local-search-grid": {
     title: "Local Search Grid - indexFlow Platform",
@@ -154,10 +164,25 @@ const routeMeta: Record<string, { title: string; description: string; canonical?
     description: "Advanced SEO tools to improve your online visibility.",
     canonical: `${BASE_URL}/platform/seo-tools`,
   },
+  "/platform/seo-audit": {
+    title: "SEO Audit - indexFlow Platform",
+    description: "On-page SEO auditing and site profiling tools.",
+    canonical: `${BASE_URL}/platform/seo-audit`,
+  },
   "/platform/seo": {
     title: "SEO Tools - indexFlow Platform",
     description: "Comprehensive SEO toolkit designed for agencies.",
     canonical: `${BASE_URL}/platform/seo`,
+  },
+  "/platform/schema-markup": {
+    title: "Schema Markup Generator - indexFlow Platform",
+    description: "Generate structured data markup for better search engine visibility.",
+    canonical: `${BASE_URL}/platform/schema-markup`,
+  },
+  "/platform/link-builder": {
+    title: "Link Builder - indexFlow Platform",
+    description: "Internal and external link building tools for SEO.",
+    canonical: `${BASE_URL}/platform/link-builder`,
   },
   "/platform/white-label": {
     title: "White Label - indexFlow Platform",
@@ -199,6 +224,21 @@ const routeMeta: Record<string, { title: string; description: string; canonical?
     description: "Feature-by-feature comparison of leading SEO platforms.",
     canonical: `${BASE_URL}/comparisons/platform`,
   },
+  "/comparisons/opentable": {
+    title: "indexFlow vs SEMrush - Comparison",
+    description: "See how indexFlow compares to SEMrush for agency SEO and content management.",
+    canonical: `${BASE_URL}/comparisons/opentable`,
+  },
+  "/comparisons/resy": {
+    title: "indexFlow vs Ahrefs - Comparison",
+    description: "Compare indexFlow and Ahrefs for agency SEO workflows and rank tracking.",
+    canonical: `${BASE_URL}/comparisons/resy`,
+  },
+  "/comparisons/best-booking-systems": {
+    title: "Best SEO Platforms Compared - indexFlow",
+    description: "Compare the best SEO and marketing platforms side by side.",
+    canonical: `${BASE_URL}/comparisons/best-booking-systems`,
+  },
   "/features/analytics": {
     title: "Analytics - indexFlow Features",
     description: "Deep analytics and reporting for your agency.",
@@ -239,35 +279,114 @@ const routeMeta: Record<string, { title: string; description: string; canonical?
     description: "Real results from agencies using indexFlow for SEO and content marketing.",
     canonical: `${BASE_URL}/case-studies`,
   },
+  "/solutions/restaurants": {
+    title: "SEO Agencies - IndexFlow",
+    description: "All-in-one SEO platform for agencies.",
+    canonical: `${BASE_URL}/solutions/restaurants`,
+  },
+  "/solutions/cafes": {
+    title: "Content Marketing Agencies - IndexFlow",
+    description: "Scale your content agency with AI-powered bulk drafts.",
+    canonical: `${BASE_URL}/solutions/cafes`,
+  },
+  "/solutions/bars": {
+    title: "Digital Marketing Agencies - IndexFlow",
+    description: "Replace your entire MarTech stack with one platform.",
+    canonical: `${BASE_URL}/solutions/bars`,
+  },
+  "/solutions/hotels": {
+    title: "Freelancers & Consultants - IndexFlow",
+    description: "Operate like a 5-person agency with one platform.",
+    canonical: `${BASE_URL}/solutions/hotels`,
+  },
+  "/solutions/multi-location": {
+    title: "White-Label Resellers - IndexFlow",
+    description: "Resell IndexFlow as your own SaaS product.",
+    canonical: `${BASE_URL}/solutions/multi-location`,
+  },
+  "/locations": {
+    title: "Locations - indexFlow",
+    description: "Find indexFlow agencies and partners near you.",
+    canonical: `${BASE_URL}/locations`,
+  },
 };
 
-export function getMetaForRoute(url: string) {
-  const path = url.split("?")[0].replace(/\/$/, "") || "/";
-  return routeMeta[path] || null;
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export function render(url: string) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity,
-        retry: false,
-      },
-    },
-  });
+function injectMeta(html: string, meta: { title: string; description: string; canonical?: string; ogType?: string }): string {
+  if (meta.title) {
+    html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(meta.title)}</title>`);
+    html = html.replace(
+      /<meta property="og:title" content="[^"]*" \/>/,
+      `<meta property="og:title" content="${escapeHtml(meta.title)}" />`
+    );
+    html = html.replace(
+      /<meta name="twitter:title" content="[^"]*" \/>/,
+      `<meta name="twitter:title" content="${escapeHtml(meta.title)}" />`
+    );
+  }
+  if (meta.description) {
+    html = html.replace(
+      /<meta name="description" content="[^"]*" \/>/,
+      `<meta name="description" content="${escapeHtml(meta.description)}" />`
+    );
+    html = html.replace(
+      /<meta property="og:description" content="[^"]*" \/>/,
+      `<meta property="og:description" content="${escapeHtml(meta.description)}" />`
+    );
+    html = html.replace(
+      /<meta name="twitter:description" content="[^"]*" \/>/,
+      `<meta name="twitter:description" content="${escapeHtml(meta.description)}" />`
+    );
+  }
+  if (meta.canonical) {
+    const canonicalTag = `<link rel="canonical" href="${escapeHtml(meta.canonical)}" />`;
+    if (html.includes('<link rel="canonical"')) {
+      html = html.replace(/<link rel="canonical" href="[^"]*" \/>/, canonicalTag);
+    } else {
+      html = html.replace("</head>", `  ${canonicalTag}\n  </head>`);
+    }
+  }
+  if (meta.ogType) {
+    html = html.replace(
+      /<meta property="og:type" content="[^"]*" \/>/,
+      `<meta property="og:type" content="${escapeHtml(meta.ogType)}" />`
+    );
+  }
+  return html;
+}
 
-  const { hook } = memoryLocation({ path: url, static: true });
+export function ssrMetaMiddleware() {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const urlPath = req.path.replace(/\/$/, "") || "/";
 
-  const html = renderToString(
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router hook={hook}>
-          <div id="ssr-shell" />
-        </Router>
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
+    if (urlPath.startsWith("/api") || urlPath.startsWith("/vite-hmr") || urlPath.includes(".")) {
+      return next();
+    }
 
-  return { html };
+    const meta = routeMeta[urlPath];
+    if (!meta) {
+      return next();
+    }
+
+    const originalEnd = res.end.bind(res);
+    res.end = function(chunk?: any, ...args: any[]) {
+      const contentType = res.getHeader("content-type");
+      if (contentType && typeof contentType === "string" && contentType.includes("text/html") && chunk) {
+        try {
+          const html = typeof chunk === "string" ? chunk : chunk.toString("utf-8");
+          const modified = injectMeta(html, meta);
+          res.setHeader("content-length", Buffer.byteLength(modified));
+          return originalEnd(modified, ...args);
+        } catch {
+          return originalEnd(chunk, ...args);
+        }
+      }
+      return originalEnd(chunk, ...args);
+    } as any;
+
+    next();
+  };
 }
