@@ -73,7 +73,7 @@ export function Footer() {
               />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-              The white-label agency operating system. 40+ SEO tools, one subscription, 100% of the revenue chain.
+              White-label agency operating system. 40+ SEO tools, one subscription, keep 100% of the revenue chain.
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="X (Twitter)" data-testid="link-footer-x">
