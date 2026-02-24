@@ -3,7 +3,7 @@ import wixLogo from "@assets/image_1771707999263.png";
 
 const row1Items = [
   "Content Engine | Deploy to LLM | CMS instantly",
-  "Pages | Posts | Articles | Listicles",
+  "Pages | Posts | Listicles",
   "Link Builder | Internal | External",
   "Post Validator | On-Page Auditor | Site Profiler",
   "Schema Markup Generator",

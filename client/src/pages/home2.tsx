@@ -72,7 +72,7 @@ function FadeIn({ children, className = "" }: { children: React.ReactNode; class
 
 const marqueeItems = [
   "Content Engine | Deploy to LLM | CMS instantly",
-  "Pages | Posts | Articles | Listicles",
+  "Pages | Posts | Listicles",
   "Link Builder | Internal | External",
   "Post Validator | On-Page Auditor | Site Profiler",
   "Schema Markup Generator",
