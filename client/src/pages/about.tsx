@@ -55,7 +55,7 @@ export default function About() {
                 <p className="text-white/40 text-sm sm:text-base font-normal italic mt-1">
                   Not your Seo tools.
                 </p>
-                <div className="flex items-center justify-center gap-x-3 sm:gap-x-5 mt-3 text-[10px] sm:text-xs font-semibold tracking-wider text-white uppercase">
+                <div className="flex items-center justify-center gap-x-2 sm:gap-x-5 mt-3 text-[8px] sm:text-xs font-semibold tracking-wider text-white uppercase whitespace-nowrap">
                   <span className="flex items-center gap-1 sm:gap-1.5">
                     <Wrench className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.6)]" />
                     40+ SEO Tools
