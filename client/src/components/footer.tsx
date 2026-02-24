@@ -19,9 +19,9 @@ const rankIntelLinks = [
 const businessToolLinks = [
   { href: "/platform/crm-pipeline", label: "CRM & Pipeline" },
   { href: "/platform/invoices-reports", label: "Invoicing & Reports" },
-  { href: "/platform/ai-widget-voice", label: "AI Widget" },
-  { href: "/platform/white-label", label: "White Label" },
-  { href: "/platform/byok", label: "BYOK" },
+  { href: "/platform/ai-widget-voice", label: "AI Website Widget" },
+  { href: "/platform/white-label", label: "White Label Agency" },
+  { href: "/platform/byok", label: "BYOK (AI) 100% control" },
   { href: "/platform/twilio", label: "Twilio SMS & Voice" },
 ];
 
