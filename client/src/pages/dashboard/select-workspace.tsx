@@ -132,6 +132,10 @@ export default function SelectWorkspace() {
     <div className="min-h-screen bg-muted/30 p-4">
       <div className="w-full max-w-2xl mx-auto pt-8">
         <div className="text-center mb-8">
+          <a href="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4" data-testid="link-back-home">
+            <ChevronLeft className="w-4 h-4" />
+            Back
+          </a>
           <img src={indexFlowLogo} alt="indexFlow Workspace Management Dashboard" className="h-16 mx-auto mb-4" />
           <h1 className="text-2xl font-bold" data-testid="text-workspaces-title">My Workspaces</h1>
           <p className="text-muted-foreground">
