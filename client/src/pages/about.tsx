@@ -14,7 +14,7 @@ export default function About() {
     <Layout>
       <SEO {...seoData.about} />
 
-      <section className="pt-24 pb-16 lg:pt-32 lg:pb-20">
+      <section className="pt-6 pb-16 lg:pt-10 lg:pb-20">
         <div className="max-w-3xl mx-auto px-6 sm:px-10">
           <p className="text-xs font-bold tracking-[3px] uppercase text-primary mb-6" data-testid="text-label">IndexFlow Founder Statement</p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-8" data-testid="text-heading">
