@@ -39,7 +39,6 @@ const resourceItems = [
   { href: "/docs", label: "Documentation", icon: BookOpen, desc: "Setup guides & platform docs" },
   { href: "/blog", label: "Blog", icon: Newspaper, desc: "Industry insights & tips" },
   { href: "/case-studies", label: "Case Studies", icon: BarChart3, desc: "Client success stories" },
-  { href: "/templates", label: "Templates", icon: Layout, desc: "Ready-made content templates" },
 ];
 
 const companyItems = [
