@@ -394,6 +394,103 @@ function MobileDropdown({ label, items, location, isOpen, onToggle, onNavigate, 
   );
 }
 
+function MobileSimpleDropdown({ label, links, location, isOpen, onToggle, onNavigate, testId }: {
+  label: string;
+  links: { href: string; label: string }[];
+  location: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  onNavigate: () => void;
+  testId: string;
+}) {
+  return (
+    <div>
+      <button
+        className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
+          isOpen || links.some((i) => location === i.href || location.startsWith(i.href + "/"))
+            ? "text-primary bg-primary/5"
+            : "text-foreground/80 hover:text-foreground hover:bg-muted/50"
+        }`}
+        onClick={onToggle}
+        data-testid={testId}
+      >
+        {label}
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}>
+        <div className="pl-3 py-1 space-y-0.5">
+          {links.map((link) => (
+            <Link key={link.href} href={link.href}>
+              <button
+                className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                  location === link.href || location.startsWith(link.href + "/")
+                    ? "text-primary bg-primary/5"
+                    : "text-foreground/70 hover:text-foreground hover:bg-muted/50"
+                }`}
+                onClick={onNavigate}
+                data-testid={`${testId}-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+              >
+                {link.label}
+              </button>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileSimpleLink({ href, label, location, onClick, testId }: {
+  href: string; label: string; location: string; onClick: () => void; testId: string;
+}) {
+  return (
+    <Link href={href}>
+      <button
+        className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
+          location === href ? "text-primary bg-primary/5" : "text-foreground/80 hover:text-foreground hover:bg-muted/50"
+        }`}
+        onClick={onClick}
+        data-testid={testId}
+      >
+        {label}
+      </button>
+    </Link>
+  );
+}
+
+function MobileLanguagePicker() {
+  const [selected, setSelected] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("indexflow_lang") || "en";
+    }
+    return "en";
+  });
+
+  const currentLang = languages.find(l => l.code === selected) || languages[0];
+
+  return (
+    <div className="flex items-center gap-1.5 flex-wrap">
+      {languages.map((lang) => (
+        <button
+          key={lang.code}
+          onClick={() => {
+            setSelected(lang.code);
+            localStorage.setItem("indexflow_lang", lang.code);
+          }}
+          className={`px-2 py-1 text-xs rounded-md transition-colors ${
+            selected === lang.code
+              ? "bg-primary/10 text-primary font-medium"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+          }`}
+          data-testid={`mobile-lang-${lang.code}`}
+        >
+          {lang.flag} {lang.code.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function NavLink({ href, label, location, testId }: { href: string; label: string; location: string; testId: string }) {
   const isActive = location === href;
   return (
@@ -572,64 +669,60 @@ export function Header() {
         <div className="bg-white dark:bg-gray-900 border-b border-border/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <nav className="py-3 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-0.5">
-              <MobileDropdown
+              <MobileSimpleDropdown
                 label="Product"
-                items={[]}
+                links={[
+                  ...contentSeoItems.map(i => ({ href: i.href, label: i.label })),
+                  ...rankIntelItems.map(i => ({ href: i.href, label: i.label })),
+                  ...businessToolItems.map(i => ({ href: i.href, label: i.label })),
+                ]}
                 location={location}
                 isOpen={openMobileDropdown === "product"}
                 onToggle={() => toggleMobileDropdown("product")}
                 onNavigate={() => setIsOpen(false)}
                 testId="link-mobile-product"
-                sections={[
-                  { label: "Content & SEO", items: contentSeoItems },
-                  { label: "Rank Intelligence", items: rankIntelItems },
-                  { label: "Business Tools", items: businessToolItems },
-                ]}
               />
-              <MobileDropdown
+              <MobileSimpleDropdown
                 label="Solutions"
-                items={solutionItems}
+                links={solutionItems.map(i => ({ href: i.href, label: i.label }))}
                 location={location}
                 isOpen={openMobileDropdown === "solutions"}
                 onToggle={() => toggleMobileDropdown("solutions")}
                 onNavigate={() => setIsOpen(false)}
                 testId="link-mobile-solutions"
               />
-              <Link href="/pricing">
-                <button
-                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
-                    location === "/pricing"
-                      ? "text-primary bg-primary/5"
-                      : "text-foreground/80 hover:text-foreground hover:bg-muted/50"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                  data-testid="link-mobile-pricing"
-                >
-                  Pricing
-                </button>
-              </Link>
-              <MobileDropdown
+              <MobileSimpleLink href="/pricing" label="Pricing" location={location} onClick={() => setIsOpen(false)} testId="link-mobile-pricing" />
+              <MobileSimpleDropdown
                 label="Resources"
-                items={resourceItems}
+                links={[
+                  ...resourceItems.map(i => ({ href: i.href, label: i.label })),
+                  ...companyItems.map(i => ({ href: i.href, label: i.label })),
+                ]}
                 location={location}
                 isOpen={openMobileDropdown === "resources"}
                 onToggle={() => toggleMobileDropdown("resources")}
                 onNavigate={() => setIsOpen(false)}
                 testId="link-mobile-resources"
               />
-              <MobileDropdown
-                label="Company"
-                items={companyItems}
-                location={location}
-                isOpen={openMobileDropdown === "company"}
-                onToggle={() => toggleMobileDropdown("company")}
-                onNavigate={() => setIsOpen(false)}
-                testId="link-mobile-company"
-              />
 
               <div className="border-t border-border/30 my-2" />
 
+              <div className="flex items-center justify-between px-3 py-2">
+                <span className="text-xs text-muted-foreground">Language</span>
+                <MobileLanguagePicker />
+              </div>
+
               <div className="flex flex-col gap-2 px-3 py-2">
+                <Link href="/contact">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-center gap-2"
+                    onClick={() => setIsOpen(false)}
+                    data-testid="link-mobile-demo"
+                  >
+                    Book a Demo
+                  </Button>
+                </Link>
                 <Link href="/select-workspace">
                   <Button
                     variant="ghost"
