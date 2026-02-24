@@ -586,13 +586,13 @@ export function Header() {
                 testId="link-nav-solutions"
                 footer={{ label: "Compare plans", href: "/pricing" }}
               />
-              <NavLink href="/pricing" label="Pricing" location={location} testId="link-nav-pricing" />
               <NavDropdown
                 label="Compare"
                 items={compareItems}
                 location={location}
                 testId="link-nav-compare"
               />
+              <NavLink href="/pricing" label="Pricing" location={location} testId="link-nav-pricing" />
               <NavLink href="/blog" label="Blog" location={location} testId="link-nav-blog" />
               <NavLink href="/founder-statement" label="Founder Statement" location={location} testId="link-nav-founder" />
               <NavLink href="/contact" label="Contact" location={location} testId="link-nav-contact" />
@@ -671,7 +671,6 @@ export function Header() {
                 onNavigate={() => setIsOpen(false)}
                 testId="link-mobile-solutions"
               />
-              <MobileSimpleLink href="/pricing" label="Pricing" location={location} onClick={() => setIsOpen(false)} testId="link-mobile-pricing" />
               <MobileSimpleDropdown
                 label="Compare"
                 links={compareItems.map(i => ({ href: i.href, label: i.label }))}
@@ -681,6 +680,7 @@ export function Header() {
                 onNavigate={() => setIsOpen(false)}
                 testId="link-mobile-compare"
               />
+              <MobileSimpleLink href="/pricing" label="Pricing" location={location} onClick={() => setIsOpen(false)} testId="link-mobile-pricing" />
               <MobileSimpleLink href="/blog" label="Blog" location={location} onClick={() => setIsOpen(false)} testId="link-mobile-blog" />
               <MobileSimpleLink href="/founder-statement" label="Founder Statement" location={location} onClick={() => setIsOpen(false)} testId="link-mobile-founder" />
               <MobileSimpleLink href="/contact" label="Contact" location={location} onClick={() => setIsOpen(false)} testId="link-mobile-contact" />
