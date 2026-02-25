@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, Fragment } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useWorkspace } from "@/lib/workspace-context";
@@ -351,7 +351,7 @@ export default function ContentPosts() {
                   paginatedPosts.map((post) => {
                     const isExpanded = expandedPostId === post.id;
                     return (
-                      <React.Fragment key={post.id}>
+                      <Fragment key={post.id}>
                         <TableRow
                           className="cursor-pointer hover:bg-muted/50 transition-colors"
                           onClick={() => toggleExpand(post.id)}
@@ -456,7 +456,7 @@ export default function ContentPosts() {
                             </TableCell>
                           </TableRow>
                         )}
-                      </React.Fragment>
+                      </Fragment>
                     );
                   }))
                 )}
