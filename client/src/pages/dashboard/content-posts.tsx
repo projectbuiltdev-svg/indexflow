@@ -257,6 +257,118 @@ export default function ContentPosts() {
     return content.split(/\s+/).filter(Boolean).length;
   };
 
+  const renderPostRow = (post: Post) => {
+    const isExpanded = expandedPostId === post.id;
+    return (
+      <Fragment key={post.id}>
+        <TableRow
+          className="cursor-pointer hover:bg-muted/50 transition-colors"
+          onClick={() => toggleExpand(post.id)}
+          data-testid={`row-post-${post.id}`}
+        >
+          <TableCell className="font-medium max-w-[300px] truncate" data-testid={`text-post-title-${post.id}`}>
+            <div className="flex items-center gap-2">
+              {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />}
+              <span className="hover:text-sidebar-primary transition-colors">{post.title}</span>
+            </div>
+          </TableCell>
+          <TableCell data-testid={`text-post-category-${post.id}`}>{post.category || "-"}</TableCell>
+          <TableCell>
+            <Badge variant={statusVariant(post.status)} data-testid={`badge-post-status-${post.id}`}>
+              {post.status}
+            </Badge>
+          </TableCell>
+          <TableCell className="text-right" data-testid={`text-post-words-${post.id}`}>
+            {wordCount(post.mdxContent).toLocaleString()}
+          </TableCell>
+          <TableCell>
+            <Badge variant="outline" data-testid={`badge-post-schema-${post.id}`}>
+              {post.schemaType || "-"}
+            </Badge>
+          </TableCell>
+          <TableCell data-testid={`text-post-date-${post.id}`}>
+            {formatDate(post.publishedAt)}
+          </TableCell>
+          <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" data-testid={`button-post-actions-${post.id}`}>
+                  <MoreHorizontal className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem data-testid={`action-edit-${post.id}`} onClick={() => navigate(`/${wsId}/content/posts/${post.id}/edit`)}>
+                  <Pencil className="w-4 h-4 mr-2" />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem data-testid={`action-preview-${post.id}`} onClick={() => toggleExpand(post.id)}>
+                  <Eye className="w-4 h-4 mr-2" />
+                  Preview
+                </DropdownMenuItem>
+                <DropdownMenuItem data-testid={`action-duplicate-${post.id}`} onClick={() => handleDuplicate(post)}>
+                  <Copy className="w-4 h-4 mr-2" />
+                  Duplicate
+                </DropdownMenuItem>
+                <DropdownMenuItem data-testid={`action-export-${post.id}`} onClick={() => handleExportMDX(post)}>
+                  <FileDown className="w-4 h-4 mr-2" />
+                  Export MDX
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive" data-testid={`action-delete-${post.id}`} onClick={() => { setDeletePost(post); setDeleteOpen(true); }}>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </TableCell>
+        </TableRow>
+        {isExpanded && (
+          <TableRow data-testid={`row-post-preview-${post.id}`}>
+            <TableCell colSpan={7} className="p-0">
+              <div className="border-t bg-muted/30 p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-sm font-semibold">{post.title}</h4>
+                  <div className="flex items-center gap-2">
+                    <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); navigate(`/${wsId}/content/posts/${post.id}/edit`); }} data-testid={`button-open-editor-${post.id}`}>
+                      <Pencil className="w-3 h-3 mr-1" />
+                      Open Editor
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); setExpandedPostId(null); }} data-testid={`button-close-preview-${post.id}`}>
+                      <ChevronUp className="w-3 h-3" />
+                    </Button>
+                  </div>
+                </div>
+                {post.description && (
+                  <p className="text-sm text-muted-foreground mb-3">{post.description}</p>
+                )}
+                {post.tags && post.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {post.tags.map((tag, i) => (
+                      <Badge key={i} variant="secondary" className="text-xs">{tag}</Badge>
+                    ))}
+                  </div>
+                )}
+                {post.compiledHtml ? (
+                  <div className="bg-background rounded-md border p-4 max-h-[400px] overflow-auto">
+                    <div
+                      className="prose dark:prose-invert max-w-none text-sm [&_img]:rounded-lg [&_img]:max-w-full [&_figure]:my-4"
+                      dangerouslySetInnerHTML={{ __html: post.compiledHtml }}
+                    />
+                  </div>
+                ) : post.mdxContent ? (
+                  <div className="bg-background rounded-md border p-4 max-h-[400px] overflow-auto">
+                    <pre className="text-xs font-mono whitespace-pre-wrap break-words">{post.mdxContent}</pre>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">No content yet. Click &quot;Open Editor&quot; to start writing.</p>
+                )}
+              </div>
+            </TableCell>
+          </TableRow>
+        )}
+      </Fragment>
+    );
+  };
+
   return (
     <div className="p-6 space-y-6">
       <ContentEngineTabs />
@@ -348,117 +460,7 @@ export default function ContentPosts() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  paginatedPosts.map((post) => {
-                    const isExpanded = expandedPostId === post.id;
-                    return (
-                      <Fragment key={post.id}>
-                        <TableRow
-                          className="cursor-pointer hover:bg-muted/50 transition-colors"
-                          onClick={() => toggleExpand(post.id)}
-                          data-testid={`row-post-${post.id}`}
-                        >
-                          <TableCell className="font-medium max-w-[300px] truncate" data-testid={`text-post-title-${post.id}`}>
-                            <div className="flex items-center gap-2">
-                              {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />}
-                              <span className="hover:text-sidebar-primary transition-colors">{post.title}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell data-testid={`text-post-category-${post.id}`}>{post.category || "-"}</TableCell>
-                          <TableCell>
-                            <Badge variant={statusVariant(post.status)} data-testid={`badge-post-status-${post.id}`}>
-                              {post.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-right" data-testid={`text-post-words-${post.id}`}>
-                            {wordCount(post.mdxContent).toLocaleString()}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline" data-testid={`badge-post-schema-${post.id}`}>
-                              {post.schemaType || "-"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell data-testid={`text-post-date-${post.id}`}>
-                            {formatDate(post.publishedAt)}
-                          </TableCell>
-                          <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" data-testid={`button-post-actions-${post.id}`}>
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem data-testid={`action-edit-${post.id}`} onClick={() => navigate(`/${wsId}/content/posts/${post.id}/edit`)}>
-                                  <Pencil className="w-4 h-4 mr-2" />
-                                  Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuItem data-testid={`action-preview-${post.id}`} onClick={() => toggleExpand(post.id)}>
-                                  <Eye className="w-4 h-4 mr-2" />
-                                  Preview
-                                </DropdownMenuItem>
-                                <DropdownMenuItem data-testid={`action-duplicate-${post.id}`} onClick={() => handleDuplicate(post)}>
-                                  <Copy className="w-4 h-4 mr-2" />
-                                  Duplicate
-                                </DropdownMenuItem>
-                                <DropdownMenuItem data-testid={`action-export-${post.id}`} onClick={() => handleExportMDX(post)}>
-                                  <FileDown className="w-4 h-4 mr-2" />
-                                  Export MDX
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive" data-testid={`action-delete-${post.id}`} onClick={() => { setDeletePost(post); setDeleteOpen(true); }}>
-                                  <Trash2 className="w-4 h-4 mr-2" />
-                                  Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                        {isExpanded && (
-                          <TableRow data-testid={`row-post-preview-${post.id}`}>
-                            <TableCell colSpan={7} className="p-0">
-                              <div className="border-t bg-muted/30 p-4">
-                                <div className="flex items-center justify-between mb-3">
-                                  <h4 className="text-sm font-semibold">{post.title}</h4>
-                                  <div className="flex items-center gap-2">
-                                    <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); navigate(`/${wsId}/content/posts/${post.id}/edit`); }} data-testid={`button-open-editor-${post.id}`}>
-                                      <Pencil className="w-3 h-3 mr-1" />
-                                      Open Editor
-                                    </Button>
-                                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); setExpandedPostId(null); }} data-testid={`button-close-preview-${post.id}`}>
-                                      <ChevronUp className="w-3 h-3" />
-                                    </Button>
-                                  </div>
-                                </div>
-                                {post.description && (
-                                  <p className="text-sm text-muted-foreground mb-3">{post.description}</p>
-                                )}
-                                {post.tags && post.tags.length > 0 && (
-                                  <div className="flex flex-wrap gap-1 mb-3">
-                                    {post.tags.map((tag, i) => (
-                                      <Badge key={i} variant="secondary" className="text-xs">{tag}</Badge>
-                                    ))}
-                                  </div>
-                                )}
-                                {post.compiledHtml ? (
-                                  <div className="bg-background rounded-md border p-4 max-h-[400px] overflow-auto">
-                                    <div
-                                      className="prose dark:prose-invert max-w-none text-sm [&_img]:rounded-lg [&_img]:max-w-full [&_figure]:my-4"
-                                      dangerouslySetInnerHTML={{ __html: post.compiledHtml }}
-                                    />
-                                  </div>
-                                ) : post.mdxContent ? (
-                                  <div className="bg-background rounded-md border p-4 max-h-[400px] overflow-auto">
-                                    <pre className="text-xs font-mono whitespace-pre-wrap break-words">{post.mdxContent}</pre>
-                                  </div>
-                                ) : (
-                                  <p className="text-sm text-muted-foreground italic">No content yet. Click "Open Editor" to start writing.</p>
-                                )}
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      </Fragment>
-                    );
-                  }))
+                  paginatedPosts.map((post) => renderPostRow(post))
                 )}
               </TableBody>
             </Table>
