@@ -1399,12 +1399,19 @@ export async function registerRoutes(
 
       const created = [];
       for (const post of posts) {
+        if (!post.slug && post.title) {
+          post.slug = post.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        }
+        if (!post.mdxContent) {
+          post.mdxContent = "";
+        }
         const result = await storage.createWorkspaceBlogPost(post);
         created.push(result);
       }
       res.json(created);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to create bulk posts" });
+    } catch (error: any) {
+      console.error("[BulkCreate] Error:", error.message);
+      res.status(500).json({ error: error.message || "Failed to create bulk posts" });
     }
   });
 
