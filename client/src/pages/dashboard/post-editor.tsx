@@ -145,6 +145,84 @@ export default function PostEditor() {
     }
   };
 
+  const [imageGenerating, setImageGenerating] = useState(false);
+
+  const handleAiGenerateImages = async () => {
+    if (!content.trim()) {
+      toast({ title: "No content", description: "Write some content first before generating images.", variant: "destructive" });
+      return;
+    }
+
+    setImageGenerating(true);
+    try {
+      const lines = content.split("\n");
+      let wordCount = 0;
+      const insertions: Array<{ lineIndex: number; query: string }> = [];
+      let lastHeading = title || "SEO agency";
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.match(/^#{1,3}\s+/)) {
+          lastHeading = line.replace(/^#{1,3}\s+/, "").trim();
+        }
+        const words = line.trim().split(/\s+/).filter(Boolean).length;
+        wordCount += words;
+
+        if (wordCount >= 250 && i < lines.length - 1) {
+          const query = lastHeading.replace(/[^a-zA-Z0-9\s]/g, "").trim().split(/\s+/).slice(0, 5).join(" ");
+          insertions.push({ lineIndex: i, query: query || "business professional" });
+          wordCount = 0;
+        }
+      }
+
+      if (insertions.length === 0) {
+        toast({ title: "Content too short", description: "Need at least 250 words to insert images." });
+        setImageGenerating(false);
+        return;
+      }
+
+      const imageResults: Array<{ lineIndex: number; url: string; alt: string; credit: string }> = [];
+
+      for (const ins of insertions) {
+        try {
+          const res = await fetch(`/api/workspaces/${wsId}/images/search?source=pixabay&q=${encodeURIComponent(ins.query)}&page=1`);
+          if (res.ok) {
+            const results = await res.json();
+            if (results.length > 0) {
+              const pick = results[Math.floor(Math.random() * Math.min(5, results.length))];
+              imageResults.push({
+                lineIndex: ins.lineIndex,
+                url: pick.full_url || pick.thumb_url,
+                alt: ins.query,
+                credit: pick.credit_name ? `Photo by ${pick.credit_name}` : "",
+              });
+            }
+          }
+        } catch {}
+      }
+
+      if (imageResults.length === 0) {
+        toast({ title: "No images found", description: "Could not find matching stock images.", variant: "destructive" });
+        setImageGenerating(false);
+        return;
+      }
+
+      const newLines = [...lines];
+      let offset = 0;
+      for (const img of imageResults) {
+        const imgMarkdown = `\n![${img.alt}](${img.url})\n*${img.credit}*\n`;
+        newLines.splice(img.lineIndex + 1 + offset, 0, imgMarkdown);
+        offset++;
+      }
+
+      setContent(newLines.join("\n"));
+      toast({ title: "Images inserted", description: `Added ${imageResults.length} image${imageResults.length > 1 ? "s" : ""} to the post.` });
+    } catch (err) {
+      toast({ title: "Image generation failed", variant: "destructive" });
+    }
+    setImageGenerating(false);
+  };
+
   if (isLoading && !isNew) {
     return (
       <div className="p-6 flex items-center justify-center min-h-[400px]">
@@ -364,9 +442,9 @@ export default function PostEditor() {
             <p className="text-sm text-muted-foreground mb-4">Upload or generate images for this post</p>
             <div className="flex items-center gap-2">
               <Button variant="outline" data-testid="button-upload-image">Upload Image</Button>
-              <Button variant="outline" data-testid="button-generate-image">
-                <Sparkles className="h-4 w-4 mr-1" />
-                AI Generate
+              <Button variant="outline" onClick={handleAiGenerateImages} disabled={imageGenerating} data-testid="button-generate-image">
+                {imageGenerating ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1" />}
+                {imageGenerating ? "Generating..." : "AI Generate"}
               </Button>
             </div>
           </CardContent>

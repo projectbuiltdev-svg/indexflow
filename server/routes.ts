@@ -1021,6 +1021,69 @@ export async function registerRoutes(
   });
 
 
+  app.get("/api/workspaces/:workspaceId/images/search", async (req, res) => {
+    try {
+      const source = (req.query.source as string) || "pexels";
+      const q = req.query.q as string;
+      const page = parseInt(req.query.page as string) || 1;
+      if (!q) return res.status(400).json({ error: "q (query) required" });
+
+      let results: any[] = [];
+
+      if (source === "pexels") {
+        const apiKey = process.env.PEXELS_API_KEY;
+        if (!apiKey) return res.status(503).json({ error: "Image search not available" });
+        const resp = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(q)}&per_page=20&page=${page}`, {
+          headers: { Authorization: apiKey },
+        });
+        const data = await resp.json() as any;
+        results = (data.photos || []).map((p: any) => ({
+          source: "pexels",
+          thumb_url: p.src?.medium || p.src?.small,
+          full_url: p.src?.large2x || p.src?.original,
+          width: p.width,
+          height: p.height,
+          credit_name: p.photographer,
+          credit_url: p.photographer_url,
+        }));
+      } else if (source === "unsplash") {
+        const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+        if (!accessKey) return res.status(503).json({ error: "Image search not available" });
+        const resp = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(q)}&per_page=20&page=${page}`, {
+          headers: { Authorization: `Client-ID ${accessKey}` },
+        });
+        const data = await resp.json() as any;
+        results = (data.results || []).map((p: any) => ({
+          source: "unsplash",
+          thumb_url: p.urls?.small,
+          full_url: p.urls?.full,
+          width: p.width,
+          height: p.height,
+          credit_name: p.user?.name,
+          credit_url: p.user?.links?.html,
+        }));
+      } else if (source === "pixabay") {
+        const apiKey = process.env.PIXABAY_API_KEY;
+        if (!apiKey) return res.status(503).json({ error: "Image search not available" });
+        const resp = await fetch(`https://pixabay.com/api/?key=${apiKey}&q=${encodeURIComponent(q)}&per_page=20&page=${page}&image_type=photo`);
+        const data = await resp.json() as any;
+        results = (data.hits || []).map((p: any) => ({
+          source: "pixabay",
+          thumb_url: p.webformatURL,
+          full_url: p.largeImageURL,
+          width: p.imageWidth,
+          height: p.imageHeight,
+          credit_name: p.user,
+          credit_url: `https://pixabay.com/users/${p.user}-${p.user_id}/`,
+        }));
+      }
+
+      res.json(results);
+    } catch (err) {
+      res.status(500).json({ error: "Failed to search images" });
+    }
+  });
+
   // Admin Settings
   app.get("/api/settings/:key", async (req, res) => {
     try {
