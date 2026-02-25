@@ -7,25 +7,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { UserPlus, UserMinus, RotateCcw, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-const initialMembers = [
-  { id: 1, name: "Alex Morgan", email: "alex@company.com", role: "owner", status: "Active", joined: "2025-06-15" },
-  { id: 2, name: "Jordan Lee", email: "jordan@company.com", role: "admin", status: "Active", joined: "2025-08-20" },
-  { id: 3, name: "Casey Rivera", email: "casey@company.com", role: "editor", status: "Active", joined: "2025-11-10" },
-  { id: 4, name: "Taylor Kim", email: "taylor@company.com", role: "viewer", status: "Active", joined: "2026-01-05" },
-];
-
-const initialPendingInvites = [
-  { id: 1, email: "sam@company.com", role: "editor", invited: "2026-02-15", status: "Pending" },
-  { id: 2, email: "pat@company.com", role: "viewer", invited: "2026-02-17", status: "Pending" },
-];
+import { useWorkspace } from "@/lib/workspace-context";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { TeamMember } from "@shared/schema";
 
 export default function SettingsTeamNew() {
   const { toast } = useToast();
-  const [members, setMembers] = useState(initialMembers);
-  const [pendingInvites, setPendingInvites] = useState(initialPendingInvites);
+  const { selectedWorkspace } = useWorkspace();
+  const workspaceId = selectedWorkspace?.id;
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
@@ -34,52 +27,121 @@ export default function SettingsTeamNew() {
   const [removeOpen, setRemoveOpen] = useState(false);
   const [removeMemberId, setRemoveMemberId] = useState<number | null>(null);
 
+  const { data: teamMembers = [], isLoading } = useQuery<TeamMember[]>({
+    queryKey: ["/api/workspaces", workspaceId, "team"],
+    enabled: !!workspaceId,
+  });
+
+  const activeMembers = teamMembers.filter((m) => m.status === "accepted");
+  const pendingInvites = teamMembers.filter((m) => m.status === "pending");
+
+  const inviteMutation = useMutation({
+    mutationFn: async (data: { email: string; role: string }) => {
+      const res = await apiRequest("POST", `/api/workspaces/${workspaceId}/team`, {
+        email: data.email,
+        role: data.role,
+        status: "pending",
+      });
+      return res.json();
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/workspaces", workspaceId, "team"] });
+      toast({ title: "Invitation sent", description: `Invited ${variables.email} as ${variables.role}` });
+      setInviteEmail("");
+      setInviteRole("editor");
+      setInviteOpen(false);
+    },
+    onError: (error: Error) => {
+      toast({ title: "Failed to send invite", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const updateRoleMutation = useMutation({
+    mutationFn: async ({ id, role }: { id: number; role: string }) => {
+      const res = await apiRequest("PATCH", `/api/team/${id}`, { role });
+      return res.json();
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/workspaces", workspaceId, "team"] });
+      toast({ title: "Role updated", description: `Role changed to ${variables.role}` });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Failed to update role", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/team/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/workspaces", workspaceId, "team"] });
+      toast({ title: "Member removed", description: "Team member has been removed" });
+      setRemoveMemberId(null);
+      setRemoveOpen(false);
+    },
+    onError: (error: Error) => {
+      toast({ title: "Failed to remove member", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const resendMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await apiRequest("PATCH", `/api/team/${id}`, { status: "pending" });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/workspaces", workspaceId, "team"] });
+      toast({ title: "Invitation resent", description: "Invitation has been resent" });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Failed to resend invite", description: error.message, variant: "destructive" });
+    },
+  });
+
   const handleInvite = () => {
     if (!inviteEmail.trim()) return;
-    const newInvite = {
-      id: Date.now(),
-      email: inviteEmail.trim(),
-      role: inviteRole,
-      invited: new Date().toISOString().split("T")[0],
-      status: "Pending",
-    };
-    setPendingInvites((prev) => [...prev, newInvite]);
-    toast({ title: "Invitation sent", description: `Invited ${inviteEmail} as ${inviteRole}` });
-    setInviteEmail("");
-    setInviteRole("editor");
-    setInviteOpen(false);
+    inviteMutation.mutate({ email: inviteEmail.trim(), role: inviteRole });
   };
 
   const handleRoleChange = (memberId: number, newRole: string) => {
-    setMembers((prev) => prev.map((m) => m.id === memberId ? { ...m, role: newRole } : m));
-    toast({ title: "Role updated", description: `Role changed to ${newRole}` });
+    updateRoleMutation.mutate({ id: memberId, role: newRole });
   };
 
   const confirmRemove = () => {
     if (removeMemberId === null) return;
-    const member = members.find((m) => m.id === removeMemberId);
-    setMembers((prev) => prev.filter((m) => m.id !== removeMemberId));
-    toast({ title: "Member removed", description: `${member?.name || "Member"} has been removed from the team` });
-    setRemoveMemberId(null);
-    setRemoveOpen(false);
+    removeMutation.mutate(removeMemberId);
   };
 
   const handleResendInvite = (invId: number) => {
-    const inv = pendingInvites.find((i) => i.id === invId);
-    toast({ title: "Invitation resent", description: `Resent invitation to ${inv?.email}` });
+    resendMutation.mutate(invId);
   };
 
   const handleCancelInvite = (invId: number) => {
-    const inv = pendingInvites.find((i) => i.id === invId);
-    setPendingInvites((prev) => prev.filter((i) => i.id !== invId));
-    toast({ title: "Invitation cancelled", description: `Cancelled invitation to ${inv?.email}` });
+    removeMutation.mutate(invId);
   };
+
+  if (isLoading) {
+    return (
+      <div className="p-6 space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <Card>
+          <CardHeader><Skeleton className="h-6 w-32" /></CardHeader>
+          <CardContent className="space-y-3">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Team</h1>
-        <Button data-testid="button-invite-member" onClick={() => setInviteOpen(true)}>
+        <Button data-testid="button-invite-member" onClick={() => setInviteOpen(true)} disabled={inviteMutation.isPending}>
           <UserPlus className="w-4 h-4 mr-2" />
           Invite Member
         </Button>
@@ -93,7 +155,6 @@ export default function SettingsTeamNew() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
@@ -102,12 +163,16 @@ export default function SettingsTeamNew() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {members.map((m) => (
+              {activeMembers.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center text-muted-foreground">No active team members</TableCell>
+                </TableRow>
+              )}
+              {activeMembers.map((m) => (
                 <TableRow key={m.id} data-testid={`row-member-${m.id}`}>
-                  <TableCell className="font-medium" data-testid={`text-member-name-${m.id}`}>{m.name}</TableCell>
-                  <TableCell className="text-muted-foreground">{m.email}</TableCell>
+                  <TableCell className="font-medium" data-testid={`text-member-email-${m.id}`}>{m.email}</TableCell>
                   <TableCell>
-                    <Select value={m.role} onValueChange={(val) => handleRoleChange(m.id, val)}>
+                    <Select value={m.role || "staff"} onValueChange={(val) => handleRoleChange(m.id, val)}>
                       <SelectTrigger className="w-[120px]" data-testid={`select-role-${m.id}`}>
                         <SelectValue />
                       </SelectTrigger>
@@ -115,14 +180,17 @@ export default function SettingsTeamNew() {
                         <SelectItem value="owner">Owner</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
                         <SelectItem value="editor">Editor</SelectItem>
+                        <SelectItem value="staff">Staff</SelectItem>
                         <SelectItem value="viewer">Viewer</SelectItem>
                       </SelectContent>
                     </Select>
                   </TableCell>
                   <TableCell>
-                    <Badge data-testid={`badge-member-status-${m.id}`}>{m.status}</Badge>
+                    <Badge data-testid={`badge-member-status-${m.id}`}>Active</Badge>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{m.joined}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {m.acceptedAt ? new Date(m.acceptedAt).toLocaleDateString() : m.invitedAt ? new Date(m.invitedAt).toLocaleDateString() : "—"}
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1 flex-wrap">
                       <Button
@@ -158,20 +226,27 @@ export default function SettingsTeamNew() {
               </TableRow>
             </TableHeader>
             <TableBody>
+              {pendingInvites.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center text-muted-foreground">No pending invites</TableCell>
+                </TableRow>
+              )}
               {pendingInvites.map((inv) => (
                 <TableRow key={inv.id} data-testid={`row-invite-${inv.id}`}>
                   <TableCell className="font-medium">{inv.email}</TableCell>
                   <TableCell className="capitalize">{inv.role}</TableCell>
-                  <TableCell className="text-muted-foreground">{inv.invited}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {inv.invitedAt ? new Date(inv.invitedAt).toLocaleDateString() : "—"}
+                  </TableCell>
                   <TableCell>
-                    <Badge variant="secondary" data-testid={`badge-invite-status-${inv.id}`}>{inv.status}</Badge>
+                    <Badge variant="secondary" data-testid={`badge-invite-status-${inv.id}`}>Pending</Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1 flex-wrap">
-                      <Button variant="ghost" size="icon" data-testid={`button-resend-invite-${inv.id}`} onClick={() => handleResendInvite(inv.id)}>
+                      <Button variant="ghost" size="icon" data-testid={`button-resend-invite-${inv.id}`} onClick={() => handleResendInvite(inv.id)} disabled={resendMutation.isPending}>
                         <RotateCcw className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" data-testid={`button-cancel-invite-${inv.id}`} onClick={() => handleCancelInvite(inv.id)}>
+                      <Button variant="ghost" size="icon" data-testid={`button-cancel-invite-${inv.id}`} onClick={() => handleCancelInvite(inv.id)} disabled={removeMutation.isPending}>
                         <X className="w-4 h-4" />
                       </Button>
                     </div>
@@ -215,7 +290,9 @@ export default function SettingsTeamNew() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setInviteOpen(false)} data-testid="button-cancel-invite-dialog">Cancel</Button>
-            <Button onClick={handleInvite} data-testid="button-send-invite">Send Invite</Button>
+            <Button onClick={handleInvite} disabled={inviteMutation.isPending} data-testid="button-send-invite">
+              {inviteMutation.isPending ? "Sending..." : "Send Invite"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -226,11 +303,13 @@ export default function SettingsTeamNew() {
             <DialogTitle>Remove Team Member</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground py-2">
-            Are you sure you want to remove <span className="font-medium text-foreground">{members.find((m) => m.id === removeMemberId)?.name}</span> from the team? This action cannot be undone.
+            Are you sure you want to remove <span className="font-medium text-foreground">{teamMembers.find((m) => m.id === removeMemberId)?.email}</span> from the team? This action cannot be undone.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setRemoveOpen(false)} data-testid="button-cancel-remove">Cancel</Button>
-            <Button variant="destructive" onClick={confirmRemove} data-testid="button-confirm-remove">Remove</Button>
+            <Button variant="destructive" onClick={confirmRemove} disabled={removeMutation.isPending} data-testid="button-confirm-remove">
+              {removeMutation.isPending ? "Removing..." : "Remove"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

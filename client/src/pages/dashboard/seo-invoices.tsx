@@ -23,43 +23,42 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, MoreHorizontal, Eye, Pencil, Send, CheckCircle, Download, Trash2, FileText, Clock, DollarSign, AlertTriangle, Search } from "lucide-react";
+import { Plus, MoreHorizontal, Eye, Pencil, Send, CheckCircle, Download, Trash2, FileText, DollarSign, AlertTriangle, Search, Loader2 } from "lucide-react";
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
-
-const initialInvoices = [
-  { id: "INV-2026-042", client: "BrightPath Marketing", amount: 2500, tax: 250, total: 2750, status: "Paid", dueDate: "2026-01-15", notes: "" },
-  { id: "INV-2026-043", client: "TechVista Solutions", amount: 4800, tax: 480, total: 5280, status: "Sent", dueDate: "2026-02-20", notes: "" },
-  { id: "INV-2026-044", client: "GreenLeaf Organics", amount: 1500, tax: 150, total: 1650, status: "Draft", dueDate: "2026-02-28", notes: "" },
-  { id: "INV-2026-045", client: "Nova Design Studio", amount: 3200, tax: 320, total: 3520, status: "Overdue", dueDate: "2026-01-30", notes: "" },
-  { id: "INV-2026-046", client: "Summit Legal Group", amount: 6000, tax: 600, total: 6600, status: "Paid", dueDate: "2026-02-10", notes: "" },
-];
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { Invoice } from "@shared/schema";
 
 const statCards = [
-  { label: "Draft", icon: FileText, color: "text-muted-foreground" },
-  { label: "Sent", icon: Send, color: "text-blue-600" },
-  { label: "Paid", icon: DollarSign, color: "text-green-600" },
-  { label: "Overdue", icon: AlertTriangle, color: "text-red-600" },
+  { label: "Draft", dbStatus: "draft", icon: FileText, color: "text-muted-foreground" },
+  { label: "Sent", dbStatus: "sent", icon: Send, color: "text-blue-600" },
+  { label: "Paid", dbStatus: "paid", icon: DollarSign, color: "text-green-600" },
+  { label: "Overdue", dbStatus: "overdue", icon: AlertTriangle, color: "text-red-600" },
 ];
 
 const statusVariant = (status: string) => {
   switch (status) {
-    case "Draft":
+    case "draft":
       return "secondary" as const;
-    case "Sent":
+    case "sent":
       return "outline" as const;
-    case "Paid":
+    case "paid":
       return "default" as const;
-    case "Overdue":
+    case "overdue":
       return "destructive" as const;
     default:
       return "secondary" as const;
   }
 };
 
+const statusDisplay = (status: string) => {
+  return status.charAt(0).toUpperCase() + status.slice(1);
+};
+
 export default function SeoInvoices() {
   const { selectedWorkspace } = useWorkspace();
   const { toast } = useToast();
-  const [invoices, setInvoices] = useState(initialInvoices);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -67,28 +66,82 @@ export default function SeoInvoices() {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
-  const [selectedInvoice, setSelectedInvoice] = useState<typeof initialInvoices[0] | null>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
 
   const [formClient, setFormClient] = useState("");
   const [formAmount, setFormAmount] = useState("");
   const [formTax, setFormTax] = useState("");
   const [formDueDate, setFormDueDate] = useState("");
-  const [formStatus, setFormStatus] = useState("Draft");
+  const [formStatus, setFormStatus] = useState("draft");
   const [formNotes, setFormNotes] = useState("");
+
+  const workspaceId = selectedWorkspace?.id;
+
+  const { data: invoices = [], isLoading } = useQuery<Invoice[]>({
+    queryKey: ["/api/invoices", workspaceId ? `?workspaceId=${workspaceId}` : ""],
+    enabled: true,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: async (data: Record<string, unknown>) => {
+      const res = await apiRequest("POST", "/api/invoices", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
+      setCreateOpen(false);
+      resetForm();
+      toast({ title: "Invoice Created", description: "New invoice has been created." });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Record<string, unknown> }) => {
+      const res = await apiRequest("PATCH", `/api/invoices/${id}`, data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
+      setEditOpen(false);
+      resetForm();
+      toast({ title: "Invoice Updated", description: "Invoice has been updated." });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/invoices/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
+      setDeleteOpen(false);
+      setSelectedInvoice(null);
+      toast({ title: "Invoice Deleted", description: "Invoice has been deleted." });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
 
   const filteredInvoices = invoices.filter((inv) => {
     const matchesSearch =
-      inv.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      inv.client.toLowerCase().includes(searchQuery.toLowerCase());
+      inv.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      inv.clientName.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || inv.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const getStats = () => {
     return statCards.map((stat) => {
-      const matching = invoices.filter((inv) => inv.status === stat.label);
+      const matching = invoices.filter((inv) => inv.status === stat.dbStatus);
       const count = matching.length;
-      const amount = matching.reduce((sum, inv) => sum + inv.total, 0);
+      const amount = matching.reduce((sum, inv) => sum + parseFloat(String(inv.total || "0")), 0);
       return { ...stat, count, amount: `$${amount.toLocaleString()}` };
     });
   };
@@ -96,86 +149,91 @@ export default function SeoInvoices() {
   const stats = getStats();
 
   const handleCreateInvoice = () => {
-    const amount = parseFloat(formAmount) || 0;
-    const tax = parseFloat(formTax) || 0;
+    const subtotal = parseFloat(formAmount) || 0;
+    const taxAmount = parseFloat(formTax) || 0;
     if (!formClient || !formAmount || !formDueDate) {
       toast({ title: "Error", description: "Please fill in all required fields.", variant: "destructive" });
       return;
     }
-    const nextNum = invoices.length + 42 + 1;
-    const newInvoice = {
-      id: `INV-2026-${String(nextNum).padStart(3, "0")}`,
-      client: formClient,
-      amount,
-      tax,
-      total: amount + tax,
+    const total = subtotal + taxAmount;
+    const invoiceNumber = `INV-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
+
+    createMutation.mutate({
+      workspaceId: workspaceId || undefined,
+      invoiceNumber,
+      clientName: formClient,
+      subtotal: String(subtotal),
+      taxAmount: String(taxAmount),
+      total: String(total),
       status: formStatus,
       dueDate: formDueDate,
-      notes: formNotes,
-    };
-    setInvoices((prev) => [...prev, newInvoice]);
-    setCreateOpen(false);
-    resetForm();
-    toast({ title: "Invoice Created", description: `Invoice ${newInvoice.id} has been created.` });
+      issueDate: new Date().toISOString().slice(0, 10),
+      notes: formNotes || undefined,
+    });
   };
 
-  const handleEditOpen = (inv: typeof initialInvoices[0]) => {
+  const handleEditOpen = (inv: Invoice) => {
     setSelectedInvoice(inv);
-    setFormClient(inv.client);
-    setFormAmount(String(inv.amount));
-    setFormTax(String(inv.tax));
-    setFormDueDate(inv.dueDate);
+    setFormClient(inv.clientName);
+    setFormAmount(String(inv.subtotal || "0"));
+    setFormTax(String(inv.taxAmount || "0"));
+    setFormDueDate(inv.dueDate || "");
     setFormStatus(inv.status);
-    setFormNotes(inv.notes);
+    setFormNotes(inv.notes || "");
     setEditOpen(true);
   };
 
   const handleEditSave = () => {
     if (!selectedInvoice) return;
-    const amount = parseFloat(formAmount) || 0;
-    const tax = parseFloat(formTax) || 0;
-    setInvoices((prev) =>
-      prev.map((inv) =>
-        inv.id === selectedInvoice.id
-          ? { ...inv, client: formClient, amount, tax, total: amount + tax, dueDate: formDueDate, status: formStatus, notes: formNotes }
-          : inv
-      )
-    );
-    setEditOpen(false);
-    resetForm();
-    toast({ title: "Invoice Updated", description: `Invoice ${selectedInvoice.id} has been updated.` });
+    const subtotal = parseFloat(formAmount) || 0;
+    const taxAmount = parseFloat(formTax) || 0;
+    const total = subtotal + taxAmount;
+
+    updateMutation.mutate({
+      id: selectedInvoice.id,
+      data: {
+        clientName: formClient,
+        subtotal: String(subtotal),
+        taxAmount: String(taxAmount),
+        total: String(total),
+        dueDate: formDueDate,
+        status: formStatus,
+        notes: formNotes || undefined,
+      },
+    });
   };
 
-  const handleDeleteOpen = (inv: typeof initialInvoices[0]) => {
+  const handleDeleteOpen = (inv: Invoice) => {
     setSelectedInvoice(inv);
     setDeleteOpen(true);
   };
 
   const handleDeleteConfirm = () => {
     if (!selectedInvoice) return;
-    setInvoices((prev) => prev.filter((inv) => inv.id !== selectedInvoice.id));
-    setDeleteOpen(false);
-    toast({ title: "Invoice Deleted", description: `Invoice ${selectedInvoice.id} has been deleted.` });
-    setSelectedInvoice(null);
+    deleteMutation.mutate(selectedInvoice.id);
   };
 
-  const handleViewOpen = (inv: typeof initialInvoices[0]) => {
+  const handleViewOpen = (inv: Invoice) => {
     setSelectedInvoice(inv);
     setViewOpen(true);
   };
 
-  const handleSendInvoice = (inv: typeof initialInvoices[0]) => {
-    setInvoices((prev) => prev.map((i) => (i.id === inv.id ? { ...i, status: "Sent" } : i)));
-    toast({ title: "Invoice Sent", description: `Invoice ${inv.id} has been sent to ${inv.client}.` });
+  const handleSendInvoice = (inv: Invoice) => {
+    updateMutation.mutate({
+      id: inv.id,
+      data: { status: "sent" },
+    });
   };
 
-  const handleMarkPaid = (inv: typeof initialInvoices[0]) => {
-    setInvoices((prev) => prev.map((i) => (i.id === inv.id ? { ...i, status: "Paid" } : i)));
-    toast({ title: "Marked as Paid", description: `Invoice ${inv.id} has been marked as paid.` });
+  const handleMarkPaid = (inv: Invoice) => {
+    updateMutation.mutate({
+      id: inv.id,
+      data: { status: "paid", paidAt: new Date().toISOString() },
+    });
   };
 
-  const handleDownload = (inv: typeof initialInvoices[0]) => {
-    toast({ title: "Download Started", description: `Downloading PDF for invoice ${inv.id}.` });
+  const handleDownload = (inv: Invoice) => {
+    toast({ title: "Download Started", description: `Downloading PDF for invoice ${inv.invoiceNumber}.` });
   };
 
   const resetForm = () => {
@@ -183,9 +241,14 @@ export default function SeoInvoices() {
     setFormAmount("");
     setFormTax("");
     setFormDueDate("");
-    setFormStatus("Draft");
+    setFormStatus("draft");
     setFormNotes("");
     setSelectedInvoice(null);
+  };
+
+  const formatCurrency = (value: string | number | null | undefined) => {
+    const num = parseFloat(String(value || "0"));
+    return `$${num.toLocaleString()}`;
   };
 
   return (
@@ -210,10 +273,10 @@ export default function SeoInvoices() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="Draft">Draft</SelectItem>
-              <SelectItem value="Sent">Sent</SelectItem>
-              <SelectItem value="Paid">Paid</SelectItem>
-              <SelectItem value="Overdue">Overdue</SelectItem>
+              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="sent">Sent</SelectItem>
+              <SelectItem value="paid">Paid</SelectItem>
+              <SelectItem value="overdue">Overdue</SelectItem>
             </SelectContent>
           </Select>
           <Button onClick={() => { resetForm(); setCreateOpen(true); }} data-testid="button-create-invoice">
@@ -244,6 +307,13 @@ export default function SeoInvoices() {
 
       <Card>
         <CardContent className="p-0">
+          {isLoading ? (
+            <div className="p-6 space-y-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -259,57 +329,57 @@ export default function SeoInvoices() {
             </TableHeader>
             <TableBody>
               {filteredInvoices.map((inv) => (
-                <TableRow key={inv.id} data-testid={`row-invoice-${inv.id}`}>
-                  <TableCell className="font-medium" data-testid={`text-invoice-id-${inv.id}`}>
-                    {inv.id}
+                <TableRow key={inv.id} data-testid={`row-invoice-${inv.invoiceNumber}`}>
+                  <TableCell className="font-medium" data-testid={`text-invoice-id-${inv.invoiceNumber}`}>
+                    {inv.invoiceNumber}
                   </TableCell>
-                  <TableCell data-testid={`text-invoice-client-${inv.id}`}>{inv.client}</TableCell>
-                  <TableCell className="text-right" data-testid={`text-invoice-amount-${inv.id}`}>
-                    ${inv.amount.toLocaleString()}
+                  <TableCell data-testid={`text-invoice-client-${inv.invoiceNumber}`}>{inv.clientName}</TableCell>
+                  <TableCell className="text-right" data-testid={`text-invoice-amount-${inv.invoiceNumber}`}>
+                    {formatCurrency(inv.subtotal)}
                   </TableCell>
-                  <TableCell className="text-right text-muted-foreground" data-testid={`text-invoice-tax-${inv.id}`}>
-                    ${inv.tax.toLocaleString()}
+                  <TableCell className="text-right text-muted-foreground" data-testid={`text-invoice-tax-${inv.invoiceNumber}`}>
+                    {formatCurrency(inv.taxAmount)}
                   </TableCell>
-                  <TableCell className="text-right font-semibold" data-testid={`text-invoice-total-${inv.id}`}>
-                    ${inv.total.toLocaleString()}
+                  <TableCell className="text-right font-semibold" data-testid={`text-invoice-total-${inv.invoiceNumber}`}>
+                    {formatCurrency(inv.total)}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={statusVariant(inv.status)} data-testid={`badge-invoice-status-${inv.id}`}>
-                      {inv.status}
+                    <Badge variant={statusVariant(inv.status)} data-testid={`badge-invoice-status-${inv.invoiceNumber}`}>
+                      {statusDisplay(inv.status)}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-muted-foreground" data-testid={`text-invoice-due-${inv.id}`}>
-                    {inv.dueDate}
+                  <TableCell className="text-muted-foreground" data-testid={`text-invoice-due-${inv.invoiceNumber}`}>
+                    {inv.dueDate || "—"}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" data-testid={`button-invoice-actions-${inv.id}`}>
+                        <Button variant="ghost" size="icon" data-testid={`button-invoice-actions-${inv.invoiceNumber}`}>
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleViewOpen(inv)} data-testid={`action-view-${inv.id}`}>
+                        <DropdownMenuItem onClick={() => handleViewOpen(inv)} data-testid={`action-view-${inv.invoiceNumber}`}>
                           <Eye className="w-4 h-4 mr-2" />
                           View
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleEditOpen(inv)} data-testid={`action-edit-${inv.id}`}>
+                        <DropdownMenuItem onClick={() => handleEditOpen(inv)} data-testid={`action-edit-${inv.invoiceNumber}`}>
                           <Pencil className="w-4 h-4 mr-2" />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSendInvoice(inv)} data-testid={`action-send-${inv.id}`}>
+                        <DropdownMenuItem onClick={() => handleSendInvoice(inv)} data-testid={`action-send-${inv.invoiceNumber}`}>
                           <Send className="w-4 h-4 mr-2" />
                           Send
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleMarkPaid(inv)} data-testid={`action-mark-paid-${inv.id}`}>
+                        <DropdownMenuItem onClick={() => handleMarkPaid(inv)} data-testid={`action-mark-paid-${inv.invoiceNumber}`}>
                           <CheckCircle className="w-4 h-4 mr-2" />
                           Mark Paid
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDownload(inv)} data-testid={`action-download-${inv.id}`}>
+                        <DropdownMenuItem onClick={() => handleDownload(inv)} data-testid={`action-download-${inv.invoiceNumber}`}>
                           <Download className="w-4 h-4 mr-2" />
                           Download PDF
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteOpen(inv)} data-testid={`action-delete-${inv.id}`}>
+                        <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteOpen(inv)} data-testid={`action-delete-${inv.invoiceNumber}`}>
                           <Trash2 className="w-4 h-4 mr-2" />
                           Delete
                         </DropdownMenuItem>
@@ -318,8 +388,16 @@ export default function SeoInvoices() {
                   </TableCell>
                 </TableRow>
               ))}
+              {filteredInvoices.length === 0 && !isLoading && (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+                    No invoices found
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
+          )}
         </CardContent>
       </Card>
 
@@ -354,10 +432,10 @@ export default function SeoInvoices() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Draft">Draft</SelectItem>
-                  <SelectItem value="Sent">Sent</SelectItem>
-                  <SelectItem value="Paid">Paid</SelectItem>
-                  <SelectItem value="Overdue">Overdue</SelectItem>
+                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="sent">Sent</SelectItem>
+                  <SelectItem value="paid">Paid</SelectItem>
+                  <SelectItem value="overdue">Overdue</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -368,7 +446,10 @@ export default function SeoInvoices() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)} data-testid="button-cancel-create-invoice">Cancel</Button>
-            <Button onClick={handleCreateInvoice} data-testid="button-confirm-create-invoice">Create</Button>
+            <Button onClick={handleCreateInvoice} disabled={createMutation.isPending} data-testid="button-confirm-create-invoice">
+              {createMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Create
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -376,7 +457,7 @@ export default function SeoInvoices() {
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent data-testid="dialog-edit-invoice">
           <DialogHeader>
-            <DialogTitle>Edit Invoice {selectedInvoice?.id}</DialogTitle>
+            <DialogTitle>Edit Invoice {selectedInvoice?.invoiceNumber}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -404,10 +485,10 @@ export default function SeoInvoices() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Draft">Draft</SelectItem>
-                  <SelectItem value="Sent">Sent</SelectItem>
-                  <SelectItem value="Paid">Paid</SelectItem>
-                  <SelectItem value="Overdue">Overdue</SelectItem>
+                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="sent">Sent</SelectItem>
+                  <SelectItem value="paid">Paid</SelectItem>
+                  <SelectItem value="overdue">Overdue</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -418,7 +499,10 @@ export default function SeoInvoices() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditOpen(false)} data-testid="button-cancel-edit-invoice">Cancel</Button>
-            <Button onClick={handleEditSave} data-testid="button-confirm-edit-invoice">Save Changes</Button>
+            <Button onClick={handleEditSave} disabled={updateMutation.isPending} data-testid="button-confirm-edit-invoice">
+              {updateMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Save Changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -429,11 +513,14 @@ export default function SeoInvoices() {
             <DialogTitle>Delete Invoice</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground py-4">
-            Are you sure you want to delete invoice <span className="font-medium text-foreground">{selectedInvoice?.id}</span> for <span className="font-medium text-foreground">{selectedInvoice?.client}</span>? This action cannot be undone.
+            Are you sure you want to delete invoice <span className="font-medium text-foreground">{selectedInvoice?.invoiceNumber}</span> for <span className="font-medium text-foreground">{selectedInvoice?.clientName}</span>? This action cannot be undone.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteOpen(false)} data-testid="button-cancel-delete-invoice">Cancel</Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm} data-testid="button-confirm-delete-invoice">Delete</Button>
+            <Button variant="destructive" onClick={handleDeleteConfirm} disabled={deleteMutation.isPending} data-testid="button-confirm-delete-invoice">
+              {deleteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Delete
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -441,34 +528,40 @@ export default function SeoInvoices() {
       <Dialog open={viewOpen} onOpenChange={setViewOpen}>
         <DialogContent data-testid="dialog-view-invoice">
           <DialogHeader>
-            <DialogTitle>Invoice {selectedInvoice?.id}</DialogTitle>
+            <DialogTitle>Invoice {selectedInvoice?.invoiceNumber}</DialogTitle>
           </DialogHeader>
           {selectedInvoice && (
             <div className="space-y-3 py-4">
               <div className="flex items-center gap-4">
                 <Label className="w-24 text-muted-foreground">Client</Label>
-                <span className="font-medium">{selectedInvoice.client}</span>
+                <span className="font-medium">{selectedInvoice.clientName}</span>
               </div>
               <div className="flex items-center gap-4">
                 <Label className="w-24 text-muted-foreground">Amount</Label>
-                <span>${selectedInvoice.amount.toLocaleString()}</span>
+                <span>{formatCurrency(selectedInvoice.subtotal)}</span>
               </div>
               <div className="flex items-center gap-4">
                 <Label className="w-24 text-muted-foreground">Tax</Label>
-                <span>${selectedInvoice.tax.toLocaleString()}</span>
+                <span>{formatCurrency(selectedInvoice.taxAmount)}</span>
               </div>
               <div className="flex items-center gap-4">
                 <Label className="w-24 text-muted-foreground">Total</Label>
-                <span className="font-bold">${selectedInvoice.total.toLocaleString()}</span>
+                <span className="font-bold">{formatCurrency(selectedInvoice.total)}</span>
               </div>
               <div className="flex items-center gap-4">
                 <Label className="w-24 text-muted-foreground">Status</Label>
-                <Badge variant={statusVariant(selectedInvoice.status)}>{selectedInvoice.status}</Badge>
+                <Badge variant={statusVariant(selectedInvoice.status)}>{statusDisplay(selectedInvoice.status)}</Badge>
               </div>
               <div className="flex items-center gap-4">
                 <Label className="w-24 text-muted-foreground">Due Date</Label>
-                <span>{selectedInvoice.dueDate}</span>
+                <span>{selectedInvoice.dueDate || "—"}</span>
               </div>
+              {selectedInvoice.notes && (
+                <div className="flex items-start gap-4">
+                  <Label className="w-24 text-muted-foreground">Notes</Label>
+                  <span className="text-sm">{selectedInvoice.notes}</span>
+                </div>
+              )}
             </div>
           )}
           <DialogFooter>

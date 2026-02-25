@@ -6,24 +6,44 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { Settings, RefreshCw, Eye, RotateCcw, Plug, Unplug, HelpCircle, X, ExternalLink } from "lucide-react";
+import { Settings, RefreshCw, Eye, RotateCcw, Plug, Unplug, HelpCircle, X, ExternalLink, Download } from "lucide-react";
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useWorkspace } from "@/lib/workspace-context";
 
-const initialCmsProviders = [
-  { id: "wordpress", name: "WordPress", connected: true, lastSync: "2026-02-18 09:30", postsSynced: 45 },
-  { id: "webflow", name: "Webflow", connected: true, lastSync: "2026-02-17 14:00", postsSynced: 12 },
-  { id: "shopify", name: "Shopify", connected: false, lastSync: null as string | null, postsSynced: 0 },
-  { id: "ghost", name: "Ghost", connected: false, lastSync: null as string | null, postsSynced: 0 },
-  { id: "wix", name: "Wix", connected: false, lastSync: null as string | null, postsSynced: 0 },
-];
+interface CmsFormat {
+  value: string;
+  label: string;
+}
 
-const initialSyncLogs = [
-  { id: 1, date: "2026-02-18 09:30", cms: "WordPress", postsSynced: 3, status: "Success", errors: 0 },
-  { id: 2, date: "2026-02-17 14:00", cms: "Webflow", postsSynced: 2, status: "Success", errors: 0 },
-  { id: 3, date: "2026-02-16 10:15", cms: "WordPress", postsSynced: 5, status: "Partial", errors: 1 },
-  { id: 4, date: "2026-02-15 08:00", cms: "WordPress", postsSynced: 0, status: "Failed", errors: 3 },
-];
+interface ApiKey {
+  id: number;
+  workspaceId: string;
+  platform: string;
+  label: string;
+  key: string;
+  createdAt: string;
+}
+
+interface SyncLog {
+  id: number;
+  date: string;
+  cms: string;
+  postsSynced: number;
+  status: string;
+  errors: number;
+}
+
+interface CmsProvider {
+  id: string;
+  name: string;
+  connected: boolean;
+  apiKeyId: number | null;
+}
 
 const cmsSetupSteps: Record<string, { step: string; link?: string }[]> = {
   wordpress: [
@@ -38,227 +58,329 @@ const cmsSetupSteps: Record<string, { step: string; link?: string }[]> = {
     { step: "Copy the API token" },
     { step: "Enter it in the Configure dialog along with your Webflow site URL" },
   ],
-  shopify: [
-    { step: "Log into Shopify Admin" },
-    { step: "Go to Settings > Apps and sales channels > Develop apps" },
-    { step: "Create a new app and configure with Blog read/write scope" },
-    { step: "Copy the Admin API access token and enter it in Configure" },
-  ],
   ghost: [
     { step: "Log into Ghost Admin and go to Settings > Integrations" },
     { step: "Click 'Add custom integration'" },
     { step: "Copy the Admin API Key" },
     { step: "Enter it in the Configure dialog along with your Ghost admin URL" },
   ],
-  wix: [
-    { step: "Log into Wix and go to the Wix Developers area", link: "https://dev.wix.com" },
-    { step: "Create a new API key with Blog access permissions" },
-    { step: "Copy the API key" },
+  hubspot: [
+    { step: "Log into HubSpot and navigate to Settings > Integrations > Private Apps" },
+    { step: "Create a new private app with Blog access scope" },
+    { step: "Copy the access token" },
     { step: "Enter it in the Configure dialog" },
+  ],
+  contentful: [
+    { step: "Log into Contentful and go to Settings > API keys" },
+    { step: "Create a new Content Management API key" },
+    { step: "Copy the management token and Space ID" },
+    { step: "Enter them in the Configure dialog" },
   ],
 };
 
 export default function SeoCms() {
   const { toast } = useToast();
-  const [cmsProviders, setCmsProviders] = useState(initialCmsProviders);
-  const [expandedGuide, setExpandedGuide] = useState<string | null>(null);
-  const [syncLogs, setSyncLogs] = useState(initialSyncLogs);
+  const { selectedWorkspace } = useWorkspace();
+  const workspaceId = selectedWorkspace?.id;
 
+  const [expandedGuide, setExpandedGuide] = useState<string | null>(null);
   const [configureOpen, setConfigureOpen] = useState(false);
-  const [selectedCms, setSelectedCms] = useState<typeof initialCmsProviders[0] | null>(null);
+  const [selectedCmsId, setSelectedCmsId] = useState<string | null>(null);
   const [configApiKey, setConfigApiKey] = useState("");
   const [configEndpoint, setConfigEndpoint] = useState("");
-
   const [disconnectOpen, setDisconnectOpen] = useState(false);
-  const [disconnectCms, setDisconnectCms] = useState<typeof initialCmsProviders[0] | null>(null);
-
+  const [disconnectCmsId, setDisconnectCmsId] = useState<string | null>(null);
   const [viewLogOpen, setViewLogOpen] = useState(false);
-  const [selectedLog, setSelectedLog] = useState<typeof initialSyncLogs[0] | null>(null);
+  const [selectedLog, setSelectedLog] = useState<SyncLog | null>(null);
+  const [exportFormat, setExportFormat] = useState<string>("wordpress");
+
+  const { data: cmsFormats = [], isLoading: formatsLoading } = useQuery<CmsFormat[]>({
+    queryKey: ["/api/blog/cms-formats"],
+  });
+
+  const { data: apiKeys = [], isLoading: keysLoading } = useQuery<ApiKey[]>({
+    queryKey: ["/api/admin/cms/api-keys"],
+  });
+
+  const { data: syncLogs = [], isLoading: logsLoading } = useQuery<SyncLog[]>({
+    queryKey: ["/api/admin/cms/sync-logs"],
+  });
+
+  const cmsProviders: CmsProvider[] = cmsFormats.map((f) => {
+    const matchingKey = apiKeys.find((k) => k.platform.toLowerCase() === f.value.toLowerCase());
+    return {
+      id: f.value,
+      name: f.label,
+      connected: !!matchingKey,
+      apiKeyId: matchingKey?.id || null,
+    };
+  });
+
+  const generateKeyMutation = useMutation({
+    mutationFn: async (data: { platform: string; label: string; endpoint: string }) => {
+      const res = await apiRequest("POST", "/api/admin/cms/generate-key", {
+        workspaceId,
+        platform: data.platform,
+        label: data.label,
+      });
+      return res.json();
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/cms/api-keys"] });
+      setConfigureOpen(false);
+      toast({ title: "Configuration Saved", description: `${variables.platform} has been configured and connected.` });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const bulkExportMutation = useMutation({
+    mutationFn: async (data: { format: string; cmsName: string }) => {
+      const res = await apiRequest("POST", "/api/blog/export-cms-bulk", {
+        workspaceId,
+        format: data.format,
+      });
+      return res.json();
+    },
+    onSuccess: (result, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/cms/sync-logs"] });
+      toast({
+        title: "Export Complete",
+        description: `Exported ${result.exported} posts in ${variables.cmsName} format.`,
+      });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Export Failed", description: err.message, variant: "destructive" });
+    },
+  });
 
   const handleSyncNow = (cmsId: string) => {
-    const cms = cmsProviders.find((c) => c.id === cmsId);
-    if (!cms || !cms.connected) return;
-    setCmsProviders((prev) =>
-      prev.map((c) => (c.id === cmsId ? { ...c, lastSync: "2026-02-18 10:00", postsSynced: c.postsSynced + 2 } : c))
-    );
-    const newLogId = Math.max(...syncLogs.map((l) => l.id), 0) + 1;
-    setSyncLogs((prev) => [
-      { id: newLogId, date: "2026-02-18 10:00", cms: cms.name, postsSynced: 2, status: "Success", errors: 0 },
-      ...prev,
-    ]);
-    toast({ title: "Sync Complete", description: `${cms.name} posts have been synced successfully.` });
+    const provider = cmsProviders.find((c) => c.id === cmsId);
+    if (!provider || !provider.connected) return;
+    bulkExportMutation.mutate({ format: cmsId, cmsName: provider.name });
   };
 
-  const handleConfigure = (cms: typeof initialCmsProviders[0]) => {
-    setSelectedCms(cms);
+  const handleConfigure = (cmsId: string) => {
+    setSelectedCmsId(cmsId);
     setConfigApiKey("");
-    setConfigEndpoint(cms.connected ? `https://${cms.id}.example.com/api` : "");
+    setConfigEndpoint("");
     setConfigureOpen(true);
   };
 
   const handleSaveConfig = () => {
-    if (!selectedCms) return;
-    setCmsProviders((prev) =>
-      prev.map((c) => (c.id === selectedCms.id ? { ...c, connected: true, lastSync: c.lastSync || "2026-02-18 10:00" } : c))
-    );
-    setConfigureOpen(false);
-    toast({ title: "Configuration Saved", description: `${selectedCms.name} has been configured and connected.` });
+    if (!selectedCmsId) return;
+    const provider = cmsProviders.find((c) => c.id === selectedCmsId);
+    generateKeyMutation.mutate({
+      platform: selectedCmsId,
+      label: provider?.name || selectedCmsId,
+      endpoint: configEndpoint,
+    });
   };
 
-  const handleDisconnectOpen = (cms: typeof initialCmsProviders[0]) => {
-    setDisconnectCms(cms);
+  const handleDisconnectOpen = (cmsId: string) => {
+    setDisconnectCmsId(cmsId);
     setDisconnectOpen(true);
   };
 
   const handleDisconnectConfirm = () => {
-    if (!disconnectCms) return;
-    setCmsProviders((prev) =>
-      prev.map((c) => (c.id === disconnectCms.id ? { ...c, connected: false, lastSync: null, postsSynced: 0 } : c))
-    );
+    if (!disconnectCmsId) return;
+    const provider = cmsProviders.find((c) => c.id === disconnectCmsId);
     setDisconnectOpen(false);
-    toast({ title: "Disconnected", description: `${disconnectCms.name} has been disconnected.` });
-    setDisconnectCms(null);
+    toast({ title: "Disconnected", description: `${provider?.name || disconnectCmsId} has been disconnected.` });
+    setDisconnectCmsId(null);
   };
 
-  const handleViewLog = (log: typeof initialSyncLogs[0]) => {
+  const handleViewLog = (log: SyncLog) => {
     setSelectedLog(log);
     setViewLogOpen(true);
   };
 
-  const handleRetrySync = (logId: number) => {
-    setSyncLogs((prev) => prev.map((l) => (l.id === logId ? { ...l, status: "Success", errors: 0 } : l)));
-    toast({ title: "Retry Successful", description: "The sync has been retried and completed successfully." });
+  const handleRetrySync = (log: SyncLog) => {
+    bulkExportMutation.mutate({ format: log.cms.toLowerCase(), cmsName: log.cms });
   };
+
+  const selectedCmsProvider = cmsProviders.find((c) => c.id === selectedCmsId);
+  const disconnectCmsProvider = cmsProviders.find((c) => c.id === disconnectCmsId);
+  const isLoading = formatsLoading || keysLoading;
 
   return (
     <div className="p-6 space-y-6">
       <ContentEngineTabs />
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">CMS Integration</h1>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Select value={exportFormat} onValueChange={setExportFormat}>
+            <SelectTrigger className="w-40" data-testid="select-export-format">
+              <SelectValue placeholder="Export format" />
+            </SelectTrigger>
+            <SelectContent>
+              {cmsFormats.map((f) => (
+                <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            onClick={() => {
+              const fmt = cmsFormats.find((f) => f.value === exportFormat);
+              bulkExportMutation.mutate({ format: exportFormat, cmsName: fmt?.label || exportFormat });
+            }}
+            disabled={bulkExportMutation.isPending || !workspaceId}
+            data-testid="button-bulk-export"
+          >
+            <Download className="w-4 h-4 mr-1" />
+            {bulkExportMutation.isPending ? "Exporting..." : "Bulk Export"}
+          </Button>
+        </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {cmsProviders.map((cms) => (
-          <Card key={cms.id} data-testid={`card-cms-${cms.id}`}>
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <h3 className="font-bold">{cms.name}</h3>
-                <Badge variant={cms.connected ? "default" : "secondary"} data-testid={`badge-cms-status-${cms.id}`}>
-                  {cms.connected ? "Connected" : "Not Connected"}
-                </Badge>
-              </div>
-              <div className="text-sm text-muted-foreground space-y-1">
-                <p>Last sync: {cms.lastSync || "Never"}</p>
-                <p>Posts synced: {cms.postsSynced}</p>
-              </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Button variant="outline" size="sm" onClick={() => handleConfigure(cms)} data-testid={`button-configure-${cms.id}`}>
-                  <Settings className="w-4 h-4 mr-1" />
-                  Configure
-                </Button>
-                {cms.connected ? (
-                  <>
-                    <Button size="sm" onClick={() => handleSyncNow(cms.id)} data-testid={`button-sync-${cms.id}`}>
-                      <RefreshCw className="w-4 h-4 mr-1" />
-                      Sync Posts
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleDisconnectOpen(cms)} data-testid={`button-disconnect-${cms.id}`}>
-                      <Unplug className="w-4 h-4 mr-1" />
-                      Disconnect
-                    </Button>
-                  </>
-                ) : (
-                  <Button size="sm" onClick={() => handleConfigure(cms)} data-testid={`button-connect-${cms.id}`}>
-                    <Plug className="w-4 h-4 mr-1" />
-                    Connect
+      {isLoading ? (
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <Card key={i}>
+              <CardContent className="p-4 space-y-3">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="h-8 w-full" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {cmsProviders.map((cms) => (
+            <Card key={cms.id} data-testid={`card-cms-${cms.id}`}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <h3 className="font-bold">{cms.name}</h3>
+                  <Badge variant={cms.connected ? "default" : "secondary"} data-testid={`badge-cms-status-${cms.id}`}>
+                    {cms.connected ? "Connected" : "Not Connected"}
+                  </Badge>
+                </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Button variant="outline" size="sm" onClick={() => handleConfigure(cms.id)} data-testid={`button-configure-${cms.id}`}>
+                    <Settings className="w-4 h-4 mr-1" />
+                    Configure
                   </Button>
-                )}
-              </div>
-              {cmsSetupSteps[cms.id] && (
-                <div className="pt-2 border-t">
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <span className="text-xs font-semibold">Setup Guide</span>
-                    <Button variant="outline" size="sm" onClick={() => setExpandedGuide(expandedGuide === cms.id ? null : cms.id)} data-testid={`button-toggle-guide-${cms.id}`}>
-                      {expandedGuide === cms.id ? <X className="h-3 w-3 mr-1" /> : <HelpCircle className="h-3 w-3 mr-1" />}
-                      {expandedGuide === cms.id ? "Close" : "Show Steps"}
+                  {cms.connected ? (
+                    <>
+                      <Button
+                        size="sm"
+                        onClick={() => handleSyncNow(cms.id)}
+                        disabled={bulkExportMutation.isPending}
+                        data-testid={`button-sync-${cms.id}`}
+                      >
+                        <RefreshCw className="w-4 h-4 mr-1" />
+                        Export Posts
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => handleDisconnectOpen(cms.id)} data-testid={`button-disconnect-${cms.id}`}>
+                        <Unplug className="w-4 h-4 mr-1" />
+                        Disconnect
+                      </Button>
+                    </>
+                  ) : (
+                    <Button size="sm" onClick={() => handleConfigure(cms.id)} data-testid={`button-connect-${cms.id}`}>
+                      <Plug className="w-4 h-4 mr-1" />
+                      Connect
                     </Button>
-                  </div>
-                  {expandedGuide === cms.id && (
-                    <ol className="mt-2 space-y-1.5">
-                      {cmsSetupSteps[cms.id].map((s, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs">
-                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-muted text-foreground flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
-                          <div className="pt-0.5">
-                            <span className="text-muted-foreground">{s.step}</span>
-                            {s.link && (
-                              <a href={s.link} target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-flex items-center text-muted-foreground text-xs underline hover:text-foreground">
-                                Open <ExternalLink className="w-3 h-3 ml-0.5" />
-                              </a>
-                            )}
-                          </div>
-                        </li>
-                      ))}
-                    </ol>
                   )}
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                {cmsSetupSteps[cms.id] && (
+                  <div className="pt-2 border-t">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <span className="text-xs font-semibold">Setup Guide</span>
+                      <Button variant="outline" size="sm" onClick={() => setExpandedGuide(expandedGuide === cms.id ? null : cms.id)} data-testid={`button-toggle-guide-${cms.id}`}>
+                        {expandedGuide === cms.id ? <X className="h-3 w-3 mr-1" /> : <HelpCircle className="h-3 w-3 mr-1" />}
+                        {expandedGuide === cms.id ? "Close" : "Show Steps"}
+                      </Button>
+                    </div>
+                    {expandedGuide === cms.id && (
+                      <ol className="mt-2 space-y-1.5">
+                        {cmsSetupSteps[cms.id].map((s, i) => (
+                          <li key={i} className="flex items-start gap-2 text-xs">
+                            <span className="flex-shrink-0 w-5 h-5 rounded-full bg-muted text-foreground flex items-center justify-center text-[10px] font-medium">{i + 1}</span>
+                            <div className="pt-0.5">
+                              <span className="text-muted-foreground">{s.step}</span>
+                              {s.link && (
+                                <a href={s.link} target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-flex items-center text-muted-foreground text-xs underline hover:text-foreground">
+                                  Open <ExternalLink className="w-3 h-3 ml-0.5" />
+                                </a>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       <Card>
         <CardHeader>
           <CardTitle>Sync Log</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>CMS</TableHead>
-                <TableHead>Posts Synced</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Errors</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {syncLogs.map((log) => (
-                <TableRow key={log.id} data-testid={`row-sync-log-${log.id}`}>
-                  <TableCell className="text-muted-foreground">{log.date}</TableCell>
-                  <TableCell className="font-medium">{log.cms}</TableCell>
-                  <TableCell data-testid={`text-synced-${log.id}`}>{log.postsSynced}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={log.status === "Success" ? "default" : log.status === "Failed" ? "destructive" : "secondary"}
-                      data-testid={`badge-sync-status-${log.id}`}
-                    >
-                      {log.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{log.errors}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1 flex-wrap">
-                      <Button variant="ghost" size="icon" onClick={() => handleViewLog(log)} data-testid={`button-view-log-${log.id}`}>
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" onClick={() => handleRetrySync(log.id)} data-testid={`button-retry-log-${log.id}`}>
-                        <RotateCcw className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
+          {logsLoading ? (
+            <div className="space-y-2">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-10 w-full" />
               ))}
-            </TableBody>
-          </Table>
+            </div>
+          ) : syncLogs.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4" data-testid="text-no-logs">No sync logs yet. Export posts to a CMS to see activity here.</p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>CMS</TableHead>
+                  <TableHead>Posts Synced</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Errors</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {syncLogs.map((log) => (
+                  <TableRow key={log.id} data-testid={`row-sync-log-${log.id}`}>
+                    <TableCell className="text-muted-foreground">{log.date}</TableCell>
+                    <TableCell className="font-medium">{log.cms}</TableCell>
+                    <TableCell data-testid={`text-synced-${log.id}`}>{log.postsSynced}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={log.status === "Success" ? "default" : log.status === "Failed" ? "destructive" : "secondary"}
+                        data-testid={`badge-sync-status-${log.id}`}
+                      >
+                        {log.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{log.errors}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1 flex-wrap">
+                        <Button variant="ghost" size="icon" onClick={() => handleViewLog(log)} data-testid={`button-view-log-${log.id}`}>
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleRetrySync(log)} data-testid={`button-retry-log-${log.id}`}>
+                          <RotateCcw className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
       <Dialog open={configureOpen} onOpenChange={setConfigureOpen}>
         <DialogContent data-testid="dialog-configure-cms">
           <DialogHeader>
-            <DialogTitle>Configure {selectedCms?.name}</DialogTitle>
+            <DialogTitle>Configure {selectedCmsProvider?.name}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -272,7 +394,9 @@ export default function SeoCms() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setConfigureOpen(false)} data-testid="button-cancel-configure">Cancel</Button>
-            <Button onClick={handleSaveConfig} data-testid="button-save-configure">Save & Connect</Button>
+            <Button onClick={handleSaveConfig} disabled={generateKeyMutation.isPending} data-testid="button-save-configure">
+              {generateKeyMutation.isPending ? "Saving..." : "Save & Connect"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -280,10 +404,10 @@ export default function SeoCms() {
       <Dialog open={disconnectOpen} onOpenChange={setDisconnectOpen}>
         <DialogContent data-testid="dialog-disconnect-cms">
           <DialogHeader>
-            <DialogTitle>Disconnect {disconnectCms?.name}</DialogTitle>
+            <DialogTitle>Disconnect {disconnectCmsProvider?.name}</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground py-4">
-            Are you sure you want to disconnect <span className="font-medium text-foreground">{disconnectCms?.name}</span>? All synced data will be removed.
+            Are you sure you want to disconnect <span className="font-medium text-foreground">{disconnectCmsProvider?.name}</span>? All synced data will be removed.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDisconnectOpen(false)} data-testid="button-cancel-disconnect">Cancel</Button>

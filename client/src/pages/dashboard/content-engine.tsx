@@ -988,33 +988,41 @@ function SeoTab({ workspaceId }: { workspaceId: string }) {
 function LinksTab({ workspaceId }: { workspaceId: string }) {
   const { toast } = useToast();
 
-  const { data: suggestions = [] } = useQuery<any[]>({ queryKey: [`/api/admin/blog/links/suggestions?workspaceId=${workspaceId}`] });
+  const suggestionsQueryKey = `/api/blog/link-suggestions?workspaceId=${workspaceId}`;
+  const { data: suggestions = [] } = useQuery<any[]>({
+    queryKey: [suggestionsQueryKey],
+    select: (data: any) => data?.suggestions || [],
+  });
 
   const indexMutation = useMutation({
-    mutationFn: () => apiRequest("POST", `/api/admin/blog/links/index-keywords`, { workspaceId }),
+    mutationFn: () => apiRequest("POST", `/api/blog/index-all-keywords`, { workspaceId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/links/suggestions?workspaceId=${workspaceId}`] });
+      queryClient.invalidateQueries({ queryKey: [suggestionsQueryKey] });
       toast({ title: "Keywords indexed" });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
   const autoLinkMutation = useMutation({
-    mutationFn: () => apiRequest("POST", `/api/admin/blog/links/auto-link`, { workspaceId }),
+    mutationFn: () => apiRequest("POST", `/api/blog/bulk-auto-link`, { workspaceId }),
     onSuccess: () => toast({ title: "Auto-linking complete" }),
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
   const validateMutation = useMutation({
-    mutationFn: () => apiRequest("POST", `/api/admin/blog/links/validate-all`, { workspaceId }),
+    mutationFn: () => apiRequest("POST", `/api/blog/validate-all`, { workspaceId }),
     onSuccess: () => toast({ title: "Validation complete" }),
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
   const applyMutation = useMutation({
-    mutationFn: (id: string) => apiRequest("POST", `/api/admin/blog/links/apply/${id}`),
+    mutationFn: (suggestion: { sourcePostId: string; keyword: string; targetSlug: string }) =>
+      apiRequest("POST", `/api/blog/posts/${suggestion.sourcePostId}/apply-link`, {
+        keyword: suggestion.keyword,
+        targetSlug: suggestion.targetSlug,
+      }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/links/suggestions?workspaceId=${workspaceId}`] });
+      queryClient.invalidateQueries({ queryKey: [suggestionsQueryKey] });
       toast({ title: "Link applied" });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
@@ -1065,13 +1073,13 @@ function LinksTab({ workspaceId }: { workspaceId: string }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {suggestions.map((s: any) => (
-                  <TableRow key={s.id}>
+                {suggestions.map((s: any, idx: number) => (
+                  <TableRow key={`${s.sourcePostId}-${s.targetPostId}-${s.keyword}-${idx}`}>
                     <TableCell className="font-medium">{s.keyword}</TableCell>
                     <TableCell>{s.sourceTitle}</TableCell>
                     <TableCell>{s.targetTitle}</TableCell>
                     <TableCell>
-                      <Button size="sm" onClick={() => applyMutation.mutate(s.id)} disabled={applyMutation.isPending} data-testid={`button-apply-link-${s.id}`}>Apply</Button>
+                      <Button size="sm" onClick={() => applyMutation.mutate({ sourcePostId: s.sourcePostId, keyword: s.keyword, targetSlug: s.targetSlug })} disabled={applyMutation.isPending} data-testid={`button-apply-link-${s.sourcePostId}`}>Apply</Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -1086,12 +1094,19 @@ function LinksTab({ workspaceId }: { workspaceId: string }) {
 
 function HealthTab({ workspaceId }: { workspaceId: string }) {
   const { toast } = useToast();
-  const { data: orphans = [] } = useQuery<any[]>({ queryKey: [`/api/admin/blog/links/orphans?workspaceId=${workspaceId}`] });
+  const orphanQueryKey = `/api/blog/orphan-report?workspaceId=${workspaceId}`;
+  const linkHealthQueryKey = `/api/blog/link-health?workspaceId=${workspaceId}`;
+  const { data: orphans = [] } = useQuery<any[]>({
+    queryKey: [orphanQueryKey],
+    select: (data: any) => data?.orphans || [],
+  });
 
   const healthMutation = useMutation({
-    mutationFn: () => apiRequest("POST", `/api/admin/blog/links/check-health`, { workspaceId }),
+    mutationFn: async () => {
+      await queryClient.invalidateQueries({ queryKey: [linkHealthQueryKey] });
+      await queryClient.invalidateQueries({ queryKey: [orphanQueryKey] });
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/links/orphans?workspaceId=${workspaceId}`] });
       toast({ title: "Health check complete" });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
@@ -1134,12 +1149,12 @@ function HealthTab({ workspaceId }: { workspaceId: string }) {
               </TableHeader>
               <TableBody>
                 {orphans.map((o: any) => (
-                  <TableRow key={o.id}>
+                  <TableRow key={o.postId}>
                     <TableCell className="font-medium">{o.title}</TableCell>
-                    <TableCell>{o.inboundCount || 0}</TableCell>
+                    <TableCell>{o.inboundLinks || 0}</TableCell>
                     <TableCell>
-                      <Badge variant={(o.inboundCount || 0) === 0 ? "destructive" : "default"}>
-                        {(o.inboundCount || 0) === 0 ? "Orphan" : "OK"}
+                      <Badge variant={(o.inboundLinks || 0) === 0 ? "destructive" : "default"}>
+                        {(o.inboundLinks || 0) === 0 ? "Orphan" : "OK"}
                       </Badge>
                     </TableCell>
                   </TableRow>

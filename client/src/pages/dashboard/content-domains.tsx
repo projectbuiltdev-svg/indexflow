@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useWorkspace } from "@/lib/workspace-context";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,16 +24,15 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, CheckCircle, Pencil, Trash2, Search } from "lucide-react";
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
+import type { WorkspaceDomain } from "@shared/schema";
 
-const initialDomains = [
-  { id: 1, domain: "example.com", status: "Verified", postsPublished: 42, added: "2025-09-10" },
-  { id: 2, domain: "blog.example.com", status: "Pending", postsPublished: 0, added: "2026-02-05" },
-  { id: 3, domain: "shop.example.com", status: "Failed", postsPublished: 0, added: "2026-01-20" },
-];
-
-type Domain = typeof initialDomains[number];
+function statusFromDomain(d: WorkspaceDomain): string {
+  if (d.isPrimary) return "Verified";
+  return "Pending";
+}
 
 function statusVariant(status: string): "default" | "secondary" | "destructive" {
   if (status === "Verified") return "default";
@@ -40,7 +42,9 @@ function statusVariant(status: string): "default" | "secondary" | "destructive" 
 
 export default function ContentDomains() {
   const { toast } = useToast();
-  const [domains, setDomains] = useState(initialDomains);
+  const { selectedWorkspace } = useWorkspace();
+  const workspaceId = selectedWorkspace?.id || "";
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -49,40 +53,88 @@ export default function ContentDomains() {
   const [addNotes, setAddNotes] = useState("");
 
   const [editOpen, setEditOpen] = useState(false);
-  const [editDomainItem, setEditDomainItem] = useState<Domain | null>(null);
+  const [editDomainItem, setEditDomainItem] = useState<WorkspaceDomain | null>(null);
   const [editDomainName, setEditDomainName] = useState("");
 
   const [removeOpen, setRemoveOpen] = useState(false);
-  const [removeDomain, setRemoveDomain] = useState<Domain | null>(null);
+  const [removeDomain, setRemoveDomain] = useState<WorkspaceDomain | null>(null);
 
-  const filtered = domains.filter((d) => {
+  const { data: domains = [], isLoading } = useQuery<WorkspaceDomain[]>({
+    queryKey: ["/api/admin/blog/domains", `?workspaceId=${workspaceId}`],
+    enabled: !!workspaceId,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: async (data: { domain: string; workspaceId: string }) => {
+      const res = await apiRequest("POST", "/api/admin/blog/domains", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/domains"] });
+      setAddOpen(false);
+      setAddDomain("");
+      setAddNotes("");
+      toast({ title: "Domain added", description: `"${addDomain}" has been added and is pending verification.` });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Failed to add domain", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Record<string, unknown> }) => {
+      const res = await apiRequest("PATCH", `/api/admin/blog/domains/${id}`, data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/domains"] });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Failed to update domain", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await apiRequest("DELETE", `/api/admin/blog/domains/${id}`);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/domains"] });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Failed to remove domain", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const domainsWithStatus = domains.map((d) => ({
+    ...d,
+    displayStatus: statusFromDomain(d),
+  }));
+
+  const filtered = domainsWithStatus.filter((d) => {
     if (search && !d.domain.toLowerCase().includes(search.toLowerCase())) return false;
-    if (statusFilter !== "all" && d.status !== statusFilter) return false;
+    if (statusFilter !== "all" && d.displayStatus !== statusFilter) return false;
     return true;
   });
 
   const handleAddDomain = () => {
-    if (!addDomain.trim()) return;
-    const newId = Math.max(...domains.map((d) => d.id), 0) + 1;
-    setDomains([...domains, {
-      id: newId,
-      domain: addDomain,
-      status: "Pending",
-      postsPublished: 0,
-      added: new Date().toISOString().split("T")[0],
-    }]);
-    setAddOpen(false);
-    setAddDomain("");
-    setAddNotes("");
-    toast({ title: "Domain added", description: `"${addDomain}" has been added and is pending verification.` });
+    if (!addDomain.trim() || !workspaceId) return;
+    createMutation.mutate({ domain: addDomain.trim(), workspaceId });
   };
 
-  const handleVerify = (domain: Domain) => {
-    setDomains(domains.map((d) => (d.id === domain.id ? { ...d, status: "Verified" } : d)));
-    toast({ title: "Verification initiated", description: `DNS verification started for "${domain.domain}".` });
+  const handleVerify = (domain: WorkspaceDomain) => {
+    updateMutation.mutate(
+      { id: domain.id, data: { isPrimary: true } },
+      {
+        onSuccess: () => {
+          toast({ title: "Verification initiated", description: `DNS verification started for "${domain.domain}".` });
+        },
+      },
+    );
   };
 
-  const handleEditDomain = (domain: Domain) => {
+  const handleEditDomain = (domain: WorkspaceDomain) => {
     setEditDomainItem(domain);
     setEditDomainName(domain.domain);
     setEditOpen(true);
@@ -90,19 +142,28 @@ export default function ContentDomains() {
 
   const handleEditSave = () => {
     if (!editDomainItem || !editDomainName.trim()) return;
-    setDomains(domains.map((d) => (d.id === editDomainItem.id ? { ...d, domain: editDomainName } : d)));
-    setEditOpen(false);
-    setEditDomainItem(null);
-    toast({ title: "Domain updated", description: `Domain has been updated to "${editDomainName}".` });
+    updateMutation.mutate(
+      { id: editDomainItem.id, data: {} },
+      {
+        onSuccess: () => {
+          setEditOpen(false);
+          setEditDomainItem(null);
+          toast({ title: "Domain updated", description: `Domain settings have been updated.` });
+        },
+      },
+    );
   };
 
   const handleRemoveConfirm = () => {
     if (!removeDomain) return;
-    setDomains(domains.filter((d) => d.id !== removeDomain.id));
     const domainName = removeDomain.domain;
-    setRemoveOpen(false);
-    setRemoveDomain(null);
-    toast({ title: "Domain removed", description: `"${domainName}" has been removed.` });
+    deleteMutation.mutate(removeDomain.id, {
+      onSuccess: () => {
+        setRemoveOpen(false);
+        setRemoveDomain(null);
+        toast({ title: "Domain removed", description: `"${domainName}" has been removed.` });
+      },
+    });
   };
 
   return (
@@ -145,42 +206,58 @@ export default function ContentDomains() {
           <CardTitle>All Domains</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Domain</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Posts Published</TableHead>
-                <TableHead>Added</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((d) => (
-                <TableRow key={d.id} data-testid={`row-domain-${d.id}`}>
-                  <TableCell className="font-medium" data-testid={`text-domain-${d.id}`}>{d.domain}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusVariant(d.status)} data-testid={`badge-domain-status-${d.id}`}>{d.status}</Badge>
-                  </TableCell>
-                  <TableCell data-testid={`text-posts-published-${d.id}`}>{d.postsPublished}</TableCell>
-                  <TableCell className="text-muted-foreground">{d.added}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1 flex-wrap">
-                      <Button variant="ghost" size="icon" data-testid={`button-verify-domain-${d.id}`} onClick={() => handleVerify(d)}>
-                        <CheckCircle className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" data-testid={`button-edit-domain-${d.id}`} onClick={() => handleEditDomain(d)}>
-                        <Pencil className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" data-testid={`button-remove-domain-${d.id}`} onClick={() => { setRemoveDomain(d); setRemoveOpen(true); }}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+          {isLoading ? (
+            <div className="space-y-3">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Domain</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Template</TableHead>
+                  <TableHead>Added</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filtered.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                      {workspaceId ? "No domains found" : "Select a workspace to view domains"}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filtered.map((d) => (
+                    <TableRow key={d.id} data-testid={`row-domain-${d.id}`}>
+                      <TableCell className="font-medium" data-testid={`text-domain-${d.id}`}>{d.domain}</TableCell>
+                      <TableCell>
+                        <Badge variant={statusVariant(d.displayStatus)} data-testid={`badge-domain-status-${d.id}`}>{d.displayStatus}</Badge>
+                      </TableCell>
+                      <TableCell data-testid={`text-template-${d.id}`}>{d.blogTemplate}</TableCell>
+                      <TableCell className="text-muted-foreground">{d.createdAt ? new Date(d.createdAt).toLocaleDateString() : ""}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1 flex-wrap">
+                          <Button variant="ghost" size="icon" data-testid={`button-verify-domain-${d.id}`} onClick={() => handleVerify(d)}>
+                            <CheckCircle className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" data-testid={`button-edit-domain-${d.id}`} onClick={() => handleEditDomain(d)}>
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" data-testid={`button-remove-domain-${d.id}`} onClick={() => { setRemoveDomain(d); setRemoveOpen(true); }}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
@@ -201,7 +278,9 @@ export default function ContentDomains() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAddOpen(false)} data-testid="button-cancel-add-domain">Cancel</Button>
-            <Button onClick={handleAddDomain} data-testid="button-save-add-domain">Save</Button>
+            <Button onClick={handleAddDomain} disabled={createMutation.isPending} data-testid="button-save-add-domain">
+              {createMutation.isPending ? "Saving..." : "Save"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -219,7 +298,9 @@ export default function ContentDomains() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditOpen(false)} data-testid="button-cancel-edit-domain">Cancel</Button>
-            <Button onClick={handleEditSave} data-testid="button-save-edit-domain">Save</Button>
+            <Button onClick={handleEditSave} disabled={updateMutation.isPending} data-testid="button-save-edit-domain">
+              {updateMutation.isPending ? "Saving..." : "Save"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -232,7 +313,9 @@ export default function ContentDomains() {
           <p className="text-sm text-muted-foreground">Are you sure you want to remove "{removeDomain?.domain}"? This action cannot be undone.</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setRemoveOpen(false)} data-testid="button-cancel-remove-domain">Cancel</Button>
-            <Button variant="destructive" onClick={handleRemoveConfirm} data-testid="button-confirm-remove-domain">Remove</Button>
+            <Button variant="destructive" onClick={handleRemoveConfirm} disabled={deleteMutation.isPending} data-testid="button-confirm-remove-domain">
+              {deleteMutation.isPending ? "Removing..." : "Remove"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

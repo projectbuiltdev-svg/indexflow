@@ -1,26 +1,105 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Info, Upload, Lock } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Info, Upload, Lock, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useWorkspace } from "@/lib/workspace-context";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { WorkspaceSiteProfile } from "@shared/schema";
 
 export default function SettingsWhiteLabel() {
   const { toast } = useToast();
   const { selectedWorkspace } = useWorkspace();
+  const workspaceId = selectedWorkspace?.id;
 
   const plan = selectedWorkspace?.plan?.toLowerCase() || "solo";
   const isAgencyOrEnterprise = plan === "agency" || plan === "white_label" || plan === "white-label" || plan === "enterprise" || plan === "complete";
 
-  const [brandName, setBrandName] = useState("My Agency");
+  const { data: profile, isLoading } = useQuery<WorkspaceSiteProfile | null>({
+    queryKey: ["/api/workspaces", workspaceId, "site-profile"],
+    enabled: !!workspaceId,
+  });
+
+  const [siteName, setSiteName] = useState("");
   const [primaryColor, setPrimaryColor] = useState("#3B82F6");
-  const [customDomain, setCustomDomain] = useState("app.myagency.com");
-  const [supportEmail, setSupportEmail] = useState("support@myagency.com");
+  const [siteUrl, setSiteUrl] = useState("");
   const [customLogin, setCustomLogin] = useState(false);
   const [removeWidgetBranding, setRemoveWidgetBranding] = useState(false);
+
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const faviconInputRef = useRef<HTMLInputElement>(null);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [faviconFile, setFaviconFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [faviconPreview, setFaviconPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (profile) {
+      setSiteName(profile.siteName || "");
+      setPrimaryColor(profile.primaryColor || "#3B82F6");
+      setSiteUrl(profile.siteUrl || "");
+    }
+  }, [profile]);
+
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("PUT", `/api/workspaces/${workspaceId}/site-profile`, {
+        siteName,
+        primaryColor,
+        siteUrl,
+        logoUrl: profile?.logoUrl || null,
+        faviconUrl: profile?.faviconUrl || null,
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/workspaces", workspaceId, "site-profile"] });
+      toast({ title: "White label settings saved", description: "Your branding configuration has been updated" });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Failed to save", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Logo must be under 2MB", variant: "destructive" });
+      return;
+    }
+    setLogoFile(file);
+    const url = URL.createObjectURL(file);
+    setLogoPreview(url);
+    toast({ title: "Logo selected", description: `${file.name} ready to upload on save` });
+  };
+
+  const handleFaviconSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Favicon must be under 2MB", variant: "destructive" });
+      return;
+    }
+    setFaviconFile(file);
+    const url = URL.createObjectURL(file);
+    setFaviconPreview(url);
+    toast({ title: "Favicon selected", description: `${file.name} ready to upload on save` });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="p-6 space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-96 w-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
@@ -41,18 +120,34 @@ export default function SettingsWhiteLabel() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Brand Name</Label>
-            <Input value={brandName} onChange={(e) => setBrandName(e.target.value)} data-testid="input-brand-name" />
+            <Label>Brand / Site Name</Label>
+            <Input value={siteName} onChange={(e) => setSiteName(e.target.value)} data-testid="input-brand-name" />
           </div>
 
           <div className="space-y-2">
             <Label>Logo</Label>
+            <input
+              ref={logoInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="hidden"
+              onChange={handleLogoSelect}
+            />
             <div
               className="border-2 border-dashed rounded-md p-6 text-center cursor-pointer"
               data-testid="upload-logo"
-              onClick={() => toast({ title: "Upload logo", description: "Logo upload dialog would open here" })}
+              onClick={() => logoInputRef.current?.click()}
             >
-              <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
+              {logoPreview || profile?.logoUrl ? (
+                <img
+                  src={logoPreview || profile?.logoUrl || ""}
+                  alt="Logo preview"
+                  className="h-12 mx-auto mb-2 object-contain"
+                  data-testid="img-logo-preview"
+                />
+              ) : (
+                <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
+              )}
               <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>
               <p className="text-xs text-muted-foreground">PNG, JPG up to 2MB</p>
             </div>
@@ -60,12 +155,28 @@ export default function SettingsWhiteLabel() {
 
           <div className="space-y-2">
             <Label>Favicon</Label>
+            <input
+              ref={faviconInputRef}
+              type="file"
+              accept="image/png,image/x-icon,image/vnd.microsoft.icon"
+              className="hidden"
+              onChange={handleFaviconSelect}
+            />
             <div
               className="border-2 border-dashed rounded-md p-6 text-center cursor-pointer"
               data-testid="upload-favicon"
-              onClick={() => toast({ title: "Upload favicon", description: "Favicon upload dialog would open here" })}
+              onClick={() => faviconInputRef.current?.click()}
             >
-              <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
+              {faviconPreview || profile?.faviconUrl ? (
+                <img
+                  src={faviconPreview || profile?.faviconUrl || ""}
+                  alt="Favicon preview"
+                  className="h-8 mx-auto mb-2 object-contain"
+                  data-testid="img-favicon-preview"
+                />
+              ) : (
+                <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
+              )}
               <p className="text-sm text-muted-foreground">Click to upload favicon</p>
               <p className="text-xs text-muted-foreground">ICO, PNG 32x32 or 16x16</p>
             </div>
@@ -77,18 +188,13 @@ export default function SettingsWhiteLabel() {
           </div>
 
           <div className="space-y-2">
-            <Label>Custom Domain</Label>
-            <Input value={customDomain} onChange={(e) => setCustomDomain(e.target.value)} data-testid="input-custom-domain" />
+            <Label>Custom Domain / Site URL</Label>
+            <Input value={siteUrl} onChange={(e) => setSiteUrl(e.target.value)} data-testid="input-custom-domain" placeholder="app.myagency.com" />
             <div className="p-3 rounded-md bg-muted/50 text-xs text-muted-foreground space-y-1" data-testid="text-dns-instructions">
               <p className="font-medium">DNS Configuration:</p>
               <p>Add a CNAME record pointing to: cname.indexflow.cloud</p>
               <p>TTL: 3600 (or Auto)</p>
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Support Email</Label>
-            <Input type="email" value={supportEmail} onChange={(e) => setSupportEmail(e.target.value)} data-testid="input-support-email" />
           </div>
 
           <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -141,14 +247,22 @@ export default function SettingsWhiteLabel() {
           <div className="flex items-center gap-3 flex-wrap">
             <Button
               data-testid="button-save-white-label"
-              onClick={() => toast({ title: "White label settings saved", description: "Your branding configuration has been updated" })}
+              disabled={saveMutation.isPending || !workspaceId}
+              onClick={() => saveMutation.mutate()}
             >
+              {saveMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               Save
             </Button>
             <Button
               variant="outline"
               data-testid="button-preview"
-              onClick={() => toast({ title: "Preview mode", description: "Opening preview of your white label branding..." })}
+              onClick={() => {
+                if (siteUrl) {
+                  window.open(siteUrl.startsWith("http") ? siteUrl : `https://${siteUrl}`, "_blank");
+                } else {
+                  toast({ title: "No custom domain set", description: "Enter a custom domain / site URL first" });
+                }
+              }}
             >
               Preview
             </Button>

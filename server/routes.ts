@@ -64,6 +64,7 @@ import {
   insertRoomTypeSchema,
   insertRoomSchema,
   insertRoomBookingSchema,
+  insertWorkspaceSiteProfileSchema,
 } from "@shared/schema";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes } from "./replit_integrations/auth";
@@ -1002,6 +1003,37 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Invalid AI provider settings", details: error.errors });
       }
       res.status(500).json({ error: "Failed to update AI provider settings" });
+    }
+  });
+
+  app.get("/api/workspaces/:workspaceId/site-profile", async (req, res) => {
+    try {
+      if (!await authorizeWorkspaceAccess(req, req.params.workspaceId)) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+      const profile = await storage.getSiteProfile(req.params.workspaceId);
+      res.json(profile || null);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch site profile" });
+    }
+  });
+
+  app.put("/api/workspaces/:workspaceId/site-profile", async (req, res) => {
+    try {
+      if (!await authorizeWorkspaceAccess(req, req.params.workspaceId)) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+      const validatedData = insertWorkspaceSiteProfileSchema.parse({
+        ...req.body,
+        workspaceId: req.params.workspaceId,
+      });
+      const profile = await storage.upsertSiteProfile(validatedData);
+      res.json(profile);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Invalid site profile data", details: error.errors });
+      }
+      res.status(500).json({ error: "Failed to update site profile" });
     }
   });
 

@@ -270,7 +270,7 @@ export interface IStorage {
   createWorkspaceBlogPost(post: InsertWorkspaceBlogPost): Promise<WorkspaceBlogPost>;
   bulkCreateWorkspaceBlogPosts(posts: InsertWorkspaceBlogPost[]): Promise<WorkspaceBlogPost[]>;
   getWorkspaceBlogPostsByCampaign(workspaceId: string, campaignId: string): Promise<WorkspaceBlogPost[]>;
-  getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]>;
+  getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; name: string; status: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]>;
   createContentCampaign(data: InsertContentCampaign): Promise<ContentCampaign>;
   updateWorkspaceBlogPost(id: string, post: Partial<WorkspaceBlogPost>): Promise<WorkspaceBlogPost | undefined>;
   deleteWorkspaceBlogPost(id: string): Promise<boolean>;
@@ -1375,7 +1375,7 @@ export class MemStorage implements IStorage {
     this.contentCampaignsMap.set(id, campaign);
     return campaign;
   }
-  async getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]> {
+  async getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; name: string; status: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]> {
     const posts = Array.from(this.workspaceBlogPostsMap.values()).filter(p => p.workspaceId === workspaceId && p.campaignId);
     const map = new Map<string, WorkspaceBlogPost[]>();
     for (const p of posts) {
@@ -1390,7 +1390,8 @@ export class MemStorage implements IStorage {
         statuses[s] = (statuses[s] || 0) + 1;
       }
       const earliest = cPosts.reduce((min, p) => (p.createdAt && p.createdAt < min ? p.createdAt : min), cPosts[0].createdAt || new Date());
-      return { campaignId, postCount: cPosts.length, createdAt: earliest, statuses };
+      const campaign = this.contentCampaignsMap.get(campaignId);
+      return { campaignId, name: campaign?.name || `Campaign ${campaignId.slice(0, 8)}`, status: campaign?.status || "active", postCount: cPosts.length, createdAt: earliest, statuses };
     }).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
   async updateWorkspaceBlogPost(id: string, post: Partial<WorkspaceBlogPost>): Promise<WorkspaceBlogPost | undefined> {
@@ -2358,8 +2359,13 @@ export class DbStorage implements IStorage {
     const [row] = await db!.insert(contentCampaigns).values(data).returning();
     return row;
   }
-  async getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]> {
+  async getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; name: string; status: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]> {
     const posts = await db!.select().from(workspaceBlogPosts).where(and(eq(workspaceBlogPosts.workspaceId, workspaceId), sql`${workspaceBlogPosts.campaignId} IS NOT NULL`)).orderBy(desc(workspaceBlogPosts.createdAt));
+    const campaignIds = [...new Set(posts.map(p => p.campaignId!))];
+    const campaignRecords = campaignIds.length > 0
+      ? await db!.select().from(contentCampaigns).where(sql`${contentCampaigns.id} IN (${sql.join(campaignIds.map(id => sql`${id}`), sql`, `)})`)
+      : [];
+    const campaignMap = new Map(campaignRecords.map(c => [c.id, c]));
     const map = new Map<string, WorkspaceBlogPost[]>();
     for (const p of posts) {
       const arr = map.get(p.campaignId!) || [];
@@ -2373,7 +2379,8 @@ export class DbStorage implements IStorage {
         statuses[s] = (statuses[s] || 0) + 1;
       }
       const earliest = cPosts.reduce((min, p) => (p.createdAt && p.createdAt < min ? p.createdAt : min), cPosts[0].createdAt || new Date());
-      return { campaignId, postCount: cPosts.length, createdAt: earliest, statuses };
+      const campaign = campaignMap.get(campaignId);
+      return { campaignId, name: campaign?.name || `Campaign ${campaignId.slice(0, 8)}`, status: campaign?.status || "active", postCount: cPosts.length, createdAt: earliest, statuses };
     }).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
   async updateWorkspaceBlogPost(id: string, post: Partial<WorkspaceBlogPost>): Promise<WorkspaceBlogPost | undefined> {
