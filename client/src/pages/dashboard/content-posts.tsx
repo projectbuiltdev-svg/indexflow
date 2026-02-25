@@ -176,11 +176,12 @@ export default function ContentPosts() {
     const topics = bulkTopics.split("\n").filter((t) => t.trim());
     if (topics.length === 0) return;
     try {
-      const created: any = await apiRequest("POST", "/api/admin/blog/posts/bulk/create", {
+      const res = await apiRequest("POST", "/api/admin/blog/posts/bulk/create", {
         topics: topics.map((t) => t.trim()),
         category: bulkCategory,
         workspaceId: wsId,
       });
+      const created: any = await res.json();
       queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts", wsId] });
       setBulkOpen(false);
       setBulkTopics("");

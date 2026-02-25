@@ -170,7 +170,8 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
 
   const bulkMutation = useMutation({
     mutationFn: async (data: any) => {
-      const created: any = await apiRequest("POST", "/api/admin/blog/posts/bulk/create", data);
+      const res = await apiRequest("POST", "/api/admin/blog/posts/bulk/create", data);
+      const created: any = await res.json();
       if (Array.isArray(created) && created.length > 0) {
         const postIds = created.map((p: any) => p.id);
         await apiRequest("POST", "/api/admin/blog/posts/bulk/generate", { postIds });
