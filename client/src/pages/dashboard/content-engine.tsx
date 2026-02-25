@@ -643,7 +643,7 @@ function PagesTab({ workspaceId }: { workspaceId: string }) {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-serif italic font-semibold" data-testid="text-pages-title">Pages</h2>
-          <p className="text-sm text-muted-foreground">Manage and audit on-page SEO for your venue's pages.</p>
+          <p className="text-sm text-muted-foreground">Manage and audit on-page SEO for your website pages.</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => setCrawlOpen(true)} data-testid="button-crawl-sitemap">
@@ -871,7 +871,7 @@ function DomainsTab({ workspaceId }: { workspaceId: string }) {
           </div>
 
           {domains.length === 0 ? (
-            <p className="text-sm text-muted-foreground" data-testid="text-no-domains">No domains mapped. Add a domain to enable the public blog API for this venue.</p>
+            <p className="text-sm text-muted-foreground" data-testid="text-no-domains">No domains mapped. Add a domain to enable the public blog API for this workspace.</p>
           ) : (
             <div className="space-y-2">
               {domains.map((d: any) => (
@@ -935,7 +935,7 @@ function SeoTab({ workspaceId }: { workspaceId: string }) {
             </div>
             <div>
               <Label>Brand Terms (comma-separated)</Label>
-              <Input placeholder="Resto, Resto.Restaurant" value={brandTerms} onChange={(e) => setBrandTerms(e.target.value)} data-testid="input-brand-terms" />
+              <Input placeholder="indexFlow, Your Brand" value={brandTerms} onChange={(e) => setBrandTerms(e.target.value)} data-testid="input-brand-terms" />
             </div>
           </div>
           <div className="grid grid-cols-4 gap-4 mb-6">
@@ -949,11 +949,11 @@ function SeoTab({ workspaceId }: { workspaceId: string }) {
             </div>
             <div>
               <Label>CTA Text</Label>
-              <Input placeholder="Book your table today" value={ctaText} onChange={(e) => setCtaText(e.target.value)} data-testid="input-cta-text" />
+              <Input placeholder="Get started today" value={ctaText} onChange={(e) => setCtaText(e.target.value)} data-testid="input-cta-text" />
             </div>
             <div>
               <Label>CTA Page URL</Label>
-              <Input placeholder="/booking" value={ctaUrl} onChange={(e) => setCtaUrl(e.target.value)} data-testid="input-cta-url" />
+              <Input placeholder="/contact" value={ctaUrl} onChange={(e) => setCtaUrl(e.target.value)} data-testid="input-cta-url" />
             </div>
           </div>
           <Button
@@ -1737,7 +1737,7 @@ export default function ContentEngine() {
       <div className="flex items-start justify-between mb-4">
         <div>
           <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-content-engine-title">Content Engine</h1>
-          <p className="text-sm text-muted-foreground" data-testid="text-content-engine-subtitle">White-label blog management for client venues</p>
+          <p className="text-sm text-muted-foreground" data-testid="text-content-engine-subtitle">White-label blog management for client workspaces</p>
         </div>
         <Button variant="ghost" size="sm" data-testid="button-how-it-works">
           <HelpCircle className="h-4 w-4 mr-1" />

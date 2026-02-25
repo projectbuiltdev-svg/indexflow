@@ -51,7 +51,7 @@ function runQualityGate(mdx: string): QualityResult {
   return { pass: reasons.length === 0, reasons };
 }
 
-const SYSTEM_PROMPT = `You are an expert SEO content writer for the hospitality industry (restaurants, cafes, bars, hotels). You create high-quality, informative blog posts in MDX format.
+const SYSTEM_PROMPT = `You are an expert SEO content writer specializing in digital marketing, SEO, and business growth. You create high-quality, informative blog posts in MDX format.
 
 STRICT REQUIREMENTS:
 - Write between 1800-2500 words of actual prose content. This is a HARD requirement - never write fewer than 1800 words. Aim for 2000+ words. Count your words carefully before finishing.
@@ -59,8 +59,8 @@ STRICT REQUIREMENTS:
 - Include a FAQ section at the end with at least 3 questions
 - IMAGE PLACEHOLDERS: You MUST insert a <BlogImage /> placeholder every 250-300 words throughout the article. Each placeholder MUST include a "prompt" attribute with a detailed, descriptive prompt suitable for AI image generation or stock photo search. The prompt should describe the scene, mood, style and subject matter relevant to the surrounding text.
   - Format: <BlogImage prompt="detailed description of the image needed, including style, mood, subject, and context" />
-  - Example: <BlogImage prompt="Aerial view of a busy restaurant kitchen during dinner service, warm lighting, chefs plating dishes, professional hospitality environment" />
-  - Example: <BlogImage prompt="Modern hotel lobby with minimalist design, natural light streaming through large windows, reception desk with friendly staff" />
+  - Example: <BlogImage prompt="Marketing team analyzing SEO performance data on multiple screens, modern office environment, collaborative workspace" />
+  - Example: <BlogImage prompt="Business professional reviewing analytics dashboard on laptop, clean desk setup, data visualizations on screen" />
   - For a 1500 word article, include at least 5 image placeholders
   - For a 2500 word article, include at least 8 image placeholders
   - Place them naturally between paragraphs, after key section introductions
@@ -84,7 +84,7 @@ function buildUserPrompt(
   keyword: string,
   intent: string,
   funnel: string,
-  venueName?: string
+  workspaceName?: string
 ): string {
   return `Write a blog post with the following specifications:
 
@@ -92,7 +92,7 @@ TITLE: ${title}
 PRIMARY KEYWORD: ${keyword}
 SEARCH INTENT: ${intent}
 FUNNEL STAGE: ${funnel}
-${venueName ? `BUSINESS NAME: ${venueName} (mention naturally 1-2 times)` : ""}
+${workspaceName ? `BUSINESS NAME: ${workspaceName} (mention naturally 1-2 times)` : ""}
 
 The post should target the "${keyword}" keyword naturally throughout the content. Match the "${intent}" search intent and serve readers at the "${funnel}" stage of the marketing funnel.
 
@@ -108,10 +108,10 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
   });
 
   try {
-    let venueName: string | undefined;
+    let workspaceName: string | undefined;
     try {
-      const venue = await storage.getWorkspace(post.workspaceId);
-      venueName = venue?.name;
+      const ws = await storage.getWorkspace(post.workspaceId);
+      workspaceName = ws?.name;
     } catch {}
 
     const response = await openai.chat.completions.create({
@@ -125,7 +125,7 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
             post.primaryKeyword,
             post.intent || "informational",
             post.funnel || "tofu",
-            venueName
+            workspaceName
           ),
         },
       ],

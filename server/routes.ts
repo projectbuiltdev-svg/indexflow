@@ -2293,7 +2293,7 @@ export async function registerRoutes(
       const siteUrl = venue?.website || "";
       
       if (!siteUrl) {
-        return res.status(400).json({ error: "No custom domain configured for this venue. The Rank Tracker only works with your venue's custom domain. Please contact Resto to set up your domain." });
+        return res.status(400).json({ error: "No custom domain configured for this workspace. The Rank Tracker only works with your workspace's custom domain. Please set up a domain in your workspace settings." });
       }
 
       const dfsLogin = process.env.DATAFORSEO_LOGIN;
@@ -2535,7 +2535,7 @@ export async function registerRoutes(
       }
 
       if (!venue.latitude || !venue.longitude) {
-        return res.status(400).json({ error: "Workspace has no coordinates set. Please update your venue address with latitude and longitude." });
+        return res.status(400).json({ error: "Workspace has no coordinates set. Please update your workspace address with latitude and longitude." });
       }
 
       const gridKeywordsList = await storage.getGridKeywords(req.params.workspaceId);

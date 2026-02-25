@@ -13,9 +13,9 @@ import { indexPostKeywords, keywordEntriesToInsertRecords, generateLinkSuggestio
 import { analyzePostForImageSuggestions, resolveKeywordImages, resolveAllSourceImages } from "./image-resolver";
 
 const VALID_CATEGORIES = [
-  "general", "booking-systems", "ai-automation", "voice-sms", "website-design",
-  "payments-deposits", "comparisons", "pricing-cost", "industry-guides",
-  "local-guides", "operations-management",
+  "general", "seo", "content-marketing", "ai-automation", "voice-sms", "website-design",
+  "link-building", "comparisons", "pricing-cost", "industry-guides",
+  "local-seo", "agency-operations",
 ];
 
 function normalizeCategory(cat: string | undefined | null): string {
@@ -666,7 +666,7 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
           ? new Date(post.createdAt).toISOString().slice(0, 10)
           : new Date().toISOString().slice(0, 10);
 
-        const description = post.description || `Learn about ${post.primaryKeyword || post.title}. Expert insights for hospitality businesses.`;
+        const description = post.description || `Learn about ${post.primaryKeyword || post.title}. Expert insights for growing your business.`;
 
         const frontmatter = [
           "---",
@@ -708,12 +708,12 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
       const domain = (req.query.domain as string) || req.hostname;
       const normalized = domain.toLowerCase().replace(/^www\./, "").split(":")[0];
 
-      const venueDomain = await storage.getWorkspaceDomainByDomain(normalized);
-      if (!venueDomain) {
+      const wsDomain = await storage.getWorkspaceDomainByDomain(normalized);
+      if (!wsDomain) {
         return res.status(404).json({ error: "Domain not found" });
       }
 
-      const posts = await storage.getPublishedPostsByWorkspace(venueDomain.workspaceId);
+      const posts = await storage.getPublishedPostsByWorkspace(wsDomain.workspaceId);
       const safeList = posts.map(p => ({
         slug: p.slug,
         title: p.title,
@@ -725,9 +725,9 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
 
       res.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
       res.json({
-        blogTemplate: venueDomain.blogTemplate || "editorial",
-        accentColor: venueDomain.accentColor || null,
-        accentForeground: venueDomain.accentForeground || null,
+        blogTemplate: wsDomain.blogTemplate || "editorial",
+        accentColor: wsDomain.accentColor || null,
+        accentForeground: wsDomain.accentForeground || null,
         posts: safeList,
       });
     } catch (err: any) {
@@ -742,21 +742,21 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
       if (!slug) return res.status(400).json({ error: "slug required" });
 
       const normalized = domain.toLowerCase().replace(/^www\./, "").split(":")[0];
-      const venueDomain = await storage.getWorkspaceDomainByDomain(normalized);
-      if (!venueDomain) {
+      const wsDomain = await storage.getWorkspaceDomainByDomain(normalized);
+      if (!wsDomain) {
         return res.status(404).json({ error: "Domain not found" });
       }
 
-      const post = await storage.getWorkspaceBlogPostBySlug(venueDomain.workspaceId, slug);
+      const post = await storage.getWorkspaceBlogPostBySlug(wsDomain.workspaceId, slug);
       if (!post || post.status !== "published") {
         return res.status(404).json({ error: "Post not found" });
       }
 
       res.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
       res.json({
-        blogTemplate: venueDomain.blogTemplate || "editorial",
-        accentColor: venueDomain.accentColor || null,
-        accentForeground: venueDomain.accentForeground || null,
+        blogTemplate: wsDomain.blogTemplate || "editorial",
+        accentColor: wsDomain.accentColor || null,
+        accentForeground: wsDomain.accentForeground || null,
         slug: post.slug,
         title: post.title,
         description: post.description,
@@ -805,7 +805,7 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     if (/event|conference|meetup|workshop|webinar/i.test(title)) {
       return { schemaType: "Event", confidence: 0.7 };
     }
-    if (/local.*guide|best.*restaurants|best.*bars|best.*hotels|city\s+guide/i.test(title) || catLower === "local-guides") {
+    if (/local.*guide|best.*agencies|best.*tools|best.*platforms|city\s+guide/i.test(title) || catLower === "local-guides") {
       return { schemaType: "LocalBusiness", confidence: 0.65 };
     }
     if (/news|breaking|update|announce/i.test(title)) {
@@ -820,7 +820,7 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     return { schemaType: "Article", confidence: 0.5 };
   }
 
-  function generateSchemaJson(schemaType: string, post: any, venue?: any): Record<string, any> {
+  function generateSchemaJson(schemaType: string, post: any, workspace?: any): Record<string, any> {
     const base: Record<string, any> = {
       "@context": "https://schema.org",
       "@type": schemaType,
@@ -834,11 +834,11 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
       base["keywords"] = post.primaryKeyword;
     }
 
-    if (venue) {
+    if (workspace) {
       base["publisher"] = {
         "@type": "Organization",
-        "name": venue.name,
-        "url": venue.website || undefined,
+        "name": workspace.name,
+        "url": workspace.website || undefined,
       };
     }
 
@@ -862,10 +862,10 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
 
     if (schemaType === "LocalBusiness") {
       base["@type"] = "LocalBusiness";
-      if (venue) {
-        base["name"] = venue.name;
-        base["address"] = venue.address || undefined;
-        base["telephone"] = venue.phone || undefined;
+      if (workspace) {
+        base["name"] = workspace.name;
+        base["address"] = workspace.address || undefined;
+        base["telephone"] = workspace.phone || undefined;
       }
     }
 
@@ -920,7 +920,7 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
       const post = await storage.getWorkspaceBlogPost(req.params.id);
       if (!post) return res.status(404).json({ error: "Post not found" });
 
-      const venue = await storage.getWorkspace(post.workspaceId);
+      const workspace = await storage.getWorkspace(post.workspaceId);
       let detectedType: string;
       let confidence: number;
       let method: string;
@@ -968,7 +968,7 @@ Return ONLY valid JSON, no markdown.`;
         method = "heuristic";
       }
 
-      const schemaJson = generateSchemaJson(detectedType, post, venue);
+      const schemaJson = generateSchemaJson(detectedType, post, workspace);
 
       const updated = await storage.updateWorkspaceBlogPost(post.id, {
         schemaType: detectedType,
@@ -1004,8 +1004,8 @@ Return ONLY valid JSON, no markdown.`;
         return res.status(400).json({ error: `Invalid schemaType. Must be one of: ${validTypes.join(", ")}` });
       }
 
-      const venue = await storage.getWorkspace(post.workspaceId);
-      const schemaJson = generateSchemaJson(schemaType, post, venue);
+      const workspace = await storage.getWorkspace(post.workspaceId);
+      const schemaJson = generateSchemaJson(schemaType, post, workspace);
 
       const updated = await storage.updateWorkspaceBlogPost(post.id, {
         schemaType,

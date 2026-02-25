@@ -119,7 +119,7 @@ export default function SettingsTwilioSetup() {
     },
     {
       number: 4,
-      title: "Connect Twilio to Your Venue",
+      title: "Connect Twilio to Your Workspace",
       description: "Enter your Twilio credentials in either the Voice or SMS settings page to connect.",
       completed: twilioConnected,
       details: [
