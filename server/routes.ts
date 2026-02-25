@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import type { InsertRoomBooking } from "@shared/schema";
 import { insertSupportTicketSchema, getPlanTier } from "@shared/schema";
 import { getAiResponse, buildWidgetSystemPrompt, resolveAiKey } from "./ai-chat";
+import { compileMdxToHtml } from "./mdx-compiler";
 import fs from "fs";
 import path from "path";
 
@@ -1619,10 +1620,28 @@ export async function registerRoutes(
     }
   });
 
+  const PLATFORM_DOMAINS = ["indexflow.io", "indexflow.cloud"];
+
   app.get("/api/public/blog/posts", async (req, res) => {
     try {
       const domain = req.query.domain as string;
       if (!domain) return res.json({ blogTemplate: "editorial", accentColor: null, accentForeground: null, posts: [] });
+
+      if (PLATFORM_DOMAINS.includes(domain)) {
+        const allWorkspaces = await storage.getWorkspaces();
+        let allPosts: any[] = [];
+        for (const ws of allWorkspaces) {
+          const posts = await storage.getWorkspaceBlogPosts(ws.id, "published");
+          allPosts = allPosts.concat(posts);
+        }
+        allPosts.sort((a, b) => {
+          const da = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+          const db = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+          return db - da;
+        });
+        return res.json({ blogTemplate: "editorial", accentColor: null, accentForeground: null, posts: allPosts });
+      }
+
       const domainRecord = await storage.getWorkspaceDomainByDomain(domain);
       if (!domainRecord) return res.json({ blogTemplate: "editorial", accentColor: null, accentForeground: null, posts: [] });
       const venue = await storage.getWorkspace(domainRecord.workspaceId);
@@ -1643,12 +1662,39 @@ export async function registerRoutes(
       const domain = req.query.domain as string;
       const slug = req.query.slug as string;
       if (!domain || !slug) return res.status(400).json({ error: "domain and slug required" });
+
+      const compileIfNeeded = async (post: any) => {
+        if (!post.compiledHtml && post.mdxContent) {
+          const { html } = await compileMdxToHtml(post.mdxContent);
+          return { ...post, compiledHtml: html };
+        }
+        return post;
+      };
+
+      if (PLATFORM_DOMAINS.includes(domain)) {
+        const allWorkspaces = await storage.getWorkspaces();
+        for (const ws of allWorkspaces) {
+          const posts = await storage.getWorkspaceBlogPosts(ws.id, "published");
+          const post = posts.find(p => p.slug === slug);
+          if (post) {
+            const venue = await storage.getWorkspace(ws.id);
+            return res.json({
+              blogTemplate: (venue as any)?.blogTemplate || "editorial",
+              accentColor: (venue as any)?.accentColor || null,
+              accentForeground: (venue as any)?.accentForeground || null,
+              ...(await compileIfNeeded(post)),
+            });
+          }
+        }
+        return res.status(404).json({ error: "Post not found" });
+      }
+
       const domainRecord = await storage.getWorkspaceDomainByDomain(domain);
       if (!domainRecord) return res.status(404).json({ error: "Domain not found" });
       const posts = await storage.getWorkspaceBlogPosts(domainRecord.workspaceId, "published");
       const post = posts.find(p => p.slug === slug);
       if (!post) return res.status(404).json({ error: "Post not found" });
-      res.json(post);
+      res.json(await compileIfNeeded(post));
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch blog post" });
     }
