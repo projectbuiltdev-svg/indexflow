@@ -1365,7 +1365,18 @@ export async function registerRoutes(
 
   app.post("/api/admin/blog/posts/bulk/create", async (req, res) => {
     try {
-      const posts = req.body.posts || [];
+      let posts = req.body.posts || [];
+
+      if (posts.length === 0 && Array.isArray(req.body.topics) && req.body.topics.length > 0) {
+        const wId = req.body.workspaceId;
+        const cat = req.body.category || "SEO";
+        posts = req.body.topics.map((topic: string) => ({
+          workspaceId: wId,
+          title: topic.trim(),
+          category: cat,
+          status: "draft",
+        }));
+      }
       if (posts.length > 0 && posts[0].workspaceId) {
         const workspaceId = posts[0].workspaceId;
         const workspace = await storage.getWorkspace(workspaceId);
