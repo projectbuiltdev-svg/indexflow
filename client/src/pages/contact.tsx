@@ -165,7 +165,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="outline" className="mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">Get In Touch</Badge>
           <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-            Let's Grow Your <span className="text-primary">SEO Platform</span>
+            Grow Your <span className="text-primary">SEO Platform</span>
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Ready to scale your agency with indexFlow? Schedule a demo or ask us anything about our platform. We've made this simple and easy.
