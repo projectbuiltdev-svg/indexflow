@@ -1,13 +1,12 @@
 import { useRoute, Link } from "wouter";
-import { ArrowRight, CheckCircle, MapPin, ChevronRight, Compass, Building2, Sparkles, TreePine, Search, PenTool, Megaphone, User, TrendingUp, BarChart3, FileText, Globe } from "lucide-react";
+import { ArrowRight, CheckCircle, MapPin, ChevronRight, Search, PenTool, Megaphone, User, TrendingUp, FileText, Globe } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Layout } from "@/components/layout";
 import { SEO } from "@/components/seo";
-import { LocationMap } from "@/components/location-map";
-import { locations, getLocationBySlug, type Location, type Attraction } from "@/data/locations";
+import { locations, getLocationBySlug, type Location } from "@/data/locations";
 import { serviceTypes, getServiceBySlug, type ServiceType } from "@/data/services";
 import NotFound from "./not-found";
 
