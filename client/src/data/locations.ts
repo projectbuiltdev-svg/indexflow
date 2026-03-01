@@ -2,6 +2,10 @@ export interface Attraction {
   name: string;
   type: string;
   description: string;
+  latitude: number;
+  longitude: number;
+  link: string;
+  nofollow: boolean;
 }
 
 export interface Location {
@@ -41,8 +45,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Birmingham AL Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content automation for marketing agencies and businesses in Birmingham, Alabama.",
     attractions: [
-      { name: "Innovation Depot", type: "landmark", description: "Alabama's largest startup incubator and tech accelerator" },
-      { name: "UAB District", type: "neighborhood", description: "University-adjacent area with growing digital agency presence" },
+      { name: "Innovation Depot", type: "landmark", description: "Alabama's largest startup incubator and tech accelerator", latitude: 33.4967, longitude: -86.8265, link: "https://maps.google.com/?q=Innovation%20Depot", nofollow: false },
+      { name: "UAB District", type: "neighborhood", description: "University-adjacent area with growing digital agency presence", latitude: 33.5047, longitude: -86.8145, link: "https://maps.google.com/?q=UAB%20District", nofollow: true },
     ],
     neighborhoods: ["Southside", "Avondale", "Homewood", "Mountain Brook", "Five Points South"],
   },
@@ -62,7 +66,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Anchorage Agencies | indexFlow",
     metaDescription: "SEO tools and content management for agencies and businesses serving the Anchorage, Alaska market.",
     attractions: [
-      { name: "Downtown Anchorage", type: "landmark", description: "Business hub with concentrated local service providers" },
+      { name: "Downtown Anchorage", type: "landmark", description: "Business hub with concentrated local service providers", latitude: 61.2101, longitude: -149.9003, link: "https://maps.google.com/?q=Downtown%20Anchorage", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Midtown", "South Anchorage", "Eagle River"],
   },
@@ -82,9 +86,9 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Phoenix Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for marketing agencies in Phoenix and the greater Arizona market.",
     attractions: [
-      { name: "Scottsdale", type: "neighborhood", description: "Affluent suburb with concentrated marketing and tech firms" },
-      { name: "Tempe", type: "neighborhood", description: "ASU-adjacent tech corridor with startup agencies" },
-      { name: "Downtown Phoenix", type: "landmark", description: "Revitalized business core with growing digital sector" },
+      { name: "Scottsdale", type: "neighborhood", description: "Affluent suburb with concentrated marketing and tech firms", latitude: 33.4484, longitude: -112.0620, link: "https://maps.google.com/?q=Scottsdale", nofollow: false },
+      { name: "Tempe", type: "neighborhood", description: "ASU-adjacent tech corridor with startup agencies", latitude: 33.4564, longitude: -112.0500, link: "https://maps.google.com/?q=Tempe", nofollow: true },
+      { name: "Downtown Phoenix", type: "landmark", description: "Revitalized business core with growing digital sector", latitude: 33.4644, longitude: -112.0980, link: "https://maps.google.com/?q=Downtown%20Phoenix", nofollow: true },
     ],
     neighborhoods: ["Scottsdale", "Tempe", "Mesa", "Chandler", "Gilbert"],
   },
@@ -104,7 +108,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Little Rock Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies and businesses in Little Rock, Arkansas.",
     attractions: [
-      { name: "River Market District", type: "landmark", description: "Downtown business and entertainment hub" },
+      { name: "River Market District", type: "landmark", description: "Downtown business and entertainment hub", latitude: 34.7705, longitude: -92.3016, link: "https://maps.google.com/?q=River%20Market%20District", nofollow: false },
     ],
     neighborhoods: ["River Market", "Hillcrest", "The Heights", "West Little Rock"],
   },
@@ -124,9 +128,9 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Los Angeles Agencies | indexFlow",
     metaDescription: "AI-powered SEO, content automation, and white-label reporting for LA-based agencies and marketing teams.",
     attractions: [
-      { name: "Santa Monica", type: "neighborhood", description: "Tech-forward neighborhood with numerous digital marketing agencies" },
-      { name: "Silicon Beach", type: "neighborhood", description: "LA's tech hub home to hundreds of startups and agencies" },
-      { name: "Downtown LA", type: "landmark", description: "Growing center for creative agencies and enterprise marketing" },
+      { name: "Santa Monica", type: "neighborhood", description: "Tech-forward neighborhood with numerous digital marketing agencies", latitude: 34.0282, longitude: -118.2437, link: "https://maps.google.com/?q=Santa%20Monica", nofollow: true },
+      { name: "Silicon Beach", type: "neighborhood", description: "LA's tech hub home to hundreds of startups and agencies", latitude: 34.0362, longitude: -118.2317, link: "https://maps.google.com/?q=Silicon%20Beach", nofollow: true },
+      { name: "Downtown LA", type: "landmark", description: "Growing center for creative agencies and enterprise marketing", latitude: 34.0442, longitude: -118.2197, link: "https://maps.google.com/?q=Downtown%20LA", nofollow: false },
     ],
     neighborhoods: ["Hollywood", "Santa Monica", "Downtown LA", "Silver Lake", "West Hollywood", "Beverly Hills"],
   },
@@ -144,8 +148,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for San Francisco Agencies | indexFlow",
     metaDescription: "Enterprise-grade SEO and content automation for agencies in the Bay Area tech ecosystem.",
     attractions: [
-      { name: "SOMA", type: "neighborhood", description: "Startup hub with dense concentration of tech and marketing firms" },
-      { name: "Financial District", type: "landmark", description: "Corporate marketing teams and enterprise SEO demand" },
+      { name: "SOMA", type: "neighborhood", description: "Startup hub with dense concentration of tech and marketing firms", latitude: 37.7749, longitude: -122.4434, link: "https://maps.google.com/?q=SOMA", nofollow: true },
+      { name: "Financial District", type: "landmark", description: "Corporate marketing teams and enterprise SEO demand", latitude: 37.7829, longitude: -122.4314, link: "https://maps.google.com/?q=Financial%20District", nofollow: true },
     ],
     neighborhoods: ["Mission District", "North Beach", "SOMA", "Hayes Valley", "Marina"],
   },
@@ -163,8 +167,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for San Diego Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies and businesses in San Diego, California.",
     attractions: [
-      { name: "Downtown San Diego", type: "landmark", description: "Business core with growing startup and agency presence" },
-      { name: "UTC", type: "neighborhood", description: "Tech corridor near UCSD with SaaS and marketing firms" },
+      { name: "Downtown San Diego", type: "landmark", description: "Business core with growing startup and agency presence", latitude: 32.7317, longitude: -117.1611, link: "https://maps.google.com/?q=Downtown%20San%20Diego", nofollow: false },
+      { name: "UTC", type: "neighborhood", description: "Tech corridor near UCSD with SaaS and marketing firms", latitude: 32.7397, longitude: -117.1491, link: "https://maps.google.com/?q=UTC", nofollow: true },
     ],
     neighborhoods: ["Gaslamp Quarter", "La Jolla", "North Park", "Pacific Beach", "Hillcrest"],
   },
@@ -184,9 +188,9 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Denver Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for marketing agencies in the Denver metro area.",
     attractions: [
-      { name: "RiNo", type: "neighborhood", description: "River North Art District with creative agencies and tech startups" },
-      { name: "LoDo", type: "neighborhood", description: "Lower Downtown tech hub with coworking and agency spaces" },
-      { name: "Denver Tech Center", type: "landmark", description: "Major business park with enterprise marketing demand" },
+      { name: "RiNo", type: "neighborhood", description: "River North Art District with creative agencies and tech startups", latitude: 39.7152, longitude: -104.9663, link: "https://maps.google.com/?q=RiNo", nofollow: true },
+      { name: "LoDo", type: "neighborhood", description: "Lower Downtown tech hub with coworking and agency spaces", latitude: 39.7232, longitude: -105.0143, link: "https://maps.google.com/?q=LoDo", nofollow: false },
+      { name: "Denver Tech Center", type: "landmark", description: "Major business park with enterprise marketing demand", latitude: 39.7312, longitude: -105.0023, link: "https://maps.google.com/?q=Denver%20Tech%20Center", nofollow: true },
     ],
     neighborhoods: ["RiNo", "LoDo", "Cherry Creek", "Highland", "Capitol Hill"],
   },
@@ -206,7 +210,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Hartford Agencies | indexFlow",
     metaDescription: "SEO and content platform for agencies serving Hartford's insurance and financial services market.",
     attractions: [
-      { name: "Downtown Hartford", type: "landmark", description: "Insurance industry HQ cluster with B2B marketing demand" },
+      { name: "Downtown Hartford", type: "landmark", description: "Insurance industry HQ cluster with B2B marketing demand", latitude: 41.7658, longitude: -72.6734, link: "https://maps.google.com/?q=Downtown%20Hartford", nofollow: true },
     ],
     neighborhoods: ["West End", "Downtown", "Asylum Hill", "South End"],
   },
@@ -226,7 +230,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Wilmington DE Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies and businesses in Wilmington, Delaware.",
     attractions: [
-      { name: "Wilmington Riverfront", type: "landmark", description: "Revitalized business district with growing tech presence" },
+      { name: "Wilmington Riverfront", type: "landmark", description: "Revitalized business district with growing tech presence", latitude: 39.7471, longitude: -75.5278, link: "https://maps.google.com/?q=Wilmington%20Riverfront", nofollow: false },
     ],
     neighborhoods: ["Riverfront", "Trolley Square", "Downtown", "Greenville"],
   },
@@ -246,8 +250,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Miami Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for marketing agencies in Miami and South Florida.",
     attractions: [
-      { name: "Brickell", type: "neighborhood", description: "Miami's financial district with a booming startup ecosystem" },
-      { name: "Wynwood", type: "neighborhood", description: "Creative district home to digital agencies and tech companies" },
+      { name: "Brickell", type: "neighborhood", description: "Miami's financial district with a booming startup ecosystem", latitude: 25.7777, longitude: -80.1678, link: "https://maps.google.com/?q=Brickell", nofollow: true },
+      { name: "Wynwood", type: "neighborhood", description: "Creative district home to digital agencies and tech companies", latitude: 25.7857, longitude: -80.2158, link: "https://maps.google.com/?q=Wynwood", nofollow: true },
     ],
     neighborhoods: ["South Beach", "Wynwood", "Brickell", "Little Havana", "Coral Gables"],
   },
@@ -265,7 +269,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Tampa Agencies | indexFlow",
     metaDescription: "SEO and content automation for marketing agencies in the Tampa Bay area.",
     attractions: [
-      { name: "Water Street Tampa", type: "landmark", description: "New mixed-use district attracting tech and marketing firms" },
+      { name: "Water Street Tampa", type: "landmark", description: "New mixed-use district attracting tech and marketing firms", latitude: 27.9266, longitude: -82.4692, link: "https://maps.google.com/?q=Water%20Street%20Tampa", nofollow: false },
     ],
     neighborhoods: ["Downtown", "Ybor City", "SoHo", "Channelside", "Westshore"],
   },
@@ -283,7 +287,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Jacksonville Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies and businesses in Jacksonville, Florida.",
     attractions: [
-      { name: "Downtown Jacksonville", type: "landmark", description: "Financial services hub with marketing agency presence" },
+      { name: "Downtown Jacksonville", type: "landmark", description: "Financial services hub with marketing agency presence", latitude: 30.3162, longitude: -81.6557, link: "https://maps.google.com/?q=Downtown%20Jacksonville", nofollow: true },
     ],
     neighborhoods: ["Downtown", "San Marco", "Riverside", "Five Points", "Jacksonville Beach"],
   },
@@ -303,9 +307,9 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Atlanta Agencies | indexFlow",
     metaDescription: "Manage SEO, content, and client reporting for your Atlanta marketing agency with indexFlow.",
     attractions: [
-      { name: "Midtown", type: "neighborhood", description: "Tech and startup center with coworking spaces and agencies" },
-      { name: "Buckhead", type: "neighborhood", description: "Corporate district with enterprise marketing demand" },
-      { name: "Atlanta Tech Village", type: "landmark", description: "Largest tech hub in the Southeast for startups" },
+      { name: "Midtown", type: "neighborhood", description: "Tech and startup center with coworking spaces and agencies", latitude: 33.7410, longitude: -84.3760, link: "https://maps.google.com/?q=Midtown", nofollow: true },
+      { name: "Buckhead", type: "neighborhood", description: "Corporate district with enterprise marketing demand", latitude: 33.7490, longitude: -84.3640, link: "https://maps.google.com/?q=Buckhead", nofollow: false },
+      { name: "Atlanta Tech Village", type: "landmark", description: "Largest tech hub in the Southeast for startups", latitude: 33.7570, longitude: -84.4120, link: "https://maps.google.com/?q=Atlanta%20Tech%20Village", nofollow: true },
     ],
     neighborhoods: ["Midtown", "Buckhead", "Inman Park", "Old Fourth Ward", "Decatur"],
   },
@@ -325,7 +329,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Honolulu Agencies | indexFlow",
     metaDescription: "SEO and content tools for agencies serving Honolulu's tourism and local business market.",
     attractions: [
-      { name: "Waikiki", type: "neighborhood", description: "Tourism hotspot with intense local SEO competition" },
+      { name: "Waikiki", type: "neighborhood", description: "Tourism hotspot with intense local SEO competition", latitude: 21.3229, longitude: -157.8703, link: "https://maps.google.com/?q=Waikiki", nofollow: true },
     ],
     neighborhoods: ["Waikiki", "Downtown", "Kailua", "Kakaako", "Ala Moana"],
   },
@@ -345,7 +349,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Boise Agencies | indexFlow",
     metaDescription: "SEO and content management for agencies and businesses in Boise, Idaho.",
     attractions: [
-      { name: "Downtown Boise", type: "landmark", description: "Growing tech corridor attracting remote-friendly companies" },
+      { name: "Downtown Boise", type: "landmark", description: "Growing tech corridor attracting remote-friendly companies", latitude: 43.6390, longitude: -116.2023, link: "https://maps.google.com/?q=Downtown%20Boise", nofollow: false },
     ],
     neighborhoods: ["Downtown", "North End", "Boise Bench", "Eagle", "Meridian"],
   },
@@ -365,9 +369,9 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Chicago Agencies | indexFlow",
     metaDescription: "Manage SEO, content production, and client reporting for your Chicago-based marketing agency from one platform.",
     attractions: [
-      { name: "The Loop", type: "landmark", description: "Chicago's business core with major agency headquarters" },
-      { name: "River North", type: "neighborhood", description: "Dense cluster of advertising and digital marketing firms" },
-      { name: "West Loop", type: "neighborhood", description: "Growing tech and startup scene with coworking spaces" },
+      { name: "The Loop", type: "landmark", description: "Chicago's business core with major agency headquarters", latitude: 41.8541, longitude: -87.6178, link: "https://maps.google.com/?q=The%20Loop", nofollow: true },
+      { name: "River North", type: "neighborhood", description: "Dense cluster of advertising and digital marketing firms", latitude: 41.8621, longitude: -87.6058, link: "https://maps.google.com/?q=River%20North", nofollow: true },
+      { name: "West Loop", type: "neighborhood", description: "Growing tech and startup scene with coworking spaces", latitude: 41.8701, longitude: -87.6538, link: "https://maps.google.com/?q=West%20Loop", nofollow: false },
     ],
     neighborhoods: ["River North", "Wicker Park", "Lincoln Park", "West Loop", "Old Town"],
   },
@@ -387,7 +391,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Indianapolis Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for marketing agencies in Indianapolis, Indiana.",
     attractions: [
-      { name: "Downtown Indy", type: "landmark", description: "Business district with marketing and tech firm presence" },
+      { name: "Downtown Indy", type: "landmark", description: "Business district with marketing and tech firm presence", latitude: 39.7684, longitude: -86.1701, link: "https://maps.google.com/?q=Downtown%20Indy", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Broad Ripple", "Mass Ave", "Fountain Square", "Carmel"],
   },
@@ -407,7 +411,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Des Moines Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Des Moines, Iowa.",
     attractions: [
-      { name: "East Village", type: "neighborhood", description: "Revitalized district with creative agencies and startups" },
+      { name: "East Village", type: "neighborhood", description: "Revitalized district with creative agencies and startups", latitude: 41.5948, longitude: -93.6250, link: "https://maps.google.com/?q=East%20Village", nofollow: true },
     ],
     neighborhoods: ["East Village", "Downtown", "West Des Moines", "Ankeny"],
   },
@@ -427,7 +431,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Kansas City Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in the Kansas City metro area.",
     attractions: [
-      { name: "Crossroads Arts District", type: "neighborhood", description: "Creative hub with digital agencies and tech startups" },
+      { name: "Crossroads Arts District", type: "neighborhood", description: "Creative hub with digital agencies and tech startups", latitude: 39.1157, longitude: -94.5666, link: "https://maps.google.com/?q=Crossroads%20Arts%20District", nofollow: false },
     ],
     neighborhoods: ["Crossroads", "Westport", "Country Club Plaza", "River Market", "Brookside"],
   },
@@ -447,7 +451,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Louisville Agencies | indexFlow",
     metaDescription: "SEO and content management for marketing agencies in Louisville, Kentucky.",
     attractions: [
-      { name: "NuLu", type: "neighborhood", description: "New Louisville arts and innovation district" },
+      { name: "NuLu", type: "neighborhood", description: "New Louisville arts and innovation district", latitude: 38.2767, longitude: -85.7345, link: "https://maps.google.com/?q=NuLu", nofollow: true },
     ],
     neighborhoods: ["NuLu", "Highlands", "Downtown", "St. Matthews", "Germantown"],
   },
@@ -467,8 +471,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for New Orleans Agencies | indexFlow",
     metaDescription: "Local SEO and content tools for marketing agencies serving New Orleans businesses.",
     attractions: [
-      { name: "French Quarter", type: "neighborhood", description: "High-competition local SEO market with dense small businesses" },
-      { name: "Warehouse District", type: "neighborhood", description: "Growing tech and creative agency presence" },
+      { name: "French Quarter", type: "neighborhood", description: "High-competition local SEO market with dense small businesses", latitude: 29.9271, longitude: -90.0955, link: "https://maps.google.com/?q=French%20Quarter", nofollow: true },
+      { name: "Warehouse District", type: "neighborhood", description: "Growing tech and creative agency presence", latitude: 29.9351, longitude: -90.0835, link: "https://maps.google.com/?q=Warehouse%20District", nofollow: false },
     ],
     neighborhoods: ["French Quarter", "Garden District", "Bywater", "Marigny", "Uptown"],
   },
@@ -488,7 +492,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Portland ME Agencies | indexFlow",
     metaDescription: "SEO and content platform for marketing agencies and businesses in Portland, Maine.",
     attractions: [
-      { name: "Old Port", type: "neighborhood", description: "Historic waterfront district with small business concentration" },
+      { name: "Old Port", type: "neighborhood", description: "Historic waterfront district with small business concentration", latitude: 43.6511, longitude: -70.2568, link: "https://maps.google.com/?q=Old%20Port", nofollow: true },
     ],
     neighborhoods: ["Old Port", "East End", "West End", "Munjoy Hill"],
   },
@@ -508,8 +512,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Baltimore Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in the Baltimore metro area.",
     attractions: [
-      { name: "Harbor East", type: "neighborhood", description: "Revitalized waterfront with tech and creative firms" },
-      { name: "Federal Hill", type: "neighborhood", description: "Growing startup and small agency presence" },
+      { name: "Harbor East", type: "neighborhood", description: "Revitalized waterfront with tech and creative firms", latitude: 39.2904, longitude: -76.6002, link: "https://maps.google.com/?q=Harbor%20East", nofollow: true },
+      { name: "Federal Hill", type: "neighborhood", description: "Growing startup and small agency presence", latitude: 39.2984, longitude: -76.5882, link: "https://maps.google.com/?q=Federal%20Hill", nofollow: false },
     ],
     neighborhoods: ["Harbor East", "Federal Hill", "Fells Point", "Canton", "Mount Vernon"],
   },
@@ -529,8 +533,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Boston Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content management for marketing agencies in the Boston metro area.",
     attractions: [
-      { name: "Seaport District", type: "neighborhood", description: "Innovation district with a growing tech and startup ecosystem" },
-      { name: "Cambridge/Kendall Square", type: "neighborhood", description: "MIT-adjacent hub for biotech and SaaS marketing" },
+      { name: "Seaport District", type: "neighborhood", description: "Innovation district with a growing tech and startup ecosystem", latitude: 42.3761, longitude: -71.0829, link: "https://maps.google.com/?q=Seaport%20District", nofollow: true },
+      { name: "Cambridge/Kendall Square", type: "neighborhood", description: "MIT-adjacent hub for biotech and SaaS marketing", latitude: 42.3841, longitude: -71.0709, link: "https://maps.google.com/?q=Cambridge%2FKendall%20Square", nofollow: true },
     ],
     neighborhoods: ["Back Bay", "North End", "Seaport", "South End", "Cambridge"],
   },
@@ -550,8 +554,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Detroit Agencies | indexFlow",
     metaDescription: "SEO and content platform for marketing agencies in Detroit and Southeast Michigan.",
     attractions: [
-      { name: "Downtown Detroit", type: "landmark", description: "Revitalized business core with growing tech scene" },
-      { name: "Corktown", type: "neighborhood", description: "Startup neighborhood near Ford's mobility campus" },
+      { name: "Downtown Detroit", type: "landmark", description: "Revitalized business core with growing tech scene", latitude: 42.3074, longitude: -83.0458, link: "https://maps.google.com/?q=Downtown%20Detroit", nofollow: false },
+      { name: "Corktown", type: "neighborhood", description: "Startup neighborhood near Ford's mobility campus", latitude: 42.3154, longitude: -83.0338, link: "https://maps.google.com/?q=Corktown", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Corktown", "Midtown", "Ferndale", "Royal Oak"],
   },
@@ -571,7 +575,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Minneapolis Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in the Minneapolis-St. Paul metro.",
     attractions: [
-      { name: "North Loop", type: "neighborhood", description: "Warehouse district turned startup and creative agency hub" },
+      { name: "North Loop", type: "neighborhood", description: "Warehouse district turned startup and creative agency hub", latitude: 44.9698, longitude: -93.2410, link: "https://maps.google.com/?q=North%20Loop", nofollow: true },
     ],
     neighborhoods: ["North Loop", "Uptown", "Northeast", "Downtown", "St. Paul"],
   },
@@ -591,7 +595,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Jackson MS Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies and businesses in Jackson, Mississippi.",
     attractions: [
-      { name: "Fondren District", type: "neighborhood", description: "Creative neighborhood with small business cluster" },
+      { name: "Fondren District", type: "neighborhood", description: "Creative neighborhood with small business cluster", latitude: 32.2988, longitude: -90.2088, link: "https://maps.google.com/?q=Fondren%20District", nofollow: false },
     ],
     neighborhoods: ["Fondren", "Downtown", "Belhaven", "Madison"],
   },
@@ -611,7 +615,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for St. Louis Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for marketing agencies in St. Louis, Missouri.",
     attractions: [
-      { name: "Cortex Innovation Community", type: "landmark", description: "Tech and innovation district with startup agencies" },
+      { name: "Cortex Innovation Community", type: "landmark", description: "Tech and innovation district with startup agencies", latitude: 38.6350, longitude: -90.2114, link: "https://maps.google.com/?q=Cortex%20Innovation%20Community", nofollow: true },
     ],
     neighborhoods: ["Central West End", "Soulard", "The Grove", "Clayton", "Maplewood"],
   },
@@ -631,7 +635,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Billings Agencies | indexFlow",
     metaDescription: "SEO and content tools for agencies and businesses in Billings, Montana.",
     attractions: [
-      { name: "Downtown Billings", type: "landmark", description: "Business center for Montana's largest metro area" },
+      { name: "Downtown Billings", type: "landmark", description: "Business center for Montana's largest metro area", latitude: 45.7993, longitude: -108.5007, link: "https://maps.google.com/?q=Downtown%20Billings", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Heights", "West End"],
   },
@@ -651,7 +655,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Omaha Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for marketing agencies in Omaha, Nebraska.",
     attractions: [
-      { name: "Old Market", type: "neighborhood", description: "Historic district with creative and digital agency presence" },
+      { name: "Old Market", type: "neighborhood", description: "Historic district with creative and digital agency presence", latitude: 41.2805, longitude: -95.9225, link: "https://maps.google.com/?q=Old%20Market", nofollow: false },
     ],
     neighborhoods: ["Old Market", "Midtown", "Dundee", "Benson", "Aksarben"],
   },
@@ -671,8 +675,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Las Vegas Agencies | indexFlow",
     metaDescription: "SEO and content tools for agencies serving Las Vegas hospitality, entertainment, and local businesses.",
     attractions: [
-      { name: "The Strip", type: "landmark", description: "High-competition local SEO market for hospitality businesses" },
-      { name: "Downtown Arts District", type: "neighborhood", description: "Growing tech startup community with creative agencies" },
+      { name: "The Strip", type: "landmark", description: "High-competition local SEO market for hospitality businesses", latitude: 36.1459, longitude: -115.1158, link: "https://maps.google.com/?q=The%20Strip", nofollow: true },
+      { name: "Downtown Arts District", type: "neighborhood", description: "Growing tech startup community with creative agencies", latitude: 36.1539, longitude: -115.1638, link: "https://maps.google.com/?q=Downtown%20Arts%20District", nofollow: true },
     ],
     neighborhoods: ["The Strip", "Downtown", "Summerlin", "Henderson", "Arts District"],
   },
@@ -692,7 +696,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Manchester NH Agencies | indexFlow",
     metaDescription: "SEO and content management for agencies and businesses in Manchester, New Hampshire.",
     attractions: [
-      { name: "Millyard", type: "landmark", description: "Historic mill complex transformed into tech and startup campus" },
+      { name: "Millyard", type: "landmark", description: "Historic mill complex transformed into tech and startup campus", latitude: 42.9876, longitude: -71.4668, link: "https://maps.google.com/?q=Millyard", nofollow: false },
     ],
     neighborhoods: ["Millyard", "Downtown", "South Side", "North End"],
   },
@@ -712,7 +716,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Newark Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content tools for agencies in Newark and Northern New Jersey.",
     attractions: [
-      { name: "Ironbound District", type: "neighborhood", description: "Diverse business district with entrepreneurial energy" },
+      { name: "Ironbound District", type: "neighborhood", description: "Diverse business district with entrepreneurial energy", latitude: 40.7357, longitude: -74.1724, link: "https://maps.google.com/?q=Ironbound%20District", nofollow: true },
     ],
     neighborhoods: ["Ironbound", "Downtown", "University Heights", "North Ward"],
   },
@@ -732,7 +736,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Albuquerque Agencies | indexFlow",
     metaDescription: "SEO and content platform for marketing agencies and businesses in Albuquerque, New Mexico.",
     attractions: [
-      { name: "Downtown Albuquerque", type: "landmark", description: "Business hub with growing startup and tech presence" },
+      { name: "Downtown Albuquerque", type: "landmark", description: "Business hub with growing startup and tech presence", latitude: 35.0924, longitude: -106.6384, link: "https://maps.google.com/?q=Downtown%20Albuquerque", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Nob Hill", "Old Town", "North Valley", "Uptown"],
   },
@@ -752,9 +756,9 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for New York Agencies | indexFlow",
     metaDescription: "All-in-one SEO, content management, and client reporting platform for agencies and businesses in New York City.",
     attractions: [
-      { name: "Midtown Manhattan", type: "landmark", description: "Dense concentration of agencies and corporate marketing teams" },
-      { name: "Silicon Alley", type: "neighborhood", description: "NYC's tech startup corridor with hundreds of digital agencies" },
-      { name: "Flatiron District", type: "neighborhood", description: "Hub for SaaS companies, ad-tech firms, and marketing agencies" },
+      { name: "Midtown Manhattan", type: "landmark", description: "Dense concentration of agencies and corporate marketing teams", latitude: 40.7288, longitude: -73.9820, link: "https://maps.google.com/?q=Midtown%20Manhattan", nofollow: false },
+      { name: "Silicon Alley", type: "neighborhood", description: "NYC's tech startup corridor with hundreds of digital agencies", latitude: 40.7368, longitude: -74.0300, link: "https://maps.google.com/?q=Silicon%20Alley", nofollow: true },
+      { name: "Flatiron District", type: "neighborhood", description: "Hub for SaaS companies, ad-tech firms, and marketing agencies", latitude: 40.6888, longitude: -74.0180, link: "https://maps.google.com/?q=Flatiron%20District", nofollow: true },
     ],
     neighborhoods: ["Manhattan", "Brooklyn", "Queens", "SoHo", "Williamsburg", "Greenwich Village"],
   },
@@ -774,8 +778,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Charlotte Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for marketing agencies in Charlotte, North Carolina.",
     attractions: [
-      { name: "South End", type: "neighborhood", description: "Trendy neighborhood with tech startups and creative agencies" },
-      { name: "Uptown Charlotte", type: "landmark", description: "Financial district with banking and enterprise marketing teams" },
+      { name: "South End", type: "neighborhood", description: "Trendy neighborhood with tech startups and creative agencies", latitude: 35.2111, longitude: -80.8431, link: "https://maps.google.com/?q=South%20End", nofollow: false },
+      { name: "Uptown Charlotte", type: "landmark", description: "Financial district with banking and enterprise marketing teams", latitude: 35.2191, longitude: -80.8311, link: "https://maps.google.com/?q=Uptown%20Charlotte", nofollow: true },
     ],
     neighborhoods: ["South End", "NoDa", "Uptown", "Plaza Midwood", "Dilworth"],
   },
@@ -795,7 +799,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Fargo Agencies | indexFlow",
     metaDescription: "SEO and content management for agencies and businesses in Fargo, North Dakota.",
     attractions: [
-      { name: "Downtown Fargo", type: "landmark", description: "Startup-friendly downtown with growing tech ecosystem" },
+      { name: "Downtown Fargo", type: "landmark", description: "Startup-friendly downtown with growing tech ecosystem", latitude: 46.8772, longitude: -96.7658, link: "https://maps.google.com/?q=Downtown%20Fargo", nofollow: true },
     ],
     neighborhoods: ["Downtown", "West Fargo", "South Fargo"],
   },
@@ -815,7 +819,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Columbus Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for marketing agencies in Columbus, Ohio.",
     attractions: [
-      { name: "Short North", type: "neighborhood", description: "Arts district with creative agencies and tech startups" },
+      { name: "Short North", type: "neighborhood", description: "Arts district with creative agencies and tech startups", latitude: 39.9692, longitude: -83.0228, link: "https://maps.google.com/?q=Short%20North", nofollow: false },
     ],
     neighborhoods: ["Short North", "German Village", "Downtown", "Grandview", "Clintonville"],
   },
@@ -835,7 +839,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Oklahoma City Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Oklahoma City.",
     attractions: [
-      { name: "Automobile Alley", type: "neighborhood", description: "Revitalized district with creative and digital firms" },
+      { name: "Automobile Alley", type: "neighborhood", description: "Revitalized district with creative and digital firms", latitude: 35.4836, longitude: -97.5284, link: "https://maps.google.com/?q=Automobile%20Alley", nofollow: true },
     ],
     neighborhoods: ["Automobile Alley", "Midtown", "Bricktown", "Paseo", "Nichols Hills"],
   },
@@ -855,8 +859,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Portland Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content management for marketing agencies and freelancers in Portland, Oregon.",
     attractions: [
-      { name: "Pearl District", type: "neighborhood", description: "Upscale neighborhood with creative agencies and tech firms" },
-      { name: "Central Eastside", type: "neighborhood", description: "Industrial-creative hub with growing startup presence" },
+      { name: "Pearl District", type: "neighborhood", description: "Upscale neighborhood with creative agencies and tech firms", latitude: 45.5392, longitude: -122.6784, link: "https://maps.google.com/?q=Pearl%20District", nofollow: true },
+      { name: "Central Eastside", type: "neighborhood", description: "Industrial-creative hub with growing startup presence", latitude: 45.4912, longitude: -122.6664, link: "https://maps.google.com/?q=Central%20Eastside", nofollow: false },
     ],
     neighborhoods: ["Pearl District", "Alberta Arts", "Hawthorne", "Division", "Mississippi"],
   },
@@ -876,8 +880,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Philadelphia Agencies | indexFlow",
     metaDescription: "AI-powered SEO, content automation, and client management for Philadelphia marketing agencies.",
     attractions: [
-      { name: "Center City", type: "landmark", description: "Downtown business core with major agency headquarters" },
-      { name: "University City", type: "neighborhood", description: "Innovation hub near UPenn and Drexel with startup agencies" },
+      { name: "Center City", type: "landmark", description: "Downtown business core with major agency headquarters", latitude: 39.9366, longitude: -75.1412, link: "https://maps.google.com/?q=Center%20City", nofollow: true },
+      { name: "University City", type: "neighborhood", description: "Innovation hub near UPenn and Drexel with startup agencies", latitude: 39.9446, longitude: -75.1892, link: "https://maps.google.com/?q=University%20City", nofollow: true },
     ],
     neighborhoods: ["Rittenhouse", "Fishtown", "Old City", "Northern Liberties", "Passyunk"],
   },
@@ -895,7 +899,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Pittsburgh Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Pittsburgh, Pennsylvania.",
     attractions: [
-      { name: "Strip District", type: "neighborhood", description: "Tech hub with startups and creative agency spaces" },
+      { name: "Strip District", type: "neighborhood", description: "Tech hub with startups and creative agency spaces", latitude: 40.4406, longitude: -80.0079, link: "https://maps.google.com/?q=Strip%20District", nofollow: false },
     ],
     neighborhoods: ["Strip District", "Lawrenceville", "Shadyside", "Oakland", "South Side"],
   },
@@ -915,7 +919,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Providence Agencies | indexFlow",
     metaDescription: "SEO and content platform for agencies and businesses in Providence, Rhode Island.",
     attractions: [
-      { name: "Downtown Providence", type: "landmark", description: "Creative and tech hub near major universities" },
+      { name: "Downtown Providence", type: "landmark", description: "Creative and tech hub near major universities", latitude: 41.8320, longitude: -71.4128, link: "https://maps.google.com/?q=Downtown%20Providence", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Federal Hill", "East Side", "Fox Point"],
   },
@@ -935,7 +939,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Charleston SC Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in Charleston, South Carolina.",
     attractions: [
-      { name: "Upper King Street", type: "neighborhood", description: "Growing tech and creative district" },
+      { name: "Upper King Street", type: "neighborhood", description: "Growing tech and creative district", latitude: 32.7925, longitude: -79.9191, link: "https://maps.google.com/?q=Upper%20King%20Street", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Upper King", "Mount Pleasant", "West Ashley", "James Island"],
   },
@@ -955,7 +959,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Sioux Falls Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Sioux Falls, South Dakota.",
     attractions: [
-      { name: "Downtown Sioux Falls", type: "landmark", description: "Business hub with growing digital marketing sector" },
+      { name: "Downtown Sioux Falls", type: "landmark", description: "Business hub with growing digital marketing sector", latitude: 43.5700, longitude: -96.7073, link: "https://maps.google.com/?q=Downtown%20Sioux%20Falls", nofollow: false },
     ],
     neighborhoods: ["Downtown", "East Side", "West Side"],
   },
@@ -975,8 +979,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Nashville Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for marketing agencies in Nashville, Tennessee.",
     attractions: [
-      { name: "The Gulch", type: "neighborhood", description: "Trendy business district with digital agencies and startups" },
-      { name: "East Nashville", type: "neighborhood", description: "Creative neighborhood attracting freelancers and small agencies" },
+      { name: "The Gulch", type: "neighborhood", description: "Trendy business district with digital agencies and startups", latitude: 36.1387, longitude: -86.8056, link: "https://maps.google.com/?q=The%20Gulch", nofollow: true },
+      { name: "East Nashville", type: "neighborhood", description: "Creative neighborhood attracting freelancers and small agencies", latitude: 36.1467, longitude: -86.7936, link: "https://maps.google.com/?q=East%20Nashville", nofollow: true },
     ],
     neighborhoods: ["East Nashville", "The Gulch", "12 South", "Germantown", "Midtown"],
   },
@@ -996,8 +1000,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Houston Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies serving Houston's diverse business market.",
     attractions: [
-      { name: "Energy Corridor", type: "landmark", description: "Major business district with enterprise marketing demand" },
-      { name: "Midtown", type: "neighborhood", description: "Growing hub for startups and digital agencies" },
+      { name: "Energy Corridor", type: "landmark", description: "Major business district with enterprise marketing demand", latitude: 29.7524, longitude: -95.3698, link: "https://maps.google.com/?q=Energy%20Corridor", nofollow: false },
+      { name: "Midtown", type: "neighborhood", description: "Growing hub for startups and digital agencies", latitude: 29.7604, longitude: -95.3578, link: "https://maps.google.com/?q=Midtown", nofollow: true },
     ],
     neighborhoods: ["Montrose", "The Heights", "Midtown", "River Oaks", "EaDo"],
   },
@@ -1015,8 +1019,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Austin Agencies | indexFlow",
     metaDescription: "White-label SEO and content automation for agencies and freelancers in Austin, Texas.",
     attractions: [
-      { name: "East Austin", type: "neighborhood", description: "Startup-dense area with coworking spaces and digital agencies" },
-      { name: "Domain", type: "neighborhood", description: "Tech campus area home to major SaaS companies" },
+      { name: "East Austin", type: "neighborhood", description: "Startup-dense area with coworking spaces and digital agencies", latitude: 30.2752, longitude: -97.7191, link: "https://maps.google.com/?q=East%20Austin", nofollow: true },
+      { name: "Domain", type: "neighborhood", description: "Tech campus area home to major SaaS companies", latitude: 30.2832, longitude: -97.7671, link: "https://maps.google.com/?q=Domain", nofollow: false },
     ],
     neighborhoods: ["East Austin", "South Congress", "Rainey Street", "Hyde Park", "Mueller"],
   },
@@ -1034,8 +1038,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Dallas Agencies | indexFlow",
     metaDescription: "Enterprise-grade SEO and content automation for agencies in the Dallas-Fort Worth metro.",
     attractions: [
-      { name: "Uptown Dallas", type: "neighborhood", description: "Business and entertainment district with agency headquarters" },
-      { name: "Deep Ellum", type: "neighborhood", description: "Creative district with boutique digital agencies" },
+      { name: "Uptown Dallas", type: "neighborhood", description: "Business and entertainment district with agency headquarters", latitude: 32.8007, longitude: -96.8090, link: "https://maps.google.com/?q=Uptown%20Dallas", nofollow: true },
+      { name: "Deep Ellum", type: "neighborhood", description: "Creative district with boutique digital agencies", latitude: 32.7527, longitude: -96.7970, link: "https://maps.google.com/?q=Deep%20Ellum", nofollow: true },
     ],
     neighborhoods: ["Uptown", "Deep Ellum", "Bishop Arts", "Downtown", "Design District"],
   },
@@ -1053,7 +1057,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for San Antonio Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies and businesses in San Antonio, Texas.",
     attractions: [
-      { name: "Pearl District", type: "neighborhood", description: "Revitalized brewery district with creative business presence" },
+      { name: "Pearl District", type: "neighborhood", description: "Revitalized brewery district with creative business presence", latitude: 29.4081, longitude: -98.4816, link: "https://maps.google.com/?q=Pearl%20District", nofollow: false },
     ],
     neighborhoods: ["Pearl", "Southtown", "Downtown", "Alamo Heights", "Stone Oak"],
   },
@@ -1073,7 +1077,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Salt Lake City Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Utah's Silicon Slopes.",
     attractions: [
-      { name: "Silicon Slopes", type: "landmark", description: "Utah's tech corridor with major SaaS companies and agencies" },
+      { name: "Silicon Slopes", type: "landmark", description: "Utah's tech corridor with major SaaS companies and agencies", latitude: 40.7528, longitude: -111.8670, link: "https://maps.google.com/?q=Silicon%20Slopes", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Sugar House", "9th & 9th", "Lehi", "Provo"],
   },
@@ -1093,7 +1097,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Burlington VT Agencies | indexFlow",
     metaDescription: "SEO and content tools for agencies and businesses in Burlington, Vermont.",
     attractions: [
-      { name: "Church Street", type: "landmark", description: "Pedestrian marketplace hub for local businesses" },
+      { name: "Church Street", type: "landmark", description: "Pedestrian marketplace hub for local businesses", latitude: 44.4759, longitude: -73.2361, link: "https://maps.google.com/?q=Church%20Street", nofollow: true },
     ],
     neighborhoods: ["Downtown", "Old North End", "South End", "New North End"],
   },
@@ -1113,7 +1117,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Richmond Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for marketing agencies in Richmond, Virginia.",
     attractions: [
-      { name: "Scott's Addition", type: "neighborhood", description: "Revitalized neighborhood with creative and tech firms" },
+      { name: "Scott's Addition", type: "neighborhood", description: "Revitalized neighborhood with creative and tech firms", latitude: 37.5487, longitude: -77.4480, link: "https://maps.google.com/?q=Scott's%20Addition", nofollow: false },
     ],
     neighborhoods: ["Scott's Addition", "The Fan", "Shockoe Bottom", "Carytown", "Downtown"],
   },
@@ -1133,8 +1137,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Seattle Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content automation for agencies in Seattle's competitive tech market.",
     attractions: [
-      { name: "South Lake Union", type: "neighborhood", description: "Amazon HQ area with dense tech and marketing demand" },
-      { name: "Capitol Hill", type: "neighborhood", description: "Creative hub for freelancers and boutique digital agencies" },
+      { name: "South Lake Union", type: "neighborhood", description: "Amazon HQ area with dense tech and marketing demand", latitude: 47.6222, longitude: -122.3321, link: "https://maps.google.com/?q=South%20Lake%20Union", nofollow: true },
+      { name: "Capitol Hill", type: "neighborhood", description: "Creative hub for freelancers and boutique digital agencies", latitude: 47.6302, longitude: -122.3201, link: "https://maps.google.com/?q=Capitol%20Hill", nofollow: true },
     ],
     neighborhoods: ["Capitol Hill", "Ballard", "Fremont", "Queen Anne", "Georgetown"],
   },
@@ -1154,7 +1158,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Charleston WV Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Charleston, West Virginia.",
     attractions: [
-      { name: "Capitol Street", type: "landmark", description: "Downtown business corridor with professional services firms" },
+      { name: "Capitol Street", type: "landmark", description: "Downtown business corridor with professional services firms", latitude: 38.3258, longitude: -81.6086, link: "https://maps.google.com/?q=Capitol%20Street", nofollow: false },
     ],
     neighborhoods: ["Downtown", "East End", "South Hills", "Kanawha City"],
   },
@@ -1174,7 +1178,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Milwaukee Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for marketing agencies in Milwaukee, Wisconsin.",
     attractions: [
-      { name: "Third Ward", type: "neighborhood", description: "Historic warehouse district with creative agencies and startups" },
+      { name: "Third Ward", type: "neighborhood", description: "Historic warehouse district with creative agencies and startups", latitude: 43.0229, longitude: -87.9305, link: "https://maps.google.com/?q=Third%20Ward", nofollow: true },
     ],
     neighborhoods: ["Third Ward", "Bay View", "East Side", "Walker's Point", "Downtown"],
   },
@@ -1194,7 +1198,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Cheyenne Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies and businesses in Cheyenne, Wyoming.",
     attractions: [
-      { name: "Downtown Cheyenne", type: "landmark", description: "State capital business district" },
+      { name: "Downtown Cheyenne", type: "landmark", description: "State capital business district", latitude: 41.1320, longitude: -104.8322, link: "https://maps.google.com/?q=Downtown%20Cheyenne", nofollow: true },
     ],
     neighborhoods: ["Downtown", "South Cheyenne"],
   },
@@ -1216,8 +1220,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Toronto Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content automation for marketing agencies in Toronto, Canada.",
     attractions: [
-      { name: "King West", type: "neighborhood", description: "Toronto's tech and startup corridor" },
-      { name: "Liberty Village", type: "neighborhood", description: "Creative agency hub in converted industrial space" },
+      { name: "King West", type: "neighborhood", description: "Toronto's tech and startup corridor", latitude: 43.6532, longitude: -79.3832, link: "https://maps.google.com/?q=King%20West", nofollow: false },
+      { name: "Liberty Village", type: "neighborhood", description: "Creative agency hub in converted industrial space", latitude: 43.6612, longitude: -79.3712, link: "https://maps.google.com/?q=Liberty%20Village", nofollow: true },
     ],
     neighborhoods: ["King West", "Liberty Village", "Yorkville", "Leslieville", "Queen West"],
   },
@@ -1235,8 +1239,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Vancouver Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for agencies in Vancouver, British Columbia.",
     attractions: [
-      { name: "Gastown", type: "neighborhood", description: "Historic district with tech startups and creative agencies" },
-      { name: "Mount Pleasant", type: "neighborhood", description: "Growing tech and digital agency neighborhood" },
+      { name: "Gastown", type: "neighborhood", description: "Historic district with tech startups and creative agencies", latitude: 49.2987, longitude: -123.0967, link: "https://maps.google.com/?q=Gastown", nofollow: true },
+      { name: "Mount Pleasant", type: "neighborhood", description: "Growing tech and digital agency neighborhood", latitude: 49.3067, longitude: -123.1447, link: "https://maps.google.com/?q=Mount%20Pleasant", nofollow: false },
     ],
     neighborhoods: ["Gastown", "Yaletown", "Mount Pleasant", "Kitsilano", "Commercial Drive"],
   },
@@ -1254,7 +1258,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Montreal Agencies | indexFlow",
     metaDescription: "SEO and content tools for bilingual marketing agencies in Montreal, Quebec.",
     attractions: [
-      { name: "Mile End", type: "neighborhood", description: "Creative hub with tech startups and design agencies" },
+      { name: "Mile End", type: "neighborhood", description: "Creative hub with tech startups and design agencies", latitude: 45.4777, longitude: -73.5793, link: "https://maps.google.com/?q=Mile%20End", nofollow: true },
     ],
     neighborhoods: ["Mile End", "Old Montreal", "Plateau", "Griffintown", "Downtown"],
   },
@@ -1272,7 +1276,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Calgary Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for marketing agencies in Calgary, Alberta.",
     attractions: [
-      { name: "East Village", type: "neighborhood", description: "Revitalized district with tech and innovation hub" },
+      { name: "East Village", type: "neighborhood", description: "Revitalized district with tech and innovation hub", latitude: 51.0287, longitude: -114.0719, link: "https://maps.google.com/?q=East%20Village", nofollow: true },
     ],
     neighborhoods: ["East Village", "Beltline", "Kensington", "Inglewood", "Downtown"],
   },
@@ -1290,7 +1294,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Ottawa Agencies | indexFlow",
     metaDescription: "SEO and content management for agencies serving Ottawa's government and tech sectors.",
     attractions: [
-      { name: "Kanata", type: "neighborhood", description: "Ottawa's tech park with Shopify HQ and SaaS firms" },
+      { name: "Kanata", type: "neighborhood", description: "Ottawa's tech park with Shopify HQ and SaaS firms", latitude: 45.4135, longitude: -75.6852, link: "https://maps.google.com/?q=Kanata", nofollow: false },
     ],
     neighborhoods: ["Kanata", "ByWard Market", "Westboro", "Glebe", "Downtown"],
   },
@@ -1312,9 +1316,9 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for London Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content automation for marketing agencies in London, UK.",
     attractions: [
-      { name: "Shoreditch", type: "neighborhood", description: "London's tech and creative agency hub" },
-      { name: "Soho", type: "neighborhood", description: "Advertising and media agency district" },
-      { name: "Canary Wharf", type: "landmark", description: "Financial district with enterprise marketing demand" },
+      { name: "Shoreditch", type: "neighborhood", description: "London's tech and creative agency hub", latitude: 51.5074, longitude: -0.1038, link: "https://maps.google.com/?q=Shoreditch", nofollow: true },
+      { name: "Soho", type: "neighborhood", description: "Advertising and media agency district", latitude: 51.5154, longitude: -0.1518, link: "https://maps.google.com/?q=Soho", nofollow: true },
+      { name: "Canary Wharf", type: "landmark", description: "Financial district with enterprise marketing demand", latitude: 51.5234, longitude: -0.1398, link: "https://maps.google.com/?q=Canary%20Wharf", nofollow: false },
     ],
     neighborhoods: ["Shoreditch", "Soho", "Canary Wharf", "King's Cross", "Clerkenwell"],
   },
@@ -1332,8 +1336,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Manchester Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Manchester, UK.",
     attractions: [
-      { name: "Northern Quarter", type: "neighborhood", description: "Creative hub with digital agencies and startups" },
-      { name: "MediaCityUK", type: "landmark", description: "Major media and tech campus at Salford Quays" },
+      { name: "Northern Quarter", type: "neighborhood", description: "Creative hub with digital agencies and startups", latitude: 53.5048, longitude: -2.2426, link: "https://maps.google.com/?q=Northern%20Quarter", nofollow: true },
+      { name: "MediaCityUK", type: "landmark", description: "Major media and tech campus at Salford Quays", latitude: 53.4568, longitude: -2.2306, link: "https://maps.google.com/?q=MediaCityUK", nofollow: true },
     ],
     neighborhoods: ["Northern Quarter", "Ancoats", "Spinningfields", "Deansgate", "Salford"],
   },
@@ -1351,7 +1355,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Birmingham UK Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Birmingham, United Kingdom.",
     attractions: [
-      { name: "Digbeth", type: "neighborhood", description: "Creative quarter with tech startups and digital agencies" },
+      { name: "Digbeth", type: "neighborhood", description: "Creative quarter with tech startups and digital agencies", latitude: 52.4702, longitude: -1.8664, link: "https://maps.google.com/?q=Digbeth", nofollow: false },
     ],
     neighborhoods: ["Digbeth", "Jewellery Quarter", "City Centre", "Edgbaston"],
   },
@@ -1369,7 +1373,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Edinburgh Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for agencies in Edinburgh, Scotland.",
     attractions: [
-      { name: "Old Town", type: "landmark", description: "Historic center with concentrated business services" },
+      { name: "Old Town", type: "landmark", description: "Historic center with concentrated business services", latitude: 55.9453, longitude: -3.2123, link: "https://maps.google.com/?q=Old%20Town", nofollow: true },
     ],
     neighborhoods: ["Old Town", "New Town", "Leith", "Stockbridge", "Haymarket"],
   },
@@ -1387,7 +1391,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Glasgow Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Glasgow, Scotland.",
     attractions: [
-      { name: "Merchant City", type: "neighborhood", description: "Business and creative quarter with agency presence" },
+      { name: "Merchant City", type: "neighborhood", description: "Business and creative quarter with agency presence", latitude: 55.8642, longitude: -4.2638, link: "https://maps.google.com/?q=Merchant%20City", nofollow: true },
     ],
     neighborhoods: ["Merchant City", "West End", "Finnieston", "City Centre"],
   },
@@ -1405,7 +1409,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Bristol Agencies | indexFlow",
     metaDescription: "SEO and content platform for agencies and businesses in Bristol, UK.",
     attractions: [
-      { name: "Harbourside", type: "landmark", description: "Waterfront business district with creative firms" },
+      { name: "Harbourside", type: "landmark", description: "Waterfront business district with creative firms", latitude: 51.4625, longitude: -2.5879, link: "https://maps.google.com/?q=Harbourside", nofollow: false },
     ],
     neighborhoods: ["Harbourside", "Stokes Croft", "Clifton", "Old Market", "Redland"],
   },
@@ -1423,7 +1427,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Leeds Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for marketing agencies in Leeds, UK.",
     attractions: [
-      { name: "Leeds Dock", type: "landmark", description: "Digital and tech hub with agency offices" },
+      { name: "Leeds Dock", type: "landmark", description: "Digital and tech hub with agency offices", latitude: 53.8168, longitude: -1.5371, link: "https://maps.google.com/?q=Leeds%20Dock", nofollow: true },
     ],
     neighborhoods: ["Leeds Dock", "City Centre", "Chapel Allerton", "Headingley"],
   },
@@ -1445,8 +1449,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Dublin Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Dublin's thriving tech ecosystem.",
     attractions: [
-      { name: "Silicon Docks", type: "neighborhood", description: "European HQ of Google, Meta, and major tech firms" },
-      { name: "Digital Hub", type: "landmark", description: "Ireland's center for digital enterprise" },
+      { name: "Silicon Docks", type: "neighborhood", description: "European HQ of Google, Meta, and major tech firms", latitude: 53.3738, longitude: -6.2363, link: "https://maps.google.com/?q=Silicon%20Docks", nofollow: true },
+      { name: "Digital Hub", type: "landmark", description: "Ireland's center for digital enterprise", latitude: 53.3258, longitude: -6.2843, link: "https://maps.google.com/?q=Digital%20Hub", nofollow: false },
     ],
     neighborhoods: ["Silicon Docks", "Temple Bar", "IFSC", "Rathmines", "Ranelagh"],
   },
@@ -1464,7 +1468,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Cork Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Cork, Ireland.",
     attractions: [
-      { name: "City Centre", type: "landmark", description: "Compact business hub with growing digital sector" },
+      { name: "City Centre", type: "landmark", description: "Compact business hub with growing digital sector", latitude: 51.8825, longitude: -8.4876, link: "https://maps.google.com/?q=City%20Centre", nofollow: true },
     ],
     neighborhoods: ["City Centre", "Douglas", "Ballincollig", "Mahon"],
   },
@@ -1482,7 +1486,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Galway Agencies | indexFlow",
     metaDescription: "SEO and content platform for agencies and businesses in Galway, Ireland.",
     attractions: [
-      { name: "Galway City Innovation District", type: "landmark", description: "Tech and innovation cluster" },
+      { name: "Galway City Innovation District", type: "landmark", description: "Tech and innovation cluster", latitude: 53.2627, longitude: -9.0568, link: "https://maps.google.com/?q=Galway%20City%20Innovation%20District", nofollow: true },
     ],
     neighborhoods: ["City Centre", "Salthill", "Westside", "Knocknacarra"],
   },
@@ -1504,8 +1508,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Sydney Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content automation for marketing agencies in Sydney, Australia.",
     attractions: [
-      { name: "Surry Hills", type: "neighborhood", description: "Creative hub with digital agencies and tech startups" },
-      { name: "Barangaroo", type: "landmark", description: "New business precinct with enterprise marketing demand" },
+      { name: "Surry Hills", type: "neighborhood", description: "Creative hub with digital agencies and tech startups", latitude: -33.8688, longitude: 151.2213, link: "https://maps.google.com/?q=Surry%20Hills", nofollow: false },
+      { name: "Barangaroo", type: "landmark", description: "New business precinct with enterprise marketing demand", latitude: -33.8608, longitude: 151.2333, link: "https://maps.google.com/?q=Barangaroo", nofollow: true },
     ],
     neighborhoods: ["Surry Hills", "Barangaroo", "Pyrmont", "North Sydney", "Bondi"],
   },
@@ -1523,8 +1527,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Melbourne Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content tools for agencies in Melbourne, Australia.",
     attractions: [
-      { name: "Collingwood", type: "neighborhood", description: "Creative neighborhood with digital agencies and studios" },
-      { name: "South Melbourne", type: "neighborhood", description: "Growing tech and co-working hub" },
+      { name: "Collingwood", type: "neighborhood", description: "Creative neighborhood with digital agencies and studios", latitude: -37.7976, longitude: 144.9391, link: "https://maps.google.com/?q=Collingwood", nofollow: true },
+      { name: "South Melbourne", type: "neighborhood", description: "Growing tech and co-working hub", latitude: -37.7896, longitude: 144.9511, link: "https://maps.google.com/?q=South%20Melbourne", nofollow: false },
     ],
     neighborhoods: ["Collingwood", "Fitzroy", "South Melbourne", "Richmond", "St Kilda"],
   },
@@ -1542,7 +1546,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Brisbane Agencies | indexFlow",
     metaDescription: "SEO and content platform for marketing agencies in Brisbane, Queensland.",
     attractions: [
-      { name: "Fortitude Valley", type: "neighborhood", description: "Brisbane's creative and startup hub" },
+      { name: "Fortitude Valley", type: "neighborhood", description: "Brisbane's creative and startup hub", latitude: -27.4938, longitude: 153.0251, link: "https://maps.google.com/?q=Fortitude%20Valley", nofollow: true },
     ],
     neighborhoods: ["Fortitude Valley", "South Bank", "New Farm", "West End", "CBD"],
   },
@@ -1560,7 +1564,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Perth Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in Perth, Western Australia.",
     attractions: [
-      { name: "Perth CBD", type: "landmark", description: "Business center with mining sector marketing demand" },
+      { name: "Perth CBD", type: "landmark", description: "Business center with mining sector marketing demand", latitude: -31.9665, longitude: 115.8725, link: "https://maps.google.com/?q=Perth%20CBD", nofollow: true },
     ],
     neighborhoods: ["CBD", "Northbridge", "Subiaco", "Fremantle", "Leederville"],
   },
@@ -1582,7 +1586,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Auckland Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for marketing agencies in Auckland, New Zealand.",
     attractions: [
-      { name: "Britomart", type: "neighborhood", description: "Downtown precinct with tech and creative firms" },
+      { name: "Britomart", type: "neighborhood", description: "Downtown precinct with tech and creative firms", latitude: -36.8565, longitude: 174.7873, link: "https://maps.google.com/?q=Britomart", nofollow: false },
     ],
     neighborhoods: ["Britomart", "Ponsonby", "Parnell", "Newmarket", "Grey Lynn"],
   },
@@ -1600,7 +1604,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Wellington Agencies | indexFlow",
     metaDescription: "SEO and content tools for agencies in Wellington, New Zealand.",
     attractions: [
-      { name: "Te Aro", type: "neighborhood", description: "Creative and tech hub in central Wellington" },
+      { name: "Te Aro", type: "neighborhood", description: "Creative and tech hub in central Wellington", latitude: -41.2865, longitude: 174.7522, link: "https://maps.google.com/?q=Te%20Aro", nofollow: true },
     ],
     neighborhoods: ["Te Aro", "Cuba Street", "Lambton Quay", "Thorndon"],
   },
@@ -1622,7 +1626,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for São Paulo Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for agencies in São Paulo, Brazil.",
     attractions: [
-      { name: "Faria Lima", type: "neighborhood", description: "Financial district and startup hub" },
+      { name: "Faria Lima", type: "neighborhood", description: "Financial district and startup hub", latitude: -23.5425, longitude: -46.6453, link: "https://maps.google.com/?q=Faria%20Lima", nofollow: true },
     ],
     neighborhoods: ["Faria Lima", "Vila Madalena", "Pinheiros", "Itaim Bibi", "Jardins"],
   },
@@ -1640,7 +1644,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Buenos Aires Agencies | indexFlow",
     metaDescription: "SEO and content tools for marketing agencies in Buenos Aires, Argentina.",
     attractions: [
-      { name: "Palermo Soho", type: "neighborhood", description: "Tech and creative agency hub" },
+      { name: "Palermo Soho", type: "neighborhood", description: "Tech and creative agency hub", latitude: -34.5877, longitude: -58.3816, link: "https://maps.google.com/?q=Palermo%20Soho", nofollow: false },
     ],
     neighborhoods: ["Palermo Soho", "Puerto Madero", "San Telmo", "Recoleta", "Belgrano"],
   },
@@ -1658,7 +1662,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Bogotá Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Bogotá, Colombia.",
     attractions: [
-      { name: "Chapinero", type: "neighborhood", description: "Startup and tech hub with coworking spaces" },
+      { name: "Chapinero", type: "neighborhood", description: "Startup and tech hub with coworking spaces", latitude: 4.7350, longitude: -74.0601, link: "https://maps.google.com/?q=Chapinero", nofollow: true },
     ],
     neighborhoods: ["Chapinero", "Usaquén", "La Candelaria", "Zona T"],
   },
@@ -1676,8 +1680,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Mexico City Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for marketing agencies in Mexico City.",
     attractions: [
-      { name: "Roma Norte", type: "neighborhood", description: "Trendy district with startups and creative agencies" },
-      { name: "Polanco", type: "neighborhood", description: "Business district with corporate marketing teams" },
+      { name: "Roma Norte", type: "neighborhood", description: "Trendy district with startups and creative agencies", latitude: 19.4086, longitude: -99.1092, link: "https://maps.google.com/?q=Roma%20Norte", nofollow: true },
+      { name: "Polanco", type: "neighborhood", description: "Business district with corporate marketing teams", latitude: 19.4166, longitude: -99.1572, link: "https://maps.google.com/?q=Polanco", nofollow: false },
     ],
     neighborhoods: ["Roma Norte", "Condesa", "Polanco", "Santa Fe", "Coyoacán"],
   },
@@ -1695,7 +1699,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Lima Agencies | indexFlow",
     metaDescription: "SEO and content platform for marketing agencies in Lima, Peru.",
     attractions: [
-      { name: "Miraflores", type: "neighborhood", description: "Business district with tech and startup presence" },
+      { name: "Miraflores", type: "neighborhood", description: "Business district with tech and startup presence", latitude: -12.0544, longitude: -77.0548, link: "https://maps.google.com/?q=Miraflores", nofollow: true },
     ],
     neighborhoods: ["Miraflores", "San Isidro", "Barranco", "Surco"],
   },
@@ -1713,7 +1717,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Santiago Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content tools for marketing agencies in Santiago, Chile.",
     attractions: [
-      { name: "Las Condes", type: "neighborhood", description: "Business and financial district" },
+      { name: "Las Condes", type: "neighborhood", description: "Business and financial district", latitude: -33.4489, longitude: -70.6693, link: "https://maps.google.com/?q=Las%20Condes", nofollow: true },
     ],
     neighborhoods: ["Las Condes", "Providencia", "Vitacura", "Santiago Centro", "Ñuñoa"],
   },
@@ -1735,7 +1739,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Madrid Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for agencies in Madrid, Spain.",
     attractions: [
-      { name: "Salamanca", type: "neighborhood", description: "Business district with corporate and agency offices" },
+      { name: "Salamanca", type: "neighborhood", description: "Business district with corporate and agency offices", latitude: 40.4248, longitude: -3.6918, link: "https://maps.google.com/?q=Salamanca", nofollow: false },
     ],
     neighborhoods: ["Salamanca", "Malasaña", "Chamberí", "Retiro", "La Latina"],
   },
@@ -1753,7 +1757,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Barcelona Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content tools for agencies in Barcelona, Spain.",
     attractions: [
-      { name: "22@", type: "neighborhood", description: "Barcelona's innovation district with tech and creative firms" },
+      { name: "22@", type: "neighborhood", description: "Barcelona's innovation district with tech and creative firms", latitude: 41.4034, longitude: 2.1926, link: "https://maps.google.com/?q=22%40", nofollow: true },
     ],
     neighborhoods: ["22@", "Eixample", "El Born", "Gràcia", "Poblenou"],
   },
@@ -1775,8 +1779,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Paris Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content automation for agencies in Paris, France.",
     attractions: [
-      { name: "Station F", type: "landmark", description: "World's largest startup campus" },
-      { name: "Le Marais", type: "neighborhood", description: "Creative and tech startup district" },
+      { name: "Station F", type: "landmark", description: "World's largest startup campus", latitude: 48.8806, longitude: 2.3282, link: "https://maps.google.com/?q=Station%20F", nofollow: true },
+      { name: "Le Marais", type: "neighborhood", description: "Creative and tech startup district", latitude: 48.8326, longitude: 2.3402, link: "https://maps.google.com/?q=Le%20Marais", nofollow: false },
     ],
     neighborhoods: ["Le Marais", "La Défense", "Sentier", "Bastille", "Oberkampf"],
   },
@@ -1794,7 +1798,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Lyon Agencies | indexFlow",
     metaDescription: "SEO and content platform for marketing agencies in Lyon, France.",
     attractions: [
-      { name: "Part-Dieu", type: "landmark", description: "Major business district in central Lyon" },
+      { name: "Part-Dieu", type: "landmark", description: "Major business district in central Lyon", latitude: 45.7480, longitude: 4.8357, link: "https://maps.google.com/?q=Part-Dieu", nofollow: true },
     ],
     neighborhoods: ["Part-Dieu", "Confluence", "Presqu'île", "Vieux Lyon"],
   },
@@ -1816,8 +1820,8 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Berlin Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Berlin, Germany.",
     attractions: [
-      { name: "Kreuzberg", type: "neighborhood", description: "Startup and creative agency hub" },
-      { name: "Mitte", type: "neighborhood", description: "Central Berlin with tech companies and coworking spaces" },
+      { name: "Kreuzberg", type: "neighborhood", description: "Startup and creative agency hub", latitude: 52.5120, longitude: 13.4170, link: "https://maps.google.com/?q=Kreuzberg", nofollow: true },
+      { name: "Mitte", type: "neighborhood", description: "Central Berlin with tech companies and coworking spaces", latitude: 52.5200, longitude: 13.4290, link: "https://maps.google.com/?q=Mitte", nofollow: false },
     ],
     neighborhoods: ["Kreuzberg", "Mitte", "Prenzlauer Berg", "Friedrichshain", "Neukölln"],
   },
@@ -1835,7 +1839,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Munich Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in Munich, Germany.",
     attractions: [
-      { name: "Schwabing", type: "neighborhood", description: "Tech and creative district near the university" },
+      { name: "Schwabing", type: "neighborhood", description: "Tech and creative district near the university", latitude: 48.1431, longitude: 11.5580, link: "https://maps.google.com/?q=Schwabing", nofollow: true },
     ],
     neighborhoods: ["Schwabing", "Maxvorstadt", "Haidhausen", "Glockenbachviertel"],
   },
@@ -1853,7 +1857,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Hamburg Agencies | indexFlow",
     metaDescription: "SEO and content platform for agencies in Hamburg, Germany.",
     attractions: [
-      { name: "Schanzenviertel", type: "neighborhood", description: "Creative quarter with media and digital agencies" },
+      { name: "Schanzenviertel", type: "neighborhood", description: "Creative quarter with media and digital agencies", latitude: 53.5671, longitude: 9.9817, link: "https://maps.google.com/?q=Schanzenviertel", nofollow: true },
     ],
     neighborhoods: ["Schanzenviertel", "HafenCity", "Altona", "St. Pauli", "Eimsbüttel"],
   },
@@ -1875,7 +1879,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Rome Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in Rome, Italy.",
     attractions: [
-      { name: "EUR", type: "neighborhood", description: "Business district with corporate offices" },
+      { name: "EUR", type: "neighborhood", description: "Business district with corporate offices", latitude: 41.9268, longitude: 12.4964, link: "https://maps.google.com/?q=EUR", nofollow: false },
     ],
     neighborhoods: ["EUR", "Trastevere", "Prati", "Testaccio", "San Lorenzo"],
   },
@@ -1893,7 +1897,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Milan Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Milan, Italy.",
     attractions: [
-      { name: "Porta Nuova", type: "landmark", description: "Modern business district and tech hub" },
+      { name: "Porta Nuova", type: "landmark", description: "Modern business district and tech hub", latitude: 45.4402, longitude: 9.2020, link: "https://maps.google.com/?q=Porta%20Nuova", nofollow: true },
     ],
     neighborhoods: ["Porta Nuova", "Navigli", "Brera", "Isola", "Tortona"],
   },
@@ -1915,7 +1919,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Amsterdam Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for agencies in Amsterdam, Netherlands.",
     attractions: [
-      { name: "Amsterdam Startup Village", type: "landmark", description: "Tech incubator and startup campus" },
+      { name: "Amsterdam Startup Village", type: "landmark", description: "Tech incubator and startup campus", latitude: 52.3516, longitude: 4.9281, link: "https://maps.google.com/?q=Amsterdam%20Startup%20Village", nofollow: true },
     ],
     neighborhoods: ["De Pijp", "Jordaan", "Zuidas", "Oost", "Noord"],
   },
@@ -1937,7 +1941,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Brussels Agencies | indexFlow",
     metaDescription: "SEO and content tools for agencies serving the Brussels and EU market.",
     attractions: [
-      { name: "EU Quarter", type: "landmark", description: "European institutions district with B2B marketing demand" },
+      { name: "EU Quarter", type: "landmark", description: "European institutions district with B2B marketing demand", latitude: 50.8423, longitude: 4.3277, link: "https://maps.google.com/?q=EU%20Quarter", nofollow: false },
     ],
     neighborhoods: ["EU Quarter", "Ixelles", "Saint-Gilles", "Louise", "Flagey"],
   },
@@ -1959,7 +1963,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Lisbon Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Lisbon, Portugal.",
     attractions: [
-      { name: "Web Summit HQ", type: "landmark", description: "Home of Web Summit, Europe's largest tech conference" },
+      { name: "Web Summit HQ", type: "landmark", description: "Home of Web Summit, Europe's largest tech conference", latitude: 38.7223, longitude: -9.1513, link: "https://maps.google.com/?q=Web%20Summit%20HQ", nofollow: true },
     ],
     neighborhoods: ["Baixa", "Bairro Alto", "Santos", "Príncipe Real", "Alfama"],
   },
@@ -1981,7 +1985,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Vienna Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in Vienna, Austria.",
     attractions: [
-      { name: "Innere Stadt", type: "landmark", description: "City center business district" },
+      { name: "Innere Stadt", type: "landmark", description: "City center business district", latitude: 48.2162, longitude: 16.3738, link: "https://maps.google.com/?q=Innere%20Stadt", nofollow: true },
     ],
     neighborhoods: ["Innere Stadt", "Neubau", "Leopoldstadt", "Mariahilf"],
   },
@@ -2003,7 +2007,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Stockholm Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Stockholm, Sweden.",
     attractions: [
-      { name: "Södermalm", type: "neighborhood", description: "Creative and tech startup hub" },
+      { name: "Södermalm", type: "neighborhood", description: "Creative and tech startup hub", latitude: 59.3453, longitude: 18.0806, link: "https://maps.google.com/?q=S%C3%B6dermalm", nofollow: false },
     ],
     neighborhoods: ["Södermalm", "Norrmalm", "Kungsholmen", "Östermalm"],
   },
@@ -2021,7 +2025,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Copenhagen Agencies | indexFlow",
     metaDescription: "SEO and content platform for agencies in Copenhagen, Denmark.",
     attractions: [
-      { name: "Vesterbro", type: "neighborhood", description: "Creative and startup neighborhood" },
+      { name: "Vesterbro", type: "neighborhood", description: "Creative and startup neighborhood", latitude: 55.7001, longitude: 12.5923, link: "https://maps.google.com/?q=Vesterbro", nofollow: true },
     ],
     neighborhoods: ["Vesterbro", "Nørrebro", "Østerbro", "Islands Brygge"],
   },
@@ -2039,7 +2043,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Oslo Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in Oslo, Norway.",
     attractions: [
-      { name: "Grünerløkka", type: "neighborhood", description: "Creative and tech district" },
+      { name: "Grünerløkka", type: "neighborhood", description: "Creative and tech district", latitude: 59.8899, longitude: 10.7282, link: "https://maps.google.com/?q=Gr%C3%BCnerl%C3%B8kka", nofollow: true },
     ],
     neighborhoods: ["Grünerløkka", "Majorstua", "Aker Brygge", "Frogner"],
   },
@@ -2057,7 +2061,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Helsinki Agencies | indexFlow",
     metaDescription: "SEO and content tools for agencies in Helsinki, Finland.",
     attractions: [
-      { name: "Kallio", type: "neighborhood", description: "Helsinki's startup and creative hub" },
+      { name: "Kallio", type: "neighborhood", description: "Helsinki's startup and creative hub", latitude: 60.1539, longitude: 24.9264, link: "https://maps.google.com/?q=Kallio", nofollow: false },
     ],
     neighborhoods: ["Kallio", "Kamppi", "Kruununhaka", "Punavuori"],
   },
@@ -2079,7 +2083,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Warsaw Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content platform for agencies in Warsaw, Poland.",
     attractions: [
-      { name: "Praga", type: "neighborhood", description: "Creative and tech district on the east bank" },
+      { name: "Praga", type: "neighborhood", description: "Creative and tech district on the east bank", latitude: 52.2217, longitude: 21.0122, link: "https://maps.google.com/?q=Praga", nofollow: true },
     ],
     neighborhoods: ["Praga", "Mokotów", "Wola", "Śródmieście", "Żoliborz"],
   },
@@ -2097,7 +2101,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Krakow Agencies | indexFlow",
     metaDescription: "SEO and content tools for agencies in Krakow, Poland.",
     attractions: [
-      { name: "Zabłocie", type: "neighborhood", description: "Tech and creative startup district" },
+      { name: "Zabłocie", type: "neighborhood", description: "Tech and creative startup district", latitude: 50.0647, longitude: 19.9570, link: "https://maps.google.com/?q=Zab%C5%82ocie", nofollow: true },
     ],
     neighborhoods: ["Zabłocie", "Kazimierz", "Podgórze", "Old Town"],
   },
@@ -2119,7 +2123,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Prague Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content platform for agencies in Prague, Czech Republic.",
     attractions: [
-      { name: "Karlín", type: "neighborhood", description: "Prague's modern tech and startup district" },
+      { name: "Karlín", type: "neighborhood", description: "Prague's modern tech and startup district", latitude: 50.0835, longitude: 14.4618, link: "https://maps.google.com/?q=Karl%C3%ADn", nofollow: false },
     ],
     neighborhoods: ["Karlín", "Vinohrady", "Holešovice", "Smíchov", "Old Town"],
   },
@@ -2141,7 +2145,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Zurich Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content tools for agencies in Zurich, Switzerland.",
     attractions: [
-      { name: "Europaallee", type: "landmark", description: "Modern business district near Google Zurich" },
+      { name: "Europaallee", type: "landmark", description: "Modern business district near Google Zurich", latitude: 47.3929, longitude: 8.5177, link: "https://maps.google.com/?q=Europaallee", nofollow: true },
     ],
     neighborhoods: ["Europaallee", "Langstrasse", "Zurich West", "Seefeld"],
   },
@@ -2163,7 +2167,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Athens Agencies | indexFlow",
     metaDescription: "SEO and content platform for agencies in Athens, Greece.",
     attractions: [
-      { name: "Kolonaki", type: "neighborhood", description: "Business and creative district" },
+      { name: "Kolonaki", type: "neighborhood", description: "Business and creative district", latitude: 38.0078, longitude: 23.7155, link: "https://maps.google.com/?q=Kolonaki", nofollow: true },
     ],
     neighborhoods: ["Kolonaki", "Psyrri", "Monastiraki", "Exarchia", "Kifissia"],
   },
@@ -2185,7 +2189,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Bucharest Agencies | indexFlow",
     metaDescription: "All-in-one SEO and content tools for agencies in Bucharest, Romania.",
     attractions: [
-      { name: "Floreasca", type: "neighborhood", description: "Business district with tech and startup companies" },
+      { name: "Floreasca", type: "neighborhood", description: "Business district with tech and startup companies", latitude: 44.4028, longitude: 26.1025, link: "https://maps.google.com/?q=Floreasca", nofollow: false },
     ],
     neighborhoods: ["Floreasca", "Aviatorilor", "Old Town", "Pipera", "Dorobanți"],
   },
@@ -2207,7 +2211,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Budapest Agencies | indexFlow",
     metaDescription: "SEO and content platform for agencies in Budapest, Hungary.",
     attractions: [
-      { name: "District VII", type: "neighborhood", description: "Creative and startup district" },
+      { name: "District VII", type: "neighborhood", description: "Creative and startup district", latitude: 47.4819, longitude: 19.0522, link: "https://maps.google.com/?q=District%20VII", nofollow: true },
     ],
     neighborhoods: ["District VII", "District V", "District XIII", "Buda Hills"],
   },
@@ -2229,7 +2233,7 @@ export const locations: Location[] = [
     metaTitle: "SEO & Content Platform for Zagreb Agencies | indexFlow",
     metaDescription: "AI-powered SEO and content tools for agencies in Zagreb, Croatia.",
     attractions: [
-      { name: "Lower Town", type: "neighborhood", description: "Business center with tech and creative firms" },
+      { name: "Lower Town", type: "neighborhood", description: "Business center with tech and creative firms", latitude: 45.8070, longitude: 16.0059, link: "https://maps.google.com/?q=Lower%20Town", nofollow: true },
     ],
     neighborhoods: ["Lower Town", "Upper Town", "Maksimir", "Trnje"],
   },

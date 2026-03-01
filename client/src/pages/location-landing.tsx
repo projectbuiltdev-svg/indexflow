@@ -1,5 +1,5 @@
 import { useRoute, Link } from "wouter";
-import { ArrowRight, CheckCircle, MapPin, ChevronRight, Compass, Building2, Sparkles, TreePine, Search, PenTool, Megaphone, User, TrendingUp, FileText, Globe } from "lucide-react";
+import { ArrowRight, CheckCircle, MapPin, ChevronRight, Compass, Building2, Sparkles, TreePine, Search, PenTool, Megaphone, User, TrendingUp, FileText, Globe, ExternalLink, Navigation } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -274,17 +274,37 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 {location.attractions.map((attraction, index) => {
                   const AttractionIcon = attractionIcons[attraction.type] || MapPin;
                   return (
-                    <Card key={index} className="hover-elevate">
+                    <Card key={index} className="hover-elevate" data-testid={`attraction-card-${index}`}>
                       <CardContent className="p-4 flex items-start gap-4">
                         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                           <AttractionIcon className="h-5 w-5 text-primary" />
                         </div>
-                        <div>
-                          <span className="font-medium">{attraction.name}</span>
-                          <p className="text-sm text-muted-foreground">{attraction.description}</p>
-                          <Badge variant="outline" className="mt-2 text-xs capitalize">
-                            {attraction.type}
-                          </Badge>
+                        <div className="flex-1">
+                          <a
+                            href={attraction.link}
+                            target="_blank"
+                            rel={attraction.nofollow ? "nofollow noopener noreferrer" : "noopener noreferrer"}
+                            className="font-medium text-foreground hover:text-primary inline-flex items-center gap-1.5 transition-colors"
+                            data-testid={`link-attraction-${index}`}
+                          >
+                            {attraction.name}
+                            <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                          </a>
+                          <p className="text-sm text-muted-foreground mt-1">{attraction.description}</p>
+                          <div className="flex items-center gap-2 mt-2 flex-wrap">
+                            <Badge variant="outline" className="text-xs capitalize">
+                              {attraction.type}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                              <Navigation className="h-3 w-3" />
+                              {attraction.latitude.toFixed(4)}°, {attraction.longitude.toFixed(4)}°
+                            </span>
+                            {attraction.nofollow && (
+                              <Badge variant="secondary" className="text-xs">
+                                nofollow
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
@@ -301,11 +321,38 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   city={location.city}
                   latitude={location.latitude}
                   longitude={location.longitude}
-                  className="h-[400px]"
+                  className="h-[300px]"
                 />
                 <p className="text-sm text-muted-foreground text-center">
                   {location.city}, {location.country} · Pop. {location.population}
                 </p>
+                {location.attractions.length > 0 && (
+                  <div className="mt-4 border rounded-lg p-4 bg-card" data-testid="attraction-coordinates">
+                    <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                      <Navigation className="h-4 w-4 text-primary" />
+                      Area Coordinates
+                    </h4>
+                    <div className="space-y-2">
+                      {location.attractions.map((attr, i) => (
+                        <a
+                          key={i}
+                          href={`https://www.google.com/maps/@${attr.latitude},${attr.longitude},15z`}
+                          target="_blank"
+                          rel={attr.nofollow ? "nofollow noopener noreferrer" : "noopener noreferrer"}
+                          className="flex items-center justify-between text-xs hover:bg-muted/50 rounded px-2 py-1.5 transition-colors group"
+                          data-testid={`map-link-${i}`}
+                        >
+                          <span className="text-muted-foreground group-hover:text-foreground truncate mr-2">
+                            {attr.name}
+                          </span>
+                          <span className="font-mono text-muted-foreground whitespace-nowrap">
+                            {attr.latitude.toFixed(4)}°, {attr.longitude.toFixed(4)}°
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
