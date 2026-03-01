@@ -2,8 +2,6 @@ import { useRoute, Link } from "wouter";
 import { ArrowRight, CheckCircle, MapPin, Phone, Calendar, Star, Users, Clock, ChevronRight, Compass, Building2, TreePine, Sparkles, UtensilsCrossed, Play } from "lucide-react";
 import { Utensils, Coffee, Wine, Bed } from "lucide-react";
 
-const VIMEO_VIDEO_ID = "1160783540";
-const VIMEO_HASH = "e93c04a13d";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -212,14 +210,18 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
 
         <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden" data-testid="video-section">
           <div className="absolute inset-0 w-full h-full overflow-hidden bg-black">
-            <iframe
-              src={`https://player.vimeo.com/video/${VIMEO_VIDEO_ID}?h=${VIMEO_HASH}&autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&controls=0&quality=720p`}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full pointer-events-none"
-              frameBorder="0"
-              allow="autoplay; fullscreen"
-              title="Hero background video"
+            <video
+              autoPlay
+              muted
+              playsInline
+              loop
+              preload="auto"
+              poster="/hero-poster.jpg"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full object-cover pointer-events-none"
               data-testid="video-player"
-            />
+            >
+              <source src="/hero-video.mp4" type="video/mp4" />
+            </video>
             <div className="absolute inset-0 bg-black/40" />
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 text-center">

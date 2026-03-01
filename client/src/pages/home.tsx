@@ -193,31 +193,21 @@ const lifecycleSteps = [
 
 
 function HeroVideo() {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [showVideo, setShowVideo] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowVideo(true), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-green-950 to-slate-900" />
-      {showVideo && (
-        <div className="absolute inset-0" style={{ padding: "56.25% 0 0 0", position: "relative" }}>
-          <iframe
-            ref={iframeRef}
-            src="https://player.vimeo.com/video/1165788581?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
-            frameBorder="0"
-            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "177.78vh", minWidth: "100%", height: "56.25vw", minHeight: "100%", border: 0 }}
-            title="indexFlow"
-            data-testid="hero-video"
-          />
-        </div>
-      )}
+      <video
+        autoPlay
+        muted
+        playsInline
+        loop
+        preload="auto"
+        poster="/hero-poster.jpg"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full object-cover"
+        data-testid="hero-video"
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
     </div>
   );
 }
