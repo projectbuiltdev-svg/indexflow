@@ -42,6 +42,16 @@ const resourceLinks = [
   { href: "/pricing", label: "Pricing" },
 ];
 
+const locationLinks = [
+  { href: "/locations/new-york", label: "New York" },
+  { href: "/locations/los-angeles", label: "Los Angeles" },
+  { href: "/locations/chicago", label: "Chicago" },
+  { href: "/locations/miami", label: "Miami" },
+  { href: "/locations/austin", label: "Austin" },
+  { href: "/locations/san-francisco", label: "San Francisco" },
+  { href: "/locations", label: "All Locations" },
+];
+
 const legalLinks = [
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms of Service" },
@@ -80,11 +90,12 @@ export function Footer() {
   return (
     <footer className="bg-muted/40 dark:bg-muted/20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 lg:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-10 lg:gap-6">
           <FooterColumn title="Content & SEO" links={contentSeoLinks} />
           <FooterColumn title="Rank Intelligence" links={rankIntelLinks} />
           <FooterColumn title="Business Tools" links={businessToolLinks} />
           <FooterColumn title="Solutions" links={solutionLinks} />
+          <FooterColumn title="Locations" links={locationLinks} />
           <FooterColumn title="Resources" links={resourceLinks} />
           <div>
             <FooterColumn title="Legal" links={legalLinks} />
