@@ -1,6 +1,5 @@
 import { useRoute, Link } from "wouter";
-import { ArrowRight, CheckCircle, MapPin, Phone, Calendar, Star, Users, Clock, ChevronRight, Compass, Building2, TreePine, Sparkles, UtensilsCrossed, Play } from "lucide-react";
-import { Utensils, Coffee, Wine, Bed } from "lucide-react";
+import { ArrowRight, CheckCircle, MapPin, ChevronRight, Compass, Building2, Sparkles, TreePine, Search, PenTool, Megaphone, User, TrendingUp, BarChart3, FileText, Globe } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,19 +11,18 @@ import { locations, getLocationBySlug, type Location, type Attraction } from "@/
 import { serviceTypes, getServiceBySlug, type ServiceType } from "@/data/services";
 import NotFound from "./not-found";
 
-const attractionIcons: Record<Attraction["type"], typeof Compass> = {
+const attractionIcons: Record<string, typeof Compass> = {
   landmark: Building2,
   neighborhood: MapPin,
-  dining: UtensilsCrossed,
   entertainment: Sparkles,
   nature: TreePine,
 };
 
-const serviceIcons: Record<string, typeof Utensils> = {
-  restaurants: Utensils,
-  cafes: Coffee,
-  bars: Wine,
-  hotels: Bed,
+const serviceIcons: Record<string, typeof Search> = {
+  "seo-agencies": Search,
+  "content-agencies": PenTool,
+  "marketing-agencies": Megaphone,
+  "freelancers": User,
 };
 
 function getNearbyLocations(currentLocation: Location, limit: number = 8): Location[] {
@@ -42,18 +40,18 @@ const popularCities = [
   { slug: "los-angeles", city: "Los Angeles", country: "USA" },
   { slug: "chicago", city: "Chicago", country: "USA" },
   { slug: "miami", city: "Miami", country: "USA" },
-  { slug: "london", city: "London", country: "UK" },
-  { slug: "paris", city: "Paris", country: "France" },
-  { slug: "berlin", city: "Berlin", country: "Germany" },
-  { slug: "amsterdam", city: "Amsterdam", country: "Netherlands" },
-  { slug: "tokyo", city: "Tokyo", country: "Japan" },
-  { slug: "singapore", city: "Singapore", country: "Singapore" },
-  { slug: "hong-kong", city: "Hong Kong", country: "China" },
-  { slug: "sydney", city: "Sydney", country: "Australia" },
-  { slug: "dubai", city: "Dubai", country: "UAE" },
-  { slug: "toronto", city: "Toronto", country: "Canada" },
-  { slug: "barcelona", city: "Barcelona", country: "Spain" },
-  { slug: "rome", city: "Rome", country: "Italy" },
+  { slug: "san-francisco", city: "San Francisco", country: "USA" },
+  { slug: "seattle", city: "Seattle", country: "USA" },
+  { slug: "austin", city: "Austin", country: "USA" },
+  { slug: "denver", city: "Denver", country: "USA" },
+  { slug: "boston", city: "Boston", country: "USA" },
+  { slug: "atlanta", city: "Atlanta", country: "USA" },
+  { slug: "nashville", city: "Nashville", country: "USA" },
+  { slug: "portland", city: "Portland", country: "USA" },
+  { slug: "houston", city: "Houston", country: "USA" },
+  { slug: "philadelphia", city: "Philadelphia", country: "USA" },
+  { slug: "las-vegas", city: "Las Vegas", country: "USA" },
+  { slug: "new-orleans", city: "New Orleans", country: "USA" },
 ];
 
 const regionCities: Record<string, Array<{ slug: string; city: string }>> = {
@@ -66,35 +64,14 @@ const regionCities: Record<string, Array<{ slug: string; city: string }>> = {
     { slug: "las-vegas", city: "Las Vegas" },
     { slug: "seattle", city: "Seattle" },
     { slug: "boston", city: "Boston" },
-    { slug: "toronto", city: "Toronto" },
-    { slug: "vancouver", city: "Vancouver" },
-  ],
-  "Europe": [
-    { slug: "london", city: "London" },
-    { slug: "paris", city: "Paris" },
-    { slug: "berlin", city: "Berlin" },
-    { slug: "amsterdam", city: "Amsterdam" },
-    { slug: "barcelona", city: "Barcelona" },
-    { slug: "rome", city: "Rome" },
-    { slug: "madrid", city: "Madrid" },
-    { slug: "vienna", city: "Vienna" },
-    { slug: "prague", city: "Prague" },
-    { slug: "copenhagen", city: "Copenhagen" },
-  ],
-  "Asia-Pacific": [
-    { slug: "tokyo", city: "Tokyo" },
-    { slug: "singapore", city: "Singapore" },
-    { slug: "hong-kong", city: "Hong Kong" },
-    { slug: "sydney", city: "Sydney" },
-    { slug: "melbourne", city: "Melbourne" },
-    { slug: "seoul", city: "Seoul" },
-    { slug: "bangkok", city: "Bangkok" },
-    { slug: "mumbai", city: "Mumbai" },
-  ],
-  "Middle East & Africa": [
-    { slug: "dubai", city: "Dubai" },
-    { slug: "cape-town", city: "Cape Town" },
-    { slug: "tel-aviv", city: "Tel Aviv" },
+    { slug: "austin", city: "Austin" },
+    { slug: "denver", city: "Denver" },
+    { slug: "atlanta", city: "Atlanta" },
+    { slug: "nashville", city: "Nashville" },
+    { slug: "portland", city: "Portland" },
+    { slug: "houston", city: "Houston" },
+    { slug: "philadelphia", city: "Philadelphia" },
+    { slug: "new-orleans", city: "New Orleans" },
   ],
 };
 
@@ -105,25 +82,25 @@ interface LocationLandingProps {
 
 function LocationLandingContent({ location, service }: LocationLandingProps) {
   const displayService = service || serviceTypes[0];
-  const ServiceIcon = serviceIcons[displayService.slug] || Utensils;
+  const ServiceIcon = serviceIcons[displayService.slug] || Search;
   const nearbyLocations = getNearbyLocations(location);
   const otherServices = getOtherServices(displayService.slug);
 
   const pageTitle = service 
     ? `${displayService.headline} in ${location.city}`
-    : `SEO & Marketing Platform Software in ${location.city}`;
+    : `SEO & Content Platform for ${location.city} Agencies`;
   
   const pageDescription = service
-    ? `${displayService.subheadline}. Serving ${location.restaurantCount} businesses in ${location.city}, ${location.country}.`
-    : `AI-powered content management platform for businesses in ${location.city}. ${location.description}`;
+    ? `${displayService.subheadline}. Serving ${location.businessCount} businesses in ${location.city}, ${location.country}.`
+    : `AI-powered SEO, content automation, and white-label reporting for agencies and businesses in ${location.city}. ${location.description}`;
 
   const canonicalUrl = service 
     ? `/locations/${location.slug}/${service.slug}`
     : `/locations/${location.slug}`;
 
   const seoKeywords = service
-    ? `${displayService.name.toLowerCase()} booking software ${location.city}, ${displayService.name.toLowerCase()} reservation system ${location.city}, AI booking ${location.city}, booking software ${location.country}`
-    : `SEO platform ${location.city}, marketing automation ${location.city}, AI assistant ${location.city}, content management ${location.country}`;
+    ? `${displayService.name.toLowerCase()} ${location.city}, ${displayService.name.toLowerCase()} platform ${location.city}, SEO tools ${location.city}, content marketing ${location.country}`
+    : `SEO platform ${location.city}, content marketing ${location.city}, marketing agency tools ${location.city}, white-label SEO ${location.country}`;
 
   return (
     <Layout>
@@ -189,20 +166,20 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center p-4">
-                <div className="text-3xl font-bold text-primary">{location.restaurantCount}</div>
+                <div className="text-3xl font-bold text-primary">{location.businessCount}</div>
                 <div className="text-sm text-muted-foreground">Businesses in {location.city}</div>
               </div>
               <div className="text-center p-4">
-                <div className="text-3xl font-bold text-primary">24/7</div>
-                <div className="text-sm text-muted-foreground">AI Availability</div>
+                <div className="text-3xl font-bold text-primary">13</div>
+                <div className="text-sm text-muted-foreground">Modules Included</div>
               </div>
               <div className="text-center p-4">
-                <div className="text-3xl font-bold text-primary">60%</div>
-                <div className="text-sm text-muted-foreground">Fewer No-Shows</div>
+                <div className="text-3xl font-bold text-primary">5</div>
+                <div className="text-sm text-muted-foreground">CMS Integrations</div>
               </div>
               <div className="text-center p-4">
-                <div className="text-3xl font-bold text-primary">5 Days</div>
-                <div className="text-sm text-muted-foreground">Average Setup</div>
+                <div className="text-3xl font-bold text-primary">$99</div>
+                <div className="text-sm text-muted-foreground">Starting Price/mo</div>
               </div>
             </div>
           </div>
@@ -230,18 +207,18 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 <span className="relative flex items-center justify-center w-5 h-5 rounded-full bg-white">
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                 </span>
-                <span className="font-semibold">Done-for-you</span> <span className="font-light">content automation</span>
+                <span className="font-semibold">All-in-one</span> <span className="font-light">SEO & content platform</span>
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6 text-white">
-                Dominate Your Market!<br className="hidden sm:block" />
+                Dominate Search in {location.city}<br className="hidden sm:block" />
                 <span className="sm:hidden"> </span>
-                <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent">Start Growing Revenue.</span>
+                <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent">Scale Your Agency Revenue.</span>
               </h2>
               <p className="text-lg lg:text-xl max-w-3xl mx-auto mb-8">
-                <span className="font-semibold text-white drop-shadow-lg">AI-Powered Marketing Platform</span> <em className="text-primary">&</em><br />
-                <span className="font-semibold text-white drop-shadow-lg">Custom Websites for {location.city} {displayService.namePlural}</span><br />
-                <span className="inline-block mt-2 font-bold text-xl lg:text-2xl bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 bg-clip-text text-transparent drop-shadow-lg animate-[pulse_5s_ease-in-out_infinite]">Agencies · SaaS · Ecommerce · Local Business</span><br />
-                <span className="inline-block mt-2 text-lg font-medium text-white drop-shadow-lg">We Boss the tech, you focus on Biz!</span>
+                <span className="font-semibold text-white drop-shadow-lg">Rank Tracker · Content Engine · White-Label Reports</span><br />
+                <span className="font-semibold text-white drop-shadow-lg">Built for {location.city} {displayService.namePlural}</span><br />
+                <span className="inline-block mt-2 font-bold text-xl lg:text-2xl bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 bg-clip-text text-transparent drop-shadow-lg">SEO Agencies · Content Teams · Freelancers · Enterprises</span><br />
+                <span className="inline-block mt-2 text-lg font-medium text-white drop-shadow-lg">We handle the tech, you focus on growing clients.</span>
               </p>
               <div className="flex items-center justify-center gap-2 sm:gap-4">
                 <Link href="/contact">
@@ -251,7 +228,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 </Link>
                 <Link href="/pricing">
                   <Button size="default" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 sm:text-base text-sm sm:px-4 px-3" data-testid="button-video-pricing">
-                    <span className="italic">from</span> <span className="font-bold">$149</span> p/mo
+                    <span className="italic">from</span> <span className="font-bold">$99</span> p/mo
                   </Button>
                 </Link>
               </div>
@@ -266,7 +243,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 Challenges {location.city} {displayService.namePlural} Face
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Running a {displayService.name.toLowerCase()} in {location.city} comes with unique challenges. We're here to solve them.
+                Running a {displayService.name.toLowerCase()} operation in {location.city} comes with unique challenges. indexFlow solves them.
               </p>
             </div>
 
@@ -292,7 +269,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 How indexFlow Helps {displayService.namePlural} in {location.city}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Our AI-powered platform is designed specifically for all businesses.
+                Our platform replaces your entire SEO and content marketing stack with one unified solution.
               </p>
             </div>
 
@@ -320,10 +297,10 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
           <div className="container max-w-6xl mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Explore {location.city}
+                The {location.city} Market
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Discover the best places to visit and things to do in {location.city}. Perfect for businesses looking to attract customers.
+                Key business areas and neighborhoods where agencies and businesses compete for search visibility in {location.city}.
               </p>
             </div>
 
@@ -331,11 +308,10 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
               <div className="space-y-4">
                 <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
                   <Compass className="h-5 w-5 text-primary" />
-                  Top Attractions
+                  Key Business Areas
                 </h3>
                 {location.attractions.map((attraction, index) => {
                   const AttractionIcon = attractionIcons[attraction.type] || MapPin;
-                  const attractionUrl = `https://www.google.com/maps/search/${encodeURIComponent(attraction.name + ', ' + location.city)}`;
                   return (
                     <Card key={index} className="hover-elevate">
                       <CardContent className="p-4 flex items-start gap-4">
@@ -343,14 +319,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                           <AttractionIcon className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                          <a 
-                            href={attractionUrl}
-                            target="_blank"
-                            rel="nofollow noopener noreferrer"
-                            className="font-medium hover:text-primary hover:underline"
-                          >
-                            {attraction.name}
-                          </a>
+                          <span className="font-medium">{attraction.name}</span>
                           <p className="text-sm text-muted-foreground">{attraction.description}</p>
                           <Badge variant="outline" className="mt-2 text-xs capitalize">
                             {attraction.type}
@@ -374,7 +343,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   className="h-[400px]"
                 />
                 <p className="text-sm text-muted-foreground text-center">
-                  {location.city}, {location.country} • Coordinates: {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
+                  {location.city}, {location.country} · {location.businessCount} businesses
                 </p>
               </div>
             </div>
@@ -388,7 +357,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 Pricing for {location.city} {displayService.namePlural}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Transparent, flat-rate pricing with no hidden fees. Choose the plan that fits your business.
+                Transparent, flat-rate pricing. No per-keyword fees, no hidden costs. Choose the plan that fits your agency.
               </p>
             </div>
 
@@ -396,30 +365,30 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
               <Card className="hover-elevate">
                 <CardContent className="p-6">
                   <div className="text-center mb-6">
-                    <h3 className="font-semibold text-lg mb-2">AI Assistant Widget</h3>
-                    <p className="text-sm text-muted-foreground mb-4">AI widget for your website</p>
-                    <div className="text-4xl font-bold text-primary">$149</div>
+                    <h3 className="font-semibold text-lg mb-2">Solo</h3>
+                    <p className="text-sm text-muted-foreground mb-4">For freelancers & solo consultants</p>
+                    <div className="text-4xl font-bold text-primary">$99</div>
                     <p className="text-sm text-muted-foreground">/month</p>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">AI chat widget for your site</span>
+                      <span className="text-sm">Up to 3 workspaces</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">24/7 automated responses</span>
+                      <span className="text-sm">AI content engine with bulk drafts</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Reservation capture</span>
+                      <span className="text-sm">Rank tracker & local search grid</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Custom training on your menu</span>
+                      <span className="text-sm">CRM & invoicing</span>
                     </li>
                   </ul>
-                  <Button className="w-full" variant="outline" asChild data-testid="button-pricing-widget">
+                  <Button className="w-full" variant="outline" asChild data-testid="button-pricing-solo">
                     <Link href="/contact">Get Started</Link>
                   </Button>
                 </CardContent>
@@ -431,34 +400,34 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 </div>
                 <CardContent className="p-6">
                   <div className="text-center mb-6">
-                    <h3 className="font-semibold text-lg mb-2">Complete Solution</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Full booking infrastructure</p>
+                    <h3 className="font-semibold text-lg mb-2">Professional</h3>
+                    <p className="text-sm text-muted-foreground mb-4">For growing agencies</p>
                     <div className="text-4xl font-bold text-primary">$299</div>
-                    <p className="text-sm text-muted-foreground">/month + $499 setup</p>
+                    <p className="text-sm text-muted-foreground">/month</p>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Everything in AI Assistant Widget</span>
+                      <span className="text-sm">Up to 15 workspaces</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Custom website design</span>
+                      <span className="text-sm">Everything in Solo</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">AI voice & SMS integration</span>
+                      <span className="text-sm">Multi-CMS publishing (WordPress, Webflow, Shopify, Ghost, Wix)</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Full reservation management</span>
+                      <span className="text-sm">Team management & roles</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Pre-paid deposit support</span>
+                      <span className="text-sm">Automated client reports</span>
                     </li>
                   </ul>
-                  <Button className="w-full" asChild data-testid="button-pricing-complete">
+                  <Button className="w-full" asChild data-testid="button-pricing-professional">
                     <Link href="/contact">Get Started</Link>
                   </Button>
                 </CardContent>
@@ -467,38 +436,38 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
               <Card className="hover-elevate">
                 <CardContent className="p-6">
                   <div className="text-center mb-6">
-                    <h3 className="font-semibold text-lg mb-2">SEO Add-On</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Boost your online visibility</p>
+                    <h3 className="font-semibold text-lg mb-2">White Label Agency</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Full white-label platform</p>
                     <div className="text-4xl font-bold text-primary">$499</div>
-                    <p className="text-sm text-muted-foreground">one-time</p>
+                    <p className="text-sm text-muted-foreground">/month</p>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Local SEO optimization</span>
+                      <span className="text-sm">Unlimited workspaces</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Google Business setup</span>
+                      <span className="text-sm">Everything in Professional</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Schema markup for {location.city}</span>
+                      <span className="text-sm">Custom branding, logo, domain</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Monthly ranking reports</span>
+                      <span className="text-sm">Client sub-BYOK AI key management</span>
                     </li>
                   </ul>
-                  <Button className="w-full" variant="outline" asChild data-testid="button-pricing-seo">
-                    <Link href="/contact">Add to Plan</Link>
+                  <Button className="w-full" variant="outline" asChild data-testid="button-pricing-whitelabel">
+                    <Link href="/contact">Get Started</Link>
                   </Button>
                 </CardContent>
               </Card>
             </div>
 
             <p className="text-center text-sm text-muted-foreground mt-8">
-              No long-term contracts • Cancel anytime • Setup in 5-20 days
+              No long-term contracts · Cancel anytime · Enterprise pricing available
             </p>
           </div>
         </section>
@@ -508,11 +477,11 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
             <Card className="bg-primary text-primary-foreground">
               <CardContent className="p-8 md:p-12 text-center">
                 <h2 className="text-3xl font-bold mb-4">
-                  Ready to Transform Your {location.city} {displayService.name}?
+                  Ready to Scale Your {location.city} Agency?
                 </h2>
                 <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-                  Join hundreds of businesses using indexFlow to streamline operations, 
-                  reduce no-shows, and grow revenue.
+                  Join agencies across {location.city} using indexFlow to automate content production, 
+                  track rankings, and deliver white-label reports to clients.
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <Button size="lg" variant="secondary" asChild data-testid="button-cta-get-started">
@@ -555,11 +524,11 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 Solutions by Business Type
               </h2>
               <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-                Explore our specialized solutions for different types of businesses in {location.city}.
+                Explore our specialized solutions for different types of agencies and businesses in {location.city}.
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {serviceTypes.map((svc) => {
-                  const Icon = serviceIcons[svc.slug] || Utensils;
+                  const Icon = serviceIcons[svc.slug] || Search;
                   return (
                     <Link key={svc.slug} href={`/locations/${location.slug}/${svc.slug}`}>
                       <Card className="h-full hover-elevate cursor-pointer">
@@ -587,7 +556,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
               </h2>
               <div className="grid sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
                 {otherServices.map((svc) => {
-                  const Icon = serviceIcons[svc.slug] || Utensils;
+                  const Icon = serviceIcons[svc.slug] || Search;
                   return (
                     <Link key={svc.slug} href={`/locations/${location.slug}/${svc.slug}`}>
                       <Card className="hover-elevate cursor-pointer">
@@ -641,7 +610,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
               <Link href="/how-it-works">
                 <Card className="hover-elevate cursor-pointer h-full">
                   <CardContent className="p-5 text-center">
-                    <Calendar className="h-8 w-8 text-primary mx-auto mb-3" />
+                    <Globe className="h-8 w-8 text-primary mx-auto mb-3" />
                     <h3 className="font-semibold mb-1">How It Works</h3>
                     <p className="text-sm text-muted-foreground">See our simple 3-step process</p>
                   </CardContent>
@@ -656,38 +625,38 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   </CardContent>
                 </Card>
               </Link>
-              <Link href="/templates">
+              <Link href="/platform/content-engine">
                 <Card className="hover-elevate cursor-pointer h-full">
                   <CardContent className="p-5 text-center">
-                    <Star className="h-8 w-8 text-primary mx-auto mb-3" />
-                    <h3 className="font-semibold mb-1">Website Templates</h3>
-                    <p className="text-sm text-muted-foreground">Beautiful designs for your business</p>
+                    <FileText className="h-8 w-8 text-primary mx-auto mb-3" />
+                    <h3 className="font-semibold mb-1">Content Engine</h3>
+                    <p className="text-sm text-muted-foreground">AI-powered bulk content production</p>
                   </CardContent>
                 </Card>
               </Link>
-              <Link href="/faq">
+              <Link href="/platform/rank-tracker">
                 <Card className="hover-elevate cursor-pointer h-full">
                   <CardContent className="p-5 text-center">
-                    <Users className="h-8 w-8 text-primary mx-auto mb-3" />
-                    <h3 className="font-semibold mb-1">FAQ</h3>
-                    <p className="text-sm text-muted-foreground">Common questions answered</p>
+                    <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
+                    <h3 className="font-semibold mb-1">Rank Tracker</h3>
+                    <p className="text-sm text-muted-foreground">Track keywords across all clients</p>
                   </CardContent>
                 </Card>
               </Link>
             </div>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
-              <Link href="/portfolio" className="text-sm text-muted-foreground hover:text-primary underline">
-                View Our Portfolio
+              <Link href="/solutions/seo-agencies" className="text-sm text-muted-foreground hover:text-primary underline">
+                SEO Agency Solutions
               </Link>
-              <span className="text-muted-foreground">•</span>
+              <span className="text-muted-foreground">·</span>
               <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary underline">
                 Contact Us
               </Link>
-              <span className="text-muted-foreground">•</span>
+              <span className="text-muted-foreground">·</span>
               <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary underline">
                 Privacy Policy
               </Link>
-              <span className="text-muted-foreground">•</span>
+              <span className="text-muted-foreground">·</span>
               <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary underline">
                 Terms of Service
               </Link>
@@ -698,11 +667,11 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
         <section className="py-12 bg-muted/30" data-testid="all-services-section">
           <div className="container max-w-6xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-center mb-8">
-              All Booking Solutions in {location.city}
+              All Solutions in {location.city}
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {serviceTypes.map((svc) => {
-                const Icon = serviceIcons[svc.slug] || Utensils;
+                const Icon = serviceIcons[svc.slug] || Search;
                 const isCurrentService = service?.slug === svc.slug;
                 return (
                   <Link key={svc.slug} href={`/locations/${location.slug}/${svc.slug}`}>
@@ -730,7 +699,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
         <section className="py-12" data-testid="popular-cities-section">
           <div className="container max-w-6xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-center mb-8">
-              Popular Cities Worldwide
+              Popular Cities
             </h2>
             <div className="flex flex-wrap justify-center gap-2 mb-8">
               {popularCities
@@ -774,7 +743,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
             <div className="text-center mt-8">
               <Button variant="outline" asChild>
                 <Link href="/locations">
-                  View All 51 Cities
+                  View All {locations.length} Cities
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -785,63 +754,63 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
         <section className="py-12" data-testid="service-city-matrix-section">
           <div className="container max-w-6xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-center mb-8">
-              Quick Links by City & Service
+              Quick Links by City & Solution
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
               <div>
                 <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <Utensils className="h-4 w-4 text-primary" />
-                  Restaurant Booking
+                  <Search className="h-4 w-4 text-primary" />
+                  SEO Agencies
                 </h3>
                 <ul className="space-y-1.5 text-muted-foreground">
-                  <li><Link href="/locations/new-york/restaurants" className="hover:text-primary">New York Restaurants</Link></li>
-                  <li><Link href="/locations/london/restaurants" className="hover:text-primary">London Restaurants</Link></li>
-                  <li><Link href="/locations/paris/restaurants" className="hover:text-primary">Paris Restaurants</Link></li>
-                  <li><Link href="/locations/tokyo/restaurants" className="hover:text-primary">Tokyo Restaurants</Link></li>
-                  <li><Link href="/locations/los-angeles/restaurants" className="hover:text-primary">LA Restaurants</Link></li>
-                  <li><Link href="/locations/sydney/restaurants" className="hover:text-primary">Sydney Restaurants</Link></li>
+                  <li><Link href="/locations/new-york/seo-agencies" className="hover:text-primary">New York SEO Agencies</Link></li>
+                  <li><Link href="/locations/los-angeles/seo-agencies" className="hover:text-primary">LA SEO Agencies</Link></li>
+                  <li><Link href="/locations/chicago/seo-agencies" className="hover:text-primary">Chicago SEO Agencies</Link></li>
+                  <li><Link href="/locations/miami/seo-agencies" className="hover:text-primary">Miami SEO Agencies</Link></li>
+                  <li><Link href="/locations/san-francisco/seo-agencies" className="hover:text-primary">SF SEO Agencies</Link></li>
+                  <li><Link href="/locations/austin/seo-agencies" className="hover:text-primary">Austin SEO Agencies</Link></li>
                 </ul>
               </div>
               <div>
                 <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <Coffee className="h-4 w-4 text-primary" />
-                  Cafe Booking
+                  <PenTool className="h-4 w-4 text-primary" />
+                  Content Agencies
                 </h3>
                 <ul className="space-y-1.5 text-muted-foreground">
-                  <li><Link href="/locations/melbourne/cafes" className="hover:text-primary">Melbourne Cafes</Link></li>
-                  <li><Link href="/locations/seattle/cafes" className="hover:text-primary">Seattle Cafes</Link></li>
-                  <li><Link href="/locations/amsterdam/cafes" className="hover:text-primary">Amsterdam Cafes</Link></li>
-                  <li><Link href="/locations/vienna/cafes" className="hover:text-primary">Vienna Cafes</Link></li>
-                  <li><Link href="/locations/copenhagen/cafes" className="hover:text-primary">Copenhagen Cafes</Link></li>
-                  <li><Link href="/locations/berlin/cafes" className="hover:text-primary">Berlin Cafes</Link></li>
+                  <li><Link href="/locations/new-york/content-agencies" className="hover:text-primary">New York Content Agencies</Link></li>
+                  <li><Link href="/locations/seattle/content-agencies" className="hover:text-primary">Seattle Content Agencies</Link></li>
+                  <li><Link href="/locations/boston/content-agencies" className="hover:text-primary">Boston Content Agencies</Link></li>
+                  <li><Link href="/locations/denver/content-agencies" className="hover:text-primary">Denver Content Agencies</Link></li>
+                  <li><Link href="/locations/portland/content-agencies" className="hover:text-primary">Portland Content Agencies</Link></li>
+                  <li><Link href="/locations/atlanta/content-agencies" className="hover:text-primary">Atlanta Content Agencies</Link></li>
                 </ul>
               </div>
               <div>
                 <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <Wine className="h-4 w-4 text-primary" />
-                  Bar Booking
+                  <Megaphone className="h-4 w-4 text-primary" />
+                  Marketing Agencies
                 </h3>
                 <ul className="space-y-1.5 text-muted-foreground">
-                  <li><Link href="/locations/miami/bars" className="hover:text-primary">Miami Bars</Link></li>
-                  <li><Link href="/locations/las-vegas/bars" className="hover:text-primary">Las Vegas Bars</Link></li>
-                  <li><Link href="/locations/barcelona/bars" className="hover:text-primary">Barcelona Bars</Link></li>
-                  <li><Link href="/locations/berlin/bars" className="hover:text-primary">Berlin Bars</Link></li>
-                  <li><Link href="/locations/hong-kong/bars" className="hover:text-primary">Hong Kong Bars</Link></li>
-                  <li><Link href="/locations/chicago/bars" className="hover:text-primary">Chicago Bars</Link></li>
+                  <li><Link href="/locations/miami/marketing-agencies" className="hover:text-primary">Miami Marketing Agencies</Link></li>
+                  <li><Link href="/locations/las-vegas/marketing-agencies" className="hover:text-primary">Las Vegas Marketing Agencies</Link></li>
+                  <li><Link href="/locations/nashville/marketing-agencies" className="hover:text-primary">Nashville Marketing Agencies</Link></li>
+                  <li><Link href="/locations/houston/marketing-agencies" className="hover:text-primary">Houston Marketing Agencies</Link></li>
+                  <li><Link href="/locations/philadelphia/marketing-agencies" className="hover:text-primary">Philly Marketing Agencies</Link></li>
+                  <li><Link href="/locations/new-orleans/marketing-agencies" className="hover:text-primary">NOLA Marketing Agencies</Link></li>
                 </ul>
               </div>
               <div>
                 <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <Bed className="h-4 w-4 text-primary" />
-                  Hotel Booking
+                  <User className="h-4 w-4 text-primary" />
+                  Freelancers
                 </h3>
                 <ul className="space-y-1.5 text-muted-foreground">
-                  <li><Link href="/locations/dubai/hotels" className="hover:text-primary">Dubai Hotels</Link></li>
-                  <li><Link href="/locations/singapore/hotels" className="hover:text-primary">Singapore Hotels</Link></li>
-                  <li><Link href="/locations/rome/hotels" className="hover:text-primary">Rome Hotels</Link></li>
-                  <li><Link href="/locations/bangkok/hotels" className="hover:text-primary">Bangkok Hotels</Link></li>
-                  <li><Link href="/locations/sydney/hotels" className="hover:text-primary">Sydney Hotels</Link></li>
-                  <li><Link href="/locations/cape-town/hotels" className="hover:text-primary">Cape Town Hotels</Link></li>
+                  <li><Link href="/locations/austin/freelancers" className="hover:text-primary">Austin Freelancers</Link></li>
+                  <li><Link href="/locations/denver/freelancers" className="hover:text-primary">Denver Freelancers</Link></li>
+                  <li><Link href="/locations/portland/freelancers" className="hover:text-primary">Portland Freelancers</Link></li>
+                  <li><Link href="/locations/nashville/freelancers" className="hover:text-primary">Nashville Freelancers</Link></li>
+                  <li><Link href="/locations/seattle/freelancers" className="hover:text-primary">Seattle Freelancers</Link></li>
+                  <li><Link href="/locations/san-francisco/freelancers" className="hover:text-primary">SF Freelancers</Link></li>
                 </ul>
               </div>
             </div>

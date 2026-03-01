@@ -86,7 +86,7 @@ export default function Locations() {
                             <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                           </div>
                           <p className="text-xs text-muted-foreground mt-2">
-                            {location.restaurantCount} businesses
+                            {location.businessCount} businesses
                           </p>
                         </CardContent>
                       </Card>
