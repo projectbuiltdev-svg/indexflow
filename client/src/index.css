@@ -433,3 +433,9 @@ body {
 .shooting-stars .star-particle:nth-child(6) { animation: explode6 6s ease-out infinite 0.1s; }
 .shooting-stars .star-particle:nth-child(7) { animation: explode7 6s ease-out infinite 0.6s; }
 .shooting-stars .star-particle:nth-child(8) { animation: explode8 6s ease-out infinite 0.35s; }
+
+@media (orientation: portrait) and (max-width: 639px) {
+  .hero-pill-mobile {
+    font-size: 11px;
+  }
+}
