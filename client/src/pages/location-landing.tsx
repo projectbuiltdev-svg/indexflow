@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Layout } from "@/components/layout";
 import { SEO } from "@/components/seo";
 import { LocationMap } from "@/components/location-map";
-import { locations, getLocationBySlug, type Location, type Attraction } from "@/data/locations";
+import { locations, getLocationBySlug, getAllRegions, getLocationsByRegion, type Location, type Attraction } from "@/data/locations";
 import { serviceTypes, getServiceBySlug, type ServiceType } from "@/data/services";
 import NotFound from "./not-found";
 
@@ -36,44 +36,23 @@ function getOtherServices(currentService: string): ServiceType[] {
 }
 
 const popularCities = [
-  { slug: "new-york", city: "New York", country: "USA" },
-  { slug: "los-angeles", city: "Los Angeles", country: "USA" },
-  { slug: "chicago", city: "Chicago", country: "USA" },
-  { slug: "miami", city: "Miami", country: "USA" },
-  { slug: "san-francisco", city: "San Francisco", country: "USA" },
-  { slug: "seattle", city: "Seattle", country: "USA" },
-  { slug: "austin", city: "Austin", country: "USA" },
-  { slug: "denver", city: "Denver", country: "USA" },
-  { slug: "boston", city: "Boston", country: "USA" },
-  { slug: "atlanta", city: "Atlanta", country: "USA" },
-  { slug: "nashville", city: "Nashville", country: "USA" },
-  { slug: "portland", city: "Portland", country: "USA" },
-  { slug: "houston", city: "Houston", country: "USA" },
-  { slug: "philadelphia", city: "Philadelphia", country: "USA" },
-  { slug: "las-vegas", city: "Las Vegas", country: "USA" },
-  { slug: "new-orleans", city: "New Orleans", country: "USA" },
+  { slug: "new-york", city: "New York" },
+  { slug: "los-angeles", city: "Los Angeles" },
+  { slug: "london", city: "London" },
+  { slug: "chicago", city: "Chicago" },
+  { slug: "toronto", city: "Toronto" },
+  { slug: "sydney", city: "Sydney" },
+  { slug: "miami", city: "Miami" },
+  { slug: "berlin", city: "Berlin" },
+  { slug: "san-francisco", city: "San Francisco" },
+  { slug: "dublin", city: "Dublin" },
+  { slug: "austin", city: "Austin" },
+  { slug: "amsterdam", city: "Amsterdam" },
+  { slug: "seattle", city: "Seattle" },
+  { slug: "melbourne", city: "Melbourne" },
+  { slug: "barcelona", city: "Barcelona" },
+  { slug: "denver", city: "Denver" },
 ];
-
-const regionCities: Record<string, Array<{ slug: string; city: string }>> = {
-  "North America": [
-    { slug: "new-york", city: "New York" },
-    { slug: "los-angeles", city: "Los Angeles" },
-    { slug: "chicago", city: "Chicago" },
-    { slug: "miami", city: "Miami" },
-    { slug: "san-francisco", city: "San Francisco" },
-    { slug: "las-vegas", city: "Las Vegas" },
-    { slug: "seattle", city: "Seattle" },
-    { slug: "boston", city: "Boston" },
-    { slug: "austin", city: "Austin" },
-    { slug: "denver", city: "Denver" },
-    { slug: "atlanta", city: "Atlanta" },
-    { slug: "nashville", city: "Nashville" },
-    { slug: "portland", city: "Portland" },
-    { slug: "houston", city: "Houston" },
-    { slug: "philadelphia", city: "Philadelphia" },
-    { slug: "new-orleans", city: "New Orleans" },
-  ],
-};
 
 interface LocationLandingProps {
   location: Location;
@@ -91,7 +70,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
     : `SEO & Content Platform for ${location.city} Agencies`;
   
   const pageDescription = service
-    ? `${displayService.subheadline}. Serving ${location.businessCount} businesses in ${location.city}, ${location.country}.`
+    ? `${displayService.subheadline}. Serving agencies and businesses in ${location.city}, ${location.country}.`
     : `AI-powered SEO, content automation, and white-label reporting for agencies and businesses in ${location.city}. ${location.description}`;
 
   const canonicalUrl = service 
@@ -164,24 +143,6 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
               </Button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="text-center p-4">
-                <div className="text-3xl font-bold text-primary">{location.businessCount}</div>
-                <div className="text-sm text-muted-foreground">Businesses in {location.city}</div>
-              </div>
-              <div className="text-center p-4">
-                <div className="text-3xl font-bold text-primary">13</div>
-                <div className="text-sm text-muted-foreground">Modules Included</div>
-              </div>
-              <div className="text-center p-4">
-                <div className="text-3xl font-bold text-primary">5</div>
-                <div className="text-sm text-muted-foreground">CMS Integrations</div>
-              </div>
-              <div className="text-center p-4">
-                <div className="text-3xl font-bold text-primary">$99</div>
-                <div className="text-sm text-muted-foreground">Starting Price/mo</div>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -343,7 +304,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   className="h-[400px]"
                 />
                 <p className="text-sm text-muted-foreground text-center">
-                  {location.city}, {location.country} · {location.businessCount} businesses
+                  {location.city}, {location.country} · Pop. {location.population}
                 </p>
               </div>
             </div>
@@ -722,23 +683,26 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
               Browse by Region
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {Object.entries(regionCities).map(([region, cities]) => (
-                <div key={region}>
-                  <h3 className="font-semibold mb-3 text-primary">{region}</h3>
-                  <ul className="space-y-1.5">
-                    {cities.map((city) => (
-                      <li key={city.slug}>
-                        <Link 
-                          href={service ? `/locations/${city.slug}/${service.slug}` : `/locations/${city.slug}`}
-                          className={`text-sm hover:text-primary ${city.slug === location.slug ? 'text-primary font-medium' : 'text-muted-foreground'}`}
-                        >
-                          {city.city}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+              {getAllRegions().map((region) => {
+                const regionLocs = getLocationsByRegion(region).slice(0, 8);
+                return (
+                  <div key={region}>
+                    <h3 className="font-semibold mb-3 text-primary">{region}</h3>
+                    <ul className="space-y-1.5">
+                      {regionLocs.map((city) => (
+                        <li key={city.slug}>
+                          <Link 
+                            href={service ? `/locations/${city.slug}/${service.slug}` : `/locations/${city.slug}`}
+                            className={`text-sm hover:text-primary ${city.slug === location.slug ? 'text-primary font-medium' : 'text-muted-foreground'}`}
+                          >
+                            {city.city}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
             </div>
             <div className="text-center mt-8">
               <Button variant="outline" asChild>

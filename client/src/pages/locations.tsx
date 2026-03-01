@@ -86,7 +86,7 @@ export default function Locations() {
                             <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                           </div>
                           <p className="text-xs text-muted-foreground mt-2">
-                            {location.businessCount} businesses
+                            Pop. {location.population}
                           </p>
                         </CardContent>
                       </Card>
@@ -139,11 +139,11 @@ export default function Locations() {
                         <Link href={`/locations/london/${service.slug}`}>
                           <Badge variant="outline" className="text-xs hover-elevate cursor-pointer">London</Badge>
                         </Link>
-                        <Link href={`/locations/paris/${service.slug}`}>
-                          <Badge variant="outline" className="text-xs hover-elevate cursor-pointer">Paris</Badge>
+                        <Link href={`/locations/sydney/${service.slug}`}>
+                          <Badge variant="outline" className="text-xs hover-elevate cursor-pointer">Sydney</Badge>
                         </Link>
-                        <Link href={`/locations/tokyo/${service.slug}`}>
-                          <Badge variant="outline" className="text-xs hover-elevate cursor-pointer">Tokyo</Badge>
+                        <Link href={`/locations/toronto/${service.slug}`}>
+                          <Badge variant="outline" className="text-xs hover-elevate cursor-pointer">Toronto</Badge>
                         </Link>
                       </div>
                     </CardContent>
@@ -166,8 +166,8 @@ export default function Locations() {
                   <li><Link href="/locations/new-york/seo-agencies" className="hover:text-primary">New York SEO</Link></li>
                   <li><Link href="/locations/los-angeles/seo-agencies" className="hover:text-primary">Los Angeles SEO</Link></li>
                   <li><Link href="/locations/london/seo-agencies" className="hover:text-primary">London SEO</Link></li>
-                  <li><Link href="/locations/paris/seo-agencies" className="hover:text-primary">Paris SEO</Link></li>
-                  <li><Link href="/locations/tokyo/seo-agencies" className="hover:text-primary">Tokyo SEO</Link></li>
+                  <li><Link href="/locations/toronto/seo-agencies" className="hover:text-primary">Toronto SEO</Link></li>
+                  <li><Link href="/locations/sydney/seo-agencies" className="hover:text-primary">Sydney SEO</Link></li>
                 </ul>
               </div>
               <div>
@@ -187,17 +187,17 @@ export default function Locations() {
                   <li><Link href="/locations/las-vegas/marketing-agencies" className="hover:text-primary">Las Vegas Marketing</Link></li>
                   <li><Link href="/locations/barcelona/marketing-agencies" className="hover:text-primary">Barcelona Marketing</Link></li>
                   <li><Link href="/locations/berlin/marketing-agencies" className="hover:text-primary">Berlin Marketing</Link></li>
-                  <li><Link href="/locations/hong-kong/marketing-agencies" className="hover:text-primary">Hong Kong Marketing</Link></li>
+                  <li><Link href="/locations/dublin/marketing-agencies" className="hover:text-primary">Dublin Marketing</Link></li>
                 </ul>
               </div>
               <div>
                 <h3 className="font-semibold mb-3">Freelancers</h3>
                 <ul className="space-y-2 text-muted-foreground">
-                  <li><Link href="/locations/dubai/freelancers" className="hover:text-primary">Dubai Freelancers</Link></li>
-                  <li><Link href="/locations/singapore/freelancers" className="hover:text-primary">Singapore Freelancers</Link></li>
+                  <li><Link href="/locations/austin/freelancers" className="hover:text-primary">Austin Freelancers</Link></li>
+                  <li><Link href="/locations/lisbon/freelancers" className="hover:text-primary">Lisbon Freelancers</Link></li>
                   <li><Link href="/locations/sydney/freelancers" className="hover:text-primary">Sydney Freelancers</Link></li>
                   <li><Link href="/locations/rome/freelancers" className="hover:text-primary">Rome Freelancers</Link></li>
-                  <li><Link href="/locations/cape-town/freelancers" className="hover:text-primary">Cape Town Freelancers</Link></li>
+                  <li><Link href="/locations/portland/freelancers" className="hover:text-primary">Portland Freelancers</Link></li>
                 </ul>
               </div>
             </div>
