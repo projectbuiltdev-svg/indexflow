@@ -441,24 +441,24 @@ export default function Home2() {
 
             <FadeIn className="w-full">
               <div className="flex justify-center w-full" data-testid="hero-stats-slim">
-                <div className="relative border border-white/15 rounded-full px-4 sm:px-8 py-1.5 sm:py-2.5 inline-flex">
-                  <div className="flex items-center justify-center gap-x-2 sm:gap-x-5 text-[7px] sm:text-[10px] font-semibold tracking-wider sm:tracking-[0.15em] text-white whitespace-nowrap uppercase">
-                    <span className="flex items-center gap-1 sm:gap-1.5">
+                <div className="relative border border-white/15 rounded-2xl sm:rounded-full px-4 sm:px-8 py-2 sm:py-2.5 inline-flex">
+                  <div className="grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-x-3 gap-y-1.5 sm:gap-x-5 text-[7px] sm:text-[10px] font-semibold tracking-wider sm:tracking-[0.15em] text-white whitespace-nowrap uppercase">
+                    <span className="flex items-center gap-1 sm:gap-1.5 justify-center">
                       <Wrench className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.6)]" />
                       40+ SEO Tools
                     </span>
-                    <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
-                    <span className="flex items-center gap-1 sm:gap-1.5">
+                    <span className="text-white/20 text-[6px] sm:text-[8px] hidden sm:inline">|</span>
+                    <span className="flex items-center gap-1 sm:gap-1.5 justify-center">
                       <Layers className="w-3 h-3 sm:w-4 sm:h-4 text-sky-300 drop-shadow-[0_0_4px_rgba(125,211,252,0.6)]" />
                       One Subscription
                     </span>
-                    <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
-                    <span className="flex items-center gap-1 sm:gap-1.5">
+                    <span className="text-white/20 text-[6px] sm:text-[8px] hidden sm:inline">|</span>
+                    <span className="flex items-center gap-1 sm:gap-1.5 justify-center">
                       <Key className="w-3 h-3 sm:w-4 sm:h-4 text-orange-400 drop-shadow-[0_0_4px_rgba(251,146,60,0.6)]" />
                       BYOK <span className="font-black">API</span> (<span className="font-black">AI</span>)
                     </span>
-                    <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
-                    <span className="flex items-center gap-1 sm:gap-1.5">
+                    <span className="text-white/20 text-[6px] sm:text-[8px] hidden sm:inline">|</span>
+                    <span className="flex items-center gap-1 sm:gap-1.5 justify-center">
                       <ShieldCheck className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.6)]" />
                       Zero Middlemen
                     </span>
