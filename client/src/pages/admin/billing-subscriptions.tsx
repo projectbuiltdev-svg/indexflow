@@ -15,16 +15,16 @@ import { DollarSign, Users, TrendingUp, Download } from "lucide-react";
 const stats = [
   { label: "Monthly Revenue", value: "$12,857", change: "+12%", subtitle: "from last month", icon: DollarSign },
   { label: "Active Subscriptions", value: "43", change: "+3", subtitle: "from last month", icon: Users },
-  { label: "Avg. Revenue/Client", value: "$299", change: "+5%", subtitle: "from last month", icon: TrendingUp },
+  { label: "Avg. Revenue/Client", value: "$349", change: "+5%", subtitle: "from last month", icon: TrendingUp },
 ];
 
 const transactions = [
-  { id: 1, client: "Apex Digital Agency", amount: "$299.00", type: "Subscription", status: "Paid", date: "Feb 15, 2026" },
-  { id: 2, client: "Greenfield Law Firm", amount: "$499.00", type: "Subscription", status: "Paid", date: "Feb 14, 2026" },
-  { id: 3, client: "Jake Morrison SEO", amount: "$149.00", type: "Add-on", status: "Paid", date: "Feb 14, 2026" },
-  { id: 4, client: "BrightPath Marketing", amount: "$299.00", type: "Subscription", status: "Failed", date: "Feb 13, 2026" },
-  { id: 5, client: "Meridian Hotels Group", amount: "$199.00", type: "Subscription", status: "Paid", date: "Feb 12, 2026" },
-  { id: 6, client: "Summit Growth Partners", amount: "$299.00", type: "Subscription", status: "Paid", date: "Feb 11, 2026" },
+  { id: 1, client: "Apex Digital Agency", amount: "$349.00", type: "Subscription", status: "Paid", date: "Feb 15, 2026" },
+  { id: 2, client: "Greenfield Law Firm", amount: "$349.00", type: "Subscription", status: "Paid", date: "Feb 14, 2026" },
+  { id: 3, client: "Jake Morrison SEO", amount: "$99.00", type: "Add-on", status: "Paid", date: "Feb 14, 2026" },
+  { id: 4, client: "BrightPath Marketing", amount: "$199.00", type: "Subscription", status: "Failed", date: "Feb 13, 2026" },
+  { id: 5, client: "Meridian Hotels Group", amount: "$999.00", type: "Subscription", status: "Paid", date: "Feb 12, 2026" },
+  { id: 6, client: "Summit Growth Partners", amount: "$349.00", type: "Subscription", status: "Paid", date: "Feb 11, 2026" },
 ];
 
 export default function AdminBillingSubscriptions() {

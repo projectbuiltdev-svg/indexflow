@@ -18,9 +18,10 @@ const usageItems = [
 ];
 
 const plans = [
-  { id: "starter", name: "Starter", price: "$29/mo" },
-  { id: "pro", name: "Pro", price: "$99/mo" },
-  { id: "enterprise", name: "Enterprise", price: "$299/mo" },
+  { id: "solo", name: "Solo", price: "$99/mo" },
+  { id: "pro", name: "Pro", price: "$199/mo" },
+  { id: "agency", name: "Agency", price: "$349/mo" },
+  { id: "enterprise", name: "Enterprise", price: "$999/mo" },
 ];
 
 export default function SettingsBilling() {

@@ -239,7 +239,7 @@ export default function SettingsWhiteLabel() {
             </div>
             {!isAgencyOrEnterprise && (
               <p className="text-xs text-amber-600 dark:text-amber-400 mt-2" data-testid="text-branding-upgrade">
-                Upgrade to White Label Agency ($499/mo) or Enterprise to remove indexFlow branding from your widget.
+                Upgrade to Agency ($349/mo) or Enterprise ($999/mo) to remove indexFlow branding from your widget.
               </p>
             )}
           </div>

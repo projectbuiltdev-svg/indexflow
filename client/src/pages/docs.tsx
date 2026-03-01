@@ -46,7 +46,7 @@ export default function Docs() {
         <li><strong>"The Problem"</strong> - 6 pain points</li>
         <li><strong>"The Solution"</strong> - 6 benefits</li>
         <li><strong>CMS Partners</strong> - Scrolling logos</li>
-        <li><strong>Pricing</strong> - Solo ($99/mo), Professional ($299/mo), White Label ($499/mo), Enterprise (custom)</li>
+        <li><strong>Pricing</strong> - Solo ($99/mo), Pro ($199/mo), Agency ($349/mo), Enterprise ($999/mo)</li>
         <li><strong>"Why Choose indexFlow"</strong> - 4 feature cards</li>
         <li><strong>Testimonials</strong> - Customer reviews</li>
         <li><strong>Final CTA</strong></li>
@@ -129,10 +129,10 @@ export default function Docs() {
       <table className="w-full border-collapse my-4">
         <thead><tr className="bg-gray-100"><th className="border p-2 text-left">Plan</th><th className="border p-2 text-left">Price</th><th className="border p-2 text-left">Includes</th></tr></thead>
         <tbody>
-          <tr><td className="border p-2 font-semibold">Solo</td><td className="border p-2">$99/month</td><td className="border p-2">Full platform, up to 3 workspaces, rank tracking, content engine, CRM, invoicing</td></tr>
-          <tr><td className="border p-2 font-semibold">Professional</td><td className="border p-2">$299/month</td><td className="border p-2">Unlimited workspaces, AI widget, voice/SMS, priority support, advanced analytics</td></tr>
-          <tr><td className="border p-2 font-semibold">White Label Agency</td><td className="border p-2">$499/month</td><td className="border p-2">Custom branding, custom domain, BYOK support, client portals, white-label reports</td></tr>
-          <tr><td className="border p-2 font-semibold">Enterprise</td><td className="border p-2">Custom</td><td className="border p-2">Dedicated infrastructure, SLA, custom integrations, onboarding</td></tr>
+          <tr><td className="border p-2 font-semibold">Solo</td><td className="border p-2">$99/month</td><td className="border p-2">1 workspace, rank tracking, content engine, CRM, invoicing</td></tr>
+          <tr><td className="border p-2 font-semibold">Pro</td><td className="border p-2">$199/month</td><td className="border p-2">3 workspaces, AI widget, voice/SMS, priority support, advanced analytics</td></tr>
+          <tr><td className="border p-2 font-semibold">Agency</td><td className="border p-2">$349/month</td><td className="border p-2">7 workspaces, custom branding, custom domain, BYOK support, client portals, white-label reports</td></tr>
+          <tr><td className="border p-2 font-semibold">Enterprise</td><td className="border p-2">$999/month</td><td className="border p-2">20 workspaces, dedicated infrastructure, SLA, custom integrations, onboarding</td></tr>
         </tbody>
       </table>
 

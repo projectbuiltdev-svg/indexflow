@@ -62,11 +62,11 @@ export default function AdminSettings() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="complete-setup">Complete Solution - Setup Fee</Label>
-                  <Input id="complete-setup" defaultValue="$499" data-testid="input-complete-setup" />
+                  <Input id="complete-setup" defaultValue="$349" data-testid="input-complete-setup" />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="complete-monthly">Complete Solution - Monthly</Label>
-                  <Input id="complete-monthly" defaultValue="$299" data-testid="input-complete-monthly" />
+                  <Input id="complete-monthly" defaultValue="$199" data-testid="input-complete-monthly" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">

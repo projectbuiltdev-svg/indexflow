@@ -128,7 +128,7 @@ export const serviceTypes: ServiceType[] = [
     ],
     faqs: [
       { question: "Is the Solo plan enough for a freelancer?", answer: "Yes — it includes everything you need: rank tracking, content engine, CRM, invoicing, and up to 3 workspaces." },
-      { question: "Can I upgrade later?", answer: "Absolutely. Upgrade to Professional or White Label Agency as your client base grows." },
+      { question: "Can I upgrade later?", answer: "Absolutely. Upgrade to Pro or Agency as your client base grows." },
     ],
   },
 ];

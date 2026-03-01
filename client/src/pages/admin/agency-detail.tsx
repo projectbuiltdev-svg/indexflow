@@ -38,9 +38,9 @@ const users = [
 ];
 
 const invoices = [
-  { id: "INV-2026-0042", amount: "$299.00", date: "Feb 1, 2026", status: "Paid" },
-  { id: "INV-2026-0031", amount: "$299.00", date: "Jan 1, 2026", status: "Paid" },
-  { id: "INV-2025-0284", amount: "$299.00", date: "Dec 1, 2025", status: "Paid" },
+  { id: "INV-2026-0042", amount: "$349.00", date: "Feb 1, 2026", status: "Paid" },
+  { id: "INV-2026-0031", amount: "$349.00", date: "Jan 1, 2026", status: "Paid" },
+  { id: "INV-2025-0284", amount: "$349.00", date: "Dec 1, 2025", status: "Paid" },
   { id: "INV-2025-0241", amount: "$199.00", date: "Nov 1, 2025", status: "Paid" },
   { id: "INV-2025-0198", amount: "$199.00", date: "Oct 1, 2025", status: "Paid" },
 ];

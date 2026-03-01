@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     question: "How does pricing work?",
-    answer: "Four tiers: Solo at $99/mo (1 user, 1 workspace), Professional at $299/mo (3 users, 3 workspaces), White Label Agency at $499/mo (6 users, 100 workspaces, full white-label branding), and Enterprise (custom pricing, unlimited everything). All plans are month-to-month with no long-term contracts. Pay annually and get 2 months free.",
+    answer: "Four tiers: Solo at $99/mo (1 user, 1 workspace), Pro at $199/mo (5 users, 3 workspaces), Agency at $349/mo (10 users, 7 workspaces, full white-label branding), and Enterprise at $999/mo (20 workspaces, dedicated support). All plans are month-to-month with no long-term contracts. Pay annually and get 2 months free.",
   },
   {
     question: "What's included in every plan?",
@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     question: "How does white label work?",
-    answer: "On the White Label Agency plan ($499/mo) and Enterprise, you can apply your own branding, logo, colors, and custom domain to the entire platform. Your clients see your brand — not IndexFlow. You can also white-label reports and invoices.",
+    answer: "On the Agency plan ($349/mo) and Enterprise ($999/mo), you can apply your own branding, logo, colors, and custom domain to the entire platform. Your clients see your brand — not IndexFlow. You can also white-label reports and invoices.",
   },
   {
     question: "What is BYOK (Bring Your Own Key)?",

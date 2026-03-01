@@ -408,15 +408,15 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                 </div>
                 <CardContent className="p-6">
                   <div className="text-center mb-6">
-                    <h3 className="font-semibold text-lg mb-2">Professional</h3>
+                    <h3 className="font-semibold text-lg mb-2">Pro</h3>
                     <p className="text-sm text-muted-foreground mb-4">For growing agencies</p>
-                    <div className="text-4xl font-bold text-primary">$299</div>
+                    <div className="text-4xl font-bold text-primary">$199</div>
                     <p className="text-sm text-muted-foreground">/month</p>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Up to 15 workspaces</span>
+                      <span className="text-sm">3 workspaces</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
@@ -444,19 +444,19 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
               <Card className="hover-elevate">
                 <CardContent className="p-6">
                   <div className="text-center mb-6">
-                    <h3 className="font-semibold text-lg mb-2">White Label Agency</h3>
+                    <h3 className="font-semibold text-lg mb-2">Agency</h3>
                     <p className="text-sm text-muted-foreground mb-4">Full white-label platform</p>
-                    <div className="text-4xl font-bold text-primary">$499</div>
+                    <div className="text-4xl font-bold text-primary">$349</div>
                     <p className="text-sm text-muted-foreground">/month</p>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Unlimited workspaces</span>
+                      <span className="text-sm">7 workspaces</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Everything in Professional</span>
+                      <span className="text-sm">Everything in Pro</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />

@@ -37,7 +37,7 @@ const plans = [
     highlight: true,
     features: [
       "5 users",
-      "50 white label workspaces",
+      "3 workspaces",
       "Bulk campaigns",
       "Everything in Solo",
       "Full white-label branding",
@@ -57,7 +57,7 @@ const plans = [
     highlight: false,
     features: [
       "10 users",
-      "100 white label workspaces",
+      "7 workspaces",
       "Full white label",
       "Everything in Pro",
       "Advanced API access",
@@ -70,12 +70,12 @@ const plans = [
   },
   {
     name: "Enterprise",
-    price: "Custom",
-    period: "contact us",
+    price: "$999",
+    period: "per month",
     tagline: "You've outgrown tools. You need infrastructure.",
     highlight: false,
     features: [
-      "Unlimited everything",
+      "20 workspaces",
       "Super Admin Dashboard",
       "Dedicated support",
       "Custom contracts",
