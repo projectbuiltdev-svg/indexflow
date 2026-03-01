@@ -43,12 +43,12 @@ const resourceLinks = [
 ];
 
 const locationLinks = [
-  { href: "/locations/new-york", label: "New York" },
-  { href: "/locations/los-angeles", label: "Los Angeles" },
-  { href: "/locations/chicago", label: "Chicago" },
-  { href: "/locations/miami", label: "Miami" },
-  { href: "/locations/austin", label: "Austin" },
-  { href: "/locations/san-francisco", label: "San Francisco" },
+  { href: "/locations/new-york", label: "USA" },
+  { href: "/locations/london", label: "UK" },
+  { href: "/locations/toronto", label: "Canada" },
+  { href: "/locations/dublin", label: "Ireland" },
+  { href: "/locations/sydney", label: "Australia" },
+  { href: "/locations/berlin", label: "Germany" },
   { href: "/locations", label: "All Locations" },
 ];
 
