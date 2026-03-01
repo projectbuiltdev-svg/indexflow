@@ -28,18 +28,23 @@ import { Plus, Pencil, Search, Trash2, ChevronLeft, ChevronRight, Loader2 } from
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
 
 type Page = {
-  id: string | number;
+  id: number;
+  workspaceId?: string;
   title: string;
-  slug?: string;
-  url?: string;
-  schemaType?: string;
-  type?: string;
-  seoScore?: number;
-  status?: string;
-  description?: string;
-  primaryKeyword?: string;
-  updatedAt?: string;
-  lastUpdated?: string;
+  slug: string;
+  description?: string | null;
+  content?: string | null;
+  template?: string | null;
+  parentId?: number | null;
+  sortOrder?: number | null;
+  isPublished?: boolean | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  ogImage?: string | null;
+  canonicalUrl?: string | null;
+  noIndex?: boolean | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 };
 
 export default function ContentPages() {
@@ -48,19 +53,19 @@ export default function ContentPages() {
   const workspaceId = selectedWorkspace?.id || "";
 
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [templateFilter, setTemplateFilter] = useState("all");
 
   const [addOpen, setAddOpen] = useState(false);
   const [addTitle, setAddTitle] = useState("");
-  const [addUrl, setAddUrl] = useState("");
-  const [addType, setAddType] = useState("Page");
+  const [addSlug, setAddSlug] = useState("");
+  const [addTemplate, setAddTemplate] = useState("default");
   const [addDescription, setAddDescription] = useState("");
 
   const [editOpen, setEditOpen] = useState(false);
   const [editPage, setEditPage] = useState<Page | null>(null);
   const [editTitle, setEditTitle] = useState("");
-  const [editUrl, setEditUrl] = useState("");
-  const [editType, setEditType] = useState("");
+  const [editSlug, setEditSlug] = useState("");
+  const [editTemplate, setEditTemplate] = useState("");
 
   const [auditOpen, setAuditOpen] = useState(false);
   const [auditPage, setAuditPage] = useState<Page | null>(null);
@@ -71,47 +76,31 @@ export default function ContentPages() {
   const [currentPage, setCurrentPage] = useState(1);
   const pagesPerPage = 10;
 
-  const queryKey = `/api/admin/blog/pages/${workspaceId}`;
-  const { data: rawPages = [], isLoading } = useQuery<Page[]>({
-    queryKey: [queryKey],
+  const queryKey = ["/api/site-pages", workspaceId];
+  const { data: pages = [], isLoading } = useQuery<Page[]>({
+    queryKey,
+    queryFn: () => fetch(`/api/site-pages/${workspaceId}`).then(r => r.json()),
     enabled: !!workspaceId,
   });
 
-  const pages = rawPages.map((p) => ({
-    ...p,
-    url: p.url || p.slug || "",
-    type: p.schemaType || p.type || "Standard",
-    seoScore: p.seoScore ?? 0,
-    lastUpdated: p.updatedAt || p.lastUpdated || "",
-  }));
-
   const createMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("POST", "/api/admin/blog/pages", data),
+    mutationFn: (data: any) => apiRequest("POST", "/api/site-pages", data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      queryClient.invalidateQueries({ queryKey });
       setAddOpen(false);
       setAddTitle("");
-      setAddUrl("");
-      setAddType("Page");
+      setAddSlug("");
+      setAddTemplate("default");
       setAddDescription("");
       toast({ title: "Page created", description: `"${addTitle}" has been added.` });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
-  const auditAllMutation = useMutation({
-    mutationFn: () => apiRequest("POST", "/api/admin/blog/pages/audit-all", { workspaceId }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-      toast({ title: "Audit complete", description: "All pages have been audited." });
-    },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
-  });
-
   const deleteMutation = useMutation({
-    mutationFn: (id: string | number) => apiRequest("DELETE", `/api/blog/posts/${id}`),
+    mutationFn: (id: number) => apiRequest("DELETE", `/api/site-pages/${id}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      queryClient.invalidateQueries({ queryKey });
       const title = deletePage?.title;
       setDeleteOpen(false);
       setDeletePage(null);
@@ -121,9 +110,9 @@ export default function ContentPages() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string | number; data: any }) => apiRequest("PUT", `/api/blog/posts/${id}`, data),
+    mutationFn: ({ id, data }: { id: number; data: any }) => apiRequest("PUT", `/api/site-pages/${id}`, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      queryClient.invalidateQueries({ queryKey });
       setEditOpen(false);
       setEditPage(null);
       toast({ title: "Page updated", description: `"${editTitle}" has been saved.` });
@@ -131,11 +120,11 @@ export default function ContentPages() {
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
-  const types = Array.from(new Set(pages.map((p) => p.type)));
+  const templates = Array.from(new Set(pages.map((p) => p.template || "default")));
 
   const filtered = pages.filter((p) => {
-    if (search && !p.title.toLowerCase().includes(search.toLowerCase()) && !(p.url || "").toLowerCase().includes(search.toLowerCase())) return false;
-    if (typeFilter !== "all" && p.type !== typeFilter) return false;
+    if (search && !p.title.toLowerCase().includes(search.toLowerCase()) && !p.slug.toLowerCase().includes(search.toLowerCase())) return false;
+    if (templateFilter !== "all" && (p.template || "default") !== templateFilter) return false;
     return true;
   });
 
@@ -148,17 +137,17 @@ export default function ContentPages() {
     createMutation.mutate({
       workspaceId,
       title: addTitle,
-      url: addUrl || `/${addTitle.toLowerCase().replace(/\s+/g, "-")}`,
-      type: addType,
-      keywords: addDescription,
+      slug: addSlug || undefined,
+      template: addTemplate,
+      description: addDescription,
     });
   };
 
   const handleEdit = (page: Page) => {
     setEditPage(page);
     setEditTitle(page.title);
-    setEditUrl(page.url || page.slug || "");
-    setEditType(page.type || "Standard");
+    setEditSlug(page.slug);
+    setEditTemplate(page.template || "default");
     setEditOpen(true);
   };
 
@@ -168,8 +157,8 @@ export default function ContentPages() {
       id: editPage.id,
       data: {
         title: editTitle,
-        slug: editUrl,
-        schemaType: editType,
+        slug: editSlug,
+        template: editTemplate,
       },
     });
   };
@@ -203,15 +192,6 @@ export default function ContentPages() {
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-serif italic font-semibold" data-testid="text-page-title">Pages</h1>
         <div className="flex items-center gap-2 flex-wrap">
-          <Button
-            variant="outline"
-            onClick={() => auditAllMutation.mutate()}
-            disabled={auditAllMutation.isPending}
-            data-testid="button-audit-all"
-          >
-            {auditAllMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Audit All
-          </Button>
           <Button data-testid="button-add-page" onClick={() => setAddOpen(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Add Page
@@ -230,13 +210,13 @@ export default function ContentPages() {
             data-testid="input-search-pages"
           />
         </div>
-        <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-[150px]" data-testid="select-type-filter">
-            <SelectValue placeholder="Type" />
+        <Select value={templateFilter} onValueChange={setTemplateFilter}>
+          <SelectTrigger className="w-[150px]" data-testid="select-template-filter">
+            <SelectValue placeholder="Template" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            {types.map((t) => (
+            <SelectItem value="all">All Templates</SelectItem>
+            {templates.map((t) => (
               <SelectItem key={t} value={t}>{t}</SelectItem>
             ))}
           </SelectContent>
@@ -259,9 +239,9 @@ export default function ContentPages() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Page Title</TableHead>
-                  <TableHead>URL</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>SEO Score</TableHead>
+                  <TableHead>Slug</TableHead>
+                  <TableHead>Template</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead>Last Updated</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -284,12 +264,16 @@ export default function ContentPages() {
                         {page.title}
                       </button>
                     </TableCell>
-                    <TableCell className="text-muted-foreground" data-testid={`text-page-url-${page.id}`}>{page.url}</TableCell>
+                    <TableCell className="text-muted-foreground font-mono text-xs" data-testid={`text-page-slug-${page.id}`}>{page.slug}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary" data-testid={`badge-page-type-${page.id}`}>{page.type}</Badge>
+                      <Badge variant="secondary" data-testid={`badge-page-template-${page.id}`}>{page.template || "default"}</Badge>
                     </TableCell>
-                    <TableCell data-testid={`text-seo-score-${page.id}`}>{page.seoScore}/100</TableCell>
-                    <TableCell className="text-muted-foreground">{page.lastUpdated ? new Date(page.lastUpdated).toLocaleDateString() : ""}</TableCell>
+                    <TableCell>
+                      <Badge variant={page.isPublished ? "default" : "outline"} data-testid={`badge-page-status-${page.id}`}>
+                        {page.isPublished ? "Published" : "Draft"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{page.updatedAt ? new Date(page.updatedAt).toLocaleDateString() : ""}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1 flex-wrap">
                         <Button variant="ghost" size="icon" data-testid={`button-edit-page-${page.id}`} onClick={() => handleEdit(page)}>
@@ -359,26 +343,26 @@ export default function ContentPages() {
               <Input id="add-page-title" placeholder="Page title" value={addTitle} onChange={(e) => setAddTitle(e.target.value)} data-testid="input-add-page-title" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="add-page-url">URL</Label>
-              <Input id="add-page-url" placeholder="/page-url" value={addUrl} onChange={(e) => setAddUrl(e.target.value)} data-testid="input-add-page-url" />
+              <Label htmlFor="add-page-slug">Slug</Label>
+              <Input id="add-page-slug" placeholder="/about-us (auto-generated if blank)" value={addSlug} onChange={(e) => setAddSlug(e.target.value)} data-testid="input-add-page-slug" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="add-page-type">Type</Label>
-              <Select value={addType} onValueChange={setAddType}>
-                <SelectTrigger data-testid="select-add-page-type">
+              <Label htmlFor="add-page-template">Template</Label>
+              <Select value={addTemplate} onValueChange={setAddTemplate}>
+                <SelectTrigger data-testid="select-add-page-template">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Page">Page</SelectItem>
-                  <SelectItem value="Landing">Landing</SelectItem>
-                  <SelectItem value="Standard">Standard</SelectItem>
-                  <SelectItem value="Archive">Archive</SelectItem>
+                  <SelectItem value="default">Default</SelectItem>
+                  <SelectItem value="landing">Landing</SelectItem>
+                  <SelectItem value="service">Service</SelectItem>
+                  <SelectItem value="location">Location</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="add-page-description">Keywords / Meta Description</Label>
-              <Textarea id="add-page-description" placeholder="Page keywords or meta description..." value={addDescription} onChange={(e) => setAddDescription(e.target.value)} data-testid="input-add-page-description" />
+              <Label htmlFor="add-page-description">Description</Label>
+              <Textarea id="add-page-description" placeholder="Page description or meta summary..." value={addDescription} onChange={(e) => setAddDescription(e.target.value)} data-testid="input-add-page-description" />
             </div>
           </div>
           <DialogFooter>
@@ -402,20 +386,20 @@ export default function ContentPages() {
               <Input id="edit-page-title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} data-testid="input-edit-page-title" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-page-url">URL</Label>
-              <Input id="edit-page-url" value={editUrl} onChange={(e) => setEditUrl(e.target.value)} data-testid="input-edit-page-url" />
+              <Label htmlFor="edit-page-slug">Slug</Label>
+              <Input id="edit-page-slug" value={editSlug} onChange={(e) => setEditSlug(e.target.value)} data-testid="input-edit-page-slug" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-page-type">Type</Label>
-              <Select value={editType} onValueChange={setEditType}>
-                <SelectTrigger data-testid="select-edit-page-type">
+              <Label htmlFor="edit-page-template">Template</Label>
+              <Select value={editTemplate} onValueChange={setEditTemplate}>
+                <SelectTrigger data-testid="select-edit-page-template">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Page">Page</SelectItem>
-                  <SelectItem value="Landing">Landing</SelectItem>
-                  <SelectItem value="Standard">Standard</SelectItem>
-                  <SelectItem value="Archive">Archive</SelectItem>
+                  <SelectItem value="default">Default</SelectItem>
+                  <SelectItem value="landing">Landing</SelectItem>
+                  <SelectItem value="service">Service</SelectItem>
+                  <SelectItem value="location">Location</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -438,17 +422,18 @@ export default function ContentPages() {
           {auditPage && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-2 text-sm">
-                <div><span className="text-muted-foreground">URL:</span> {auditPage.url}</div>
-                <div><span className="text-muted-foreground">Type:</span> {auditPage.type}</div>
-                <div><span className="text-muted-foreground">SEO Score:</span> {auditPage.seoScore ?? 0}/100</div>
-                <div><span className="text-muted-foreground">Last Updated:</span> {auditPage.lastUpdated ? new Date(auditPage.lastUpdated).toLocaleDateString() : "N/A"}</div>
+                <div><span className="text-muted-foreground">Slug:</span> {auditPage.slug}</div>
+                <div><span className="text-muted-foreground">Template:</span> {auditPage.template || "default"}</div>
+                <div><span className="text-muted-foreground">Status:</span> {auditPage.isPublished ? "Published" : "Draft"}</div>
+                <div><span className="text-muted-foreground">Last Updated:</span> {auditPage.updatedAt ? new Date(auditPage.updatedAt).toLocaleDateString() : "N/A"}</div>
               </div>
               <div className="space-y-2 text-sm">
-                <p className="font-medium">Recommendations:</p>
+                <p className="font-medium">SEO Checklist:</p>
                 <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
-                  {(auditPage.seoScore ?? 0) < 80 && <li>Improve meta description length and relevance</li>}
-                  {(auditPage.seoScore ?? 0) < 90 && <li>Add more internal links to this page</li>}
-                  {(auditPage.seoScore ?? 0) < 85 && <li>Optimize heading structure (H1, H2, H3)</li>}
+                  {!auditPage.metaTitle && <li>Add a meta title</li>}
+                  {!auditPage.metaDescription && <li>Add a meta description</li>}
+                  {!auditPage.canonicalUrl && <li>Set a canonical URL</li>}
+                  {!auditPage.ogImage && <li>Add an Open Graph image</li>}
                   <li>Ensure all images have alt text</li>
                   <li>Check page load speed</li>
                 </ul>

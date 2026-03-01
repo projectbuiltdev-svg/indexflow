@@ -627,44 +627,24 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
 function PagesTab({ workspaceId }: { workspaceId: string }) {
   const { toast } = useToast();
   const [addOpen, setAddOpen] = useState(false);
-  const [crawlOpen, setCrawlOpen] = useState(false);
-  const [crawlUrl, setCrawlUrl] = useState("");
   const [formUrl, setFormUrl] = useState("");
   const [formTitle, setFormTitle] = useState("");
   const [formKeywords, setFormKeywords] = useState("");
-  const [formType, setFormType] = useState("Page");
-  const [formPriority, setFormPriority] = useState("5");
+  const [formType, setFormType] = useState("default");
 
-  const queryKey = `/api/admin/blog/pages/${workspaceId}`;
-  const { data: pages = [], isLoading } = useQuery<any[]>({ queryKey: [queryKey] });
+  const queryKey = ["/api/site-pages", workspaceId];
+  const { data: pages = [], isLoading } = useQuery<any[]>({
+    queryKey,
+    queryFn: () => fetch(`/api/site-pages/${workspaceId}`).then(r => r.json()),
+  });
 
   const createMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("POST", "/api/admin/blog/pages", data),
+    mutationFn: (data: any) => apiRequest("POST", "/api/site-pages", data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      queryClient.invalidateQueries({ queryKey });
       setAddOpen(false);
-      setFormUrl(""); setFormTitle(""); setFormKeywords(""); setFormType("Page"); setFormPriority("5");
+      setFormUrl(""); setFormTitle(""); setFormKeywords(""); setFormType("default");
       toast({ title: "Page added" });
-    },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
-  });
-
-  const auditMutation = useMutation({
-    mutationFn: () => apiRequest("POST", `/api/admin/blog/pages/audit-all`, { workspaceId }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-      toast({ title: "Audit complete" });
-    },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
-  });
-
-  const crawlMutation = useMutation({
-    mutationFn: (url: string) => apiRequest("POST", "/api/admin/blog/pages/crawl", { workspaceId, sitemapUrl: url }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-      setCrawlOpen(false);
-      setCrawlUrl("");
-      toast({ title: "Crawl complete" });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
@@ -677,14 +657,6 @@ function PagesTab({ workspaceId }: { workspaceId: string }) {
           <p className="text-sm text-muted-foreground">Manage and audit on-page SEO for your website pages.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => setCrawlOpen(true)} data-testid="button-crawl-sitemap">
-            <Globe className="h-4 w-4 mr-2" />
-            Crawl Sitemap
-          </Button>
-          <Button variant="outline" onClick={() => auditMutation.mutate()} disabled={auditMutation.isPending} data-testid="button-audit-all">
-            <Activity className="h-4 w-4 mr-2" />
-            Audit All
-          </Button>
           <Button onClick={() => setAddOpen(true)} data-testid="button-add-page">
             <Plus className="h-4 w-4 mr-2" />
             Add Page
@@ -698,18 +670,12 @@ function PagesTab({ workspaceId }: { workspaceId: string }) {
         <Card>
           <CardContent className="py-16 flex flex-col items-center justify-center">
             <Globe className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-1" data-testid="text-no-pages">No pages tracked yet</h3>
-            <p className="text-sm text-muted-foreground mb-6">Add pages manually or crawl your sitemap to get started.</p>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={() => setCrawlOpen(true)} data-testid="button-empty-crawl">
-                <Globe className="h-4 w-4 mr-2" />
-                Crawl Sitemap
-              </Button>
-              <Button onClick={() => setAddOpen(true)} data-testid="button-empty-add-page">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Page
-              </Button>
-            </div>
+            <h3 className="text-lg font-semibold mb-1" data-testid="text-no-pages">No pages yet</h3>
+            <p className="text-sm text-muted-foreground mb-6">Add pages to manage your website's static content and SEO.</p>
+            <Button onClick={() => setAddOpen(true)} data-testid="button-empty-add-page">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Page
+            </Button>
           </CardContent>
         </Card>
       ) : (
@@ -717,21 +683,21 @@ function PagesTab({ workspaceId }: { workspaceId: string }) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>URL</TableHead>
                 <TableHead>Title</TableHead>
-                <TableHead>SEO Score</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Priority</TableHead>
+                <TableHead>Slug</TableHead>
+                <TableHead>Template</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Updated</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {pages.map((page: any) => (
                 <TableRow key={page.id} data-testid={`row-page-${page.id}`}>
-                  <TableCell className="font-medium">{page.url}</TableCell>
-                  <TableCell>{page.title || "—"}</TableCell>
-                  <TableCell>{page.seoScore != null ? <Badge variant={page.seoScore >= 80 ? "default" : "secondary"}>{page.seoScore}</Badge> : "—"}</TableCell>
-                  <TableCell>{page.type || "Page"}</TableCell>
-                  <TableCell>{page.priority || "5"}</TableCell>
+                  <TableCell className="font-medium">{page.title}</TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">{page.slug}</TableCell>
+                  <TableCell><Badge variant="secondary">{page.template || "default"}</Badge></TableCell>
+                  <TableCell><Badge variant={page.isPublished ? "default" : "outline"}>{page.isPublished ? "Published" : "Draft"}</Badge></TableCell>
+                  <TableCell className="text-muted-foreground">{page.updatedAt ? new Date(page.updatedAt).toLocaleDateString() : "—"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -739,66 +705,41 @@ function PagesTab({ workspaceId }: { workspaceId: string }) {
         </Card>
       )}
 
-      <Dialog open={crawlOpen} onOpenChange={setCrawlOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle data-testid="text-crawl-title">Crawl Sitemap</DialogTitle>
-            <DialogDescription>Enter a sitemap URL to discover pages.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3">
-            <div>
-              <Label>Sitemap URL</Label>
-              <Input placeholder="https://example.com/sitemap.xml" value={crawlUrl} onChange={(e) => setCrawlUrl(e.target.value)} data-testid="input-crawl-url" />
-            </div>
-            <Button className="w-full" onClick={() => crawlMutation.mutate(crawlUrl)} disabled={!crawlUrl.trim() || crawlMutation.isPending} data-testid="button-crawl-submit">
-              <Globe className="h-4 w-4 mr-2" />
-              Crawl
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle data-testid="text-add-page-title">Add Page</DialogTitle>
-            <DialogDescription>Add a page to track for SEO.</DialogDescription>
+            <DialogDescription>Create a new page for your website.</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
-            <div>
-              <Label>URL</Label>
-              <Input placeholder="https://example.com/page" value={formUrl} onChange={(e) => setFormUrl(e.target.value)} data-testid="input-page-url" />
-            </div>
             <div>
               <Label>Title</Label>
               <Input placeholder="Page title" value={formTitle} onChange={(e) => setFormTitle(e.target.value)} data-testid="input-page-title" />
             </div>
             <div>
-              <Label>Target Keywords (comma-separated)</Label>
-              <Textarea placeholder="keyword 1, keyword 2, keyword 3" value={formKeywords} onChange={(e) => setFormKeywords(e.target.value)} data-testid="input-page-keywords" />
+              <Label>Slug</Label>
+              <Input placeholder="/about-us (auto-generated if blank)" value={formUrl} onChange={(e) => setFormUrl(e.target.value)} data-testid="input-page-slug" />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label>Page Type</Label>
-                <Select value={formType} onValueChange={setFormType}>
-                  <SelectTrigger data-testid="select-page-type"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Page">Page</SelectItem>
-                    <SelectItem value="Post">Post</SelectItem>
-                    <SelectItem value="Landing">Landing</SelectItem>
-                    <SelectItem value="Product">Product</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Priority (1-10)</Label>
-                <Input type="number" min="1" max="10" value={formPriority} onChange={(e) => setFormPriority(e.target.value)} data-testid="input-page-priority" />
-              </div>
+            <div>
+              <Label>Description</Label>
+              <Textarea placeholder="Page description..." value={formKeywords} onChange={(e) => setFormKeywords(e.target.value)} data-testid="input-page-description" />
+            </div>
+            <div>
+              <Label>Template</Label>
+              <Select value={formType} onValueChange={setFormType}>
+                <SelectTrigger data-testid="select-page-template"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="default">Default</SelectItem>
+                  <SelectItem value="landing">Landing</SelectItem>
+                  <SelectItem value="service">Service</SelectItem>
+                  <SelectItem value="location">Location</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <Button
               className="w-full"
-              onClick={() => createMutation.mutate({ workspaceId, url: formUrl, title: formTitle, keywords: formKeywords, type: formType, priority: parseInt(formPriority) || 5 })}
-              disabled={!formUrl.trim() || createMutation.isPending}
+              onClick={() => createMutation.mutate({ workspaceId, title: formTitle, slug: formUrl || undefined, description: formKeywords, template: formType })}
+              disabled={!formTitle.trim() || createMutation.isPending}
               data-testid="button-add-page-submit"
             >
               <Plus className="h-4 w-4 mr-2" />

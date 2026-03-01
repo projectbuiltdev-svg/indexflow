@@ -2955,52 +2955,65 @@ export async function registerRoutes(
   });
 
   // ═══════════════════════════════════════════════════
-  // Content Engine: Pages
+  // Content Engine: Pages (workspaceSitePages table)
   // ═══════════════════════════════════════════════════
-  app.get("/api/admin/blog/pages/:workspaceId", async (req, res) => {
+  app.get("/api/site-pages/:workspaceId", async (req, res) => {
     try {
-      const posts = await storage.getWorkspaceBlogPosts(req.params.workspaceId);
-      const pages = posts.filter((p: any) => p.schemaType === "Page" || p.type === "page");
+      const pages = await storage.getSitePages(req.params.workspaceId);
       res.json(pages);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch pages" });
     }
   });
 
-  app.post("/api/admin/blog/pages", async (req, res) => {
+  app.get("/api/site-pages/detail/:id", async (req, res) => {
     try {
-      const { workspaceId, url, title, keywords, type, priority } = req.body;
-      const post = await storage.createWorkspaceBlogPost({
+      const page = await storage.getSitePage(Number(req.params.id));
+      if (!page) return res.status(404).json({ error: "Page not found" });
+      res.json(page);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch page" });
+    }
+  });
+
+  app.post("/api/site-pages", async (req, res) => {
+    try {
+      const { workspaceId, title, slug, description, content, template, metaTitle, metaDescription } = req.body;
+      if (!workspaceId || !title) return res.status(400).json({ error: "workspaceId and title are required" });
+      const pageSlug = slug || `/${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+      const page = await storage.createSitePage({
         workspaceId,
-        title: title || url,
-        slug: url,
-        mdxContent: "",
-        status: "draft",
-        schemaType: type || "Page",
-        category: "page",
-        description: keywords || "",
-        primaryKeyword: keywords?.split(",")[0]?.trim() || "",
+        title,
+        slug: pageSlug,
+        description: description || "",
+        content: content || "",
+        template: template || "default",
+        metaTitle: metaTitle || title,
+        metaDescription: metaDescription || description || "",
       });
-      res.json(post);
+      res.json(page);
     } catch (error) {
       res.status(500).json({ error: "Failed to create page" });
     }
   });
 
-  app.post("/api/admin/blog/pages/audit-all", async (req, res) => {
+  app.put("/api/site-pages/:id", async (req, res) => {
     try {
-      res.json({ success: true, message: "Audit completed", audited: 0 });
+      const page = await storage.updateSitePage(Number(req.params.id), req.body);
+      if (!page) return res.status(404).json({ error: "Page not found" });
+      res.json(page);
     } catch (error) {
-      res.status(500).json({ error: "Failed to audit pages" });
+      res.status(500).json({ error: "Failed to update page" });
     }
   });
 
-  app.post("/api/admin/blog/pages/crawl", async (req, res) => {
+  app.delete("/api/site-pages/:id", async (req, res) => {
     try {
-      const { sitemapUrl } = req.body;
-      res.json({ success: true, message: `Sitemap crawl queued for ${sitemapUrl}`, pagesFound: 0 });
+      const deleted = await storage.deleteSitePage(Number(req.params.id));
+      if (!deleted) return res.status(404).json({ error: "Page not found" });
+      res.json({ success: true });
     } catch (error) {
-      res.status(500).json({ error: "Failed to crawl sitemap" });
+      res.status(500).json({ error: "Failed to delete page" });
     }
   });
 
