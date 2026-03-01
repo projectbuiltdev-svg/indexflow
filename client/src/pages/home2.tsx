@@ -442,7 +442,7 @@ export default function Home2() {
             <FadeIn className="w-full">
               <div className="flex justify-center w-full" data-testid="hero-stats-slim">
                 <div className="relative border border-white/15 rounded-full px-4 sm:px-8 py-1.5 sm:py-2.5 inline-flex">
-                  <div className="flex items-center justify-center gap-x-2 sm:gap-x-5 text-[9px] sm:text-[13px] font-semibold tracking-wider sm:tracking-[0.15em] text-white whitespace-nowrap uppercase">
+                  <div className="flex items-center justify-center gap-x-2 sm:gap-x-5 text-[7px] sm:text-[10px] font-semibold tracking-wider sm:tracking-[0.15em] text-white whitespace-nowrap uppercase">
                     <span className="flex items-center gap-1 sm:gap-1.5">
                       <Wrench className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.6)]" />
                       40+ SEO Tools
