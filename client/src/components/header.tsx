@@ -547,7 +547,7 @@ export function Header() {
               Discovery Call
             </Link>
             <span className="text-gray-500">|</span>
-            <Link href="/select-workspace" className="text-gray-200/90 hover:text-white transition-colors flex items-center gap-1" data-testid="link-topbar-login">
+            <Link href="/client-login" className="text-gray-200/90 hover:text-white transition-colors flex items-center gap-1" data-testid="link-topbar-login">
               <LogIn className="w-3 h-3" />
               Log In
             </Link>
@@ -703,7 +703,7 @@ export function Header() {
                     Book a Demo
                   </Button>
                 </Link>
-                <Link href="/select-workspace">
+                <Link href="/client-login">
                   <Button
                     variant="ghost"
                     className="w-full justify-center gap-2"
