@@ -454,6 +454,11 @@ export default function Home2() {
                     </span>
                     <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
                     <span className="flex items-center gap-1 sm:gap-1.5">
+                      <Key className="w-3 h-3 sm:w-4 sm:h-4 text-orange-400 drop-shadow-[0_0_4px_rgba(251,146,60,0.6)]" />
+                      BYOK API
+                    </span>
+                    <span className="text-white/20 text-[6px] sm:text-[8px]">|</span>
+                    <span className="flex items-center gap-1 sm:gap-1.5">
                       <ShieldCheck className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.6)]" />
                       Zero Middlemen
                     </span>
