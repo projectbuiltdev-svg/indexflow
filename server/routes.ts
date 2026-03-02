@@ -6,6 +6,8 @@ import { insertSupportTicketSchema, getPlanTier } from "@shared/schema";
 import { getAiResponse, buildWidgetSystemPrompt, resolveAiKey } from "./ai-chat";
 import { compileMdxToHtml } from "./mdx-compiler";
 import { generateSingleDraft } from "./draft-generator";
+import { protectPseoManagedPages } from "./middleware/pseo-page-deletion-protection";
+import { registerPseoPageRoutes } from "./routes/pseo/pages";
 import fs from "fs";
 import path from "path";
 
@@ -2342,7 +2344,7 @@ export async function registerRoutes(
     }
   });
 
-  app.delete("/api/site-pages/:id", async (req, res) => {
+  app.delete("/api/site-pages/:id", protectPseoManagedPages, async (req, res) => {
     try {
       const deleted = await storage.deleteSitePage(Number(req.params.id));
       if (!deleted) return res.status(404).json({ error: "Page not found" });
@@ -2408,6 +2410,7 @@ export async function registerRoutes(
   registerTwilioWebhooks(app);
   registerCrmRoutes(app);
   registerContentRoutes(app);
+  registerPseoPageRoutes(app);
 
   return httpServer;
 }

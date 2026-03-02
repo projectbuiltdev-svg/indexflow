@@ -1,0 +1,49 @@
+Confirmed. Pre-Build Step 14 complete.
+
+Pre-Build Step 15 — Page Deletion Protection. This is the final 
+pre-build foundation step.
+
+Create the following exactly as specified in Section 7.15:
+
+1. /server/middleware/pseo-page-deletion-protection.ts:
+   - Middleware runs before every DELETE request to 
+     venue_site_pages routes
+   - Query pseo_pages where venue_site_page_id equals the page 
+     ID being deleted
+   - If record exists — return 403 with message: "This page is 
+     managed by a pSEO campaign and cannot be deleted from the 
+     pages UI"
+   - Use PseoErrorType.PERMISSION_DENIED from Step 3
+   - If no record found — allow delete to proceed normally
+
+2. pSEO campaign UI deletion endpoint logic in 
+   /server/routes/pseo/pages.ts (create this file):
+   - DELETE /api/pseo/pages/:pageId
+   - Requires admin role via permissions middleware from Step 8
+   - Checks if page has hub children still live — if yes return 
+     409 with message: "Cannot delete hub page with active child 
+       pages. Delete or reassign child pages first."
+   - Soft deletes pseo_pages record — sets status to deleted, 
+     sets deleted_at
+   - Hard deletes venue_site_pages record
+   - Calls Google Indexing API with type URL_DELETED to signal 
+     removal to Google
+   - Logs to pseo_audit_log with page_id, url, action: 
+     "page_deleted"
+
+3. Wire pseo-page-deletion-protection.ts to the existing 
+   venue_site_pages DELETE route in server/routes.ts or 
+   server/content-routes.ts — whichever handles that endpoint.
+
+Write /tests/pseo/pseo-page-deletion.test.ts covering:
+   - Protected page delete attempt via pages UI — returns 403
+   - Unprotected page delete — proceeds normally
+   - Hub page with active children — returns 409
+   - Hub page with no children — deletes successfully
+   - Soft delete of pseo_pages record confirmed
+   - Hard delete of venue_site_pages record confirmed
+   - Google Indexing API called with URL_DELETED
+   - Audit log entry created
+
+Show all files and test results. Stop. Wait for confirmation 
+before proceeding.
