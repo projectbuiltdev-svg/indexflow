@@ -1,0 +1,53 @@
+Stop. We are not working on T014 or any wiring tasks.
+
+We are on Main Build Step 19. Build this now.
+
+Main Build Step 19 — Rank Tracking Integration.
+
+1. /server/integrations/google-search-console-rank-client.ts:
+   - getRankData(domain, urls, workspaceId) — queries GSC 
+     Search Analytics API for rank data on specific URLs:
+     * Dimensions: query, page, device, date
+     * Date range: last 28 days
+     * Returns per-URL: position, clicks, impressions, CTR
+   - getTopQueries(domain, workspaceId, limit) — top queries 
+     for workspace domain
+   - If GSC not connected returns empty results — never throws
+   - Rate limited — respects GSC API quotas
+
+2. /server/jobs/pseo-rank-tracker.ts — background job:
+   - trackCampaignRanks(campaignId, workspaceId)
+   - Runs on GSC_POLLING_INTERVAL_HOURS (48) from config
+   - Only runs for campaigns in "monitoring" state
+   - Updates pseo_keywords with: rankPosition, clicks, 
+     impressions, ctr, previousPosition, rankedAt
+   - Calculates movement: improved, declined, stable, new
+   - If no impressions after FLAG_AFTER_DAYS (21) — flags 
+     page in pseo_pages for review
+   - Logs summary to pseo_audit_log after each run
+
+3. /client/components/pseo/RankTrackingTab.tsx:
+   - 5th tab in CampaignDashboard — only visible in 
+     "monitoring" state
+   - Rank data table columns: page title, primary keyword, 
+     current position, previous position, movement indicator, 
+     clicks, impressions, CTR, last updated
+   - Movement indicators: green arrow up (improved), red arrow 
+     down (declined), dash (stable), star (new entry)
+   - Summary cards: Average Position, Total Clicks, Total 
+     Impressions, Average CTR
+   - Filter by: service, location, movement type
+   - "Refresh Ranks" button — triggers manual rank check
+
+4. /server/routes/pseo/ranks.ts:
+   - GET /api/pseo/campaigns/:id/ranks
+   - POST /api/pseo/campaigns/:id/ranks/refresh
+
+Write tests covering:
+- GSC not connected returns empty — never throws
+- Rank movement calculation (improved/declined/stable/new)
+- FLAG_AFTER_DAYS triggers page flag
+- Rate limit handling
+
+Show all files and test results. Stop. Wait for confirmation 
+before proceeding.

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db } from "../../db";
-import { pseoCampaigns, pseoPages } from "@shared/schema";
+import { pseoCampaigns, pseoPages, pseoServices, pseoLocations } from "@shared/schema";
 import { pseoKeywords } from "../../../db/schema/pseo-keywords";
 import { eq, and, isNull, sql, desc } from "drizzle-orm";
 import { trackCampaignRanks } from "../../jobs/pseo-rank-tracker";
@@ -44,28 +44,36 @@ router.get("/campaigns/:id/ranks", async (req, res) => {
       )
       .orderBy(desc(pseoKeywords.isPrimary), pseoKeywords.keyword);
 
-    const pageIds = [...new Set(keywords.map((k) => k.pageId).filter(Boolean))] as string[];
-
-    let pages: Array<{ id: string; title: string; slug: string; serviceId: string | null; locationId: string | null }> = [];
-    if (pageIds.length > 0) {
-      pages = await db
-        .select({
-          id: pseoPages.id,
-          title: pseoPages.title,
-          slug: pseoPages.slug,
-          serviceId: pseoPages.serviceId,
-          locationId: pseoPages.locationId,
-        })
-        .from(pseoPages)
-        .where(
-          and(
-            eq(pseoPages.campaignId, campaignId),
-            isNull(pseoPages.deletedAt)
-          )
-        );
-    }
+    const pages = await db
+      .select({
+        id: pseoPages.id,
+        title: pseoPages.title,
+        slug: pseoPages.slug,
+        serviceId: pseoPages.serviceId,
+        locationId: pseoPages.locationId,
+      })
+      .from(pseoPages)
+      .where(
+        and(
+          eq(pseoPages.campaignId, campaignId),
+          isNull(pseoPages.deletedAt)
+        )
+      );
 
     const pageMap = new Map(pages.map((p) => [p.id, p]));
+
+    const services = await db
+      .select({ id: pseoServices.id, name: pseoServices.name })
+      .from(pseoServices)
+      .where(eq(pseoServices.campaignId, campaignId));
+
+    const locations = await db
+      .select({ id: pseoLocations.id, name: pseoLocations.name })
+      .from(pseoLocations)
+      .where(eq(pseoLocations.campaignId, campaignId));
+
+    const serviceMap = new Map(services.map((s) => [s.id, s.name]));
+    const locationMap = new Map(locations.map((l) => [l.id, l.name]));
 
     let totalClicks = 0;
     let totalImpressions = 0;
@@ -98,7 +106,9 @@ router.get("/campaigns/:id/ranks", async (req, res) => {
         pageTitle: page?.title || null,
         pageSlug: page?.slug || null,
         serviceId: page?.serviceId || null,
+        serviceName: page?.serviceId ? serviceMap.get(page.serviceId) || null : null,
         locationId: page?.locationId || null,
+        locationName: page?.locationId ? locationMap.get(page.locationId) || null : null,
         keyword: kw.keyword,
         isPrimary: kw.isPrimary,
         position: kw.position,
@@ -124,7 +134,12 @@ router.get("/campaigns/:id/ranks", async (req, res) => {
       }, null),
     };
 
-    res.json({ ranks, summary });
+    const filterOptions = {
+      services: services.map((s) => ({ id: s.id, name: s.name })),
+      locations: locations.map((l) => ({ id: l.id, name: l.name })),
+    };
+
+    res.json({ ranks, summary, filterOptions });
   } catch (error: any) {
     console.error("[pSEO Ranks] Failed to fetch ranks:", error.message);
     res.status(500).json({ error: "Failed to fetch rank data" });

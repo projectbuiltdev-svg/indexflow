@@ -33,7 +33,9 @@ interface RankEntry {
   pageTitle: string | null;
   pageSlug: string | null;
   serviceId: string | null;
+  serviceName: string | null;
   locationId: string | null;
+  locationName: string | null;
   keyword: string;
   isPrimary: boolean;
   position: number | null;
@@ -54,6 +56,11 @@ interface RankSummary {
   lastUpdated: string | null;
 }
 
+interface FilterOption {
+  id: string;
+  name: string;
+}
+
 interface RankTrackingTabProps {
   campaignId: string;
 }
@@ -68,10 +75,14 @@ const MOVEMENT_CONFIG = {
 export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
   const [ranks, setRanks] = useState<RankEntry[]>([]);
   const [summary, setSummary] = useState<RankSummary | null>(null);
+  const [serviceOptions, setServiceOptions] = useState<FilterOption[]>([]);
+  const [locationOptions, setLocationOptions] = useState<FilterOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchFilter, setSearchFilter] = useState("");
   const [movementFilter, setMovementFilter] = useState("all");
+  const [serviceFilter, setServiceFilter] = useState("all");
+  const [locationFilter, setLocationFilter] = useState("all");
 
   const fetchRanks = async () => {
     try {
@@ -81,6 +92,8 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
       const data = await resp.json();
       setRanks(data.ranks || []);
       setSummary(data.summary || null);
+      setServiceOptions(data.filterOptions?.services || []);
+      setLocationOptions(data.filterOptions?.locations || []);
     } catch (err: any) {
       console.error("[RankTracking] Fetch failed:", err.message);
     } finally {
@@ -106,6 +119,8 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
 
   const filtered = ranks.filter((r) => {
     if (movementFilter !== "all" && r.movement !== movementFilter) return false;
+    if (serviceFilter !== "all" && r.serviceId !== serviceFilter) return false;
+    if (locationFilter !== "all" && r.locationId !== locationFilter) return false;
     if (searchFilter) {
       const q = searchFilter.toLowerCase();
       return (
@@ -133,21 +148,21 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
+      <div className="flex items-center justify-center py-20" data-testid="rank-loading">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   return (
-    <div>
+    <div data-testid="rank-tracking-tab">
       <div className="grid grid-cols-4 gap-4 mb-6">
         <Card data-testid="stat-avg-position">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Avg Position</p>
-                <p className="text-2xl font-bold">{summary?.averagePosition?.toFixed(1) ?? "-"}</p>
+                <p className="text-2xl font-bold" data-testid="text-avg-position">{summary?.averagePosition?.toFixed(1) ?? "-"}</p>
               </div>
               <BarChart3 className="h-6 w-6 text-muted-foreground/30" />
             </div>
@@ -158,7 +173,7 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Total Clicks</p>
-                <p className="text-2xl font-bold">{summary?.totalClicks?.toLocaleString() ?? "0"}</p>
+                <p className="text-2xl font-bold" data-testid="text-total-clicks">{summary?.totalClicks?.toLocaleString() ?? "0"}</p>
               </div>
               <MousePointerClick className="h-6 w-6 text-muted-foreground/30" />
             </div>
@@ -169,7 +184,7 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Total Impressions</p>
-                <p className="text-2xl font-bold">{summary?.totalImpressions?.toLocaleString() ?? "0"}</p>
+                <p className="text-2xl font-bold" data-testid="text-total-impressions">{summary?.totalImpressions?.toLocaleString() ?? "0"}</p>
               </div>
               <Eye className="h-6 w-6 text-muted-foreground/30" />
             </div>
@@ -180,7 +195,7 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Avg CTR</p>
-                <p className="text-2xl font-bold">{summary?.averageCtr ? formatCtr(summary.averageCtr) : "-"}</p>
+                <p className="text-2xl font-bold" data-testid="text-avg-ctr">{summary?.averageCtr ? formatCtr(summary.averageCtr) : "-"}</p>
               </div>
               <Percent className="h-6 w-6 text-muted-foreground/30" />
             </div>
@@ -189,8 +204,8 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
       </div>
 
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="relative w-64">
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="relative w-56">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search keywords or pages..."
@@ -212,10 +227,36 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
               <SelectItem value="new">New</SelectItem>
             </SelectContent>
           </Select>
+          {serviceOptions.length > 0 && (
+            <Select value={serviceFilter} onValueChange={setServiceFilter}>
+              <SelectTrigger className="w-40 h-9" data-testid="select-service-filter">
+                <SelectValue placeholder="Service" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Services</SelectItem>
+                {serviceOptions.map((s) => (
+                  <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          {locationOptions.length > 0 && (
+            <Select value={locationFilter} onValueChange={setLocationFilter}>
+              <SelectTrigger className="w-40 h-9" data-testid="select-location-filter">
+                <SelectValue placeholder="Location" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Locations</SelectItem>
+                {locationOptions.map((l) => (
+                  <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </div>
         <div className="flex items-center gap-3">
           {summary?.lastUpdated && (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-muted-foreground" data-testid="text-last-updated">
               Last updated: {formatDate(summary.lastUpdated)}
             </span>
           )}
@@ -254,7 +295,7 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
           <TableBody>
             {filtered.length === 0 && (
               <TableRow>
-                <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={9} className="text-center py-8 text-muted-foreground" data-testid="text-rank-empty">
                   {ranks.length === 0
                     ? "No rank data yet. Click Refresh Ranks to pull data from Google Search Console."
                     : "No results match your filters"
@@ -269,34 +310,34 @@ export default function RankTrackingTab({ campaignId }: RankTrackingTabProps) {
                 <TableRow key={r.id} data-testid={`row-rank-${r.id}`}>
                   <TableCell>
                     <div className="max-w-[180px]">
-                      <div className="font-medium text-sm truncate">{r.pageTitle || "-"}</div>
+                      <div className="font-medium text-sm truncate" data-testid={`text-page-title-${r.id}`}>{r.pageTitle || "-"}</div>
                       <div className="text-xs text-muted-foreground truncate">{r.pageSlug || ""}</div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-sm">{r.keyword}</span>
+                      <span className="text-sm" data-testid={`text-keyword-${r.id}`}>{r.keyword}</span>
                       {r.isPrimary && (
                         <Badge variant="secondary" className="text-[10px] px-1 py-0">Primary</Badge>
                       )}
                     </div>
                   </TableCell>
-                  <TableCell className="text-right font-mono text-sm font-medium">
+                  <TableCell className="text-right font-mono text-sm font-medium" data-testid={`text-position-${r.id}`}>
                     {formatPosition(r.position)}
                   </TableCell>
-                  <TableCell className="text-right font-mono text-sm text-muted-foreground">
+                  <TableCell className="text-right font-mono text-sm text-muted-foreground" data-testid={`text-prev-position-${r.id}`}>
                     {formatPosition(r.previousPosition)}
                   </TableCell>
                   <TableCell className="text-center">
-                    <div className={`flex items-center justify-center gap-1 ${mvConfig.color}`}>
+                    <div className={`flex items-center justify-center gap-1 ${mvConfig.color}`} data-testid={`text-movement-${r.id}`}>
                       <MvIcon className="h-3.5 w-3.5" />
                       <span className="text-xs">{mvConfig.label}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-right font-mono text-sm">{r.clicks.toLocaleString()}</TableCell>
-                  <TableCell className="text-right font-mono text-sm">{r.impressions.toLocaleString()}</TableCell>
-                  <TableCell className="text-right font-mono text-sm">{formatCtr(r.ctr)}</TableCell>
-                  <TableCell className="text-xs text-muted-foreground">{formatDate(r.lastCheckedAt)}</TableCell>
+                  <TableCell className="text-right font-mono text-sm" data-testid={`text-clicks-${r.id}`}>{r.clicks.toLocaleString()}</TableCell>
+                  <TableCell className="text-right font-mono text-sm" data-testid={`text-impressions-${r.id}`}>{r.impressions.toLocaleString()}</TableCell>
+                  <TableCell className="text-right font-mono text-sm" data-testid={`text-ctr-${r.id}`}>{formatCtr(r.ctr)}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground" data-testid={`text-updated-${r.id}`}>{formatDate(r.lastCheckedAt)}</TableCell>
                 </TableRow>
               );
             })}

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { apiRequest } from "@/lib/queryClient";
 import ReviewQueueTab from "./ReviewQueueTab";
+import RankTrackingTab from "./RankTrackingTab";
 import {
   Plus,
   ArrowLeft,
@@ -41,6 +42,7 @@ import {
   Calendar,
   Cpu,
   ShoppingCart,
+  LineChart,
 } from "lucide-react";
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
@@ -398,6 +400,12 @@ function CampaignDetailView({
             Review Queue
             {stats.inReview > 0 && <Badge variant="secondary" className="ml-2">{stats.inReview}</Badge>}
           </TabsTrigger>
+          {campaign.status === "monitoring" && (
+            <TabsTrigger value="rankings" data-testid="tab-rankings">
+              <LineChart className="h-4 w-4 mr-2" />
+              Rankings
+            </TabsTrigger>
+          )}
           <TabsTrigger value="settings" data-testid="tab-settings">
             <Settings className="h-4 w-4 mr-2" />
             Settings
@@ -413,6 +421,11 @@ function CampaignDetailView({
         <TabsContent value="review" className="mt-4">
           <ReviewQueueTab campaignId={campaignId} isGenerating={campaign.status === "generating"} />
         </TabsContent>
+        {campaign.status === "monitoring" && (
+          <TabsContent value="rankings" className="mt-4">
+            <RankTrackingTab campaignId={campaignId} />
+          </TabsContent>
+        )}
         <TabsContent value="settings" className="mt-4">
           <SettingsTab campaign={campaign} campaignId={campaignId} onRefresh={fetchDetail} />
         </TabsContent>
