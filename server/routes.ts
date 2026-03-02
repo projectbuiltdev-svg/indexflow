@@ -2362,36 +2362,6 @@ export async function registerRoutes(
   // ═══════════════════════════════════════════════════
   // Content Engine: SEO Profile
   // ═══════════════════════════════════════════════════
-  app.get("/api/admin/seo/profile/:workspaceId", async (req, res) => {
-    try {
-      const settings = await storage.getSeoSettings(req.params.workspaceId);
-      if (settings && settings.length > 0) {
-        res.json(settings[0]);
-      } else {
-        res.json(null);
-      }
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch SEO profile" });
-    }
-  });
-
-  app.post("/api/admin/seo/profile", async (req, res) => {
-    try {
-      const { workspaceId, destinationUrl, brandTerms, maxInternalLinks, maxExternalLinks, ctaText, ctaUrl } = req.body;
-      const settings = await storage.upsertSeoSettings({
-        workspaceId,
-        provider: "internal",
-        siteUrl: destinationUrl || null,
-        apiKey: null,
-        apiLogin: null,
-        apiPassword: null,
-        isConnected: true,
-      });
-      res.json(settings);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to save SEO profile" });
-    }
-  });
 
   setInterval(() => {
     const now = Date.now();

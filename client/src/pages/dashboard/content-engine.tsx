@@ -1078,7 +1078,9 @@ function SeoTab({ workspaceId }: { workspaceId: string }) {
   const [ctaText, setCtaText] = useState("");
   const [ctaUrl, setCtaUrl] = useState("");
 
-  const { data: profile } = useQuery<any>({ queryKey: [`/api/admin/seo/profile/${workspaceId}`] });
+  const seoSettingsKey = `/api/workspaces/${workspaceId}/seo-settings`;
+  const { data: settingsArr } = useQuery<any[]>({ queryKey: [seoSettingsKey] });
+  const profile = Array.isArray(settingsArr) && settingsArr.length > 0 ? settingsArr[0] : null;
 
   const loaded = profile && destUrl === "" && profile.siteUrl;
   if (loaded) {
@@ -1086,9 +1088,13 @@ function SeoTab({ workspaceId }: { workspaceId: string }) {
   }
 
   const saveMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("POST", `/api/admin/seo/profile`, data),
+    mutationFn: (data: any) => apiRequest("POST", `/api/workspaces/${workspaceId}/seo-settings`, {
+      provider: "internal",
+      siteUrl: data.destinationUrl || null,
+      isConnected: true,
+    }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/admin/seo/profile/${workspaceId}`] });
+      queryClient.invalidateQueries({ queryKey: [seoSettingsKey] });
       toast({ title: "Profile saved" });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
