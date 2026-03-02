@@ -1,0 +1,53 @@
+Confirmed. Main Build Step 8 complete.
+
+Main Build Step 9 — Campaign Wizard Step 2 — Location Setup UI.
+
+Create the following files:
+
+1. /client/components/pseo/wizard-steps/LocationSetupStep.tsx
+   - Main container for location setup
+   - Three mode tabs: Radius, Region, Manual
+   - Shows live page count calculator as locations are added
+   - Exclusion toggles per location
+   - "Confirm Locations" button — disabled until at least 1 
+     location confirmed
+   - On confirm → calls onComplete(locationsData)
+
+2. /client/components/pseo/location-modes/RadiusMode.tsx
+   - Address/postcode input field
+   - Radius selector: 5, 10, 25, 50, 100 miles or km
+   - Interactive map showing centre point and radius circle
+   - Live location count updates as radius changes
+   - Calls POST /api/pseo/locations/resolve-radius
+
+3. /client/components/pseo/location-modes/RegionMode.tsx
+   - Country selector first
+   - Zone/region checkboxes based on selected country
+   - Uses pseo-geographic-divisions config for zone data
+   - Live count per zone as checkboxes are ticked
+   - Calls POST /api/pseo/locations/resolve-region
+
+4. /client/components/pseo/location-modes/ManualMode.tsx
+   - Text input with autocomplete against geographic reference
+   - Add button per entry
+   - Shows resolved location with town, county, state, country
+   - Nearby suggestions shown as locations are added
+   - Calls POST /api/pseo/locations/resolve-manual
+
+5. /client/components/pseo/PageCountCalculator.tsx
+   - Displays live page count
+   - Formula: (services × locations) + locations + services + 1
+   - Updates in real time as matrix changes
+   - Shows breakdown: service pages, location pages, hub pages
+
+6. Server routes in /server/routes/pseo/locations.ts:
+   - POST /api/pseo/locations/resolve-radius
+   - POST /api/pseo/locations/resolve-region  
+   - POST /api/pseo/locations/resolve-manual
+   - All use location-resolver.ts from Main Build Step 6
+
+Use Lucide icons: MapPin, Search, Map, Check, X
+Use existing UI components only — no new dependencies.
+All components use React useState for local state.
+
+Show all files. Stop. Wait for confirmation before proceeding.
