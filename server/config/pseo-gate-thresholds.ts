@@ -6,3 +6,4 @@ export const MAX_INTERNAL_LINKS = 8;
 export const MIN_EXTERNAL_LINKS = 1;
 export const MIN_IMAGES = 1;
 export const QUALITY_GATE_COUNT = 12;
+export const REVIEW_QUEUE_POLL_INTERVAL_MS = 30000;

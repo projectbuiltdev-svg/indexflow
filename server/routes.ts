@@ -12,6 +12,7 @@ import pseoTemplateRouter from "./routes/pseo/template";
 import pseoLocationsRouter from "./routes/pseo/locations";
 import pseoKeywordsRouter from "./routes/pseo/keywords";
 import pseoCampaignsRouter from "./routes/pseo/campaigns";
+import pseoReviewRouter from "./routes/pseo/review";
 import fs from "fs";
 import path from "path";
 
