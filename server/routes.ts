@@ -8,6 +8,7 @@ import { compileMdxToHtml } from "./mdx-compiler";
 import { generateSingleDraft } from "./draft-generator";
 import { protectPseoManagedPages } from "./middleware/pseo-page-deletion-protection";
 import { registerPseoPageRoutes } from "./routes/pseo/pages";
+import pseoTemplateRouter from "./routes/pseo/template";
 import fs from "fs";
 import path from "path";
 
@@ -2411,6 +2412,7 @@ export async function registerRoutes(
   registerCrmRoutes(app);
   registerContentRoutes(app);
   registerPseoPageRoutes(app);
+  app.use("/api/pseo/template", pseoTemplateRouter);
 
   return httpServer;
 }
