@@ -11,6 +11,7 @@ import { registerPseoPageRoutes } from "./routes/pseo/pages";
 import pseoTemplateRouter from "./routes/pseo/template";
 import pseoLocationsRouter from "./routes/pseo/locations";
 import pseoKeywordsRouter from "./routes/pseo/keywords";
+import pseoCampaignsRouter from "./routes/pseo/campaigns";
 import fs from "fs";
 import path from "path";
 
@@ -2417,6 +2418,8 @@ export async function registerRoutes(
   app.use("/api/pseo/template", pseoTemplateRouter);
   app.use("/api/pseo/locations", pseoLocationsRouter);
   app.use("/api/pseo/keywords", pseoKeywordsRouter);
+  app.use("/api/pseo/campaigns", pseoCampaignsRouter);
+  app.use("/api/pseo", pseoCampaignsRouter);
 
   return httpServer;
 }

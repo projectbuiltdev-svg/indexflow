@@ -1,0 +1,62 @@
+Confirmed. Main Build Step 10 complete.
+
+Main Build Step 11 — Campaign Wizard Step 4 — Confirm and 
+Activate UI.
+
+Create /client/components/pseo/wizard-steps/ConfirmActivateStep.tsx
+
+This is the final wizard step before campaign activation.
+
+Requirements:
+
+1. Full campaign summary display:
+   - Template: domain/URL parsed, zone counts (locked/dynamic)
+   - Locations: total count, countries covered, mode used
+   - Services: list of service names
+   - Keywords: total keyword count
+   - Matrix: active combinations count
+   - Estimated page count from PageCountCalculator
+
+2. URL structure selector:
+   - Two options: Location First or Service First
+   - Show live URL preview example for each option using 
+     first service + first location from wizard data
+   - Example: /ireland/dublin/plumber vs /plumber/ireland/dublin
+   - Selection is permanent after activation — show warning
+
+3. AI model selector:
+   - Dropdown showing connected BYOK AI models for this workspace
+   - Calls GET /api/pseo/wizard/byok-models to get available models
+   - Shows provider name, model name, estimated cost per 665 pages
+   - Cost estimate from pseo-ai-cost-estimates.ts config
+
+4. BYOK validation check:
+   - On page load call validateByokKeys(workspaceId) from Step 4
+   - If no valid AI key — show red warning blocking activate button
+   - If no valid image bank — show yellow warning (non-blocking)
+   - If GSC not verified — show blue info message (non-blocking)
+   - All from getGscVerificationStatus from Step 13
+
+5. AI cost estimator:
+   - Shows estimated AI cost for this specific campaign
+   - Formula: (pageCount / 665) × model cost per 665 pages
+   - Updates live as page count or model selection changes
+
+6. Activate button:
+   - Disabled until: URL structure selected AND valid AI key 
+     confirmed AND user has reviewed summary
+   - "I have reviewed the campaign summary" checkbox required
+   - On click → calls POST /api/pseo/campaigns with full 
+     wizard state
+   - Shows loading state during creation
+   - On success → calls onComplete(campaignId)
+
+7. Server routes in /server/routes/pseo/campaigns.ts:
+   - POST /api/pseo/campaigns — creates campaign, applies 
+     campaign limit middleware from Step 7, applies permissions 
+     middleware from Step 8
+   - GET /api/pseo/wizard/byok-models — returns available 
+     BYOK models for workspace
+
+Show complete file and server routes. Stop. Wait for 
+confirmation before proceeding.
