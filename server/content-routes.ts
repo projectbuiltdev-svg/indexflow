@@ -559,6 +559,16 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     if (!requireSuperAdmin(req, res)) return;
     try {
       const data = bulkCreateSchema.parse(req.body);
+      const limitCheck = await checkPostLimit(data.workspaceId);
+      const requested = data.posts.length;
+      if (limitCheck.remaining < requested) {
+        return res.status(403).json({
+          error: "ai_post_limit_exceeded",
+          message: `Bulk create would exceed monthly limit. Remaining: ${limitCheck.remaining}, Requested: ${requested}.`,
+          remaining: limitCheck.remaining,
+          requested,
+        });
+      }
       const campaign = await storage.createContentCampaign({
         workspaceId: data.workspaceId,
         name: `Bulk ${new Date().toISOString().slice(0, 10)}`,
