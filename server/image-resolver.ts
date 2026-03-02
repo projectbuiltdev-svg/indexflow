@@ -209,8 +209,9 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
 
     if (resolved === 0) {
       console.warn(`[ImageResolver] No images resolved for post ${postId}`);
+      const existingReasons = (post.qualityFailReasons as string[]) || [];
       await storage.updateWorkspaceBlogPost(postId, {
-        qualityFailReasons: [`Image resolution incomplete: no images could be resolved from any image bank. Manual image selection required.`],
+        qualityFailReasons: [...existingReasons, `Image resolution incomplete: no images could be resolved from any image bank. Manual image selection required.`],
       });
       return { resolved: 0, failed };
     }
@@ -267,8 +268,10 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     return { resolved, failed };
   } catch (error) {
     console.error(`[ImageResolver] Failed for post ${postId}:`, error);
+    const post = await storage.getWorkspaceBlogPost(postId).catch(() => null);
+    const existingReasons = (post?.qualityFailReasons as string[]) || [];
     await storage.updateWorkspaceBlogPost(postId, {
-      qualityFailReasons: [`Image resolution failed: ${error instanceof Error ? error.message : 'Unknown error'}`],
+      qualityFailReasons: [...existingReasons, `Image resolution failed: ${error instanceof Error ? error.message : 'Unknown error'}`],
     });
     return { resolved: 0, failed: 0 };
   }
