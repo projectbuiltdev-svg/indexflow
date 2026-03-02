@@ -79,19 +79,6 @@ export async function registerRoutes(
   await setupAuth(app);
   registerAuthRoutes(app);
 
-  app.get("/api/db-dump", (_req, res) => {
-    if (process.env.NODE_ENV === "production") {
-      return res.status(403).json({ error: "Not available in production" });
-    }
-    const dumpPath = path.resolve("resto_database_dump.sql");
-    if (!fs.existsSync(dumpPath)) {
-      return res.status(404).send("Dump file not found");
-    }
-    const content = fs.readFileSync(dumpPath, "utf-8");
-    res.setHeader("Content-Type", "text/plain; charset=utf-8");
-    res.send(content);
-  });
-
   const BLOG_CONTENT_DIR = path.resolve("apps/marketing/content/blog");
 
   function parseFrontmatter(raw: string) {
