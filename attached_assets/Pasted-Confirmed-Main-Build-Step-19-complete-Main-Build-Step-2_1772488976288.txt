@@ -1,0 +1,56 @@
+Confirmed. Main Build Step 19 complete.
+
+Main Build Step 20 — Campaign Reports UI.
+
+Create /client/components/pseo/CampaignReportsTab.tsx:
+
+Add as 6th tab to CampaignDashboard from Step 16.
+Tab label: Reports. Visible in all states except draft.
+
+1. Report summary header:
+   - Campaign name, date range selector (7d, 28d, 90d, all time)
+   - Export button — exports report as CSV
+   - Last generated timestamp
+
+2. Four report sections:
+
+   Section A — Content Coverage:
+   - Total pages by status (published/draft/held/failed)
+   - Coverage map: services × locations grid showing 
+     published (green), draft (grey), held (amber), 
+     failed (red), not generated (empty)
+   - Completion percentage per service row
+   - Completion percentage per location column
+
+   Section B — Quality Summary:
+   - Pass rate across all quality gates
+   - Per-gate pass/fail breakdown bar chart
+   - Most common failure reasons (top 5)
+   - Average word count across published pages
+
+   Section C — Indexing Status:
+   - Total URLs submitted to Google
+   - Submitted, pending, failed, flagged counts
+   - Resubmit queue size
+   - Average time to index (if GSC connected)
+
+   Section D — Performance (only if GSC connected):
+   - Total clicks, impressions, average CTR, average position
+   - Top 10 performing pages by clicks
+   - Rank distribution chart (positions 1-3, 4-10, 11-20, 20+)
+
+3. CSV export:
+   - One row per page
+   - Columns: title, url, service, location, status, 
+     word count, quality gate status, failure reasons, 
+     similarity score, indexing status, position, clicks, 
+     impressions, CTR
+
+4. Server routes in /server/routes/pseo/reports.ts:
+   - GET /api/pseo/campaigns/:id/report — returns full 
+     report data for all 4 sections
+   - GET /api/pseo/campaigns/:id/report/export — returns 
+     CSV as downloadable file with correct Content-Disposition 
+     header
+
+Show all files. Stop. Wait for confirmation before proceeding.

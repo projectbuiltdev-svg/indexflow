@@ -16,6 +16,7 @@ import {
 import { apiRequest } from "@/lib/queryClient";
 import ReviewQueueTab from "./ReviewQueueTab";
 import RankTrackingTab from "./RankTrackingTab";
+import CampaignReportsTab from "./CampaignReportsTab";
 import {
   Plus,
   ArrowLeft,
@@ -43,6 +44,7 @@ import {
   Cpu,
   ShoppingCart,
   LineChart,
+  ClipboardList,
 } from "lucide-react";
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
@@ -406,6 +408,12 @@ function CampaignDetailView({
               Rankings
             </TabsTrigger>
           )}
+          {campaign.status !== "draft" && (
+            <TabsTrigger value="reports" data-testid="tab-reports">
+              <ClipboardList className="h-4 w-4 mr-2" />
+              Reports
+            </TabsTrigger>
+          )}
           <TabsTrigger value="settings" data-testid="tab-settings">
             <Settings className="h-4 w-4 mr-2" />
             Settings
@@ -424,6 +432,11 @@ function CampaignDetailView({
         {campaign.status === "monitoring" && (
           <TabsContent value="rankings" className="mt-4">
             <RankTrackingTab campaignId={campaignId} />
+          </TabsContent>
+        )}
+        {campaign.status !== "draft" && (
+          <TabsContent value="reports" className="mt-4">
+            <CampaignReportsTab campaignId={campaignId} campaignName={campaign.name} />
           </TabsContent>
         )}
         <TabsContent value="settings" className="mt-4">

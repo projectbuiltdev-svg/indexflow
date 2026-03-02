@@ -15,6 +15,7 @@ import pseoCampaignsRouter from "./routes/pseo/campaigns";
 import pseoReviewRouter from "./routes/pseo/review";
 import pseoAdminRouter from "./routes/pseo/admin";
 import pseoRanksRouter from "./routes/pseo/ranks";
+import pseoReportsRouter from "./routes/pseo/reports";
 import fs from "fs";
 import path from "path";
 
@@ -2396,6 +2397,7 @@ export async function registerRoutes(
   app.use("/api/pseo", pseoReviewRouter);
   app.use("/api/admin/pseo", pseoAdminRouter);
   app.use("/api/pseo", pseoRanksRouter);
+  app.use("/api/pseo", pseoReportsRouter);
 
   app.get("/api/pseo/entitlement", async (req, res) => {
     try {
