@@ -128,6 +128,7 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
     ];
 
     let mdxContent = "";
+    let attempt1Words = 0;
     for (let attempt = 0; attempt < 2; attempt++) {
       const response = await openai.chat.completions.create({
         model: "gpt-4o",
@@ -140,6 +141,7 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
       const wordCount = mdxContent.split(/\s+/).filter(Boolean).length;
       console.log(`[DraftGenerator] Attempt ${attempt + 1} for "${post.title}": ${wordCount} words`);
 
+      if (attempt === 0) attempt1Words = wordCount;
       if (wordCount >= 1500 || attempt === 1) break;
 
       messages.push({ role: "assistant", content: mdxContent });
@@ -148,11 +150,16 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
         content: `This draft is only ${wordCount} words. I need at least 1800 words. Please rewrite and significantly expand EVERY section with more detail, real-world examples, step-by-step instructions, data points, and actionable tips. Add 2-3 more paragraphs per section. Keep the same structure and image placeholders but make each section much more comprehensive. Return the complete expanded article.`,
       });
     }
-    if (!mdxContent || mdxContent.length < 500) {
+
+    const finalWordCount = mdxContent.split(/\s+/).filter(Boolean).length;
+
+    if (!mdxContent || finalWordCount < 1500) {
       await storage.updateWorkspaceBlogPost(postId, {
-        generationStatus: "failed",
+        generationStatus: "needs_review",
         qualityGateStatus: "fail",
-        qualityFailReasons: ["LLM returned insufficient content"],
+        qualityFailReasons: [
+          `Both generation attempts returned insufficient content. Attempt 1: ${attempt1Words} words. Attempt 2: ${finalWordCount} words. Minimum required: 1,800 words.`
+        ],
       });
       return null;
     }
