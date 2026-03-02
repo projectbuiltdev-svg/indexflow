@@ -112,12 +112,18 @@ const navGroups: NavGroup[] = [
     items: [
       { title: "Posts", path: "/content/posts", icon: FileText },
       { title: "Pages", path: "/content/pages", icon: File },
-      { title: "Campaigns", path: "/content/campaigns", icon: Megaphone },
       { title: "Domains", path: "/content/domains", icon: Globe },
       { title: "SEO", path: "/seo/health", icon: HeartPulse },
       { title: "Links", path: "/seo/links", icon: LinkIcon },
       { title: "CMS", path: "/seo/cms", icon: RefreshCw },
       { title: "Reports", path: "/seo/reports", icon: ClipboardList },
+    ],
+  },
+  {
+    label: "pSEO Engine",
+    collapsible: true,
+    items: [
+      { title: "Campaigns", path: "/content/campaigns", icon: Megaphone },
     ],
   },
   {
