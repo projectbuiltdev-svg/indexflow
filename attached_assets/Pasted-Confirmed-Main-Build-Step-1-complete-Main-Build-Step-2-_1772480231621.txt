@@ -1,0 +1,59 @@
+Confirmed. Main Build Step 1 complete.
+
+Main Build Step 2 — Hash Seeder, TF-IDF Vectoriser, Cosine 
+Similarity, Haversine, Commercial Intent Scorer.
+
+Create all utility files listed in Section 4.6. These are pure 
+functions with no external dependencies.
+
+/server/utils/pseo-hash-seeder.ts:
+- hashSeed(locationId, serviceId) — SHA256 hash of 
+  locationId + serviceId concatenated — returns integer
+- seededRandom(seed) — deterministic random number 0-1 from seed
+- seededSelect(seed, array) — deterministic selection of one 
+  item from array using seed
+- seededSelectIndex(seed, arrayLength) — returns index only
+
+/server/utils/pseo-tfidf-vectoriser.ts:
+- tokenise(text, languageCode) — lowercase, remove punctuation, 
+  split to tokens, remove stop words using pseo-stop-words.ts
+- termFrequency(tokens) — returns sparse vector as 
+  Record<string, number> normalised by total token count
+- buildTfIdfVector(text, languageCode) — full pipeline: 
+  tokenise → term frequency → return vector
+
+/server/utils/pseo-cosine-similarity.ts:
+- dotProduct(vectorA, vectorB) — dot product of two sparse vectors
+- l2Norm(vector) — L2 norm of sparse vector
+- cosineSimilarity(vectorA, vectorB) — returns float 0.0 to 1.0
+- Handles zero vectors — returns 0.0 if either vector is empty
+
+/server/utils/pseo-haversine.ts:
+- haversineDistance(lat1, lon1, lat2, lon2) — returns distance 
+  in miles between two coordinate pairs
+- findNearest(origin, locations, maxDistanceMiles) — returns 
+  locations within maxDistanceMiles sorted by distance ascending
+- All coordinates as decimal degrees
+
+/server/utils/pseo-commercial-intent-scorer.ts:
+- commercialIntentScore(population, businessCategoryDemandIndex) 
+  — formula: (population × 0.6) + (demandIndex × 0.4) 
+  normalised 0-100
+- getBusinessCategoryDemandIndex(category) — returns demand 
+  index for common business categories (plumber, solicitor, 
+  dentist, accountant etc)
+- scoreLocation(location, category) — convenience function 
+  combining both
+
+Write tests for each utility covering:
+- Hash seeder: same inputs always produce same output, 
+  different inputs produce different outputs
+- TF-IDF: stop words removed, normalisation correct
+- Cosine similarity: identical vectors = 1.0, opposite = 0.0, 
+  zero vector = 0.0
+- Haversine: known distances between real coordinates verified
+- Commercial intent: formula correct, boundary values, 
+  normalisation 0-100
+
+Show all files and test results. Stop. Wait for confirmation 
+before proceeding.
