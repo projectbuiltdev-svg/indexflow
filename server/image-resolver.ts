@@ -247,12 +247,18 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
       updatedMdx = updatedMdx.replace(matchesForReplace[i], replacement);
     }
 
-    const { html } = await compileMdxToHtml(updatedMdx);
-
-    await storage.updateWorkspaceBlogPost(postId, {
-      mdxContent: updatedMdx,
-      compiledHtml: html,
-    });
+    try {
+      const compiled = await compileMdxToHtml(updatedMdx);
+      await storage.updateWorkspaceBlogPost(postId, {
+        mdxContent: updatedMdx,
+        compiledHtml: compiled.html,
+      });
+    } catch (compileError) {
+      console.error(`[ImageResolver] MDX compilation failed for post ${postId}, saving raw MDX only`);
+      await storage.updateWorkspaceBlogPost(postId, {
+        mdxContent: updatedMdx,
+      });
+    }
 
     console.log(`[ImageResolver] Done: ${resolved} resolved, ${failed} failed for "${post.title}"`);
     return { resolved, failed };
