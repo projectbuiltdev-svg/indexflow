@@ -285,42 +285,18 @@ export async function registerRoutes(
       const workspaceCount = await storage.countWorkspacesByOwner(userId);
       const seatCount = await storage.countTeamMembersByOwner(userId);
 
+      const planId = user?.plan || "solo";
       res.json({
-        plan: planTier.id,
+        plan: planId,
         planName: planTier.name,
         price: planTier.price,
         limits: {
-          maxWorkspaces: planTier.maxWorkspaces === Infinity ? null : planTier.maxWorkspaces,
-          maxUsers: planTier.maxUsers === Infinity ? null : planTier.maxUsers,
-          maxDomains: planTier.maxDomains === Infinity ? null : planTier.maxDomains,
-          aiPostsPerWorkspacePerMonth: planTier.aiPostsPerWorkspacePerMonth,
+          workspaces: planTier.workspaces === Infinity ? null : planTier.workspaces,
+          users: planTier.users,
+          postsPerWorkspacePerMonth: planTier.postsPerWorkspacePerMonth,
+          pseoCampaigns: planTier.pseoCampaigns,
         },
-        features: {
-          contentEngine: planTier.contentEngine,
-          rankTracker: planTier.rankTracker,
-          localSearchGrid: planTier.localSearchGrid,
-          googleSearchConsole: planTier.googleSearchConsole,
-          crmPipeline: planTier.crmPipeline,
-          twilioSmsVoice: planTier.twilioSmsVoice,
-          websiteWidget: planTier.websiteWidget,
-          cmsIntegration: planTier.cmsIntegration,
-          linkBuilder: planTier.linkBuilder,
-          postValidator: planTier.postValidator,
-          onPageAuditor: planTier.onPageAuditor,
-          siteProfiler: planTier.siteProfiler,
-          schemaMarkup: planTier.schemaMarkup,
-          invoicing: planTier.invoicing,
-          linkHealth: planTier.linkHealth,
-          byok: planTier.byok,
-          multiLanguage: planTier.multiLanguage,
-          customDomain: planTier.customDomain,
-          bulkCampaigns: planTier.bulkCampaigns,
-          contentModeration: planTier.contentModeration,
-          whiteLabel: planTier.whiteLabel,
-          teamRoles: planTier.teamRoles,
-          apiAccess: planTier.apiAccess,
-          ssoSaml: planTier.ssoSaml,
-        },
+        features: planTier.features,
         usage: {
           workspaces: workspaceCount,
           users: seatCount,
@@ -371,13 +347,13 @@ export async function registerRoutes(
       const planTier = getPlanTier(user?.plan || "solo");
       const currentCount = await storage.countWorkspacesByOwner(userId);
 
-      if (currentCount >= planTier.maxWorkspaces) {
+      if (currentCount >= planTier.workspaces) {
         return res.status(403).json({
           error: "workspace_limit_reached",
-          message: `Your ${planTier.name} plan allows up to ${planTier.maxWorkspaces} workspace${planTier.maxWorkspaces === 1 ? "" : "s"}. Please upgrade your plan to create more.`,
+          message: `Your ${planTier.name} plan allows up to ${planTier.workspaces === Infinity ? "unlimited" : planTier.workspaces} workspace${planTier.workspaces === 1 ? "" : "s"}. Please upgrade your plan to create more.`,
           currentCount,
-          maxAllowed: planTier.maxWorkspaces,
-          plan: planTier.id,
+          maxAllowed: planTier.workspaces === Infinity ? null : planTier.workspaces,
+          plan: user?.plan || "solo",
         });
       }
 
@@ -664,13 +640,13 @@ export async function registerRoutes(
       const planTier = getPlanTier(owner?.plan || "solo");
       const currentSeatCount = await storage.countTeamMembersByOwner(ownerId);
 
-      if (currentSeatCount >= planTier.maxUsers) {
+      if (currentSeatCount >= planTier.users) {
         return res.status(403).json({
           error: "user_seat_limit_reached",
-          message: `Your ${planTier.name} plan allows up to ${planTier.maxUsers} user seat${planTier.maxUsers === 1 ? "" : "s"}. Please upgrade your plan to add more team members.`,
+          message: `Your ${planTier.name} plan allows up to ${planTier.users} user seat${planTier.users === 1 ? "" : "s"}. Please upgrade your plan to add more team members.`,
           currentCount: currentSeatCount,
-          maxAllowed: planTier.maxUsers,
-          plan: planTier.id,
+          maxAllowed: planTier.users,
+          plan: owner?.plan || "solo",
         });
       }
 
@@ -1253,13 +1229,13 @@ export async function registerRoutes(
         const planTier = getPlanTier(owner?.plan || "solo");
         const postsThisMonth = await storage.countBlogPostsThisMonth(workspaceId);
 
-        if (postsThisMonth >= planTier.aiPostsPerWorkspacePerMonth) {
+        if (postsThisMonth >= planTier.postsPerWorkspacePerMonth) {
           return res.status(403).json({
             error: "ai_post_limit_reached",
-            message: `This workspace has reached its limit of ${planTier.aiPostsPerWorkspacePerMonth} AI posts this month. The limit resets on the 1st of next month.`,
+            message: `This workspace has reached its limit of ${planTier.postsPerWorkspacePerMonth} AI posts this month. The limit resets on the 1st of next month.`,
             currentCount: postsThisMonth,
-            maxAllowed: planTier.aiPostsPerWorkspacePerMonth,
-            plan: planTier.id,
+            maxAllowed: planTier.postsPerWorkspacePerMonth,
+            plan: owner?.plan || "solo",
           });
         }
       }
@@ -1419,26 +1395,26 @@ export async function registerRoutes(
         const owner = await storage.getUser(ownerId);
         const planTier = getPlanTier(owner?.plan || "solo");
         const postsThisMonth = await storage.countBlogPostsThisMonth(workspaceId);
-        const remaining = planTier.aiPostsPerWorkspacePerMonth - postsThisMonth;
+        const remaining = planTier.postsPerWorkspacePerMonth - postsThisMonth;
 
         if (remaining <= 0) {
           return res.status(403).json({
             error: "ai_post_limit_reached",
-            message: `This workspace has reached its limit of ${planTier.aiPostsPerWorkspacePerMonth} AI posts this month. The limit resets on the 1st of next month.`,
+            message: `This workspace has reached its limit of ${planTier.postsPerWorkspacePerMonth} AI posts this month. The limit resets on the 1st of next month.`,
             currentCount: postsThisMonth,
-            maxAllowed: planTier.aiPostsPerWorkspacePerMonth,
-            plan: planTier.id,
+            maxAllowed: planTier.postsPerWorkspacePerMonth,
+            plan: owner?.plan || "solo",
           });
         }
 
         if (posts.length > remaining) {
           return res.status(403).json({
             error: "ai_post_limit_exceeded",
-            message: `You can only create ${remaining} more post${remaining === 1 ? "" : "s"} this month (${postsThisMonth}/${planTier.aiPostsPerWorkspacePerMonth} used). Please reduce the batch size.`,
+            message: `You can only create ${remaining} more post${remaining === 1 ? "" : "s"} this month (${postsThisMonth}/${planTier.postsPerWorkspacePerMonth} used). Please reduce the batch size.`,
             currentCount: postsThisMonth,
-            maxAllowed: planTier.aiPostsPerWorkspacePerMonth,
+            maxAllowed: planTier.postsPerWorkspacePerMonth,
             remaining,
-            plan: planTier.id,
+            plan: owner?.plan || "solo",
           });
         }
       }
