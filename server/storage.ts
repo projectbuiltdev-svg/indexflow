@@ -426,7 +426,7 @@ export class MemStorage implements IStorage {
       latitude: data.latitude ?? null,
       longitude: data.longitude ?? null,
       timezone: data.timezone ?? "America/New_York",
-      plan: data.plan ?? "complete",
+      plan: data.plan ?? "solo",
       status: data.status ?? "active",
       shardId: (data as any).shardId ?? 1,
       createdAt: new Date(),
