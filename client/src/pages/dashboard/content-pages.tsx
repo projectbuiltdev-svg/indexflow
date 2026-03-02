@@ -150,6 +150,9 @@ export default function ContentPages() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deletePage, setDeletePage] = useState<Page | null>(null);
 
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const pagesPerPage = 10;
 
@@ -272,6 +275,73 @@ export default function ContentPages() {
     deleteMutation.mutate(deletePage.id);
   };
 
+  const toggleSelectRow = (id: number) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    const visibleIds = paginatedPages.map((p) => p.id);
+    const allSelected = visibleIds.every((id) => selectedIds.has(id));
+    if (allSelected) {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        visibleIds.forEach((id) => next.delete(id));
+        return next;
+      });
+    } else {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        visibleIds.forEach((id) => next.add(id));
+        return next;
+      });
+    }
+  };
+
+  const [bulkActing, setBulkActing] = useState(false);
+
+  const handleBulkPublish = async (publish: boolean) => {
+    setBulkActing(true);
+    try {
+      await Promise.all(
+        Array.from(selectedIds).map((id) =>
+          apiRequest("PUT", `/api/site-pages/${id}`, { isPublished: publish })
+        )
+      );
+      queryClient.invalidateQueries({ queryKey });
+      setSelectedIds(new Set());
+      toast({ title: publish ? "Pages published" : "Pages unpublished", description: `${selectedIds.size} page(s) updated.` });
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    } finally {
+      setBulkActing(false);
+    }
+  };
+
+  const handleBulkDeleteConfirm = async () => {
+    setBulkActing(true);
+    try {
+      await Promise.all(
+        Array.from(selectedIds).map((id) =>
+          apiRequest("DELETE", `/api/site-pages/${id}`)
+        )
+      );
+      queryClient.invalidateQueries({ queryKey });
+      const count = selectedIds.size;
+      setSelectedIds(new Set());
+      setBulkDeleteOpen(false);
+      toast({ title: "Pages deleted", description: `${count} page(s) removed.` });
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    } finally {
+      setBulkActing(false);
+    }
+  };
+
   if (!workspaceId) {
     return (
       <div className="p-6 space-y-6">
@@ -322,6 +392,25 @@ export default function ContentPages() {
         </Select>
       </div>
 
+      {selectedIds.size > 0 && (
+        <div className="flex items-center gap-3 p-3 bg-muted/60 border rounded-md" data-testid="bulk-action-bar">
+          <span className="text-sm font-medium">{selectedIds.size} page(s) selected</span>
+          <div className="flex items-center gap-2 ml-auto">
+            <Button size="sm" variant="outline" disabled={bulkActing} onClick={() => handleBulkPublish(true)} data-testid="button-bulk-publish">
+              {bulkActing && <Loader2 className="w-3 h-3 mr-1 animate-spin" />}
+              Bulk Publish
+            </Button>
+            <Button size="sm" variant="outline" disabled={bulkActing} onClick={() => handleBulkPublish(false)} data-testid="button-bulk-unpublish">
+              {bulkActing && <Loader2 className="w-3 h-3 mr-1 animate-spin" />}
+              Bulk Unpublish
+            </Button>
+            <Button size="sm" variant="destructive" disabled={bulkActing} onClick={() => setBulkDeleteOpen(true)} data-testid="button-bulk-delete">
+              Bulk Delete
+            </Button>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardHeader className="flex flex-row items-center justify-between gap-2">
           <CardTitle>All Pages</CardTitle>
@@ -337,6 +426,15 @@ export default function ContentPages() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-10">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-muted-foreground/50 cursor-pointer"
+                      checked={paginatedPages.length > 0 && paginatedPages.every((p) => selectedIds.has(p.id))}
+                      onChange={toggleSelectAll}
+                      data-testid="checkbox-select-all"
+                    />
+                  </TableHead>
                   <TableHead>Page Title</TableHead>
                   <TableHead>Slug</TableHead>
                   <TableHead>Template</TableHead>
@@ -348,12 +446,21 @@ export default function ContentPages() {
               <TableBody>
                 {paginatedPages.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
                       No pages found. Add a page to get started.
                     </TableCell>
                   </TableRow>
                 ) : paginatedPages.map((page) => (
                   <TableRow key={page.id} data-testid={`row-page-${page.id}`}>
+                    <TableCell>
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-muted-foreground/50 cursor-pointer"
+                        checked={selectedIds.has(page.id)}
+                        onChange={() => toggleSelectRow(page.id)}
+                        data-testid={`checkbox-page-${page.id}`}
+                      />
+                    </TableCell>
                     <TableCell className="font-medium" data-testid={`text-page-title-${page.id}`}>
                       <button
                         className="text-left hover:text-sidebar-primary hover:underline transition-colors cursor-pointer"
@@ -570,6 +677,24 @@ export default function ContentPages() {
             <Button variant="destructive" onClick={handleDeleteConfirm} disabled={deleteMutation.isPending} data-testid="button-confirm-delete-page">
               {deleteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={bulkDeleteOpen} onOpenChange={setBulkDeleteOpen}>
+        <DialogContent data-testid="dialog-bulk-delete">
+          <DialogHeader>
+            <DialogTitle>Delete {selectedIds.size} Pages</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Delete {selectedIds.size} page(s)? This cannot be undone.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setBulkDeleteOpen(false)} data-testid="button-cancel-bulk-delete">Cancel</Button>
+            <Button variant="destructive" onClick={handleBulkDeleteConfirm} disabled={bulkActing} data-testid="button-confirm-bulk-delete">
+              {bulkActing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Delete {selectedIds.size} Pages
             </Button>
           </DialogFooter>
         </DialogContent>
