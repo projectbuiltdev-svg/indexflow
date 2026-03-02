@@ -128,7 +128,7 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
     ];
 
     let mdxContent = "";
-    let attempt1Words = 0;
+    let attempt1WordCount = 0;
     for (let attempt = 0; attempt < 2; attempt++) {
       const response = await openai.chat.completions.create({
         model: "gpt-4o",
@@ -141,7 +141,7 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
       const wordCount = mdxContent.split(/\s+/).filter(Boolean).length;
       console.log(`[DraftGenerator] Attempt ${attempt + 1} for "${post.title}": ${wordCount} words`);
 
-      if (attempt === 0) attempt1Words = wordCount;
+      if (attempt === 0) attempt1WordCount = wordCount;
       if (wordCount >= 1500 || attempt === 1) break;
 
       messages.push({ role: "assistant", content: mdxContent });
@@ -158,7 +158,7 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
         generationStatus: "needs_review",
         qualityGateStatus: "fail",
         qualityFailReasons: [
-          `Both generation attempts returned insufficient content. Attempt 1: ${attempt1Words} words. Attempt 2: ${finalWordCount} words. Minimum required: 1,800 words.`
+          `Both generation attempts returned insufficient content. Attempt 1: ${attempt1WordCount} words. Attempt 2: ${finalWordCount} words. Minimum required: 1,800 words.`
         ],
       });
       return null;
