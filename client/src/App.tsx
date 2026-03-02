@@ -125,9 +125,6 @@ const SettingsSetup = lazy(() => import("@/pages/dashboard/settings-setup"));
 const SupportDocs = lazy(() => import("@/pages/dashboard/support-docs"));
 const SupportTickets = lazy(() => import("@/pages/dashboard/support-tickets"));
 
-const SettingsHours = lazy(() => import("@/pages/dashboard/settings/hours"));
-const SettingsClosures = lazy(() => import("@/pages/dashboard/settings/closures"));
-const SettingsResources = lazy(() => import("@/pages/dashboard/settings/resources"));
 const SettingsTeam = lazy(() => import("@/pages/dashboard/settings/team"));
 const SettingsTrainWidget = lazy(() => import("@/pages/dashboard/settings/train-widget"));
 const SettingsWidgetCodeOld = lazy(() => import("@/pages/dashboard/settings/widget-code"));
@@ -451,9 +448,6 @@ export function AppRoutes() {
         <Route path="/:workspaceId/support/tickets">{() => <ClientRoute component={SupportTickets} />}</Route>
 
         {/* Legacy client dashboard routes */}
-        <Route path="/:workspaceId/settings/hours">{() => <ClientRoute component={SettingsHours} />}</Route>
-        <Route path="/:workspaceId/settings/closures">{() => <ClientRoute component={SettingsClosures} />}</Route>
-        <Route path="/:workspaceId/settings/resources">{() => <ClientRoute component={SettingsResources} />}</Route>
         <Route path="/:workspaceId/settings/train-widget">{() => <ClientRoute component={SettingsTrainWidget} />}</Route>
         <Route path="/:workspaceId/settings/widget-code">{() => <ClientRoute component={SettingsWidgetCodeOld} />}</Route>
         <Route path="/:workspaceId/settings/payments">{() => <ClientRoute component={SettingsPayments} />}</Route>

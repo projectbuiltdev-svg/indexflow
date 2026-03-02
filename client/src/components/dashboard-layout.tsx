@@ -4,7 +4,7 @@ import { useWorkspace } from "@/lib/workspace-context";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-  Calendar, Phone, BarChart3, Settings, Clock, Users, CreditCard, X as XIcon,
+  Calendar, Phone, BarChart3, Settings, Users, CreditCard,
   Building2, Bed, BookOpen, HelpCircle, Download, Search, Globe, FileText,
   Home, ChevronRight, Menu, Bot, Code, Key, MessageSquare
 } from "lucide-react";
@@ -42,9 +42,6 @@ const navSections = [
   {
     label: "Settings",
     items: [
-      { label: "Hours", href: "/dashboard/settings/hours", icon: Clock },
-      { label: "Closures", href: "/dashboard/settings/closures", icon: XIcon },
-      { label: "Resources", href: "/dashboard/settings/resources", icon: Settings },
       { label: "Team", href: "/dashboard/settings/team", icon: Users },
       { label: "Payments", href: "/dashboard/settings/payments", icon: CreditCard },
       { label: "Train Widget", href: "/dashboard/settings/train-widget", icon: Bot },

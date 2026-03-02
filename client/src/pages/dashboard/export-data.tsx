@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "wouter";
 import {
-  Download, FileSpreadsheet, Calendar, CalendarOff, Phone, BarChart3, Bed, Filter, CheckCircle2,
+  Download, FileSpreadsheet, Phone, BarChart3, Filter, CheckCircle2,
   MessageSquare, MessageCircle, Users, Brain, Globe, Mail,
   TrendingUp,
 } from "lucide-react";
@@ -22,15 +22,6 @@ import { DashboardLayout } from "@/components/dashboard-layout";
 
 const exportTypes = [
   {
-    id: "bookings",
-    title: "Client Reports",
-    description: "Export all client report data including contact details, campaign status, and notes",
-    icon: Calendar,
-    fields: ["Date", "Time", "Client Name", "Email", "Phone", "Campaign", "Status", "Notes", "Source"],
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
-  },
-  {
     id: "calls",
     title: "Call Logs",
     description: "Export AI call history with transcripts, durations, outcomes, and caller information",
@@ -47,15 +38,6 @@ const exportTypes = [
     fields: ["Date", "Widget Impressions", "Interactions", "Conversions", "Calls Answered", "Leads Generated"],
     color: "text-green-500",
     bgColor: "bg-green-500/10",
-  },
-  {
-    id: "rooms",
-    title: "Project Data",
-    description: "Export project data including client details, project types, and timeline dates",
-    icon: Bed,
-    fields: ["Project ID", "Client Name", "Project Type", "Project Code", "Start Date", "End Date", "Team", "Status", "Total"],
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
   },
   {
     id: "rank-tracker",
@@ -120,15 +102,6 @@ const exportTypes = [
     color: "text-rose-500",
     bgColor: "bg-rose-500/10",
   },
-  {
-    id: "closures",
-    title: "Scheduled Maintenance",
-    description: "Export your workspace maintenance dates for updates, migrations, and planned downtime",
-    icon: CalendarOff,
-    fields: ["Start Date", "End Date", "Reason", "Type", "Status", "Created"],
-    color: "text-slate-500",
-    bgColor: "bg-slate-500/10",
-  },
 ];
 
 export default function ExportData() {
@@ -142,14 +115,10 @@ export default function ExportData() {
   const getEndpointAndFilename = (typeId: string): { endpoint: string; filename: string } => {
     const date = new Date().toISOString().slice(0, 10);
     switch (typeId) {
-      case "bookings":
-        return { endpoint: `/api/workspaces/${workspaceId}/reservations`, filename: `client_reports_${date}.csv` };
       case "calls":
         return { endpoint: `/api/workspaces/${workspaceId}/calls`, filename: `call_logs_${date}.csv` };
-      case "rooms":
-        return { endpoint: `/api/workspaces/${workspaceId}/room-bookings`, filename: `projects_${date}.csv` };
       case "analytics":
-        return { endpoint: `/api/workspaces/${workspaceId}/reservations`, filename: `analytics_${date}.csv` };
+        return { endpoint: `/api/workspaces/${workspaceId}/blog-posts?workspaceId=${workspaceId}`, filename: `analytics_${date}.csv` };
       case "rank-tracker":
         return { endpoint: `/api/workspaces/${workspaceId}/rank-tracker/latest`, filename: `rank_tracker_${date}.csv` };
       case "widget-chats":
@@ -164,8 +133,6 @@ export default function ExportData() {
         return { endpoint: `/api/workspaces/${workspaceId}/website-changes`, filename: `website_changes_${date}.csv` };
       case "contacts":
         return { endpoint: `/api/workspaces/${workspaceId}/contact-messages`, filename: `contact_messages_${date}.csv` };
-      case "closures":
-        return { endpoint: `/api/workspaces/${workspaceId}/closures`, filename: `closures_${date}.csv` };
       default:
         return { endpoint: "", filename: "" };
     }
