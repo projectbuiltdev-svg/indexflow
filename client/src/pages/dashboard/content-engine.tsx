@@ -1292,13 +1292,13 @@ function CmsTab({ workspaceId }: { workspaceId: string }) {
 
 function ReportsTab({ workspaceId }: { workspaceId: string }) {
   const { toast } = useToast();
-  const { data: stats } = useQuery<any>({ queryKey: [`/api/admin/reports/content-stats?workspaceId=${workspaceId}`] });
-  const { data: savedReports = [] } = useQuery<any[]>({ queryKey: [`/api/admin/reports/saved?workspaceId=${workspaceId}`] });
+  const { data: stats } = useQuery<any>({ queryKey: [`/api/reports/content-stats?workspaceId=${workspaceId}`] });
+  const { data: savedReports = [] } = useQuery<any[]>({ queryKey: [`/api/reports/saved?workspaceId=${workspaceId}`] });
 
   const snapshotMutation = useMutation({
-    mutationFn: () => apiRequest("POST", "/api/admin/reports/snapshot", { workspaceId }),
+    mutationFn: () => apiRequest("POST", "/api/reports/snapshot", { workspaceId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/admin/reports/saved?workspaceId=${workspaceId}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/reports/saved?workspaceId=${workspaceId}`] });
       toast({ title: "Snapshot saved" });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),

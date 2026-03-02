@@ -1649,6 +1649,69 @@ Return ONLY valid JSON, no markdown.`;
       res.status(500).json({ error: err.message });
     }
   });
+
+  app.get("/api/reports/content-stats", async (req, res) => {
+    try {
+      const workspaceId = req.query.workspaceId as string;
+      if (!workspaceId) return res.json({});
+      const posts = await storage.getWorkspaceBlogPosts(workspaceId);
+      const invoices = await storage.getInvoices(workspaceId);
+
+      const published = posts.filter((p: any) => p.status === "published").length;
+      const draft = posts.filter((p: any) => p.status === "draft").length;
+      const totalWords = posts.reduce((sum: number, p: any) => sum + (p.mdxContent?.split(/\s+/).length || 0), 0);
+
+      const totalInvoices = invoices.length;
+      const revenue = invoices.filter((i: any) => i.status === "paid").reduce((sum: number, i: any) => sum + parseFloat(i.total || "0"), 0);
+      const outstanding = invoices.filter((i: any) => i.status !== "paid" && i.status !== "cancelled").reduce((sum: number, i: any) => sum + parseFloat(i.total || "0"), 0);
+      const overdue = invoices.filter((i: any) => i.status === "overdue").length;
+
+      res.json({
+        totalPosts: posts.length,
+        published,
+        draft,
+        avgWords: posts.length > 0 ? Math.round(totalWords / posts.length) : 0,
+        totalImages: 0,
+        schemaCoverage: 0,
+        pagesAudited: 0,
+        avgSeoScore: 0,
+        highScore: 0,
+        mediumScore: 0,
+        lowScore: 0,
+        totalInvoices,
+        revenue,
+        outstanding,
+        overdue,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch content stats" });
+    }
+  });
+
+  app.get("/api/reports/saved", async (req, res) => {
+    try {
+      const workspaceId = req.query.workspaceId as string;
+      const reports = await storage.getContentReports(workspaceId || undefined);
+      res.json(reports);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch saved reports" });
+    }
+  });
+
+  app.post("/api/reports/snapshot", async (req, res) => {
+    try {
+      const { workspaceId } = req.body;
+      const report = await storage.createContentReport({
+        workspaceId,
+        title: `Snapshot ${new Date().toISOString().split("T")[0]}`,
+        type: "snapshot",
+        status: "completed",
+      });
+      res.json(report);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to save snapshot" });
+    }
+  });
 }
 
 export async function runScheduledPublisher() {
