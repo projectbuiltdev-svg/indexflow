@@ -142,7 +142,7 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
       console.log(`[DraftGenerator] Attempt ${attempt + 1} for "${post.title}": ${wordCount} words`);
 
       if (attempt === 0) attempt1WordCount = wordCount;
-      if (wordCount >= 1500 || attempt === 1) break;
+      if (wordCount >= 1800 || attempt === 1) break;
 
       messages.push({ role: "assistant", content: mdxContent });
       messages.push({
