@@ -397,7 +397,7 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     }
   });
 
-  app.get("/api/assets/search", async (req, res) => {
+  app.get("/api/blog/assets/search-external", async (req, res) => {
     if (!requireSuperAdmin(req, res)) return;
     try {
       const source = (req.query.source as string) || "pexels";
@@ -473,20 +473,6 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     }
   });
 
-  app.post("/api/assets/save", async (req, res) => {
-    if (!requireSuperAdmin(req, res)) return;
-    try {
-      const data = insertContentAssetSchema.parse(req.body);
-      const asset = await storage.createContentAsset({
-        ...data,
-        publicUrl: data.originalUrl,
-      });
-      res.status(201).json(asset);
-    } catch (err: any) {
-      res.status(400).json({ error: err.message });
-    }
-  });
-
   app.post("/api/blog/posts/:postId/assets/attach", async (req, res) => {
     if (!requireSuperAdmin(req, res)) return;
     try {
@@ -516,7 +502,10 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
   app.post("/api/blog/assets/save", async (req, res) => {
     try {
       const data = insertContentAssetSchema.parse(req.body);
-      const asset = await storage.createContentAsset(data);
+      const asset = await storage.createContentAsset({
+        ...data,
+        publicUrl: data.originalUrl,
+      });
       res.status(201).json(asset);
     } catch (err: any) {
       res.status(400).json({ error: err.message });

@@ -227,7 +227,7 @@ function ImageSearchPanel({
     if (!query.trim()) return;
     setSearching(true);
     try {
-      const data = await adminApi("GET", `/api/assets/search?source=${source}&q=${encodeURIComponent(query)}`);
+      const data = await adminApi("GET", `/api/blog/assets/search-external?source=${source}&q=${encodeURIComponent(query)}`);
       setResults(data);
     } catch (err: any) {
       toast({ title: "Search failed", description: err.message, variant: "destructive" });
@@ -238,7 +238,7 @@ function ImageSearchPanel({
 
   const saveAndInsert = async (item: any) => {
     try {
-      const asset = await adminApi("POST", "/api/assets/save", {
+      const asset = await adminApi("POST", "/api/blog/assets/save", {
         source: item.source,
         sourceAssetId: item.source_asset_id,
         originalUrl: item.full_url,
@@ -371,7 +371,7 @@ function ImagePlaceholdersManager({
     const source = searchSources[idx] || "pexels";
     setSearchingIdx(idx);
     try {
-      const data = await adminApi("GET", `/api/assets/search?source=${source}&q=${encodeURIComponent(q)}`);
+      const data = await adminApi("GET", `/api/blog/assets/search-external?source=${source}&q=${encodeURIComponent(q)}`);
       setSearchResults((prev) => ({ ...prev, [idx]: data }));
     } catch (err: any) {
       toast({ title: "Search failed", description: err.message, variant: "destructive" });
@@ -384,7 +384,7 @@ function ImagePlaceholdersManager({
     const ph = placeholders[idx];
     if (!ph) return;
     try {
-      const asset = await adminApi("POST", "/api/assets/save", {
+      const asset = await adminApi("POST", "/api/blog/assets/save", {
         source: item.source,
         sourceAssetId: item.source_asset_id,
         originalUrl: item.full_url,
