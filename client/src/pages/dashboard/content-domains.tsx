@@ -60,17 +60,17 @@ export default function ContentDomains() {
   const [removeDomain, setRemoveDomain] = useState<WorkspaceDomain | null>(null);
 
   const { data: domains = [], isLoading } = useQuery<WorkspaceDomain[]>({
-    queryKey: ["/api/admin/blog/domains", `?workspaceId=${workspaceId}`],
+    queryKey: ["/api/blog/domains", `?workspaceId=${workspaceId}`],
     enabled: !!workspaceId,
   });
 
   const createMutation = useMutation({
     mutationFn: async (data: { domain: string; workspaceId: string }) => {
-      const res = await apiRequest("POST", "/api/admin/blog/domains", data);
+      const res = await apiRequest("POST", "/api/blog/domains", data);
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/domains"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog/domains"] });
       setAddOpen(false);
       setAddDomain("");
       setAddNotes("");
@@ -83,11 +83,11 @@ export default function ContentDomains() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Record<string, unknown> }) => {
-      const res = await apiRequest("PATCH", `/api/admin/blog/domains/${id}`, data);
+      const res = await apiRequest("PATCH", `/api/blog/domains/${id}`, data);
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/domains"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog/domains"] });
     },
     onError: (err: Error) => {
       toast({ title: "Failed to update domain", description: err.message, variant: "destructive" });
@@ -96,11 +96,11 @@ export default function ContentDomains() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await apiRequest("DELETE", `/api/admin/blog/domains/${id}`);
+      const res = await apiRequest("DELETE", `/api/blog/domains/${id}`);
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/domains"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog/domains"] });
     },
     onError: (err: Error) => {
       toast({ title: "Failed to remove domain", description: err.message, variant: "destructive" });
