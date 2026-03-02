@@ -696,6 +696,125 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     }
   });
 
+  app.post("/api/blog/campaigns/:campaignId/publish-all", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const campaign = await storage.getContentCampaign(req.params.campaignId);
+      if (!campaign) return res.status(404).json({ error: "Campaign not found" });
+
+      const posts = await storage.getWorkspaceBlogPostsByCampaign(campaign.workspaceId, campaign.id);
+      const unpublished = posts.filter(p => p.status !== "published");
+      let publishedCount = 0;
+
+      for (const post of unpublished) {
+        let html = post.compiledHtml;
+        if (!html && post.mdxContent) {
+          const result = await compileMdxToHtml(post.mdxContent);
+          if (result.errors.length === 0) {
+            html = result.html;
+          }
+        }
+        await storage.updateWorkspaceBlogPost(post.id, {
+          compiledHtml: html || post.compiledHtml,
+          status: "published",
+          publishedAt: new Date(),
+          generationStatus: "generated",
+        });
+        publishedCount++;
+      }
+
+      res.json({ campaignId: campaign.id, published: publishedCount });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/blog/campaigns/:campaignId/schedule-all", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const campaign = await storage.getContentCampaign(req.params.campaignId);
+      if (!campaign) return res.status(404).json({ error: "Campaign not found" });
+
+      const { publishAt } = req.body;
+      if (!publishAt) return res.status(400).json({ error: "publishAt date string required" });
+
+      const publishDate = new Date(publishAt);
+      if (isNaN(publishDate.getTime())) return res.status(400).json({ error: "Invalid publishAt date" });
+
+      const posts = await storage.getWorkspaceBlogPostsByCampaign(campaign.workspaceId, campaign.id);
+      const eligible = posts.filter(p => p.status === "draft" || p.status === "needs_review");
+      let scheduledCount = 0;
+
+      for (const post of eligible) {
+        await storage.updateWorkspaceBlogPost(post.id, {
+          status: "scheduled",
+          publishAt: publishDate,
+        });
+        scheduledCount++;
+      }
+
+      res.json({ campaignId: campaign.id, scheduled: scheduledCount, publishAt: publishDate.toISOString() });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/blog/campaigns/:campaignId/summary", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const campaign = await storage.getContentCampaign(req.params.campaignId);
+      if (!campaign) return res.status(404).json({ error: "Campaign not found" });
+
+      const posts = await storage.getWorkspaceBlogPostsByCampaign(campaign.workspaceId, campaign.id);
+
+      const byStatus: Record<string, number> = { draft: 0, generating: 0, generated: 0, needs_review: 0, scheduled: 0, published: 0, failed: 0 };
+      const byQualityGate: Record<string, number> = { pass: 0, fail: 0, unknown: 0 };
+      let totalWords = 0;
+
+      for (const post of posts) {
+        const s = post.status || "draft";
+        if (s in byStatus) byStatus[s]++;
+        const q = post.qualityGateStatus || "unknown";
+        if (q in byQualityGate) byQualityGate[q]++;
+        if (post.mdxContent) {
+          totalWords += post.mdxContent.split(/\s+/).filter(Boolean).length;
+        }
+      }
+
+      res.json({
+        campaignId: campaign.id,
+        name: campaign.name,
+        status: campaign.status,
+        totalPosts: posts.length,
+        byStatus,
+        byQualityGate,
+        avgWordCount: posts.length > 0 ? Math.round(totalWords / posts.length) : 0,
+        totalWords,
+        createdAt: campaign.createdAt ? new Date(campaign.createdAt).toISOString() : null,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.patch("/api/blog/campaigns/:campaignId", async (req, res) => {
+    if (!requireSuperAdmin(req, res)) return;
+    try {
+      const { name, status } = req.body;
+      if (!name && !status) return res.status(400).json({ error: "Provide name or status to update" });
+
+      const updates: Record<string, any> = {};
+      if (name) updates.name = name;
+      if (status) updates.status = status;
+
+      const updated = await storage.updateContentCampaign(req.params.campaignId, updates);
+      if (!updated) return res.status(404).json({ error: "Campaign not found" });
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   app.post("/api/blog/export-mdx", async (req, res) => {
     if (!requireSuperAdmin(req, res)) return;
     try {

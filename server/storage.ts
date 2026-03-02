@@ -278,6 +278,8 @@ export interface IStorage {
   getWorkspaceBlogPostsByCampaign(workspaceId: string, campaignId: string): Promise<WorkspaceBlogPost[]>;
   getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; name: string; status: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]>;
   createContentCampaign(data: InsertContentCampaign): Promise<ContentCampaign>;
+  getContentCampaign(id: string): Promise<ContentCampaign | undefined>;
+  updateContentCampaign(id: string, data: Partial<ContentCampaign>): Promise<ContentCampaign | undefined>;
   updateWorkspaceBlogPost(id: string, post: Partial<WorkspaceBlogPost>): Promise<WorkspaceBlogPost | undefined>;
   deleteWorkspaceBlogPost(id: string): Promise<boolean>;
   // Content Assets
@@ -1386,6 +1388,16 @@ export class MemStorage implements IStorage {
     this.contentCampaignsMap.set(id, campaign);
     return campaign;
   }
+  async getContentCampaign(id: string): Promise<ContentCampaign | undefined> {
+    return this.contentCampaignsMap.get(id);
+  }
+  async updateContentCampaign(id: string, data: Partial<ContentCampaign>): Promise<ContentCampaign | undefined> {
+    const existing = this.contentCampaignsMap.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...data, updatedAt: new Date() };
+    this.contentCampaignsMap.set(id, updated);
+    return updated;
+  }
   async getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; name: string; status: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]> {
     const posts = Array.from(this.workspaceBlogPostsMap.values()).filter(p => p.workspaceId === workspaceId && p.campaignId);
     const map = new Map<string, WorkspaceBlogPost[]>();
@@ -2392,6 +2404,14 @@ export class DbStorage implements IStorage {
   }
   async createContentCampaign(data: InsertContentCampaign): Promise<ContentCampaign> {
     const [row] = await db!.insert(contentCampaigns).values(data).returning();
+    return row;
+  }
+  async getContentCampaign(id: string): Promise<ContentCampaign | undefined> {
+    const [row] = await db!.select().from(contentCampaigns).where(eq(contentCampaigns.id, id));
+    return row;
+  }
+  async updateContentCampaign(id: string, data: Partial<ContentCampaign>): Promise<ContentCampaign | undefined> {
+    const [row] = await db!.update(contentCampaigns).set({ ...data, updatedAt: new Date() }).where(eq(contentCampaigns.id, id)).returning();
     return row;
   }
   async getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; name: string; status: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]> {
