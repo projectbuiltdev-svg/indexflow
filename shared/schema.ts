@@ -54,7 +54,7 @@ export const workspaces = pgTable(
     latitude: decimal("latitude", { precision: 10, scale: 7 }),
     longitude: decimal("longitude", { precision: 10, scale: 7 }),
     timezone: text("timezone").notNull().default("America/New_York"),
-    plan: text("plan").notNull().default("complete"),
+    plan: text("plan").notNull().default("solo"),
     status: text("status").notNull().default("active"),
     aiKeySource: text("ai_key_source").notNull().default("agency"),
     createdAt: timestamp("created_at").defaultNow(),
