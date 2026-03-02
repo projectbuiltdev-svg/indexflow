@@ -358,6 +358,25 @@ export function generateOrphanReport(posts: WorkspaceBlogPost[]): OrphanPost[] {
   return orphans.sort((a, b) => (a.inboundLinks + a.outboundLinks) - (b.inboundLinks + b.outboundLinks));
 }
 
+const MAX_LINK_HEALTH_URLS = 200;
+
+function isSafeExternalUrl(href: string): boolean {
+  try {
+    const url = new URL(href);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return false;
+    const hostname = url.hostname.toLowerCase();
+    if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1") return false;
+    const privateRanges = [/^10\./, /^172\.(1[6-9]|2[0-9]|3[01])\./, /^192\.168\./];
+    if (privateRanges.some((r) => r.test(hostname))) return false;
+    if (hostname === "169.254.169.254") return false;
+    if (hostname.endsWith(".replit.dev") || hostname.endsWith(".repl.co")) return false;
+    if (hostname.endsWith(".local") || hostname.endsWith(".internal")) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function checkLinkHealth(
   posts: WorkspaceBlogPost[],
   maxConcurrent: number = 5
@@ -370,7 +389,7 @@ export async function checkLinkHealth(
     const html = post.compiledHtml || post.mdxContent || "";
     const links = extractLinks(html);
     for (const link of links) {
-      if (link.href.startsWith("http") && !checked.has(link.href)) {
+      if (isSafeExternalUrl(link.href) && !checked.has(link.href)) {
         checked.add(link.href);
         allLinks.push({
           postId: post.id,
@@ -380,6 +399,13 @@ export async function checkLinkHealth(
         });
       }
     }
+  }
+
+  if (allLinks.length > MAX_LINK_HEALTH_URLS) {
+    console.warn(
+      `[link-builder] checkLinkHealth: ${allLinks.length} unique URLs found, capping at ${MAX_LINK_HEALTH_URLS}`
+    );
+    allLinks.length = MAX_LINK_HEALTH_URLS;
   }
 
   for (let i = 0; i < allLinks.length; i += maxConcurrent) {
