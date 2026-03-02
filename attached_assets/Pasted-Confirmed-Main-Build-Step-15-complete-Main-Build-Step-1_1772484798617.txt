@@ -1,0 +1,71 @@
+Confirmed. Main Build Step 15 complete.
+
+Main Build Step 16 — Campaign Dashboard UI.
+
+Create /client/components/pseo/CampaignDashboard.tsx — the main 
+campaign management view inside the pSEO tab.
+
+Requirements:
+
+1. Campaign list view (default):
+   - Table showing all campaigns for workspace
+   - Columns: name, status badge, locations count, services count, 
+     pages generated, pages published, created date, actions
+   - Status badges use campaign state machine states with colours:
+     * draft: grey
+     * generating: blue with spinner
+     * reviewing: amber
+     * publishing: blue
+     * live: green
+     * monitoring: teal
+     * paused: orange
+     * archived: grey muted
+   - Actions per row: View, Pause, Resume, Archive (contextual 
+     based on current state — use getAvailableTransitions from 
+     state machine)
+   - "New Campaign" button — opens 4-step wizard
+   - Add Campaign add-on button — links to Polar.sh checkout 
+     via generatePolarCheckoutUrl
+
+2. Campaign detail view (on row click):
+   - Back button to list
+   - Campaign header: name, status badge, created date, 
+     estimated pages, AI model used
+   - Four tabs:
+     * Overview — progress bar, stats grid, recent activity log
+     * Pages — paginated table of all pseo_pages with status 
+       filters
+     * Review Queue — embeds ReviewQueueTab from Step 14
+     * Settings — campaign name edit, URL structure display 
+       (read only after activation), template info
+
+3. Overview tab:
+   - Progress bar: pages generated / total expected
+   - Stats grid: Total Pages, Published, In Review, Failed, 
+     Similarity Holds, Quality Gate Failures
+   - Recent activity: last 10 pseo_audit_log entries for campaign
+   - Generate button — only visible in reviewing state
+   - Publish All button — only visible in reviewing state with 
+     0 review queue items
+
+4. Pages tab:
+   - Filter by status: all, published, draft, held, failed, deleted
+   - Search by title or slug
+   - Columns: title, slug, service, location, status, quality 
+     score, similarity score, published date
+   - Per row: Preview, Regenerate, Delete (soft)
+   - Pagination 50 rows per page
+
+5. Server routes in /server/routes/pseo/campaigns.ts (add to 
+   existing file):
+   - GET /api/pseo/campaigns — list all campaigns for workspace
+   - GET /api/pseo/campaigns/:id — campaign detail with stats
+   - GET /api/pseo/campaigns/:id/pages — paginated pages list
+   - PATCH /api/pseo/campaigns/:id/status — transition campaign 
+     state via state machine, rejects invalid transitions with 
+     400
+   - GET /api/pseo/campaigns/:id/activity — last 10 audit log 
+     entries
+
+Use existing UI components only. No new dependencies.
+Show all files. Stop. Wait for confirmation before proceeding.
