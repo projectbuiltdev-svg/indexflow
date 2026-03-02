@@ -76,6 +76,18 @@ export function registerContentRoutes(app: Express) {
   app.post("/api/blog/posts", async (req, res) => {
     if (!requireSuperAdmin(req, res)) return;
     try {
+      const workspaceId = req.body.workspaceId;
+      if (workspaceId) {
+        const limitCheck = await checkPostLimit(workspaceId);
+        if (!limitCheck.allowed) {
+          return res.status(403).json({
+            error: "ai_post_limit_reached",
+            message: `Monthly post limit reached. Used ${limitCheck.used} of ${limitCheck.limit} posts this month.`,
+            used: limitCheck.used,
+            limit: limitCheck.limit,
+          });
+        }
+      }
       const data = insertWorkspaceBlogPostSchema.parse({
         ...req.body,
         category: normalizeCategory(req.body.category),
