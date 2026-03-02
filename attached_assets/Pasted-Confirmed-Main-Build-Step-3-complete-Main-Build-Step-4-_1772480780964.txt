@@ -1,0 +1,58 @@
+Confirmed. Main Build Step 3 complete.
+
+Main Build Step 4 — Quality Gate Engine.
+
+Create /server/pseo/quality-gate-engine.ts implementing all 12 
+gates from Section 6.6 of the context document.
+
+Rules:
+- All 12 gates run on every page without exception
+- Gates run sequentially — ALL failures collected before routing 
+  to review queue — not just first failure
+- Failure reasons stored as human readable strings — never codes
+- Word count uses visible text only — strip HTML tags first
+- Meta description length is CHARACTER count not word count
+- Schema validation uses JSON.parse — throws = fail
+- Location name check is case-insensitive
+- Internal link count checks same domain only
+- Gates run against assembled HTML — not raw text
+
+The 12 gates in order:
+1. Word count: strip HTML → count tokens → minimum MIN_WORD_COUNT (800)
+2. H1 keyword check: extract h1 → lowercase → primary keyword 
+   exists as substring
+3. Meta title keyword check: extract meta title → lowercase → 
+   primary keyword exists as substring
+4. Meta description presence: meta description content is 
+   non-empty string
+5. Meta description length: character count 
+   META_DESCRIPTION_MIN (140) to META_DESCRIPTION_MAX (160)
+6. H2 secondary keyword check: any h2 contains any secondary 
+   keyword as substring
+7. Internal link count: same domain hrefs only → minimum 
+   MIN_INTERNAL_LINKS (2)
+8. External link count: different domain hrefs → minimum 
+   MIN_EXTERNAL_LINKS (1)
+9. Image presence: img tag count > 0
+10. Alt text check: ALL img tags have non-empty alt attribute
+11. Schema presence: script[type="application/ld+json"] → 
+    JSON.parse succeeds
+12. Location name check: first paragraph text → case-insensitive 
+    → location town name exists as substring
+
+All thresholds from config files — no magic numbers.
+
+Export:
+- runQualityGates(html, pageContext) — returns:
+  { passed: boolean, failures: string[], gateResults: GateResult[] }
+- GateResult: { gate: number, name: string, passed: boolean, 
+  reason?: string }
+
+Write /tests/pseo/quality-gate-engine.test.ts covering:
+- Every gate pass scenario
+- Every gate fail scenario  
+- Multiple simultaneous failures all collected
+- All 12 gates run even when early gates fail
+
+Show complete file and test results. Stop. Wait for confirmation 
+before proceeding.
