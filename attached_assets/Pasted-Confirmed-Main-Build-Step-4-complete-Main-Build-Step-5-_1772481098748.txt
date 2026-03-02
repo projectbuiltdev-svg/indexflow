@@ -1,0 +1,55 @@
+Confirmed. Main Build Step 4 complete.
+
+Main Build Step 5 — Similarity Check Engine.
+
+Create /server/pseo/similarity-checker.ts implementing all rules 
+and logic from Section 6.7 of the context document.
+
+Requirements:
+
+1. Text extraction and vectorisation:
+   - extractTextForSimilarity(html, languageCode) — strip HTML, 
+     lowercase, remove punctuation, tokenise, remove stop words
+   - Use buildTfIdfVector from Step 2 for vectorisation
+
+2. Core similarity check:
+   - checkSimilarity(newPageHtml, campaignId, newPageId, 
+     languageCode) — returns:
+     { similarityScore: number, comparisonPageId: string | null,
+       action: "pass" | "hold" }
+   - Compare new page TF vector against ALL existing page vectors 
+     in same campaign only — never cross-campaign
+   - Track highest similarity score and corresponding page ID
+   - If score >= SIMILARITY_THRESHOLD (0.80) — action is "hold"
+   - If score < SIMILARITY_THRESHOLD — action is "pass"
+
+3. On hold:
+   - Write to pseo_review_queue with score and comparison_page_id
+   - Write to pseo_pages with status "held"
+   - Do NOT write to venue_site_pages
+   - Only the later-generated page goes to review queue — 
+     earlier page status unchanged
+
+4. On pass:
+   - Write to venue_site_pages as draft
+   - Write to pseo_pages with status "draft"
+   - Store similarity score in pseo_pages for audit
+
+5. Re-check after edit:
+   - recheckSimilarity(pageId, editedHtml, campaignId) — 
+     re-runs similarity against ALL pages including any new 
+     pages generated since original check
+
+Write /tests/pseo/similarity-checker.test.ts covering:
+- Identical content scores 1.0
+- Completely different content scores near 0.0
+- Score at exactly 0.80 triggers hold
+- Score at 0.79 triggers pass
+- Cross-campaign isolation — pages from other campaigns 
+  not included in comparison
+- Earlier page status unchanged when later page is held
+- Re-check after edit runs against all current pages
+- Zero vector handling
+
+Show complete file and test results. Stop. Wait for confirmation 
+before proceeding.
