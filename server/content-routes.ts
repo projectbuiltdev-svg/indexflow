@@ -1209,8 +1209,17 @@ Return ONLY valid JSON, no markdown.`;
         return res.status(400).json({ error: `Invalid format. Must be one of: ${CMS_FORMATS.join(", ")}` });
       }
 
+      let postToExport = post;
+      if (!post.compiledHtml && post.mdxContent) {
+        const { html, errors } = await compileMdxToHtml(post.mdxContent);
+        if (errors.length === 0) {
+          postToExport = { ...post, compiledHtml: html };
+          await storage.updateWorkspaceBlogPost(post.id, { compiledHtml: html });
+        }
+      }
+
       const formatter = cmsFormatters[format];
-      const formatted = formatter(post);
+      const formatted = formatter(postToExport);
 
       res.json({
         format,
