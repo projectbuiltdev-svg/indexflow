@@ -31,9 +31,9 @@ export default function PostEditor() {
   const isNew = postId === "new";
 
   const { data: allPosts, isLoading } = useQuery<any[]>({
-    queryKey: ["/api/admin/blog/posts", wsId],
+    queryKey: ["/api/blog/posts", wsId],
     queryFn: async () => {
-      const res = await fetch(`/api/admin/blog/posts?workspaceId=${wsId}`);
+      const res = await fetch(`/api/blog/posts?workspaceId=${wsId}`);
       if (!res.ok) throw new Error("Failed to fetch posts");
       return res.json();
     },
@@ -71,22 +71,22 @@ export default function PostEditor() {
   const saveMutation = useMutation({
     mutationFn: async (data: any) => {
       if (isNew) {
-        return apiRequest("POST", "/api/admin/blog/posts", data);
+        return apiRequest("POST", "/api/blog/posts", data);
       } else {
-        return apiRequest("PUT", `/api/admin/blog/posts/${postId}`, data);
+        return apiRequest("PUT", `/api/blog/posts/${postId}`, data);
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog/posts"] });
     },
   });
 
   const publishMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest("POST", `/api/admin/blog/posts/${postId}/publish-now`);
+      return apiRequest("POST", `/api/blog/posts/${postId}/publish-now`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog/posts"] });
       toast({ title: "Post published", description: `"${title}" is now live.` });
     },
   });
@@ -211,9 +211,9 @@ export default function PostEditor() {
       };
 
       if (isNew) {
-        await apiRequest("POST", "/api/admin/blog/posts", savePayload);
+        await apiRequest("POST", "/api/blog/posts", savePayload);
       } else {
-        await apiRequest("PUT", `/api/admin/blog/posts/${postId}`, savePayload);
+        await apiRequest("PUT", `/api/blog/posts/${postId}`, savePayload);
       }
 
       toast({ title: "Placeholders inserted", description: `Added ${insertions.length} image placeholder${insertions.length > 1 ? "s" : ""}. Resolving stock images...` });
@@ -255,10 +255,10 @@ export default function PostEditor() {
             const validImages = searchResults.filter(i => i.src);
             if (validImages.length > 0) {
               await apiRequest("POST", `/api/blog/posts/${postId}/apply-images`, { images: searchResults });
-              queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts"] });
+              queryClient.invalidateQueries({ queryKey: ["/api/blog/posts"] });
               toast({ title: "Images resolved", description: `${validImages.length} stock image${validImages.length > 1 ? "s" : ""} applied to the post.` });
 
-              const refreshRes = await fetch(`/api/admin/blog/posts?workspaceId=${wsId}`);
+              const refreshRes = await fetch(`/api/blog/posts?workspaceId=${wsId}`);
               if (refreshRes.ok) {
                 const posts = await refreshRes.json();
                 const updated = posts.find((p: any) => p.id === postId);

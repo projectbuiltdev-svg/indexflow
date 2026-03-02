@@ -82,9 +82,9 @@ export default function ContentPosts() {
   const wsId = selectedWorkspace?.id || "";
 
   const { data: posts = [], isLoading } = useQuery<Post[]>({
-    queryKey: ["/api/admin/blog/posts", wsId],
+    queryKey: ["/api/blog/posts", wsId],
     queryFn: async () => {
-      const res = await fetch(`/api/admin/blog/posts?workspaceId=${wsId}`);
+      const res = await fetch(`/api/blog/posts?workspaceId=${wsId}`);
       if (!res.ok) throw new Error("Failed to fetch posts");
       return res.json();
     },
@@ -120,16 +120,16 @@ export default function ContentPosts() {
   const postsPerPage = 10;
 
   const createMutation = useMutation({
-    mutationFn: async (data: any) => apiRequest("POST", "/api/admin/blog/posts", data),
+    mutationFn: async (data: any) => apiRequest("POST", "/api/blog/posts", data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts", wsId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog/posts", wsId] });
     },
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => apiRequest("DELETE", `/api/admin/blog/posts/${id}`),
+    mutationFn: async (id: string) => apiRequest("DELETE", `/api/blog/posts/${id}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts", wsId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog/posts", wsId] });
     },
   });
 
@@ -176,13 +176,13 @@ export default function ContentPosts() {
     const topics = bulkTopics.split("\n").filter((t) => t.trim());
     if (topics.length === 0) return;
     try {
-      const res = await apiRequest("POST", "/api/admin/blog/posts/bulk/create", {
+      const res = await apiRequest("POST", "/api/blog/posts/bulk/create", {
         topics: topics.map((t) => t.trim()),
         category: bulkCategory,
         workspaceId: wsId,
       });
       const created: any = await res.json();
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts", wsId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog/posts", wsId] });
       setBulkOpen(false);
       setBulkTopics("");
       setBulkCategory("SEO");
@@ -190,7 +190,7 @@ export default function ContentPosts() {
       if (Array.isArray(created) && created.length > 0) {
         const postIds = created.map((p: any) => p.id);
         toast({ title: "Drafts created", description: `Generating content for ${postIds.length} posts...` });
-        await apiRequest("POST", "/api/admin/blog/posts/bulk/generate", { postIds });
+        await apiRequest("POST", "/api/blog/posts/bulk/generate", { postIds });
         toast({ title: "Generation started", description: `${postIds.length} posts are being written with AI. Refresh in a minute to see results.` });
       } else {
         toast({ title: "Drafts created", description: `${topics.length} posts queued.` });

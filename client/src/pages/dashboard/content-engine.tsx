@@ -129,7 +129,7 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
   const [editorSubTab, setEditorSubTab] = useState<"editor" | "images">("editor");
   const [editorPreviewMode, setEditorPreviewMode] = useState<"html" | "preview">("preview");
 
-  const queryKey = `/api/admin/blog/posts?workspaceId=${workspaceId}`;
+  const queryKey = `/api/blog/posts?workspaceId=${workspaceId}`;
   const { data: posts = [], isLoading } = useQuery<any[]>({
     queryKey: [queryKey],
     refetchInterval: (query) => {
@@ -140,7 +140,7 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("POST", "/api/admin/blog/posts", data),
+    mutationFn: (data: any) => apiRequest("POST", "/api/blog/posts", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       setView("list");
@@ -150,7 +150,7 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
   });
 
   const publishMutation = useMutation({
-    mutationFn: (id: string) => apiRequest("POST", `/api/admin/blog/posts/${id}/publish-now`),
+    mutationFn: (id: string) => apiRequest("POST", `/api/blog/posts/${id}/publish-now`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       setView("list");
@@ -160,7 +160,7 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => apiRequest("DELETE", `/api/admin/blog/posts/${id}`),
+    mutationFn: (id: string) => apiRequest("DELETE", `/api/blog/posts/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       toast({ title: "Post deleted" });
@@ -170,11 +170,11 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
 
   const bulkMutation = useMutation({
     mutationFn: async (data: any) => {
-      const res = await apiRequest("POST", "/api/admin/blog/posts/bulk/create", data);
+      const res = await apiRequest("POST", "/api/blog/posts/bulk/create", data);
       const created: any = await res.json();
       if (Array.isArray(created) && created.length > 0) {
         const postIds = created.map((p: any) => p.id);
-        await apiRequest("POST", "/api/admin/blog/posts/bulk/generate", { postIds });
+        await apiRequest("POST", "/api/blog/posts/bulk/generate", { postIds });
       }
       return created;
     },
@@ -238,7 +238,7 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
       status: "draft",
     };
     if (selectedPost) {
-      apiRequest("PUT", `/api/admin/blog/posts/${selectedPost.id}`, data)
+      apiRequest("PUT", `/api/blog/posts/${selectedPost.id}`, data)
         .then(() => {
           queryClient.invalidateQueries({ queryKey: [queryKey] });
           setView("list");
@@ -753,7 +753,7 @@ function PagesTab({ workspaceId }: { workspaceId: string }) {
 }
 
 function CampaignsTab({ workspaceId }: { workspaceId: string }) {
-  const queryKey = `/api/admin/blog/campaigns/${workspaceId}`;
+  const queryKey = `/api/blog/campaigns/${workspaceId}`;
   const { data: campaigns = [], isLoading } = useQuery<any[]>({ queryKey: [queryKey] });
 
   return (
@@ -792,11 +792,11 @@ function DomainsTab({ workspaceId }: { workspaceId: string }) {
   const { toast } = useToast();
   const [domainInput, setDomainInput] = useState("");
 
-  const queryKey = `/api/admin/blog/domains?workspaceId=${workspaceId}`;
+  const queryKey = `/api/blog/domains?workspaceId=${workspaceId}`;
   const { data: domains = [], isLoading } = useQuery<any[]>({ queryKey: [queryKey] });
 
   const addMutation = useMutation({
-    mutationFn: (domain: string) => apiRequest("POST", "/api/admin/blog/domains", { workspaceId, domain }),
+    mutationFn: (domain: string) => apiRequest("POST", "/api/blog/domains", { workspaceId, domain }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       setDomainInput("");
@@ -806,7 +806,7 @@ function DomainsTab({ workspaceId }: { workspaceId: string }) {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => apiRequest("DELETE", `/api/admin/blog/domains/${id}`),
+    mutationFn: (id: string) => apiRequest("DELETE", `/api/blog/domains/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       toast({ title: "Domain removed" });
