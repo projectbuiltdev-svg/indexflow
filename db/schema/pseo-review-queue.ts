@@ -25,6 +25,7 @@ export const pseoReviewQueue = pgTable("pseo_review_queue", {
   reviewNotes: text("review_notes"),
   resolution: text("resolution"),
   createdAt: timestamp("created_at").defaultNow(),
+  deletedAt: timestamp("deleted_at"),
 }, (t) => [
   index("pseo_review_queue_campaign_idx").on(t.campaignId),
   index("pseo_review_queue_status_idx").on(t.status),
@@ -35,6 +36,7 @@ export const pseoReviewQueue = pgTable("pseo_review_queue", {
 export const insertPseoReviewQueueSchema = createInsertSchema(pseoReviewQueue).omit({
   id: true,
   createdAt: true,
+  deletedAt: true,
 });
 export type InsertPseoReviewQueue = z.infer<typeof insertPseoReviewQueueSchema>;
 export type PseoReviewQueue = typeof pseoReviewQueue.$inferSelect;

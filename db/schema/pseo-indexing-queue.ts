@@ -26,6 +26,7 @@ export const pseoIndexingQueue = pgTable("pseo_indexing_queue", {
   indexedAt: timestamp("indexed_at"),
   errorMessage: text("error_message"),
   createdAt: timestamp("created_at").defaultNow(),
+  deletedAt: timestamp("deleted_at"),
 }, (t) => [
   index("pseo_indexing_queue_campaign_idx").on(t.campaignId),
   index("pseo_indexing_queue_status_idx").on(t.status),
@@ -36,6 +37,7 @@ export const pseoIndexingQueue = pgTable("pseo_indexing_queue", {
 export const insertPseoIndexingQueueSchema = createInsertSchema(pseoIndexingQueue).omit({
   id: true,
   createdAt: true,
+  deletedAt: true,
 });
 export type InsertPseoIndexingQueue = z.infer<typeof insertPseoIndexingQueueSchema>;
 export type PseoIndexingQueue = typeof pseoIndexingQueue.$inferSelect;

@@ -1617,6 +1617,7 @@ export const pseoPages = pgTable("pseo_pages", {
   isIndexed: boolean("is_indexed").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+  deletedAt: timestamp("deleted_at"),
 }, (t) => [
   index("pseo_pages_campaign_idx").on(t.campaignId),
   index("pseo_pages_venue_idx").on(t.venueId),
@@ -1628,6 +1629,7 @@ export const insertPseoPageSchema = createInsertSchema(pseoPages).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  deletedAt: true,
 });
 export type InsertPseoPage = z.infer<typeof insertPseoPageSchema>;
 export type PseoPage = typeof pseoPages.$inferSelect;
