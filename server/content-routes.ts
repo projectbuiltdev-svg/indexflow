@@ -591,6 +591,17 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     }
   });
 
+  app.get("/api/blog/domains/:id/lock-status", async (req, res) => {
+    try {
+      const domain = await storage.getWorkspaceDomain(req.params.id);
+      if (!domain) return res.status(404).json({ error: "Domain not found" });
+      const lockStatus = await getDomainLockStatus(domain.workspaceId);
+      res.json(lockStatus);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   const bulkCreateSchema = z.object({
     workspaceId: z.string().min(1),
     posts: z.array(z.object({
