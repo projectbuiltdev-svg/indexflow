@@ -26,12 +26,12 @@ const monthlyRevenue = [
 ];
 
 const planRevenue = [
-  { month: "Sep", starter: 2800, professional: 6200, enterprise: 5100 },
-  { month: "Oct", starter: 3000, professional: 6500, enterprise: 5300 },
-  { month: "Nov", starter: 2600, professional: 5800, enterprise: 5200 },
-  { month: "Dec", starter: 3200, professional: 6800, enterprise: 5200 },
-  { month: "Jan", starter: 2900, professional: 6400, enterprise: 5200 },
-  { month: "Feb", starter: 3100, professional: 6500, enterprise: 5150 },
+  { month: "Sep", solo: 1800, pro: 4200, agency: 5100, enterprise: 3000 },
+  { month: "Oct", solo: 2000, pro: 4500, agency: 5300, enterprise: 3000 },
+  { month: "Nov", solo: 1600, pro: 3800, agency: 5200, enterprise: 3000 },
+  { month: "Dec", solo: 2200, pro: 4800, agency: 5200, enterprise: 3000 },
+  { month: "Jan", solo: 1900, pro: 4400, agency: 5200, enterprise: 3000 },
+  { month: "Feb", solo: 2100, pro: 4500, agency: 5150, enterprise: 3000 },
 ];
 
 const churnData = [
@@ -98,9 +98,10 @@ export default function AdminBillingRevenue() {
                   <YAxis className="text-xs fill-muted-foreground" />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="starter" stackId="a" fill="hsl(var(--muted-foreground))" name="Starter" />
-                  <Bar dataKey="professional" stackId="a" fill="hsl(var(--primary))" name="Professional" />
-                  <Bar dataKey="enterprise" stackId="a" fill="hsl(var(--chart-3, 150 60% 40%))" name="Enterprise" />
+                  <Bar dataKey="solo" stackId="a" fill="hsl(var(--muted-foreground))" name="Solo" />
+                  <Bar dataKey="pro" stackId="a" fill="hsl(var(--primary))" name="Pro" />
+                  <Bar dataKey="agency" stackId="a" fill="hsl(var(--chart-3, 150 60% 40%))" name="Agency" />
+                  <Bar dataKey="enterprise" stackId="a" fill="hsl(var(--chart-4, 280 60% 50%))" name="Enterprise" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

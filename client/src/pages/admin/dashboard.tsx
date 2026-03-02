@@ -39,9 +39,9 @@ const statCards = [
 ];
 
 const recentClients = [
-  { name: "Apex Digital Agency", plan: "White Label Agency", status: "Active", date: "Jan 28, 2026" },
+  { name: "Apex Digital Agency", plan: "Agency", status: "Active", date: "Jan 28, 2026" },
   { name: "Jake Morrison SEO", plan: "Solo", status: "Active", date: "Jan 25, 2026" },
-  { name: "Greenfield Law Firm", plan: "Professional", status: "Pending Setup", date: "Jan 24, 2026" },
+  { name: "Greenfield Law Firm", plan: "Pro", status: "Pending Setup", date: "Jan 24, 2026" },
   { name: "Meridian Hotels Group", plan: "Enterprise", status: "Active", date: "Jan 20, 2026" },
 ];
 

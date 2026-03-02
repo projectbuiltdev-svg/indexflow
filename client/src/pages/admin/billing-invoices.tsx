@@ -7,11 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const invoices = [
-  { id: "INV-2026-0312", agency: "Blue Digital Agency", amount: "$299.00", status: "Paid", dueDate: "Feb 15, 2026", paidDate: "Feb 14, 2026" },
-  { id: "INV-2026-0311", agency: "Northstar Media", amount: "$499.00", status: "Paid", dueDate: "Feb 15, 2026", paidDate: "Feb 15, 2026" },
-  { id: "INV-2026-0310", agency: "Cascade Creative", amount: "$149.00", status: "Overdue", dueDate: "Feb 10, 2026", paidDate: "-" },
-  { id: "INV-2026-0309", agency: "Vertex Solutions", amount: "$299.00", status: "Pending", dueDate: "Feb 20, 2026", paidDate: "-" },
-  { id: "INV-2026-0308", agency: "Lunar Labs", amount: "$149.00", status: "Void", dueDate: "Feb 5, 2026", paidDate: "-" },
+  { id: "INV-2026-0312", agency: "Blue Digital Agency", amount: "$349.00", status: "Paid", dueDate: "Feb 15, 2026", paidDate: "Feb 14, 2026" },
+  { id: "INV-2026-0311", agency: "Northstar Media", amount: "$349.00", status: "Paid", dueDate: "Feb 15, 2026", paidDate: "Feb 15, 2026" },
+  { id: "INV-2026-0310", agency: "Cascade Creative", amount: "$199.00", status: "Overdue", dueDate: "Feb 10, 2026", paidDate: "-" },
+  { id: "INV-2026-0309", agency: "Vertex Solutions", amount: "$199.00", status: "Pending", dueDate: "Feb 20, 2026", paidDate: "-" },
+  { id: "INV-2026-0308", agency: "Lunar Labs", amount: "$99.00", status: "Void", dueDate: "Feb 5, 2026", paidDate: "-" },
 ];
 
 export default function AdminBillingInvoices() {

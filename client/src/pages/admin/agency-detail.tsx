@@ -203,11 +203,11 @@ export default function AdminAgencyDetail() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <span className="text-muted-foreground">Plan</span>
-                  <Badge data-testid="badge-current-plan">Professional</Badge>
+                  <Badge data-testid="badge-current-plan">Agency</Badge>
                 </div>
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <span className="text-muted-foreground">Monthly Cost</span>
-                  <span className="font-medium" data-testid="text-monthly-cost">$299.00</span>
+                  <span className="font-medium" data-testid="text-monthly-cost">$349.00</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <span className="text-muted-foreground">Next Invoice</span>

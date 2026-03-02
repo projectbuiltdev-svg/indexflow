@@ -127,7 +127,7 @@ export const serviceTypes: ServiceType[] = [
       { title: "BYOK AI", description: "Bring your own API keys for OpenAI, Anthropic, or other providers to control costs" },
     ],
     faqs: [
-      { question: "Is the Solo plan enough for a freelancer?", answer: "Yes — it includes everything you need: rank tracking, content engine, CRM, invoicing, and up to 3 workspaces." },
+      { question: "Is the Solo plan enough for a freelancer?", answer: "Yes — it includes everything you need: rank tracking, content engine, CRM, invoicing, and 1 workspace. Upgrade to Pro for 25 workspaces when you start taking on clients." },
       { question: "Can I upgrade later?", answer: "Absolutely. Upgrade to Pro or Agency as your client base grows." },
     ],
   },

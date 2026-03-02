@@ -130,9 +130,9 @@ export default function Docs() {
         <thead><tr className="bg-gray-100"><th className="border p-2 text-left">Plan</th><th className="border p-2 text-left">Price</th><th className="border p-2 text-left">Includes</th></tr></thead>
         <tbody>
           <tr><td className="border p-2 font-semibold">Solo</td><td className="border p-2">$99/month</td><td className="border p-2">1 workspace, rank tracking, content engine, CRM, invoicing</td></tr>
-          <tr><td className="border p-2 font-semibold">Pro</td><td className="border p-2">$199/month</td><td className="border p-2">3 workspaces, AI widget, voice/SMS, priority support, advanced analytics</td></tr>
-          <tr><td className="border p-2 font-semibold">Agency</td><td className="border p-2">$349/month</td><td className="border p-2">7 workspaces, custom branding, custom domain, BYOK support, client portals, white-label reports</td></tr>
-          <tr><td className="border p-2 font-semibold">Enterprise</td><td className="border p-2">$999/month</td><td className="border p-2">20 workspaces, dedicated infrastructure, SLA, custom integrations, onboarding</td></tr>
+          <tr><td className="border p-2 font-semibold">Pro</td><td className="border p-2">$199/month</td><td className="border p-2">5 users, 25 workspaces, bulk campaigns, white-label branding, reseller licence, priority support</td></tr>
+          <tr><td className="border p-2 font-semibold">Agency</td><td className="border p-2">$349/month</td><td className="border p-2">10 users, 50 workspaces, full white label, advanced API access, dedicated account manager, priority onboarding</td></tr>
+          <tr><td className="border p-2 font-semibold">Enterprise</td><td className="border p-2">$999/month</td><td className="border p-2">20 users, unlimited workspaces, Super Admin Dashboard, dedicated support, SLA guarantees, custom contracts</td></tr>
         </tbody>
       </table>
 

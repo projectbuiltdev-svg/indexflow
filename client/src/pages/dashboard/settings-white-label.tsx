@@ -18,7 +18,7 @@ export default function SettingsWhiteLabel() {
   const workspaceId = selectedWorkspace?.id;
 
   const plan = selectedWorkspace?.plan?.toLowerCase() || "solo";
-  const isAgencyOrEnterprise = plan === "agency" || plan === "white_label" || plan === "white-label" || plan === "enterprise" || plan === "complete";
+  const isAgencyOrEnterprise = plan === "agency" || plan === "pro" || plan === "enterprise";
 
   const { data: profile, isLoading } = useQuery<WorkspaceSiteProfile | null>({
     queryKey: ["/api/workspaces", workspaceId, "site-profile"],

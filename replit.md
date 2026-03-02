@@ -1,7 +1,7 @@
 # indexFlow - White-Label SEO & Content Management SaaS
 
 ## Overview
-indexFlow is a white-label SEO, content management, and client management SaaS platform for agencies, freelancers, and enterprises. It features a marketing landing page, a Super Admin Dashboard, and a Client Dashboard with 13 core modules: Content Engine (AI bulk drafts, quality gates), CMS Integration (WordPress/Webflow/Shopify/Ghost/Wix), SEO Tools (Rank Tracker, Local Search Grid, On-Page Auditor, Schema Markup), CRM & Pipeline, Invoicing, Reports, AI Widget, Twilio, and White Label branding. Four pricing tiers: Solo ($99/mo), Professional ($299/mo), White Label Agency ($499/mo), and Enterprise (custom). All data is workspace-scoped with a workspace selector in the sidebar.
+indexFlow is a white-label SEO, content management, and client management SaaS platform for agencies, freelancers, and enterprises. It features a marketing landing page, a Super Admin Dashboard, and a Client Dashboard with 13 core modules: Content Engine (AI bulk drafts, quality gates), CMS Integration (WordPress/Webflow/Shopify/Ghost/Wix), SEO Tools (Rank Tracker, Local Search Grid, On-Page Auditor, Schema Markup), CRM & Pipeline, Invoicing, Reports, AI Widget, Twilio, and White Label branding. Four pricing tiers: Solo ($99/mo, 1 user, 1 workspace), Pro ($199/mo, 5 users, 25 workspaces), Agency ($349/mo, 10 users, 50 workspaces), Enterprise ($999/mo, 20 users, unlimited workspaces). All plans: 40 AI posts/workspace/month. All data is workspace-scoped with a workspace selector in the sidebar.
 
 ## Architecture
 - **Frontend**: React + Vite + TailwindCSS + shadcn/ui components

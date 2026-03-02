@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     question: "How does pricing work?",
-    answer: "Four tiers: Solo at $99/mo (1 user, 1 workspace), Pro at $199/mo (5 users, 3 workspaces), Agency at $349/mo (10 users, 7 workspaces, full white-label branding), and Enterprise at $999/mo (20 workspaces, dedicated support). All plans are month-to-month with no long-term contracts. Pay annually and get 2 months free.",
+    answer: "Four tiers: Solo at $99/mo (1 user, 1 workspace), Pro at $199/mo (5 users, 25 workspaces), Agency at $349/mo (10 users, 50 workspaces, full white-label branding), and Enterprise at $999/mo (20 users, unlimited workspaces, dedicated support). All plans are month-to-month with no long-term contracts. Pay annually and get 2 months free.",
   },
   {
     question: "What's included in every plan?",

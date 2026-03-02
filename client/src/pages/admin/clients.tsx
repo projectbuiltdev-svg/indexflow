@@ -7,11 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { AdminLayout } from "@/components/admin-layout";
 
 const clients = [
-  { id: 1, name: "Acme Digital", plan: "Complete Solution", status: "Active", mrr: "$299", website: "acmedigital.com", twilioConnected: true, keywords: 28, gscConnected: true, created: "Jan 15, 2026" },
-  { id: 2, name: "Dragon Media", plan: "Professional", status: "Active", mrr: "$149", website: "-", twilioConnected: true, keywords: 18, gscConnected: true, created: "Jan 20, 2026" },
-  { id: 3, name: "Coastal SEO", plan: "Complete Solution", status: "Pending Setup", mrr: "$299", website: "coastalseo.com", twilioConnected: false, keywords: 22, gscConnected: false, created: "Jan 24, 2026" },
-  { id: 4, name: "Summit Marketing", plan: "Complete Solution", status: "Active", mrr: "$299", website: "summitmarketing.com", twilioConnected: true, keywords: 35, gscConnected: true, created: "Jan 10, 2026" },
-  { id: 5, name: "Metro Creative", plan: "Professional", status: "Active", mrr: "$149", website: "-", twilioConnected: true, keywords: 10, gscConnected: false, created: "Jan 5, 2026" },
+  { id: 1, name: "Acme Digital", plan: "Agency", status: "Active", mrr: "$349", website: "acmedigital.com", twilioConnected: true, keywords: 28, gscConnected: true, created: "Jan 15, 2026" },
+  { id: 2, name: "Dragon Media", plan: "Pro", status: "Active", mrr: "$199", website: "-", twilioConnected: true, keywords: 18, gscConnected: true, created: "Jan 20, 2026" },
+  { id: 3, name: "Coastal SEO", plan: "Agency", status: "Pending Setup", mrr: "$349", website: "coastalseo.com", twilioConnected: false, keywords: 22, gscConnected: false, created: "Jan 24, 2026" },
+  { id: 4, name: "Summit Marketing", plan: "Agency", status: "Active", mrr: "$349", website: "summitmarketing.com", twilioConnected: true, keywords: 35, gscConnected: true, created: "Jan 10, 2026" },
+  { id: 5, name: "Metro Creative", plan: "Pro", status: "Active", mrr: "$199", website: "-", twilioConnected: true, keywords: 10, gscConnected: false, created: "Jan 5, 2026" },
 ];
 
 export default function AdminClients() {

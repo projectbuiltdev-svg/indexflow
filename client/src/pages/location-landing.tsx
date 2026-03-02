@@ -381,7 +381,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Up to 3 workspaces</span>
+                      <span className="text-sm">1 workspace</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
@@ -416,7 +416,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">3 workspaces</span>
+                      <span className="text-sm">25 workspaces</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
@@ -452,7 +452,7 @@ function LocationLandingContent({ location, service }: LocationLandingProps) {
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">7 workspaces</span>
+                      <span className="text-sm">50 workspaces</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-1 flex-shrink-0" />

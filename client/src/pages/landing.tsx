@@ -132,7 +132,7 @@ const proPlanFeatures = [
 ];
 
 const starterPlanFeatures = [
-  "Up to 3 workspaces",
+  "1 workspace",
   "AI content engine",
   "Keyword rank tracker",
   "Basic SEO reports",

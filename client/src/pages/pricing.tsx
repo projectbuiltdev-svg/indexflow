@@ -37,7 +37,7 @@ const plans = [
     highlight: true,
     features: [
       "5 users",
-      "3 workspaces",
+      "25 workspaces",
       "Bulk campaigns",
       "Everything in Solo",
       "Full white-label branding",
@@ -57,7 +57,7 @@ const plans = [
     highlight: false,
     features: [
       "10 users",
-      "7 workspaces",
+      "50 workspaces",
       "Full white label",
       "Everything in Pro",
       "Advanced API access",
@@ -75,7 +75,7 @@ const plans = [
     tagline: "You've outgrown tools. You need infrastructure.",
     highlight: false,
     features: [
-      "20 workspaces",
+      "20 users, unlimited workspaces",
       "Super Admin Dashboard",
       "Dedicated support",
       "Custom contracts",
