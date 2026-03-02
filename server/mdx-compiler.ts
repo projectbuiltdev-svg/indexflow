@@ -1,4 +1,3 @@
-import { compile } from "@mdx-js/mdx";
 import matter from "gray-matter";
 
 function escapeHtml(str: string): string {
@@ -54,8 +53,8 @@ function renderComponentToHtml(tag: string, props: Record<string, string>, child
       return `<figure class="blog-image"><div style="background:#f1f5f9;border:2px dashed #cbd5e1;border-radius:8px;padding:24px;text-align:center;color:#94a3b8;font-size:13px;">Image placeholder</div></figure>`;
     }
     case "Callout": {
-      const type = props.type || "info";
-      return `<div class="callout callout-${type}">${children || props.children || ""}</div>`;
+      const type = /^[a-z]+$/.test(props.type || "") ? props.type : "info";
+      return `<div class="callout callout-${type}">${escapeHtml(children || props.children || "")}</div>`;
     }
     case "Checklist":
       return `<div class="checklist">${children}</div>`;
@@ -64,7 +63,7 @@ function renderComponentToHtml(tag: string, props: Record<string, string>, child
     case "FAQ":
       return `<details class="faq"><summary>${props.question || ""}</summary><div>${children}</div></details>`;
     case "FeatureCTA":
-      return `<div class="feature-cta"><strong>${props.title || ""}</strong><p>${props.description || ""}</p>${props.href ? `<a href="${props.href}">${props.badge || "Learn more"}</a>` : ""}</div>`;
+      return `<div class="feature-cta"><strong>${escapeHtml(props.title || "")}</strong><p>${escapeHtml(props.description || "")}</p>${props.href ? `<a href="${sanitizeUrl(props.href)}">${escapeHtml(props.badge || "Learn more")}</a>` : ""}</div>`;
     case "RelatedLinks":
       return `<div class="related-links">${children}</div>`;
     default:
@@ -123,8 +122,14 @@ function markdownToHtml(md: string): string {
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
   html = html.replace(/`(.+?)`/g, "<code>$1</code>");
 
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy" />');
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m: string, alt: string, src: string) => {
+    const safeSrc = sanitizeUrl(src);
+    return safeSrc ? `<img src="${safeSrc}" alt="${escapeAttr(alt)}" loading="lazy" />` : escapeHtml(alt);
+  });
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m: string, text: string, href: string) => {
+    const safeHref = sanitizeUrl(href);
+    return safeHref ? `<a href="${safeHref}">${escapeHtml(text)}</a>` : escapeHtml(text);
+  });
 
   const lines = html.split("\n");
   const output: string[] = [];

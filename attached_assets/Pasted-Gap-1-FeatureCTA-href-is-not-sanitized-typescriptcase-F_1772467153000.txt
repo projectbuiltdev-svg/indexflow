@@ -1,0 +1,55 @@
+Gap 1 — FeatureCTA href is not sanitized
+typescriptcase "FeatureCTA":
+  return `...<a href="${props.href}">${props.badge || "Learn more"}</a>`;
+props.href is inserted directly without sanitizeUrl validation. A malicious post could inject javascript: URLs into FeatureCTA links — a stored XSS vector.
+Gap 2 — Callout children is not escaped
+typescriptcase "Callout":
+  return `<div class="callout callout-${type}">${children || props.children || ""}</div>`;
+children is inserted raw. If a post contains a Callout with HTML content in the children it will render unsanitized. The type prop is also used directly in a class name — a value like info"><script>alert(1)</script> would break out.
+Gap 3 — markdownToHtml image src is not sanitized
+typescripthtml = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy" />');
+The image src from markdown syntax is inserted without sanitizeUrl validation. Same issue as FeatureCTA — javascript: URLs possible.
+Gap 4 — markdownToHtml link href is not sanitized
+typescripthtml = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+Same issue — href not validated.
+Gap 5 — Dead import wastes dependency
+@mdx-js/mdx is a dependency being installed and bundled but never used. Remove it.
+Gap 6 — parseJsxProps does not handle boolean props
+typescriptconst regex = /(\w+)=(?:"([^"]*)"|{[^}]*}|'([^']*)')/g;
+Boolean props like <FAQ open /> or <Checklist checked /> have no equals sign and will be silently ignored. Not a security issue but a functional gap.
+
+Fix the three XSS vulnerabilities now:
+Ask Replit:
+"Three security fixes needed in server/mdx-compiler.ts:
+Fix 1 — Sanitize FeatureCTA href at line 67:
+typescript// Replace:
+${props.href ? `<a href="${props.href}">${props.badge || "Learn more"}</a>` : ""}
+// With:
+${props.href ? `<a href="${sanitizeUrl(props.href)}">${escapeHtml(props.badge || "Learn more")}</a>` : ""}
+Fix 2 — Sanitize Callout type and children at line 57-58:
+typescript// Replace:
+const type = props.type || "info";
+return `<div class="callout callout-${type}">${children || props.children || ""}</div>`;
+// With:
+const type = /^[a-z]+$/.test(props.type || "") ? props.type : "info";
+return `<div class="callout callout-${type}">${escapeHtml(children || props.children || "")}</div>`;
+Fix 3 — Sanitize markdown image src and link href at lines 126-127:
+typescript// Replace image line:
+html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy" />');
+// With:
+html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) => {
+  const safeSrc = sanitizeUrl(src);
+  return safeSrc ? `<img src="${safeSrc}" alt="${escapeAttr(alt)}" loading="lazy" />` : escapeHtml(alt);
+});
+
+// Replace link line:
+html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+// With:
+html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, text, href) => {
+  const safeHref = sanitizeUrl(href);
+  return safeHref ? `<a href="${safeHref}">${escapeHtml(text)}</a>` : escapeHtml(text);
+});
+Also remove the unused import at line 1:
+typescriptimport { compile } from "@mdx-js/mdx";
+Show me all four changes confirmed with line numbers and confirm server compiles clean"
+Paste results and we move to the final file — server/draft-generator.ts revisit. Sonnet 4.6Extended
