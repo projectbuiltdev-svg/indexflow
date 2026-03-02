@@ -293,6 +293,8 @@ export async function registerRoutes(
   // Venues
   app.get("/api/workspaces", async (req, res) => {
     try {
+      // WARNING: Development convenience only — returns ALL workspaces without owner scoping.
+      // Must never reach production. Remove or gate behind auth before go-live.
       if (process.env.NODE_ENV !== "production") {
         const venues = await storage.getWorkspaces();
         return res.json(venues);
