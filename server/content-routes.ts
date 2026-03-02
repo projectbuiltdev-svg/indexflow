@@ -444,6 +444,28 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     }
   });
 
+  app.get("/api/blog/assets/search", async (req, res) => {
+    try {
+      const workspaceId = req.query.workspaceId as string;
+      if (!workspaceId) return res.status(400).json({ error: "workspaceId required" });
+      const query = req.query.query as string | undefined;
+      const assets = await storage.searchContentAssets(workspaceId, query);
+      res.json(assets);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/blog/assets/save", async (req, res) => {
+    try {
+      const data = insertContentAssetSchema.parse(req.body);
+      const asset = await storage.createContentAsset(data);
+      res.status(201).json(asset);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+
   app.get("/api/blog/domains", async (req, res) => {
     if (!requireSuperAdmin(req, res)) return;
     try {

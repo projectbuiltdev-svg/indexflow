@@ -131,7 +131,7 @@ import {
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
-import { eq, and, ne, desc, asc, count, max, lte, sql, inArray } from "drizzle-orm";
+import { eq, and, ne, desc, asc, count, max, lte, sql, inArray, ilike, or } from "drizzle-orm";
 import { encryptField, decryptField } from "./crypto";
 
 export interface IStorage {
@@ -276,6 +276,7 @@ export interface IStorage {
   deleteWorkspaceBlogPost(id: string): Promise<boolean>;
   // Content Assets
   getContentAssets(postId: string): Promise<ContentAsset[]>;
+  searchContentAssets(workspaceId: string, query?: string): Promise<ContentAsset[]>;
   createContentAsset(asset: InsertContentAsset): Promise<ContentAsset>;
   createContentAssetUsage(usage: InsertContentAssetUsage): Promise<ContentAssetUsage>;
   getContentAssetUsage(postId: string): Promise<ContentAssetUsage[]>;
@@ -1408,6 +1409,14 @@ export class MemStorage implements IStorage {
   async getContentAssets(postId: string): Promise<ContentAsset[]> {
     return Array.from(this.contentAssetsMap.values()).filter(a => a.postId === postId);
   }
+  async searchContentAssets(workspaceId: string, query?: string): Promise<ContentAsset[]> {
+    let results = Array.from(this.contentAssetsMap.values()).filter(a => a.workspaceId === workspaceId);
+    if (query) {
+      const q = query.toLowerCase();
+      results = results.filter(a => (a.prompt?.toLowerCase().includes(q)) || (a.title?.toLowerCase().includes(q)));
+    }
+    return results.slice(0, 100);
+  }
   async createContentAsset(asset: InsertContentAsset): Promise<ContentAsset> {
     const record: ContentAsset = { ...asset, id: randomUUID(), workspaceId: asset.workspaceId ?? null, postId: asset.postId ?? null, sourceAssetId: asset.sourceAssetId ?? null, type: asset.type ?? "generic", prompt: asset.prompt ?? null, title: asset.title ?? null, width: asset.width ?? null, height: asset.height ?? null, r2Key: asset.r2Key ?? null, publicUrl: asset.publicUrl ?? null, creditName: asset.creditName ?? null, creditUrl: asset.creditUrl ?? null, licenseNote: asset.licenseNote ?? null, createdAt: new Date() };
     this.contentAssetsMap.set(record.id, record);
@@ -2395,6 +2404,14 @@ export class DbStorage implements IStorage {
 
   async getContentAssets(postId: string): Promise<ContentAsset[]> {
     return db!.select().from(contentAssets).where(eq(contentAssets.postId, postId));
+  }
+  async searchContentAssets(workspaceId: string, query?: string): Promise<ContentAsset[]> {
+    const conditions = [eq(contentAssets.workspaceId, workspaceId)];
+    if (query) {
+      const pattern = `%${query}%`;
+      conditions.push(or(ilike(contentAssets.prompt, pattern), ilike(contentAssets.title, pattern))!);
+    }
+    return db!.select().from(contentAssets).where(and(...conditions)).orderBy(desc(contentAssets.createdAt)).limit(100);
   }
   async createContentAsset(asset: InsertContentAsset): Promise<ContentAsset> {
     const [row] = await db!.insert(contentAssets).values(asset).returning();
