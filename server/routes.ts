@@ -2395,6 +2395,14 @@ export async function registerRoutes(
     }
   }, 60 * 1000);
 
+  setInterval(async () => {
+    try {
+      await runScheduledPublisher();
+    } catch (err) {
+      console.error('[Scheduler] runScheduledPublisher tick failed:', err);
+    }
+  }, 5 * 60 * 1000);
+
   registerTwilioWebhooks(app);
   registerCrmRoutes(app);
   registerContentRoutes(app);
