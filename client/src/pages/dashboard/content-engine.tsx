@@ -1436,11 +1436,11 @@ function InvoicesTab({ workspaceId }: { workspaceId: string }) {
   const [notes, setNotes] = useState("");
   const [lineItems, setLineItems] = useState([{ description: "", qty: 1, unitPrice: 0, category: "" }]);
 
-  const queryKey = `/api/admin/invoices?workspaceId=${workspaceId}`;
+  const queryKey = `/api/invoices?workspaceId=${workspaceId}`;
   const { data: invoices = [], isLoading } = useQuery<any[]>({ queryKey: [queryKey] });
 
   const createMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("POST", "/api/admin/invoices", data),
+    mutationFn: (data: any) => apiRequest("POST", "/api/invoices", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       setView("list");
@@ -1450,7 +1450,7 @@ function InvoicesTab({ workspaceId }: { workspaceId: string }) {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => apiRequest("DELETE", `/api/admin/invoices/${id}`),
+    mutationFn: (id: string) => apiRequest("DELETE", `/api/invoices/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       toast({ title: "Invoice deleted" });
