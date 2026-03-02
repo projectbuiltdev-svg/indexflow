@@ -1,0 +1,107 @@
+{
+  "country": "FR",
+  "language": "fr",
+  "regions": [
+    {
+      "name": "Île-de-France",
+      "native_name": "Île-de-France",
+      "towns": [
+        { "name": "Paris", "native_name": "Paris", "population": 2161000 },
+        { "name": "Boulogne-Billancourt", "native_name": "Boulogne-Billancourt", "population": 120071 },
+        { "name": "Saint-Denis", "native_name": "Saint-Denis", "population": 113125 },
+        { "name": "Argenteuil", "native_name": "Argenteuil", "population": 110388 },
+        { "name": "Montreuil", "native_name": "Montreuil", "population": 109914 },
+        { "name": "Versailles", "native_name": "Versailles", "population": 85761 },
+        { "name": "Nanterre", "native_name": "Nanterre", "population": 95105 }
+      ]
+    },
+    {
+      "name": "Auvergne-Rhône-Alpes",
+      "native_name": "Auvergne-Rhône-Alpes",
+      "towns": [
+        { "name": "Lyon", "native_name": "Lyon", "population": 522250 },
+        { "name": "Grenoble", "native_name": "Grenoble", "population": 158198 },
+        { "name": "Saint-Étienne", "native_name": "Saint-Étienne", "population": 172565 },
+        { "name": "Clermont-Ferrand", "native_name": "Clermont-Ferrand", "population": 147284 },
+        { "name": "Annecy", "native_name": "Annecy", "population": 131084 }
+      ]
+    },
+    {
+      "name": "Provence-Alpes-Côte d'Azur",
+      "native_name": "Provence-Alpes-Côte d'Azur",
+      "towns": [
+        { "name": "Marseille", "native_name": "Marseille", "population": 870731 },
+        { "name": "Nice", "native_name": "Nice", "population": 340017 },
+        { "name": "Toulon", "native_name": "Toulon", "population": 176198 },
+        { "name": "Aix-en-Provence", "native_name": "Aix-en-Provence", "population": 147122 },
+        { "name": "Avignon", "native_name": "Avignon", "population": 91921 }
+      ]
+    },
+    {
+      "name": "Nouvelle-Aquitaine",
+      "native_name": "Nouvelle-Aquitaine",
+      "towns": [
+        { "name": "Bordeaux", "native_name": "Bordeaux", "population": 257068 },
+        { "name": "Limoges", "native_name": "Limoges", "population": 132175 },
+        { "name": "Poitiers", "native_name": "Poitiers", "population": 88665 },
+        { "name": "La Rochelle", "native_name": "La Rochelle", "population": 77196 }
+      ]
+    },
+    {
+      "name": "Occitanie",
+      "native_name": "Occitanie",
+      "towns": [
+        { "name": "Toulouse", "native_name": "Toulouse", "population": 493465 },
+        { "name": "Montpellier", "native_name": "Montpellier", "population": 295542 },
+        { "name": "Nîmes", "native_name": "Nîmes", "population": 151001 },
+        { "name": "Perpignan", "native_name": "Perpignan", "population": 121875 }
+      ]
+    },
+    {
+      "name": "Grand Est",
+      "native_name": "Grand Est",
+      "towns": [
+        { "name": "Strasbourg", "native_name": "Strasbourg", "population": 284677 },
+        { "name": "Reims", "native_name": "Reims", "population": 182211 },
+        { "name": "Metz", "native_name": "Metz", "population": 116581 },
+        { "name": "Mulhouse", "native_name": "Mulhouse", "population": 108312 }
+      ]
+    },
+    {
+      "name": "Hauts-de-France",
+      "native_name": "Hauts-de-France",
+      "towns": [
+        { "name": "Lille", "native_name": "Lille", "population": 236234 },
+        { "name": "Amiens", "native_name": "Amiens", "population": 134706 },
+        { "name": "Roubaix", "native_name": "Roubaix", "population": 98828 }
+      ]
+    },
+    {
+      "name": "Pays de la Loire",
+      "native_name": "Pays de la Loire",
+      "towns": [
+        { "name": "Nantes", "native_name": "Nantes", "population": 318808 },
+        { "name": "Angers", "native_name": "Angers", "population": 155850 },
+        { "name": "Le Mans", "native_name": "Le Mans", "population": 145169 }
+      ]
+    },
+    {
+      "name": "Bretagne",
+      "native_name": "Bretagne",
+      "towns": [
+        { "name": "Rennes", "native_name": "Rennes", "population": 222485 },
+        { "name": "Brest", "native_name": "Brest", "population": 139163 },
+        { "name": "Quimper", "native_name": "Quimper", "population": 63929 }
+      ]
+    },
+    {
+      "name": "Normandie",
+      "native_name": "Normandie",
+      "towns": [
+        { "name": "Rouen", "native_name": "Rouen", "population": 114007 },
+        { "name": "Le Havre", "native_name": "Le Havre", "population": 172366 },
+        { "name": "Caen", "native_name": "Caen", "population": 106538 }
+      ]
+    }
+  ]
+}

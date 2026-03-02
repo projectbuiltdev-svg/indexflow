@@ -1,0 +1,188 @@
+{
+  "country": "GB",
+  "regions": [
+    {
+      "name": "Wales",
+      "language": "cy",
+      "areas": [
+        {
+          "name": "South Wales",
+          "native_name": "De Cymru",
+          "towns": [
+            { "name": "Cardiff", "native_name": "Caerdydd", "population": 362400 },
+            { "name": "Swansea", "native_name": "Abertawe", "population": 246600 },
+            { "name": "Newport", "native_name": "Casnewydd", "population": 154600 },
+            { "name": "Barry", "native_name": "Y Barri", "population": 54673 },
+            { "name": "Port Talbot", "native_name": "Port Talbot", "population": 37276 },
+            { "name": "Bridgend", "native_name": "Pen-y-bont ar Ogwr", "population": 49404 },
+            { "name": "Pontypridd", "native_name": "Pontypridd", "population": 33075 },
+            { "name": "Neath", "native_name": "Castell-nedd", "population": 50658 },
+            { "name": "Caerphilly", "native_name": "Caerffili", "population": 41402 },
+            { "name": "Merthyr Tydfil", "native_name": "Merthyr Tudful", "population": 43820 }
+          ]
+        },
+        {
+          "name": "West Wales",
+          "native_name": "Gorllewin Cymru",
+          "towns": [
+            { "name": "Carmarthen", "native_name": "Caerfyrddin", "population": 15854 },
+            { "name": "Llanelli", "native_name": "Llanelli", "population": 49591 },
+            { "name": "Haverfordwest", "native_name": "Hwlffordd", "population": 13367 },
+            { "name": "Aberystwyth", "native_name": "Aberystwyth", "population": 18093 },
+            { "name": "Milford Haven", "native_name": "Aberdaugleddau", "population": 13907 }
+          ]
+        },
+        {
+          "name": "North Wales",
+          "native_name": "Gogledd Cymru",
+          "towns": [
+            { "name": "Wrexham", "native_name": "Wrecsam", "population": 65692 },
+            { "name": "Bangor", "native_name": "Bangor", "population": 18808 },
+            { "name": "Colwyn Bay", "native_name": "Bae Colwyn", "population": 34284 },
+            { "name": "Rhyl", "native_name": "Y Rhyl", "population": 25149 },
+            { "name": "Llandudno", "native_name": "Llandudno", "population": 20710 },
+            { "name": "Caernarfon", "native_name": "Caernarfon", "population": 9615 },
+            { "name": "Holyhead", "native_name": "Caergybi", "population": 13659 },
+            { "name": "Flint", "native_name": "Y Fflint", "population": 12804 },
+            { "name": "Denbigh", "native_name": "Dinbych", "population": 8514 }
+          ]
+        },
+        {
+          "name": "Mid Wales",
+          "native_name": "Canolbarth Cymru",
+          "towns": [
+            { "name": "Newtown", "native_name": "Y Drenewydd", "population": 11357 },
+            { "name": "Welshpool", "native_name": "Y Trallwng", "population": 6274 },
+            { "name": "Brecon", "native_name": "Aberhonddu", "population": 8250 },
+            { "name": "Llandrindod Wells", "native_name": "Llandrindod", "population": 5309 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "England",
+      "language": "en",
+      "areas": [
+        {
+          "name": "London",
+          "towns": [
+            { "name": "London", "population": 8982000 },
+            { "name": "Croydon", "population": 386710 },
+            { "name": "Bromley", "population": 331096 }
+          ]
+        },
+        {
+          "name": "South East",
+          "towns": [
+            { "name": "Brighton", "population": 229700 },
+            { "name": "Reading", "population": 174224 },
+            { "name": "Southampton", "population": 252796 },
+            { "name": "Oxford", "population": 152450 }
+          ]
+        },
+        {
+          "name": "West Midlands",
+          "towns": [
+            { "name": "Birmingham", "population": 1144900 },
+            { "name": "Coventry", "population": 379387 },
+            { "name": "Wolverhampton", "population": 254406 }
+          ]
+        },
+        {
+          "name": "North West",
+          "towns": [
+            { "name": "Manchester", "population": 553230 },
+            { "name": "Liverpool", "population": 496784 },
+            { "name": "Preston", "population": 141818 }
+          ]
+        },
+        {
+          "name": "Yorkshire and the Humber",
+          "towns": [
+            { "name": "Leeds", "population": 793139 },
+            { "name": "Sheffield", "population": 584853 },
+            { "name": "Bradford", "population": 537173 },
+            { "name": "York", "population": 210618 }
+          ]
+        },
+        {
+          "name": "North East",
+          "towns": [
+            { "name": "Newcastle", "population": 300196 },
+            { "name": "Sunderland", "population": 277417 }
+          ]
+        },
+        {
+          "name": "East Midlands",
+          "towns": [
+            { "name": "Leicester", "population": 368600 },
+            { "name": "Nottingham", "population": 323600 },
+            { "name": "Derby", "population": 257302 }
+          ]
+        },
+        {
+          "name": "South West",
+          "towns": [
+            { "name": "Bristol", "population": 467099 },
+            { "name": "Plymouth", "population": 264200 },
+            { "name": "Exeter", "population": 130428 },
+            { "name": "Bath", "population": 88859 }
+          ]
+        },
+        {
+          "name": "East of England",
+          "towns": [
+            { "name": "Norwich", "population": 213166 },
+            { "name": "Cambridge", "population": 145700 },
+            { "name": "Ipswich", "population": 133384 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Scotland",
+      "language": "en",
+      "areas": [
+        {
+          "name": "Central Belt",
+          "towns": [
+            { "name": "Glasgow", "population": 635640 },
+            { "name": "Edinburgh", "population": 524930 }
+          ]
+        },
+        {
+          "name": "North East Scotland",
+          "towns": [
+            { "name": "Aberdeen", "population": 196670 },
+            { "name": "Dundee", "population": 148270 }
+          ]
+        },
+        {
+          "name": "Highlands",
+          "towns": [
+            { "name": "Inverness", "population": 63780 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Northern Ireland",
+      "language": "en",
+      "areas": [
+        {
+          "name": "Greater Belfast",
+          "towns": [
+            { "name": "Belfast", "population": 345418 },
+            { "name": "Lisburn", "population": 71465 }
+          ]
+        },
+        {
+          "name": "North West NI",
+          "towns": [
+            { "name": "Derry", "population": 83652 }
+          ]
+        }
+      ]
+    }
+  ]
+}

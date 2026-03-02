@@ -1,0 +1,153 @@
+{
+  "country": "DE",
+  "language": "de",
+  "bundeslaender": [
+    {
+      "name": "Bavaria",
+      "native_name": "Bayern",
+      "towns": [
+        { "name": "Munich", "native_name": "München", "population": 1488202 },
+        { "name": "Nuremberg", "native_name": "Nürnberg", "population": 518370 },
+        { "name": "Augsburg", "native_name": "Augsburg", "population": 296582 },
+        { "name": "Regensburg", "native_name": "Regensburg", "population": 153094 },
+        { "name": "Würzburg", "native_name": "Würzburg", "population": 127934 },
+        { "name": "Fürth", "native_name": "Fürth", "population": 128497 }
+      ]
+    },
+    {
+      "name": "North Rhine-Westphalia",
+      "native_name": "Nordrhein-Westfalen",
+      "towns": [
+        { "name": "Cologne", "native_name": "Köln", "population": 1083498 },
+        { "name": "Düsseldorf", "native_name": "Düsseldorf", "population": 621877 },
+        { "name": "Dortmund", "native_name": "Dortmund", "population": 588250 },
+        { "name": "Essen", "native_name": "Essen", "population": 582624 },
+        { "name": "Duisburg", "native_name": "Duisburg", "population": 498686 },
+        { "name": "Bonn", "native_name": "Bonn", "population": 329673 },
+        { "name": "Münster", "native_name": "Münster", "population": 315293 }
+      ]
+    },
+    {
+      "name": "Baden-Württemberg",
+      "native_name": "Baden-Württemberg",
+      "towns": [
+        { "name": "Stuttgart", "native_name": "Stuttgart", "population": 634830 },
+        { "name": "Karlsruhe", "native_name": "Karlsruhe", "population": 308436 },
+        { "name": "Mannheim", "native_name": "Mannheim", "population": 309370 },
+        { "name": "Freiburg", "native_name": "Freiburg im Breisgau", "population": 230241 },
+        { "name": "Heidelberg", "native_name": "Heidelberg", "population": 159245 },
+        { "name": "Tübingen", "native_name": "Tübingen", "population": 91506 }
+      ]
+    },
+    {
+      "name": "Lower Saxony",
+      "native_name": "Niedersachsen",
+      "towns": [
+        { "name": "Hanover", "native_name": "Hannover", "population": 535061 },
+        { "name": "Braunschweig", "native_name": "Braunschweig", "population": 249406 },
+        { "name": "Osnabrück", "native_name": "Osnabrück", "population": 165251 },
+        { "name": "Göttingen", "native_name": "Göttingen", "population": 118911 },
+        { "name": "Oldenburg", "native_name": "Oldenburg", "population": 170389 }
+      ]
+    },
+    {
+      "name": "Hesse",
+      "native_name": "Hessen",
+      "towns": [
+        { "name": "Frankfurt", "native_name": "Frankfurt am Main", "population": 753056 },
+        { "name": "Wiesbaden", "native_name": "Wiesbaden", "population": 278474 },
+        { "name": "Kassel", "native_name": "Kassel", "population": 201585 },
+        { "name": "Darmstadt", "native_name": "Darmstadt", "population": 159207 }
+      ]
+    },
+    {
+      "name": "Berlin",
+      "native_name": "Berlin",
+      "towns": [
+        { "name": "Berlin", "native_name": "Berlin", "population": 3669491 }
+      ]
+    },
+    {
+      "name": "Hamburg",
+      "native_name": "Hamburg",
+      "towns": [
+        { "name": "Hamburg", "native_name": "Hamburg", "population": 1853935 }
+      ]
+    },
+    {
+      "name": "Saxony",
+      "native_name": "Sachsen",
+      "towns": [
+        { "name": "Dresden", "native_name": "Dresden", "population": 556780 },
+        { "name": "Leipzig", "native_name": "Leipzig", "population": 601866 },
+        { "name": "Chemnitz", "native_name": "Chemnitz", "population": 246334 }
+      ]
+    },
+    {
+      "name": "Rhineland-Palatinate",
+      "native_name": "Rheinland-Pfalz",
+      "towns": [
+        { "name": "Mainz", "native_name": "Mainz", "population": 218578 },
+        { "name": "Koblenz", "native_name": "Koblenz", "population": 113844 },
+        { "name": "Trier", "native_name": "Trier", "population": 111528 }
+      ]
+    },
+    {
+      "name": "Schleswig-Holstein",
+      "native_name": "Schleswig-Holstein",
+      "towns": [
+        { "name": "Kiel", "native_name": "Kiel", "population": 246794 },
+        { "name": "Lübeck", "native_name": "Lübeck", "population": 216530 },
+        { "name": "Flensburg", "native_name": "Flensburg", "population": 90164 }
+      ]
+    },
+    {
+      "name": "Thuringia",
+      "native_name": "Thüringen",
+      "towns": [
+        { "name": "Erfurt", "native_name": "Erfurt", "population": 214417 },
+        { "name": "Jena", "native_name": "Jena", "population": 111407 },
+        { "name": "Weimar", "native_name": "Weimar", "population": 65228 }
+      ]
+    },
+    {
+      "name": "Brandenburg",
+      "native_name": "Brandenburg",
+      "towns": [
+        { "name": "Potsdam", "native_name": "Potsdam", "population": 183154 },
+        { "name": "Cottbus", "native_name": "Cottbus", "population": 99678 }
+      ]
+    },
+    {
+      "name": "Saxony-Anhalt",
+      "native_name": "Sachsen-Anhalt",
+      "towns": [
+        { "name": "Magdeburg", "native_name": "Magdeburg", "population": 236188 },
+        { "name": "Halle", "native_name": "Halle (Saale)", "population": 238762 }
+      ]
+    },
+    {
+      "name": "Mecklenburg-Western Pomerania",
+      "native_name": "Mecklenburg-Vorpommern",
+      "towns": [
+        { "name": "Rostock", "native_name": "Rostock", "population": 209191 },
+        { "name": "Schwerin", "native_name": "Schwerin", "population": 96800 }
+      ]
+    },
+    {
+      "name": "Saarland",
+      "native_name": "Saarland",
+      "towns": [
+        { "name": "Saarbrücken", "native_name": "Saarbrücken", "population": 180374 }
+      ]
+    },
+    {
+      "name": "Bremen",
+      "native_name": "Bremen",
+      "towns": [
+        { "name": "Bremen", "native_name": "Bremen", "population": 567559 },
+        { "name": "Bremerhaven", "native_name": "Bremerhaven", "population": 113643 }
+      ]
+    }
+  ]
+}

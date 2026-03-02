@@ -1,0 +1,198 @@
+{
+  "country": "IE",
+  "language": "ga",
+  "provinces": [
+    {
+      "name": "Leinster",
+      "native_name": "Laighin",
+      "counties": [
+        {
+          "name": "Dublin",
+          "native_name": "Baile Átha Cliath",
+          "towns": [
+            { "name": "Dublin", "native_name": "Baile Átha Cliath", "population": 1173179 },
+            { "name": "Swords", "native_name": "Sord", "population": 42738 },
+            { "name": "Tallaght", "native_name": "Tamhlacht", "population": 76119 },
+            { "name": "Blanchardstown", "native_name": "Baile Bhlainséir", "population": 68156 },
+            { "name": "Lucan", "native_name": "Leamhcán", "population": 46521 }
+          ]
+        },
+        {
+          "name": "Wicklow",
+          "native_name": "Cill Mhantáin",
+          "towns": [
+            { "name": "Bray", "native_name": "Bré", "population": 32600 },
+            { "name": "Greystones", "native_name": "Na Clocha Liatha", "population": 18140 },
+            { "name": "Wicklow", "native_name": "Cill Mhantáin", "population": 10584 },
+            { "name": "Arklow", "native_name": "An tInbhear Mór", "population": 13163 }
+          ]
+        },
+        {
+          "name": "Kildare",
+          "native_name": "Cill Dara",
+          "towns": [
+            { "name": "Naas", "native_name": "An Nás", "population": 21393 },
+            { "name": "Newbridge", "native_name": "Droichead Nua", "population": 22742 },
+            { "name": "Celbridge", "native_name": "Cill Droichid", "population": 20288 },
+            { "name": "Maynooth", "native_name": "Maigh Nuad", "population": 15339 }
+          ]
+        },
+        {
+          "name": "Meath",
+          "native_name": "An Mhí",
+          "towns": [
+            { "name": "Navan", "native_name": "An Uaimh", "population": 30173 },
+            { "name": "Drogheda", "native_name": "Droichead Átha", "population": 40956 },
+            { "name": "Trim", "native_name": "Baile Átha Troim", "population": 9194 }
+          ]
+        },
+        {
+          "name": "Louth",
+          "native_name": "An Lú",
+          "towns": [
+            { "name": "Dundalk", "native_name": "Dún Dealgan", "population": 39004 },
+            { "name": "Ardee", "native_name": "Baile Átha Fhirdhia", "population": 5137 }
+          ]
+        },
+        {
+          "name": "Westmeath",
+          "native_name": "An Iarmhí",
+          "towns": [
+            { "name": "Athlone", "native_name": "Baile Átha Luain", "population": 21349 },
+            { "name": "Mullingar", "native_name": "An Muileann gCearr", "population": 20928 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Munster",
+      "native_name": "An Mhumhain",
+      "counties": [
+        {
+          "name": "Cork",
+          "native_name": "Corcaigh",
+          "towns": [
+            { "name": "Cork", "native_name": "Corcaigh", "population": 210328 },
+            { "name": "Carrigaline", "native_name": "Carraig Uí Leighin", "population": 15770 },
+            { "name": "Cobh", "native_name": "An Cóbh", "population": 13058 },
+            { "name": "Mallow", "native_name": "Mala", "population": 12459 },
+            { "name": "Midleton", "native_name": "Mainistir na Corann", "population": 12496 }
+          ]
+        },
+        {
+          "name": "Limerick",
+          "native_name": "Luimneach",
+          "towns": [
+            { "name": "Limerick", "native_name": "Luimneach", "population": 94192 },
+            { "name": "Newcastle West", "native_name": "An Caisleán Nua Thiar", "population": 6619 }
+          ]
+        },
+        {
+          "name": "Kerry",
+          "native_name": "Ciarraí",
+          "towns": [
+            { "name": "Tralee", "native_name": "Trá Lí", "population": 23691 },
+            { "name": "Killarney", "native_name": "Cill Airne", "population": 14504 }
+          ]
+        },
+        {
+          "name": "Waterford",
+          "native_name": "Port Láirge",
+          "towns": [
+            { "name": "Waterford", "native_name": "Port Láirge", "population": 53504 },
+            { "name": "Dungarvan", "native_name": "Dún Garbhán", "population": 10378 }
+          ]
+        },
+        {
+          "name": "Tipperary",
+          "native_name": "Tiobraid Árann",
+          "towns": [
+            { "name": "Clonmel", "native_name": "Cluain Meala", "population": 17908 },
+            { "name": "Thurles", "native_name": "Durlas", "population": 7940 }
+          ]
+        },
+        {
+          "name": "Clare",
+          "native_name": "An Clár",
+          "towns": [
+            { "name": "Ennis", "native_name": "Inis", "population": 25276 },
+            { "name": "Shannon", "native_name": "Sionainn", "population": 9729 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Connacht",
+      "native_name": "Connachta",
+      "counties": [
+        {
+          "name": "Galway",
+          "native_name": "Gaillimh",
+          "towns": [
+            { "name": "Galway", "native_name": "Gaillimh", "population": 83456 },
+            { "name": "Tuam", "native_name": "Tuaim", "population": 8767 },
+            { "name": "Ballinasloe", "native_name": "Béal Átha na Sluaighe", "population": 6662 }
+          ]
+        },
+        {
+          "name": "Mayo",
+          "native_name": "Maigh Eo",
+          "towns": [
+            { "name": "Castlebar", "native_name": "Caisleán an Bharraigh", "population": 12068 },
+            { "name": "Ballina", "native_name": "Béal an Átha", "population": 10171 },
+            { "name": "Westport", "native_name": "Cathair na Mart", "population": 6198 }
+          ]
+        },
+        {
+          "name": "Sligo",
+          "native_name": "Sligeach",
+          "towns": [
+            { "name": "Sligo", "native_name": "Sligeach", "population": 19199 }
+          ]
+        },
+        {
+          "name": "Roscommon",
+          "native_name": "Ros Comáin",
+          "towns": [
+            { "name": "Roscommon", "native_name": "Ros Comáin", "population": 5876 }
+          ]
+        },
+        {
+          "name": "Leitrim",
+          "native_name": "Liatroim",
+          "towns": [
+            { "name": "Carrick-on-Shannon", "native_name": "Cora Droma Rúisc", "population": 4062 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ulster (Republic)",
+      "native_name": "Ulaidh",
+      "counties": [
+        {
+          "name": "Donegal",
+          "native_name": "Dún na nGall",
+          "towns": [
+            { "name": "Letterkenny", "native_name": "Leitir Ceanainn", "population": 19274 },
+            { "name": "Buncrana", "native_name": "Bun Cranncha", "population": 6785 }
+          ]
+        },
+        {
+          "name": "Cavan",
+          "native_name": "An Cabhán",
+          "towns": [
+            { "name": "Cavan", "native_name": "An Cabhán", "population": 10914 }
+          ]
+        },
+        {
+          "name": "Monaghan",
+          "native_name": "Muineachán",
+          "towns": [
+            { "name": "Monaghan", "native_name": "Muineachán", "population": 8012 }
+          ]
+        }
+      ]
+    }
+  ]
+}
