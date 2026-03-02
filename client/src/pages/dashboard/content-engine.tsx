@@ -45,6 +45,7 @@ import {
   ExternalLink, Image, Link as LinkIcon, Key,
   HelpCircle, Maximize2, Tag, Calendar, Save,
   BarChart3, Activity, FileDown, Upload, ChevronDown,
+  Check, Play, Loader2,
 } from "lucide-react";
 
 function getTabFromUrl(): string {
@@ -129,6 +130,19 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
   const [editorSubTab, setEditorSubTab] = useState<"editor" | "images">("editor");
   const [editorPreviewMode, setEditorPreviewMode] = useState<"html" | "preview">("preview");
 
+  const isPostLimitError = (err: unknown): string | null => {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.startsWith("403:")) {
+      try {
+        const body = JSON.parse(msg.slice(4).trim());
+        if (body.error === "ai_post_limit_reached" || body.error === "ai_post_limit_exceeded") {
+          return body.message || "You have reached your monthly post limit.";
+        }
+      } catch {}
+    }
+    return null;
+  };
+
   const queryKey = `/api/blog/posts?workspaceId=${workspaceId}`;
   const { data: posts = [], isLoading } = useQuery<any[]>({
     queryKey: [queryKey],
@@ -146,7 +160,14 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
       setView("list");
       toast({ title: "Post created" });
     },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+    onError: (err: any) => {
+      const limitMsg = isPostLimitError(err);
+      if (limitMsg) {
+        toast({ title: "Monthly post limit reached", description: limitMsg, variant: "destructive" });
+      } else {
+        toast({ title: "Error", description: err.message, variant: "destructive" });
+      }
+    },
   });
 
   const publishMutation = useMutation({
@@ -185,7 +206,14 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
       const count = Array.isArray(created) ? created.length : 0;
       toast({ title: "Generation started", description: `${count} posts are being written with AI. Refresh in a minute to see results.` });
     },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+    onError: (err: any) => {
+      const limitMsg = isPostLimitError(err);
+      if (limitMsg) {
+        toast({ title: "Monthly post limit reached", description: limitMsg, variant: "destructive" });
+      } else {
+        toast({ title: "Error", description: err.message, variant: "destructive" });
+      }
+    },
   });
 
   const openNewPost = () => {
@@ -752,9 +780,103 @@ function PagesTab({ workspaceId }: { workspaceId: string }) {
   );
 }
 
+function CampaignSummaryPanel({ campaignId }: { campaignId: number }) {
+  const { data: summary, isLoading } = useQuery<any>({
+    queryKey: ["/api/blog/campaigns", campaignId, "summary"],
+    queryFn: async () => {
+      const res = await fetch(`/api/blog/campaigns/${campaignId}/summary`, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to load summary");
+      return res.json();
+    },
+  });
+
+  if (isLoading) return <div className="py-3 text-center"><Loader2 className="h-4 w-4 animate-spin inline" /></div>;
+  if (!summary) return null;
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3 p-3 bg-muted/50 rounded-md" data-testid={`panel-campaign-summary-${campaignId}`}>
+      <div>
+        <p className="text-xs text-muted-foreground">Total Posts</p>
+        <p className="text-lg font-semibold" data-testid="text-summary-total">{summary.totalPosts ?? 0}</p>
+      </div>
+      <div>
+        <p className="text-xs text-muted-foreground">Avg Word Count</p>
+        <p className="text-lg font-semibold" data-testid="text-summary-wordcount">{summary.avgWordCount ?? 0}</p>
+      </div>
+      <div>
+        <p className="text-xs text-muted-foreground">By Status</p>
+        {summary.byStatus ? Object.entries(summary.byStatus).map(([k, v]) => (
+          <p key={k} className="text-xs"><Badge variant="outline" className="mr-1">{k}</Badge>{String(v)}</p>
+        )) : <p className="text-xs text-muted-foreground">—</p>}
+      </div>
+      <div>
+        <p className="text-xs text-muted-foreground">Quality Gate</p>
+        {summary.byQualityGate ? Object.entries(summary.byQualityGate).map(([k, v]) => (
+          <p key={k} className="text-xs"><Badge variant="outline" className="mr-1">{k}</Badge>{String(v)}</p>
+        )) : <p className="text-xs text-muted-foreground">—</p>}
+      </div>
+    </div>
+  );
+}
+
 function CampaignsTab({ workspaceId }: { workspaceId: string }) {
+  const { toast } = useToast();
   const queryKey = `/api/blog/campaigns/${workspaceId}`;
   const { data: campaigns = [], isLoading } = useQuery<any[]>({ queryKey: [queryKey] });
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingName, setEditingName] = useState("");
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [scheduleId, setScheduleId] = useState<number | null>(null);
+  const [scheduleDate, setScheduleDate] = useState("");
+
+  const renameMutation = useMutation({
+    mutationFn: async ({ id, name }: { id: number; name: string }) => apiRequest("PATCH", `/api/blog/campaigns/${id}`, { name }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      setEditingId(null);
+      toast({ title: "Campaign renamed" });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const publishAllMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await apiRequest("POST", `/api/blog/campaigns/${id}/publish-all`);
+      return res.json();
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      toast({ title: "Bulk publish complete", description: `${data.publishedCount ?? 0} posts published.` });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const scheduleAllMutation = useMutation({
+    mutationFn: async ({ id, publishAt }: { id: number; publishAt: string }) => {
+      const res = await apiRequest("POST", `/api/blog/campaigns/${id}/schedule-all`, { publishAt });
+      return res.json();
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      setScheduleId(null);
+      setScheduleDate("");
+      toast({ title: "Bulk schedule complete", description: `${data.scheduledCount ?? 0} posts scheduled.` });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const startRename = (c: any) => {
+    setEditingId(c.id);
+    setEditingName(c.name || `Campaign #${c.id}`);
+  };
+
+  const commitRename = () => {
+    if (editingId && editingName.trim()) {
+      renameMutation.mutate({ id: editingId, name: editingName.trim() });
+    } else {
+      setEditingId(null);
+    }
+  };
 
   return (
     <div>
@@ -773,17 +895,98 @@ function CampaignsTab({ workspaceId }: { workspaceId: string }) {
             <Card key={c.id} data-testid={`card-campaign-${c.id}`}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">{c.name || `Campaign #${c.id}`}</p>
+                  <div className="flex-1 min-w-0">
+                    {editingId === c.id ? (
+                      <div className="flex items-center gap-2">
+                        <Input
+                          value={editingName}
+                          onChange={(e) => setEditingName(e.target.value)}
+                          onBlur={commitRename}
+                          onKeyDown={(e) => { if (e.key === "Enter") commitRename(); if (e.key === "Escape") setEditingId(null); }}
+                          className="h-8 text-sm"
+                          autoFocus
+                          data-testid={`input-rename-campaign-${c.id}`}
+                        />
+                        <Button size="sm" variant="ghost" onClick={commitRename} data-testid={`button-confirm-rename-${c.id}`}>
+                          <Check className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium truncate">{c.name || `Campaign #${c.id}`}</p>
+                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={() => startRename(c)} data-testid={`button-rename-campaign-${c.id}`}>
+                          <Pencil className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    )}
                     <p className="text-sm text-muted-foreground">{c.postsCount || 0} posts &middot; {c.createdAt ? new Date(c.createdAt).toLocaleDateString() : ""}</p>
                   </div>
-                  <Badge variant={c.status === "completed" ? "default" : "secondary"}>{c.status || "pending"}</Badge>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => publishAllMutation.mutate(c.id)}
+                      disabled={publishAllMutation.isPending}
+                      data-testid={`button-publish-all-${c.id}`}
+                    >
+                      {publishAllMutation.isPending ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : <Play className="h-3 w-3 mr-1" />}
+                      Publish All
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => { setScheduleId(c.id); setScheduleDate(""); }}
+                      data-testid={`button-schedule-all-${c.id}`}
+                    >
+                      <Calendar className="h-3 w-3 mr-1" />
+                      Schedule All
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setExpandedId(expandedId === c.id ? null : c.id)}
+                      data-testid={`button-expand-campaign-${c.id}`}
+                    >
+                      <ChevronDown className={`h-4 w-4 transition-transform ${expandedId === c.id ? "rotate-180" : ""}`} />
+                    </Button>
+                    <Badge variant={c.status === "completed" ? "default" : "secondary"}>{c.status || "pending"}</Badge>
+                  </div>
                 </div>
+                {expandedId === c.id && <CampaignSummaryPanel campaignId={c.id} />}
               </CardContent>
             </Card>
           ))}
         </div>
       )}
+
+      <Dialog open={scheduleId !== null} onOpenChange={(open) => { if (!open) { setScheduleId(null); setScheduleDate(""); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Schedule All Posts</DialogTitle>
+            <DialogDescription>Pick a date and time to publish all draft posts in this campaign.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Publish Date & Time</Label>
+              <Input
+                type="datetime-local"
+                value={scheduleDate}
+                onChange={(e) => setScheduleDate(e.target.value)}
+                data-testid="input-schedule-datetime"
+              />
+            </div>
+            <Button
+              className="w-full"
+              onClick={() => { if (scheduleId && scheduleDate) scheduleAllMutation.mutate({ id: scheduleId, publishAt: new Date(scheduleDate).toISOString() }); }}
+              disabled={!scheduleDate || scheduleAllMutation.isPending}
+              data-testid="button-confirm-schedule-all"
+            >
+              {scheduleAllMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Calendar className="h-4 w-4 mr-2" />}
+              Schedule All Posts
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

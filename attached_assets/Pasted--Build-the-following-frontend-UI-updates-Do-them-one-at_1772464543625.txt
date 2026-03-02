@@ -1,0 +1,26 @@
+"Build the following frontend UI updates. Do them one at a time and confirm each before moving to the next.
+Item 1 — Monthly post limit error handling
+In client/src/pages/dashboard/content-posts.tsx and content-engine.tsx — find the mutation error handlers for post creation and bulk creation. Add specific handling for the ai_post_limit_reached and ai_post_limit_exceeded error codes:
+typescriptif (error?.response?.status === 403) {
+  const data = await error.response.json();
+  if (data.error === 'ai_post_limit_reached' || data.error === 'ai_post_limit_exceeded') {
+    toast({
+      title: 'Monthly post limit reached',
+      description: data.message,
+      variant: 'destructive'
+    });
+    return;
+  }
+}
+Show me the updated error handlers in both files.
+Item 2, 3, 4, 5 — Campaign management UI
+In client/src/pages/dashboard/content-engine.tsx — find the campaign view section. Add these four UI elements to the campaign card or campaign detail view:
+- Rename button — inline editable campaign name, on blur calls PATCH /api/blog/campaigns/:campaignId with the new name
+- Bulk publish button — calls POST /api/blog/campaigns/:campaignId/publish-all, shows count of posts published in a success toast
+- Bulk schedule button — opens a date/time picker, on confirm calls POST /api/blog/campaigns/:campaignId/schedule-all with the selected publishAt date, shows count scheduled in success toast
+- Campaign summary panel — calls GET /api/blog/campaigns/:campaignId/summary on expand, shows totalPosts, byStatus breakdown, avgWordCount, and byQualityGate breakdown
+Item 9 — Domain lock in admin dashboard
+In client/src/pages/admin/content.tsx or wherever domains are shown in the admin view — add the same lock indicator that exists in content-domains.tsx. Show a padlock icon next to locked domains and disable the delete action with a tooltip.
+Item 10 — Reports endpoint fix
+In client/src/pages/dashboard/content-engine.tsx — find the reports tab queries. Update them from /api/content-reports to /api/reports/content-stats, /api/reports/saved, and /api/reports/snapshot to match the endpoints built in Task 11.
+Do Item 1 first, confirm, then proceed through the rest in order"

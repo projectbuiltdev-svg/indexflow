@@ -148,6 +148,19 @@ export default function ContentPosts() {
   const categories = Array.from(new Set(posts.map((p) => p.category).filter(Boolean))) as string[];
   const schemas = Array.from(new Set(posts.map((p) => p.schemaType).filter(Boolean))) as string[];
 
+  const isPostLimitError = (err: unknown): string | null => {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.startsWith("403:")) {
+      try {
+        const body = JSON.parse(msg.slice(4).trim());
+        if (body.error === "ai_post_limit_reached" || body.error === "ai_post_limit_exceeded") {
+          return body.message || "You have reached your monthly post limit.";
+        }
+      } catch {}
+    }
+    return null;
+  };
+
   const handleNewPost = async () => {
     if (!newPostTitle.trim()) return;
     const slug = newPostTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -167,8 +180,13 @@ export default function ContentPosts() {
       setNewPostSchema("Article");
       setNewPostContent("");
       toast({ title: "Post created", description: `"${newPostTitle}" has been created as a draft.` });
-    } catch {
-      toast({ title: "Failed to create post", variant: "destructive" });
+    } catch (err) {
+      const limitMsg = isPostLimitError(err);
+      if (limitMsg) {
+        toast({ title: "Monthly post limit reached", description: limitMsg, variant: "destructive" });
+      } else {
+        toast({ title: "Failed to create post", variant: "destructive" });
+      }
     }
   };
 
@@ -195,8 +213,13 @@ export default function ContentPosts() {
       } else {
         toast({ title: "Drafts created", description: `${topics.length} posts queued.` });
       }
-    } catch {
-      toast({ title: "Bulk generation failed", variant: "destructive" });
+    } catch (err) {
+      const limitMsg = isPostLimitError(err);
+      if (limitMsg) {
+        toast({ title: "Monthly post limit reached", description: limitMsg, variant: "destructive" });
+      } else {
+        toast({ title: "Bulk generation failed", variant: "destructive" });
+      }
     }
   };
 
@@ -218,8 +241,13 @@ export default function ContentPosts() {
         workspaceId: wsId,
       });
       toast({ title: "Post duplicated", description: `A copy of "${post.title}" has been created.` });
-    } catch {
-      toast({ title: "Duplicate failed", variant: "destructive" });
+    } catch (err) {
+      const limitMsg = isPostLimitError(err);
+      if (limitMsg) {
+        toast({ title: "Monthly post limit reached", description: limitMsg, variant: "destructive" });
+      } else {
+        toast({ title: "Duplicate failed", variant: "destructive" });
+      }
     }
   };
 

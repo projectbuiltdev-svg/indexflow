@@ -53,6 +53,7 @@ import {
   Code2,
   Wand2,
   Copy,
+  Lock,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -2419,6 +2420,20 @@ function DomainManager({ workspaceId }: { workspaceId: string }) {
     enabled: !!workspaceId,
   });
 
+  const firstDomainId = domains[0]?.id;
+  const { data: lockStatus } = useQuery<{ locked: boolean; reason: string | null }>({
+    queryKey: ["/api/blog/domains", firstDomainId, "lock-status"],
+    queryFn: async () => {
+      const res = await fetch(`/api/blog/domains/${firstDomainId}/lock-status`, { credentials: "include" });
+      if (!res.ok) return { locked: false, reason: null };
+      return res.json();
+    },
+    enabled: !!firstDomainId,
+  });
+
+  const isLocked = lockStatus?.locked ?? false;
+  const lockReason = lockStatus?.reason ?? null;
+
   const addMutation = useMutation({
     mutationFn: () => adminApi("POST", "/api/blog/domains", { workspaceId, domain: newDomain.trim().toLowerCase() }),
     onSuccess: () => {
@@ -2510,12 +2525,19 @@ function DomainManager({ workspaceId }: { workspaceId: string }) {
                       <Globe className="h-3 w-3 text-muted-foreground" />
                       <span className="font-mono">{d.domain}</span>
                       {d.isPrimary && <Badge variant="secondary">Primary</Badge>}
+                      {isLocked && (
+                        <span className="inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400" title={lockReason || "Domain locked"} data-testid={`icon-lock-domain-${d.id}`}>
+                          <Lock className="h-3 w-3" />
+                          Locked
+                        </span>
+                      )}
                     </div>
                     <Button
                       size="icon"
                       variant="ghost"
                       onClick={() => deleteMutation.mutate(d.id)}
-                      disabled={deleteMutation.isPending}
+                      disabled={deleteMutation.isPending || isLocked}
+                      title={isLocked ? (lockReason || "Domain is locked on Solo plan") : "Delete domain"}
                       data-testid={`button-delete-domain-${d.id}`}
                     >
                       <Trash2 className="h-3 w-3" />
