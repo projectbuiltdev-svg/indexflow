@@ -1,0 +1,60 @@
+Confirmed. Main Build Step 5 complete.
+
+Main Build Step 6 — Geographic Reference Database and Location 
+Resolver.
+
+Create the following files:
+
+1. /server/pseo/location-resolver.ts implementing all rules and 
+   logic from Section 6.2:
+
+   - resolveLocation(input, workspaceId) — main entry point:
+     * Geocode input string to lat/lng via geocoding client
+     * Resolve full address hierarchy: town, county, state, country
+     * Calculate commercial intent score using Step 2 utility
+     * Find neighbour locations within 25 miles using Haversine 
+       from Step 2
+     * Enrich with places API (landmarks, points of interest)
+     * Query image bank for location-relevant images
+     * Return fully resolved LocationResult object
+   
+   - resolveRadius(centrePoint, radiusMiles, workspaceId) —
+     * Minimum radius MIN_RADIUS_MILES (5) enforced
+     * Query pseo_geographic_reference for all localities within 
+       radius using Haversine
+     * Return sorted by population descending
+   
+   - resolveRegion(country, zones, workspaceId) —
+     * Query pseo_geographic_reference for all localities in 
+       selected zones
+     * Return all matching localities
+   
+   - validateLocation(location) —
+     * Reject if lat/lng cannot be resolved
+     * Reject duplicates within same campaign
+     * Enforce MAX_LOCATIONS_PER_CAMPAIGN (2000) hard cap
+     * Flag partial resolution for agency confirmation
+
+2. /server/integrations/geocoding-client.ts:
+   - geocode(address) — calls geocoding API, returns 
+     { lat, lng, formattedAddress, addressComponents }
+   - Uses GEOCODING_API_KEY from env
+   - Returns null if address cannot be resolved — never throws
+
+3. /server/integrations/places-api-client.ts:
+   - getNearbyLandmarks(lat, lng, category) — returns top 5 
+     nearby landmarks with name, type, distance, url
+   - Uses PLACES_API_KEY from env
+   - If API fails returns empty array — generation does not block
+   - Rate limited to PLACES_API_RATE_LIMIT_PER_SECOND (10)
+
+Write tests covering:
+- Successful location resolution with full hierarchy
+- Duplicate location rejection
+- MAX_LOCATIONS_PER_CAMPAIGN enforcement
+- Radius minimum enforcement
+- Places API failure does not block resolution
+- Geocoding failure returns null cleanly
+
+Show all files and test results. Stop. Wait for confirmation 
+before proceeding.
