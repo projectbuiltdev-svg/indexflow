@@ -1,4 +1,4 @@
-import { pgTable, varchar, text, boolean, integer, timestamp, index } from "drizzle-orm/pg-core";
+import { pgTable, varchar, text, boolean, integer, decimal, timestamp, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
@@ -15,9 +15,15 @@ export const pseoTemplateZones = pgTable("pseo_template_zones", {
   zoneKey: text("zone_key").notNull(),
   label: text("label").notNull(),
   zoneType: text("zone_type").notNull().default("text"),
+  elementType: text("element_type"),
+  cssSelector: text("css_selector"),
+  confidenceScore: decimal("confidence_score", { precision: 4, scale: 2 }),
+  contentSummary: text("content_summary"),
   defaultContent: text("default_content"),
   isRequired: boolean("is_required").notNull().default(false),
   isLocked: boolean("is_locked").notNull().default(false),
+  manuallyOverridden: boolean("manually_overridden").notNull().default(false),
+  version: integer("version").notNull().default(1),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
