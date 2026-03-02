@@ -1247,12 +1247,23 @@ Return ONLY valid JSON, no markdown.`;
       const exportable = posts.filter(p => p.mdxContent && p.mdxContent.length > 100);
 
       const formatter = cmsFormatters[format];
-      const items = exportable.map(post => ({
-        postId: post.id,
-        title: post.title,
-        slug: post.slug,
-        data: formatter(post),
-      }));
+      const items = [];
+      for (const post of exportable) {
+        let postToExport = post;
+        if (!post.compiledHtml && post.mdxContent) {
+          const { html, errors } = await compileMdxToHtml(post.mdxContent);
+          if (errors.length === 0) {
+            postToExport = { ...post, compiledHtml: html };
+            await storage.updateWorkspaceBlogPost(post.id, { compiledHtml: html });
+          }
+        }
+        items.push({
+          postId: post.id,
+          title: post.title,
+          slug: post.slug,
+          data: formatter(postToExport),
+        });
+      }
 
       res.json({
         format,
