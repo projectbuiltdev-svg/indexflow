@@ -1,0 +1,56 @@
+Confirmed. Main Build Step 2 complete.
+
+Main Build Step 3 — Spintax Engine.
+
+Create /server/pseo/spintax-engine.ts implementing all rules and 
+logic from Section 6.5 of the context document.
+
+Requirements:
+
+1. Pool generation:
+   - generateSpintaxPool(campaignContext) — BYOK AI call returning:
+     * h1Variants: string[] — minimum MIN_H1_POOL_SIZE (6) variants
+     * h2Variants: Record<sectionIndex, string[]> — minimum 
+       MIN_H2_POOL_SIZE (5) per section
+     * paragraphVariants: Record<sectionIndex, string[]> — minimum 
+       MIN_PARAGRAPH_POOL_SIZE (4) per section
+   - Store generated pool in pseo_spintax_pools table
+
+2. Deterministic selection using hash seeder from Step 2:
+   - resolveH1(locationId, serviceId, pool) — select H1 variant 
+     using hashSeed — inject location town name and primary keyword
+   - resolveH2(locationId, serviceId, sectionIndex, pool) — 
+     deterministic H2 selection per section
+   - resolveParagraph(locationId, serviceId, sectionIndex, pool) — 
+     deterministic paragraph selection per section
+
+3. Collision detection:
+   - checkH1Collision(resolvedH1, campaignId) — compare against 
+     all previously used H1 variants in campaign
+   - If collision detected select next variant in pool
+   - If pool exhausted trigger expandPool()
+
+4. Pool expansion:
+   - expandPool(campaignId, poolType) — additional AI call to 
+     generate 3 more variants
+   - Append to existing pool in pseo_spintax_pools
+   - Log expansion to pseo_audit_log
+   - Maximum MAX_POOL_EXPANSIONS (5) expansions — from config
+   - After 5 expansions rely on similarity checker
+
+5. Micro-variation:
+   - applyMicroVariation(text, seed) — tokenise sentence, 
+     identify swappable terms, apply deterministic substitution 
+     using vocabulary map
+   - Substitutions must be contextually appropriate — not random
+
+Write /tests/pseo/spintax-engine.test.ts covering:
+- Deterministic selection — same inputs always same output
+- Different location+service pairs produce different selections
+- H1 collision detection triggers next variant selection
+- Pool exhaustion triggers expansion
+- Micro-variation changes text without changing meaning
+- Pool size minimums enforced
+
+Show complete file and test results. Stop. Wait for confirmation 
+before proceeding.
