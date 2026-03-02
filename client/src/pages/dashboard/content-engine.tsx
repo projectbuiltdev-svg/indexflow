@@ -47,8 +47,6 @@ import {
   BarChart3, Activity, FileDown, Upload, ChevronDown,
   Check, Play, Loader2, Layers, Lock, ShoppingCart,
 } from "lucide-react";
-import CampaignDashboard from "@/components/pseo/CampaignDashboard";
-import CampaignWizard from "@/components/pseo/CampaignWizard";
 
 function getTabFromUrl(): string {
   try {
@@ -782,44 +780,6 @@ function PagesTab({ workspaceId }: { workspaceId: string }) {
   );
 }
 
-function CampaignSummaryPanel({ campaignId }: { campaignId: number }) {
-  const { data: summary, isLoading } = useQuery<any>({
-    queryKey: ["/api/blog/campaigns", campaignId, "summary"],
-    queryFn: async () => {
-      const res = await fetch(`/api/blog/campaigns/${campaignId}/summary`, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to load summary");
-      return res.json();
-    },
-  });
-
-  if (isLoading) return <div className="py-3 text-center"><Loader2 className="h-4 w-4 animate-spin inline" /></div>;
-  if (!summary) return null;
-
-  return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3 p-3 bg-muted/50 rounded-md" data-testid={`panel-campaign-summary-${campaignId}`}>
-      <div>
-        <p className="text-xs text-muted-foreground">Total Posts</p>
-        <p className="text-lg font-semibold" data-testid="text-summary-total">{summary.totalPosts ?? 0}</p>
-      </div>
-      <div>
-        <p className="text-xs text-muted-foreground">Avg Word Count</p>
-        <p className="text-lg font-semibold" data-testid="text-summary-wordcount">{summary.avgWordCount ?? 0}</p>
-      </div>
-      <div>
-        <p className="text-xs text-muted-foreground">By Status</p>
-        {summary.byStatus ? Object.entries(summary.byStatus).map(([k, v]) => (
-          <p key={k} className="text-xs"><Badge variant="outline" className="mr-1">{k}</Badge>{String(v)}</p>
-        )) : <p className="text-xs text-muted-foreground">—</p>}
-      </div>
-      <div>
-        <p className="text-xs text-muted-foreground">Quality Gate</p>
-        {summary.byQualityGate ? Object.entries(summary.byQualityGate).map(([k, v]) => (
-          <p key={k} className="text-xs"><Badge variant="outline" className="mr-1">{k}</Badge>{String(v)}</p>
-        )) : <p className="text-xs text-muted-foreground">—</p>}
-      </div>
-    </div>
-  );
-}
 
 function CampaignsTab({ workspaceId }: { workspaceId: string }) {
   const { toast } = useToast();
@@ -2010,7 +1970,6 @@ function PseoTab({ workspaceId }: { workspaceId: string }) {
 const tabConfig = [
   { value: "posts", label: "Posts", icon: FileText },
   { value: "pages", label: "Pages", icon: Globe },
-  { value: "campaigns", label: "Campaigns", icon: BarChart3 },
   { value: "domains", label: "Domains", icon: Globe },
   { value: "seo", label: "SEO", icon: Search },
   { value: "links", label: "Links", icon: LinkIcon },
@@ -2024,19 +1983,6 @@ export default function ContentEngine() {
   const { selectedWorkspace } = useWorkspace();
   const [activeTab, setActiveTab] = useState(getTabFromUrl());
   const workspaceId = selectedWorkspace?.id || "";
-
-  const { data: entitlement } = useQuery<PseoEntitlement>({
-    queryKey: [`/api/pseo/entitlement`, workspaceId],
-    queryFn: async () => {
-      const res = await fetch(`/api/pseo/entitlement?workspaceId=${workspaceId}`);
-      if (!res.ok) throw new Error("Failed to check entitlement");
-      return res.json();
-    },
-    enabled: !!workspaceId,
-  });
-
-  const pseoEnabled = entitlement && (entitlement.baseCampaigns > 0 || entitlement.baseCampaigns === -1);
-  const campaignCount = entitlement?.activeCount || 0;
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -2077,27 +2023,11 @@ export default function ContentEngine() {
               {tab.label}
             </TabsTrigger>
           ))}
-          {pseoEnabled && (
-            <TabsTrigger
-              value="pseo"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 py-2 gap-1.5"
-              data-testid="tab-pseo"
-            >
-              <Layers className="h-4 w-4" />
-              pSEO
-              {campaignCount > 0 && (
-                <Badge variant="secondary" className="ml-1 h-5 min-w-[20px] px-1.5 text-xs" data-testid="badge-pseo-count">
-                  {campaignCount}
-                </Badge>
-              )}
-            </TabsTrigger>
-          )}
         </TabsList>
 
         <div className="mt-6">
           <TabsContent value="posts" className="mt-0"><PostsTab workspaceId={workspaceId} /></TabsContent>
           <TabsContent value="pages" className="mt-0"><PagesTab workspaceId={workspaceId} /></TabsContent>
-          <TabsContent value="campaigns" className="mt-0"><CampaignsTab workspaceId={workspaceId} /></TabsContent>
           <TabsContent value="domains" className="mt-0"><DomainsTab workspaceId={workspaceId} /></TabsContent>
           <TabsContent value="seo" className="mt-0"><SeoTab workspaceId={workspaceId} /></TabsContent>
           <TabsContent value="links" className="mt-0"><LinksTab workspaceId={workspaceId} /></TabsContent>
@@ -2105,9 +2035,6 @@ export default function ContentEngine() {
           <TabsContent value="cms" className="mt-0"><CmsTab workspaceId={workspaceId} /></TabsContent>
           <TabsContent value="reports" className="mt-0"><ReportsTab workspaceId={workspaceId} /></TabsContent>
           <TabsContent value="invoices" className="mt-0"><InvoicesTab workspaceId={workspaceId} /></TabsContent>
-          {pseoEnabled && (
-            <TabsContent value="pseo" className="mt-0"><PseoTab workspaceId={workspaceId} /></TabsContent>
-          )}
         </div>
       </Tabs>
     </div>
