@@ -2054,6 +2054,9 @@ export async function runScheduledPublisher() {
             publishedAt: new Date(),
           });
           console.log(`[Scheduler] Published post: ${post.title} (${post.id})`);
+          // TODO: GitHub Deploy Integration
+          // Trigger client-publish dispatch here for each scheduled post published
+          // Same pattern as publish-now endpoint above
         } else {
           console.error(`[Scheduler] MDX errors for post ${post.id}:`, errors);
         }
