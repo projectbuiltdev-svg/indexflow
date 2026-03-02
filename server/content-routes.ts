@@ -1081,7 +1081,7 @@ Return ONLY valid JSON, no markdown.`;
     }
   });
 
-  const CMS_FORMATS = ["wordpress", "ghost", "webflow", "hubspot", "contentful"] as const;
+  const CMS_FORMATS = ["wordpress", "ghost", "webflow", "hubspot", "contentful", "shopify", "wix"] as const;
   type CmsFormat = typeof CMS_FORMATS[number];
 
   function formatForWordPress(post: any): Record<string, any> {
@@ -1182,12 +1182,46 @@ Return ONLY valid JSON, no markdown.`;
     };
   }
 
+  function formatForShopify(post: any): Record<string, any> {
+    return {
+      title: post.title,
+      body_html: post.compiledHtml || "",
+      summary_html: post.description || "",
+      tags: Array.isArray(post.tags) ? post.tags.join(", ") : "",
+      published: post.status === "published",
+      published_at: post.publishedAt ? new Date(post.publishedAt).toISOString() : null,
+      metafields: [
+        { key: "title", value: post.metaTitle || post.title, type: "single_line_text_field", namespace: "seo" },
+        { key: "description", value: post.metaDescription || post.description || "", type: "single_line_text_field", namespace: "seo" },
+      ],
+    };
+  }
+
+  function formatForWix(post: any): Record<string, any> {
+    return {
+      title: post.title,
+      slug: post.slug,
+      content: post.compiledHtml || "",
+      excerpt: post.description || "",
+      coverMedia: null,
+      tags: Array.isArray(post.tags) ? post.tags : [],
+      categories: post.category ? [post.category] : [],
+      seo: {
+        title: post.metaTitle || post.title,
+        description: post.metaDescription || post.description || "",
+      },
+      publishedDate: post.publishedAt ? new Date(post.publishedAt).toISOString() : null,
+    };
+  }
+
   const cmsFormatters: Record<CmsFormat, (post: any) => Record<string, any>> = {
     wordpress: formatForWordPress,
     ghost: formatForGhost,
     webflow: formatForWebflow,
     hubspot: formatForHubSpot,
     contentful: formatForContentful,
+    shopify: formatForShopify,
+    wix: formatForWix,
   };
 
   app.get("/api/blog/cms-formats", async (req, res) => {
