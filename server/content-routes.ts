@@ -532,6 +532,19 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     if (!requireSuperAdmin(req, res)) return;
     try {
       const data = insertWorkspaceDomainSchema.parse(req.body);
+      const workspace = await storage.getWorkspace(data.workspaceId);
+      if (workspace) {
+        const tier = getPlanTier((workspace as any).plan);
+        if (tier.workspaces === 1) {
+          const existingDomains = await storage.getWorkspaceDomains(data.workspaceId);
+          if (existingDomains.length >= 1) {
+            return res.status(403).json({
+              error: "domain_limit_reached",
+              message: "Solo plan allows one domain per workspace. Upgrade to Pro to add more domains.",
+            });
+          }
+        }
+      }
       const domain = await storage.createWorkspaceDomain(data);
       res.status(201).json(domain);
     } catch (err: any) {
