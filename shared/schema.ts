@@ -957,6 +957,7 @@ export const workspaceBlogPosts = pgTable(
     schemaType: text("schema_type"),
     schemaJson: jsonb("schema_json").$type<Record<string, any>>(),
     schemaAutoDetected: boolean("schema_auto_detected").default(false),
+    approvedBy: varchar("approved_by", { length: 36 }),
     campaignId: varchar("campaign_id", { length: 36 })
       .references(() => contentCampaigns.id, { onDelete: "set null" }),
     createdAt: timestamp("created_at").defaultNow(),

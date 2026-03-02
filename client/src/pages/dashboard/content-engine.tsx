@@ -192,18 +192,18 @@ function PostsTab({ workspaceId }: { workspaceId: string }) {
   const bulkMutation = useMutation({
     mutationFn: async (data: any) => {
       const res = await apiRequest("POST", "/api/blog/posts/bulk/create", data);
-      const created: any = await res.json();
-      if (Array.isArray(created) && created.length > 0) {
-        const postIds = created.map((p: any) => p.id);
-        await apiRequest("POST", "/api/blog/posts/bulk/generate", { postIds });
+      const result: any = await res.json();
+      const { campaignId, posts } = result;
+      if (campaignId && posts?.length > 0) {
+        await apiRequest("POST", "/api/blog/posts/bulk/generate", { workspaceId, campaignId: String(campaignId) });
       }
-      return created;
+      return result;
     },
-    onSuccess: (created: any) => {
+    onSuccess: (result: any) => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       setBulkOpen(false);
       setBulkRows([{ title: "", keyword: "", intent: "Informational", funnel: "TOFU", type: "Standard" }]);
-      const count = Array.isArray(created) ? created.length : 0;
+      const count = result.posts?.length ?? 0;
       toast({ title: "Generation started", description: `${count} posts are being written with AI. Refresh in a minute to see results.` });
     },
     onError: (err: any) => {

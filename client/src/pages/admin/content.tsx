@@ -1699,7 +1699,7 @@ function DraftQueue({
 
   const approveMutation = useMutation({
     mutationFn: async ({ postId, publishAt }: { postId: string; publishAt?: string }) => {
-      return adminApi("POST", `/api/blog/posts/${postId}/approve-and-schedule`, {
+      return adminApi("POST", `/api/blog/posts/${postId}/approve`, {
         publish_at: publishAt || undefined,
       });
     },

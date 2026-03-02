@@ -693,13 +693,16 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     }
   });
 
-  app.post("/api/blog/posts/:id/approve-and-schedule", async (req, res) => {
+  const approveHandler = async (req: any, res: any) => {
     if (!requireSuperAdmin(req, res)) return;
     try {
       const post = await storage.getWorkspaceBlogPost(req.params.id);
       if (!post) return res.status(404).json({ error: "Post not found" });
 
       const { publish_at } = req.body;
+      const adminUserId = (req as any).session?.userId || "unknown";
+
+      console.log(`[Approve] Post ${post.id} approved by ${adminUserId}. Previous qualityGateStatus: ${post.qualityGateStatus}, qualityFailReasons: ${JSON.stringify(post.qualityFailReasons)}`);
 
       const { html, errors } = await compileMdxToHtml(post.mdxContent);
       if (errors.length > 0) {
@@ -713,6 +716,7 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
           publishAt: new Date(publish_at),
           generationStatus: "generated",
           qualityGateStatus: "pass",
+          approvedBy: adminUserId,
         });
         res.json(updated);
       } else {
@@ -722,13 +726,19 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
           publishedAt: new Date(),
           generationStatus: "generated",
           qualityGateStatus: "pass",
+          approvedBy: adminUserId,
         });
         res.json(updated);
       }
     } catch (err: any) {
       res.status(500).json({ error: err.message });
     }
-  });
+  };
+
+  app.post("/api/blog/posts/:id/approve", approveHandler);
+
+  // @deprecated — use POST /api/blog/posts/:id/approve instead
+  app.post("/api/blog/posts/:id/approve-and-schedule", approveHandler);
 
   app.get("/api/blog/campaigns/:workspaceId", async (req, res) => {
     if (!requireSuperAdmin(req, res)) return;
@@ -938,14 +948,20 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     try {
       const domain = (req.query.domain as string) || req.hostname;
       const normalized = domain.toLowerCase().replace(/^www\./, "").split(":")[0];
+      const page = Math.max(1, parseInt(req.query.page as string) || 1);
+      const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 20));
 
       const wsDomain = await storage.getWorkspaceDomainByDomain(normalized);
       if (!wsDomain) {
         return res.status(404).json({ error: "Domain not found" });
       }
 
-      const posts = await storage.getPublishedPostsByWorkspace(wsDomain.workspaceId);
-      const safeList = posts.map(p => ({
+      const allPosts = await storage.getPublishedPostsByWorkspace(wsDomain.workspaceId);
+      const total = allPosts.length;
+      const offset = (page - 1) * limit;
+      const paginated = allPosts.slice(offset, offset + limit);
+
+      const safeList = paginated.map(p => ({
         slug: p.slug,
         title: p.title,
         description: p.description,
@@ -960,6 +976,10 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
         accentColor: wsDomain.accentColor || null,
         accentForeground: wsDomain.accentForeground || null,
         posts: safeList,
+        total,
+        page,
+        limit,
+        hasMore: offset + limit < total,
       });
     } catch (err: any) {
       res.status(500).json({ error: err.message });

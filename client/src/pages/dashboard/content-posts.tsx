@@ -195,21 +195,24 @@ export default function ContentPosts() {
     if (topics.length === 0) return;
     try {
       const res = await apiRequest("POST", "/api/blog/posts/bulk/create", {
-        topics: topics.map((t) => t.trim()),
-        category: bulkCategory,
         workspaceId: wsId,
+        posts: topics.map((t) => ({
+          title: t.trim(),
+          primaryKeyword: t.trim().toLowerCase(),
+          category: bulkCategory,
+        })),
       });
-      const created: any = await res.json();
+      const result: any = await res.json();
+      const { campaignId, posts: createdPosts } = result;
       queryClient.invalidateQueries({ queryKey: ["/api/blog/posts", wsId] });
       setBulkOpen(false);
       setBulkTopics("");
       setBulkCategory("SEO");
 
-      if (Array.isArray(created) && created.length > 0) {
-        const postIds = created.map((p: any) => p.id);
-        toast({ title: "Drafts created", description: `Generating content for ${postIds.length} posts...` });
-        await apiRequest("POST", "/api/blog/posts/bulk/generate", { postIds });
-        toast({ title: "Generation started", description: `${postIds.length} posts are being written with AI. Refresh in a minute to see results.` });
+      if (campaignId && createdPosts?.length > 0) {
+        toast({ title: "Drafts created", description: `Generating content for ${createdPosts.length} posts...` });
+        await apiRequest("POST", "/api/blog/posts/bulk/generate", { workspaceId: wsId, campaignId: String(campaignId) });
+        toast({ title: "Generation started", description: `${createdPosts.length} posts are being written with AI. Refresh in a minute to see results.` });
       } else {
         toast({ title: "Drafts created", description: `${topics.length} posts queued.` });
       }

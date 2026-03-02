@@ -41,6 +41,9 @@ indexFlow is a white-label SEO, content management, and client management SaaS p
 - CRITICAL: Do NOT run db:push - database already has correct schema from SQL import
 - **pSEO tables** (added Feb 2026): `pseo_campaigns`, `pseo_services`, `pseo_locations`, `pseo_pages` — programmatic SEO engine for location×service landing pages
 - `pseo_locations.imageIds` references `content_assets.id` records (not raw image bank IDs) — images fetched via image-resolver.ts and persisted to content_assets before storing IDs here
+- **Blog post `approvedBy`**: nullable varchar(36) column on `venue_blog_posts` — stores admin user ID who manually approved a post via the approve endpoint
+- **Asset endpoints consolidated**: External image bank search is at `/api/blog/assets/search-external`, internal DB search at `/api/blog/assets/search`, save at `/api/blog/assets/save`. No unscoped `/api/assets/*` paths remain.
+- **Approve endpoint**: `POST /api/blog/posts/:id/approve` (replaces deprecated `/approve-and-schedule`). Logs previous qualityGateStatus before overriding to pass.
 
 ## Routes
 
