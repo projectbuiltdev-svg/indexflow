@@ -2393,5 +2393,23 @@ export async function registerRoutes(
   app.use("/api/pseo", pseoCampaignsRouter);
   app.use("/api/pseo", pseoReviewRouter);
 
+  app.get("/api/pseo/entitlement", async (req, res) => {
+    try {
+      const workspaceId = req.query.workspaceId as string;
+      if (!workspaceId) {
+        return res.status(400).json({ error: "workspaceId is required" });
+      }
+      const { checkCampaignEntitlement, generatePolarCheckoutUrl } = await import("./middleware/pseo-billing-confirmation");
+      const entitlement = await checkCampaignEntitlement(workspaceId);
+      const checkoutUrl = entitlement.slotsAvailable === 0
+        ? generatePolarCheckoutUrl(workspaceId, 1)
+        : null;
+      res.json({ ...entitlement, checkoutUrl });
+    } catch (error: any) {
+      console.error("[pSEO] Entitlement check failed:", error.message);
+      res.status(500).json({ error: "Failed to check entitlement" });
+    }
+  });
+
   return httpServer;
 }

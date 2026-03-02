@@ -45,8 +45,10 @@ import {
   ExternalLink, Image, Link as LinkIcon, Key,
   HelpCircle, Maximize2, Tag, Calendar, Save,
   BarChart3, Activity, FileDown, Upload, ChevronDown,
-  Check, Play, Loader2,
+  Check, Play, Loader2, Layers, Lock, ShoppingCart,
 } from "lucide-react";
+import CampaignDashboard from "@/components/pseo/CampaignDashboard";
+import CampaignWizard from "@/components/pseo/CampaignWizard";
 
 function getTabFromUrl(): string {
   try {
