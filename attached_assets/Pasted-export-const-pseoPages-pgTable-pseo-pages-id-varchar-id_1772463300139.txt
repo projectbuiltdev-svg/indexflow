@@ -1,0 +1,93 @@
+export const pseoPages = pgTable("pseo_pages", {
+  id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
+  campaignId: varchar("campaign_id", { length: 36 })
+    .notNull()
+    .references(() => pseoCampaigns.id, { onDelete: "cascade" }),
+  venueId: varchar("venue_id", { length: 36 })
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  locationId: varchar("location_id", { length: 36 })
+    .references(() => pseoLocations.id, { onDelete: "set null" }),
+  serviceId: varchar("service_id", { length: 36 })
+    .references(() => pseoServices.id, { onDelete: "set null" }),
+  // venue_site_pages uses serial integer primary key — not uuid
+  venueSitePageId: integer("venue_site_page_id")
+    .references(() => workspaceSitePages.id, { onDelete: "set null" }),
+  pageType: text("page_type").notNull().default("location"),
+  // location | service | hub-state | hub-zone | hub-service
+  slug: text("slug").notNull(),
+  title: text("title").notNull(),
+  h1Variant: text("h1_variant"),
+  paragraphVariants: jsonb("paragraph_variants").$type<string[]>(),
+  metaTitle: text("meta_title"),
+  metaDescription: text("meta_description"),
+  schemaJson: jsonb("schema_json").$type<Record<string, any>>(),
+  internalLinks: jsonb("internal_links").$type<Array<{ url: string; anchor: string }>>(),
+  similarityScore: decimal("similarity_score", { precision: 4, scale: 3 }),
+  qualityGateStatus: text("quality_gate_status").notNull().default("pending"),
+  // pending | pass | fail
+  qualityFailReasons: jsonb("quality_fail_reasons").$type<string[]>(),
+  isPublished: boolean("is_published").notNull().default(false),
+  isIndexed: boolean("is_indexed").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (t) => [
+  index("pseo_pages_campaign_idx").on(t.campaignId),
+  index("pseo_pages_venue_idx").on(t.venueId),
+  index("pseo_pages_quality_idx").on(t.campaignId, t.qualityGateStatus),
+  uniqueIndex("pseo_pages_campaign_slug_uq").on(t.campaignId, t.slug),
+]);
+```
+
+---
+
+**Correction 2 — Pre-build step 6 migration addition**
+
+In Section 8 Pre-Build Phase, Step 6 — Database schema and migrations — add this line:
+```
+Also run: CREATE UNIQUE INDEX venue_site_pages_workspace_slug_uq 
+ON venue_site_pages (workspace_id, slug);
+NOTE: This index was added during the content engine audit.
+Confirm it exists before running pSEO migrations.
+```
+
+---
+
+**Correction 3 — Image storage uses content_assets**
+
+In Section 5, pseo_locations table description, add this note under imageIds:
+```
+imageIds stores references to content_assets.id records — not raw 
+third-party image bank IDs. All location images must be fetched from 
+Pixabay/Pexels/Unsplash via the existing image-resolver.ts 
+searchWithFallback function and persisted to the content_assets table 
+with R2 storage before the ID is written here. This ensures image 
+permanence and consistency with the content engine image pipeline.
+```
+
+---
+
+**Correction 4 — Template parser reads venue_site_profiles first**
+
+In Section 6, Template Parser module rules, add this rule at the top of the Logic section:
+```
+Before parsing uploaded HTML — check venue_site_profiles for the 
+workspace. If a site profile exists, use its primaryColor, fontFamily, 
+logoUrl, headerHtml, and footerHtml as the source of truth for locked 
+zones. Only fall back to HTML extraction if no site profile exists or 
+if the relevant field is null. Site profile data is always more reliable 
+than HTML extraction.
+```
+
+---
+
+**Correction 5 — postKeywordIndex integration**
+
+In Section 6, Internal Linking Mapper module rules, add this rule:
+```
+After generating internal links for each location page — write the 
+page's primary keyword, slug, and title to the post_keyword_index table 
+using a nullable post_id and the venue_site_page_id as the page 
+reference. This ensures location pages appear in the platform-wide 
+keyword index alongside blog posts, enabling cross-content internal 
+linking between the content engine and the pSEO engine.
