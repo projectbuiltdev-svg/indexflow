@@ -147,7 +147,7 @@ export async function generateSingleDraft(postId: string): Promise<WorkspaceBlog
       messages.push({ role: "assistant", content: mdxContent });
       messages.push({
         role: "user",
-        content: `This draft is only ${wordCount} words. I need at least 1800 words. Please rewrite and significantly expand EVERY section with more detail, real-world examples, step-by-step instructions, data points, and actionable tips. Add 2-3 more paragraphs per section. Keep the same structure and image placeholders but make each section much more comprehensive. Return the complete expanded article.`,
+        content: `This draft is only ${wordCount} words. I need at least 2000 words. Please rewrite and significantly expand EVERY section with more detail, real-world examples, step-by-step instructions, data points, and actionable tips. Add 2-3 more paragraphs per section. Keep the same structure and image placeholders but make each section much more comprehensive. Return the complete expanded article.`,
       });
     }
 
