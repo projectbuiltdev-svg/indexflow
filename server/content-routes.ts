@@ -189,6 +189,13 @@ export function registerContentRoutes(app: Express) {
         status: "published",
         publishedAt: new Date(),
       });
+      // TODO: GitHub Deploy Integration
+      // When GITHUB_TOKEN is configured, trigger repository dispatch here:
+      // await fetch(`https://api.github.com/repos/{owner}/{repo}/dispatches`, {
+      //   method: 'POST',
+      //   headers: { Authorization: `token ${process.env.GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ event_type: 'client-publish' })
+      // });
       res.json(updated);
     } catch (err: any) {
       res.status(500).json({ error: err.message });
