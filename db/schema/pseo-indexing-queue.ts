@@ -24,6 +24,7 @@ export const pseoIndexingQueue = pgTable("pseo_indexing_queue", {
   nextRetryAt: timestamp("next_retry_at"),
   submittedAt: timestamp("submitted_at"),
   indexedAt: timestamp("indexed_at"),
+  priority: integer("priority").notNull().default(4),
   errorMessage: text("error_message"),
   createdAt: timestamp("created_at").defaultNow(),
   deletedAt: timestamp("deleted_at"),

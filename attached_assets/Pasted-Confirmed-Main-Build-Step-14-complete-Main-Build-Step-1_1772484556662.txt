@@ -1,0 +1,57 @@
+Confirmed. Main Build Step 14 complete.
+
+Main Build Step 15 — Google Indexing API Integration.
+
+Create /server/integrations/google-indexing-client.ts:
+
+1. submitUrl(url, workspaceId, type) — submits a single URL:
+   - type: "URL_UPDATED" for new/updated pages
+   - type: "URL_DELETED" for removed pages
+   - Retrieves Google OAuth token from workspace GSC connection
+   - Calls Google Indexing API: 
+     POST https://indexing.googleapis.com/v3/urlNotifications:publish
+   - Returns { success, notifyTime, error? }
+   - On 429 rate limit — log and queue for retry, do not throw
+   - On 401 — token expired — log to pseo_audit_log, do not throw
+
+2. submitBatch(urls, workspaceId) — batch submission:
+   - Enforces MAX_URLS_PER_HOUR (200) hard limit from config
+   - Splits into chunks of 200 with 1 hour spacing between chunks
+   - Tracks submission count per workspace per hour in memory
+   - Returns { submitted, queued, failed } counts
+
+3. /server/jobs/pseo-indexing-queue-processor.ts — 
+   background job:
+   - Runs on QUEUE_PROCESSOR_INTERVAL_MS (900000 = 15 min) 
+     from config
+   - Queries pseo_indexing_queue for pending URLs ordered by 
+     created_at ascending
+   - Submits in batches respecting MAX_URLS_PER_HOUR
+   - Updates pseo_indexing_queue records:
+     * On success: status "submitted", submitted_at timestamp
+     * On failure: increment retry_count, set next_retry_at 
+       using RETRY_AFTER_HOURS (24) from config
+     * After MAX_RETRIES (3): status "failed", stop retrying
+   - On RESUBMIT_AFTER_DAYS (14) with no index confirmation: 
+     resubmit automatically
+   - On FLAG_AFTER_DAYS (21) with no index confirmation: 
+     status "flagged" for manual review
+
+4. enqueueForIndexing(pageIds, campaignId, workspaceId) — 
+   called after pages pass quality gates and similarity check:
+   - Inserts records into pseo_indexing_queue
+   - status: "pending"
+   - Sets priority based on page type: hub=1, service=2, 
+     location=3, default=4
+
+Write /tests/pseo/pseo-indexing.test.ts covering:
+- Single URL submission success
+- Rate limit triggers queue not throw
+- 401 logs to audit and does not throw
+- Batch enforces 200/hour limit
+- Queue processor respects retry limits
+- FLAG_AFTER_DAYS triggers flagged status
+- RESUBMIT_AFTER_DAYS triggers resubmit
+
+Show all files and test results. Stop. Wait for confirmation 
+before proceeding.
