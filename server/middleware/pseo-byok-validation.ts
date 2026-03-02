@@ -3,10 +3,11 @@ import type { AiProvider } from "../types/byok.types";
 import type { ByokValidationResult } from "../types/byok.types";
 import { PseoErrorType, handleCampaignError, type CampaignErrorContext } from "../pseo/error-handler";
 import { canTransition, type CampaignState } from "../pseo/campaign-state-machine";
+import { BYOK_VALIDATION_CACHE_TTL_MS } from "../config/pseo-indexing-rate-limits";
 
 type ImageBankProvider = "unsplash" | "pexels" | "pixabay";
 
-const VALIDATION_CACHE_TTL_MS = 60 * 60 * 1000;
+const VALIDATION_CACHE_TTL_MS = BYOK_VALIDATION_CACHE_TTL_MS;
 
 interface CachedValidation {
   result: ByokValidationResult;

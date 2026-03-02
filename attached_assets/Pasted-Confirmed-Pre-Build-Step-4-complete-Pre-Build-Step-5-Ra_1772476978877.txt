@@ -1,0 +1,75 @@
+Confirmed. Pre-Build Step 4 complete.
+
+Pre-Build Step 5 — Rate Limiting and Concurrency Config.
+
+Create all config files in /server/config/ as listed in Section 4.8 
+of the context document. Every numeric constant in the entire pSEO 
+system must be defined here. No magic numbers anywhere in the codebase.
+
+Required files and their constants:
+
+/server/config/pseo-gate-thresholds.ts
+- MIN_WORD_COUNT: 800
+- META_DESCRIPTION_MIN: 140
+- META_DESCRIPTION_MAX: 160
+- MIN_INTERNAL_LINKS: 2
+- MAX_INTERNAL_LINKS: 8
+- MIN_EXTERNAL_LINKS: 1
+- MIN_IMAGES: 1
+- QUALITY_GATE_COUNT: 12
+
+/server/config/pseo-similarity-threshold.ts
+- SIMILARITY_THRESHOLD: 0.80
+- MIN_H1_POOL_SIZE: 6
+- MIN_H2_POOL_SIZE: 5
+- MIN_PARAGRAPH_POOL_SIZE: 4
+- MAX_POOL_EXPANSIONS: 5
+
+/server/config/pseo-indexing-rate-limits.ts
+- MAX_URLS_PER_HOUR: 200
+- MAX_CONCURRENT_AI_CALLS_PER_CAMPAIGN: 10
+- MAX_CONCURRENT_AI_CALLS_PLATFORM: 100
+- AI_CALL_TIMEOUT_MS: 30000
+- AI_CALL_RETRY_LIMIT: 1
+- PLACES_API_RATE_LIMIT_PER_SECOND: 10
+- IMAGE_BANK_RATE_LIMIT_PER_SECOND: 5
+- QUEUE_PROCESSOR_INTERVAL_MS: 900000
+- GSC_POLLING_INTERVAL_HOURS: 48
+- RETRY_AFTER_HOURS: 24
+- MAX_RETRIES: 3
+- RESUBMIT_AFTER_DAYS: 14
+- FLAG_AFTER_DAYS: 21
+- BYOK_VALIDATION_CACHE_TTL_MS: 3600000
+
+/server/config/pseo-geographic-divisions.ts
+- Geographic zone definitions for all 7 markets: USA, UK, Ireland, 
+  Australia, Canada, Germany, France
+- Campaign location limits: MAX_LOCATIONS_PER_CAMPAIGN: 2000
+- MIN_RADIUS_MILES: 5
+- Subscription tier campaign limits: Solo=1, Pro=25, Agency=50, 
+  Enterprise=unlimited (use -1 for unlimited)
+
+/server/config/pseo-pricing.ts
+- BASE_CAMPAIGN_PRICE: 199
+- BUNDLE_3_PRICE: 499
+- BUNDLE_5_PRICE: 749
+- BUNDLE_3_THRESHOLD: 3
+- BUNDLE_5_THRESHOLD: 5
+- FREE_CAMPAIGNS_PER_WORKSPACE: 1
+
+/server/config/pseo-ai-cost-estimates.ts
+- Cost estimates per 665 pages for each provider as in Section 3.2
+- GPT_4O_MINI_COST_PER_665: 1
+- GPT_4O_COST_PER_665: 17
+- CLAUDE_SONNET_COST_PER_665: 22
+- IMAGE_COST: 0
+
+Also create these remaining config files as specified in Section 4.8 
+with sensible initial values:
+/server/config/pseo-domain-whitelist.ts
+/server/config/pseo-government-tld-list.ts
+/server/config/pseo-tourism-domain-list.ts
+/server/config/pseo-stop-words-list.ts
+
+Show all files created with key constants listed. Stop. Wait for 
+confirmation before proceeding.
