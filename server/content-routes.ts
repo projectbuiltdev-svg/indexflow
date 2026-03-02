@@ -1169,7 +1169,7 @@ Return ONLY valid JSON, no markdown.`;
       fields: {
         title: { "en-US": post.title },
         slug: { "en-US": post.slug },
-        body: { "en-US": post.mdxContent || "" },
+        body: { "en-US": post.compiledHtml || post.mdxContent || "" },
         description: { "en-US": post.description || "" },
         category: { "en-US": post.category || "" },
         tags: { "en-US": post.tags || [] },
