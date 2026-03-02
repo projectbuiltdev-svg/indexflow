@@ -136,6 +136,7 @@ export default function ContentPages() {
   const [addTemplate, setAddTemplate] = useState("default");
   const [addDescription, setAddDescription] = useState("");
   const [addContent, setAddContent] = useState("");
+  const [addParentId, setAddParentId] = useState<string>("none");
 
   const [editOpen, setEditOpen] = useState(false);
   const [editPage, setEditPage] = useState<Page | null>(null);
@@ -143,6 +144,7 @@ export default function ContentPages() {
   const [editSlug, setEditSlug] = useState("");
   const [editTemplate, setEditTemplate] = useState("");
   const [editContent, setEditContent] = useState("");
+  const [editParentId, setEditParentId] = useState<string>("none");
 
   const [auditOpen, setAuditOpen] = useState(false);
   const [auditPage, setAuditPage] = useState<Page | null>(null);
@@ -173,6 +175,7 @@ export default function ContentPages() {
       setAddTemplate("default");
       setAddDescription("");
       setAddContent("");
+      setAddParentId("none");
       toast({ title: "Page created", description: `"${addTitle}" has been added.` });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
@@ -240,6 +243,7 @@ export default function ContentPages() {
       template: addTemplate,
       description: addDescription,
       content: addContent || undefined,
+      parentId: addParentId !== "none" ? parseInt(addParentId) : null,
     });
   };
 
@@ -249,6 +253,7 @@ export default function ContentPages() {
     setEditSlug(page.slug);
     setEditTemplate(page.template || "default");
     setEditContent(page.content || "");
+    setEditParentId(page.parentId ? String(page.parentId) : "none");
     setEditOpen(true);
   };
 
@@ -261,6 +266,7 @@ export default function ContentPages() {
         slug: editSlug,
         template: editTemplate,
         content: editContent,
+        parentId: editParentId !== "none" ? parseInt(editParentId) : null,
       },
     });
   };
@@ -608,6 +614,20 @@ export default function ContentPages() {
               </Select>
             </div>
             <div className="space-y-2">
+              <Label>Parent Page</Label>
+              <Select value={addParentId} onValueChange={setAddParentId}>
+                <SelectTrigger data-testid="select-add-page-parent">
+                  <SelectValue placeholder="None" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">None (Top Level)</SelectItem>
+                  {pages.map((p) => (
+                    <SelectItem key={p.id} value={String(p.id)}>{p.title} <span className="text-muted-foreground">/{p.slug}</span></SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="add-page-description">Description</Label>
               <Textarea id="add-page-description" placeholder="Page description or meta summary..." value={addDescription} onChange={(e) => setAddDescription(e.target.value)} data-testid="input-add-page-description" />
             </div>
@@ -651,6 +671,20 @@ export default function ContentPages() {
                   <SelectItem value="landing">Landing</SelectItem>
                   <SelectItem value="service">Service</SelectItem>
                   <SelectItem value="location">Location</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Parent Page</Label>
+              <Select value={editParentId} onValueChange={setEditParentId}>
+                <SelectTrigger data-testid="select-edit-page-parent">
+                  <SelectValue placeholder="None" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">None (Top Level)</SelectItem>
+                  {pages.filter((p) => p.id !== editPage?.id).map((p) => (
+                    <SelectItem key={p.id} value={String(p.id)}>{p.title} <span className="text-muted-foreground">/{p.slug}</span></SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
