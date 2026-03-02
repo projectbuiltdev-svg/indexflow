@@ -1,4 +1,4 @@
-import { hydrateRoot, createRoot } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
@@ -10,10 +10,5 @@ function reveal() {
   });
 }
 
-if (rootEl.innerHTML.trim()) {
-  hydrateRoot(rootEl, <App />, { onRecoverableError: () => {} });
-  reveal();
-} else {
-  createRoot(rootEl).render(<App />);
-  reveal();
-}
+createRoot(rootEl).render(<App />);
+reveal();
