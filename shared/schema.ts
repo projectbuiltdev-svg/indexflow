@@ -57,6 +57,7 @@ export const workspaces = pgTable(
     plan: text("plan").notNull().default("solo"),
     status: text("status").notNull().default("active"),
     aiKeySource: text("ai_key_source").notNull().default("agency"),
+    pseoAdminOverride: boolean("pseo_admin_override"),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),
   },

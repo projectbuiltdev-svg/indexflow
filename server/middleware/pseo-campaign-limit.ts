@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { storage } from "../storage";
 import { TIER_CAMPAIGN_LIMITS } from "../config/pseo-geographic-divisions";
-import { getPlanTier } from "@shared/schema";
 import { createPseoError, PseoErrorType } from "../pseo/error-handler";
 import { db } from "../db";
 import { pseoCampaigns } from "@shared/schema";
@@ -24,8 +23,10 @@ export async function getCampaignLimit(workspaceId: string): Promise<number> {
   const workspace = await storage.getWorkspace(workspaceId);
   if (!workspace) return 0;
 
+  if (workspace.pseoAdminOverride === false) return 0;
+  if (workspace.pseoAdminOverride === true) return -1;
+
   const owner = await storage.getUser(workspace.ownerId!);
-  const planTier = getPlanTier(owner?.plan || "solo");
   const tierKey = (owner?.plan || "solo").toLowerCase();
 
   return TIER_CAMPAIGN_LIMITS[tierKey] ?? TIER_CAMPAIGN_LIMITS.solo;

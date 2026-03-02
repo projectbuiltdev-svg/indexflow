@@ -70,6 +70,7 @@ const AdminSeo = lazy(() => import("@/pages/admin/seo"));
 const AdminWebsiteChanges = lazy(() => import("@/pages/admin/website-changes"));
 const AdminCrm = lazy(() => import("@/pages/admin/crm"));
 const AdminContent = lazy(() => import("@/pages/admin/content"));
+const AdminPseo = lazy(() => import("@/pages/admin/pseo"));
 const AdminSeoRankTracker = lazy(() => import("@/pages/admin/seo-rank-tracker"));
 const AdminSeoLocalGrid = lazy(() => import("@/pages/admin/seo-local-grid"));
 const AdminSeoAIVisibility = lazy(() => import("@/pages/admin/seo-ai-visibility"));
@@ -372,6 +373,7 @@ export function AppRoutes() {
         <Route path="/admin/website-changes">{() => <AdminRoute component={AdminWebsiteChanges} permission="website-changes" />}</Route>
         <Route path="/admin/crm">{() => <AdminRoute component={AdminCrm} permission="crm" />}</Route>
         <Route path="/admin/content">{() => <AdminRoute component={AdminContent} permission="*" />}</Route>
+        <Route path="/admin/pseo">{() => <AdminRoute component={AdminPseo} permission="*" />}</Route>
         <Route path="/admin/notifications">{() => <AdminRoute component={AdminNotifications} permission="notifications" />}</Route>
         <Route path="/admin/settings">{() => <AdminRoute component={AdminSettings} permission="settings" />}</Route>
         <Route path="/admin/seo/rank-tracker">{() => <AdminRoute component={AdminSeoRankTracker} permission="seo" />}</Route>
