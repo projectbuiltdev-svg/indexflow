@@ -99,7 +99,7 @@ export async function registerRoutes(
     return { meta, content: raw.slice(match[0].length).trim() };
   }
 
-  app.get("/api/blog/posts", async (_req, res) => {
+  app.get("/api/marketing/posts", async (_req, res) => {
     try {
       if (!fs.existsSync(BLOG_CONTENT_DIR)) {
         return res.json([]);
@@ -136,7 +136,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/blog/posts/:category/:slug", async (req, res) => {
+  app.get("/api/marketing/posts/:category/:slug", async (req, res) => {
     try {
       const { category, slug } = req.params;
       const mdxPath = path.join(BLOG_CONTENT_DIR, category, `${slug}.mdx`);
