@@ -1,0 +1,60 @@
+Confirmed. Main Build Step 18 complete.
+
+Main Build Step 19 — Rank Tracking Integration.
+
+Create the following files:
+
+1. /server/integrations/google-search-console-rank-client.ts:
+   - getRankData(domain, urls, workspaceId) — queries GSC 
+     Search Analytics API for rank data on specific URLs:
+     * Dimensions: query, page, device, date
+     * Date range: last 28 days
+     * Returns per-URL: position, clicks, impressions, CTR
+   - getTopQueries(domain, workspaceId, limit) — returns top 
+     queries for the workspace domain
+   - Retrieves OAuth token from workspace GSC connection
+   - If GSC not connected returns empty results — never throws
+   - Rate limited — respects GSC API quotas
+
+2. /server/jobs/pseo-rank-tracker.ts — background job:
+   - trackCampaignRanks(campaignId, workspaceId) — 
+     queries GSC for all published pages in campaign
+   - Runs on GSC_POLLING_INTERVAL_HOURS (48) schedule from config
+   - Only runs for campaigns in "monitoring" state
+   - Updates pseo_keywords table with latest rank data:
+     * rankPosition, clicks, impressions, ctr
+     * previousPosition for trend calculation
+     * rankedAt timestamp
+   - Calculates rank movement: improved, declined, stable, new
+   - If page has no impressions after FLAG_AFTER_DAYS (21) — 
+     flags page in pseo_pages for review
+   - Logs summary to pseo_audit_log after each run
+
+3. /client/components/pseo/RankTrackingTab.tsx:
+   - Add as 5th tab to CampaignDashboard from Step 16
+   - Only visible when campaign is in "monitoring" state
+   - Shows rank data table:
+     * Columns: page title, primary keyword, current position, 
+       previous position, movement indicator, clicks, 
+       impressions, CTR, last updated
+     * Movement: green arrow up (improved), red arrow down 
+       (declined), dash (stable), star (new entry)
+   - Summary cards: Average Position, Total Clicks, Total 
+     Impressions, Average CTR
+   - Filter by: service, location, movement type
+   - "Refresh Ranks" button — triggers manual rank check
+
+4. Server routes in /server/routes/pseo/ranks.ts:
+   - GET /api/pseo/campaigns/:id/ranks — returns rank data 
+     for all pages in campaign
+   - POST /api/pseo/campaigns/:id/ranks/refresh — triggers 
+     manual rank refresh job
+
+Write tests covering:
+- GSC not connected returns empty — never throws
+- Rank movement calculation (improved/declined/stable/new)
+- FLAG_AFTER_DAYS triggers page flag
+- Rate limit handling
+
+Show all files and test results. Stop. Wait for confirmation 
+before proceeding.
