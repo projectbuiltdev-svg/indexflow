@@ -1339,7 +1339,8 @@ export const workspaceSitePages = pgTable(
     description: text("description"),
     content: text("content"),
     template: text("template").default("default"),
-    parentId: integer("parent_id"),
+    parentId: integer("parent_id")
+      .references((): any => workspaceSitePages.id, { onDelete: "set null" }),
     sortOrder: integer("sort_order").default(0),
     isPublished: boolean("is_published").default(false),
     metaTitle: text("meta_title"),
