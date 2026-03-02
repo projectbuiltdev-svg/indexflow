@@ -573,6 +573,16 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
   app.delete("/api/blog/domains/:id", async (req, res) => {
     if (!requireSuperAdmin(req, res)) return;
     try {
+      const domain = await storage.getWorkspaceDomain(req.params.id);
+      if (domain) {
+        const lockStatus = await getDomainLockStatus(domain.workspaceId);
+        if (lockStatus.locked) {
+          return res.status(403).json({
+            error: "domain_locked",
+            message: lockStatus.reason,
+          });
+        }
+      }
       const deleted = await storage.deleteWorkspaceDomain(req.params.id);
       if (!deleted) return res.status(404).json({ error: "Domain not found" });
       res.json({ success: true });

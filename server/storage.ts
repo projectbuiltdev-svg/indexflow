@@ -262,6 +262,7 @@ export interface IStorage {
   getGridScanKeywords(workspaceId: string): Promise<string[]>;
   // Workspace Domains
   getWorkspaceDomains(workspaceId: string): Promise<WorkspaceDomain[]>;
+  getWorkspaceDomain(id: string): Promise<WorkspaceDomain | undefined>;
   getWorkspaceDomainByDomain(domain: string): Promise<WorkspaceDomain | undefined>;
   createWorkspaceDomain(d: InsertWorkspaceDomain): Promise<WorkspaceDomain>;
   updateWorkspaceDomain(id: string, data: Partial<Pick<WorkspaceDomain, "domain" | "blogTemplate" | "isPrimary" | "accentColor" | "accentForeground">>): Promise<WorkspaceDomain | undefined>;
@@ -1317,6 +1318,9 @@ export class MemStorage implements IStorage {
   async getWorkspaceDomains(workspaceId: string): Promise<WorkspaceDomain[]> {
     return Array.from(this.workspaceDomainsMap.values()).filter(d => d.workspaceId === workspaceId);
   }
+  async getWorkspaceDomain(id: string): Promise<WorkspaceDomain | undefined> {
+    return this.workspaceDomainsMap.get(id);
+  }
   async getWorkspaceDomainByDomain(domain: string): Promise<WorkspaceDomain | undefined> {
     return Array.from(this.workspaceDomainsMap.values()).find(d => d.domain === domain.toLowerCase());
   }
@@ -2221,6 +2225,10 @@ export class DbStorage implements IStorage {
 
   async getWorkspaceDomains(workspaceId: string): Promise<WorkspaceDomain[]> {
     return db!.select().from(workspaceDomains).where(eq(workspaceDomains.workspaceId, workspaceId));
+  }
+  async getWorkspaceDomain(id: string): Promise<WorkspaceDomain | undefined> {
+    const [row] = await db!.select().from(workspaceDomains).where(eq(workspaceDomains.id, id));
+    return row;
   }
   async getWorkspaceDomainByDomain(domain: string): Promise<WorkspaceDomain | undefined> {
     const [row] = await db!.select().from(workspaceDomains).where(eq(workspaceDomains.domain, domain.toLowerCase()));
