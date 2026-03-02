@@ -1,105 +1,78 @@
 import type { Request, Response } from "express";
-import { storage } from "../storage";
 import { db } from "../db";
+import { eq, and, ne, count, sum } from "drizzle-orm";
+import { pseoCampaigns } from "@shared/schema";
+import { pseoCampaignEntitlements } from "../../db/schema/pseo-campaign-entitlements";
 import { pseoAuditLog } from "../../db/schema/pseo-audit-log";
+import { TIER_CAMPAIGN_LIMITS } from "../config/pseo-geographic-divisions";
+import { BASE_CAMPAIGN_PRICE, FREE_CAMPAIGNS_PER_WORKSPACE, PSEO_ADDON_CURRENCY } from "../config/pseo-pricing";
+import { countActiveCampaigns, getCampaignLimit } from "./pseo-campaign-limit";
 import { createPseoError, PseoErrorType } from "../pseo/error-handler";
-import { countActiveCampaigns } from "./pseo-campaign-limit";
-import {
-  BASE_CAMPAIGN_PRICE,
-  BUNDLE_3_PRICE,
-  BUNDLE_5_PRICE,
-  BUNDLE_3_THRESHOLD,
-  BUNDLE_5_THRESHOLD,
-  FREE_CAMPAIGNS_PER_WORKSPACE,
-} from "../config/pseo-pricing";
 
-export interface CampaignPricing {
-  currentCampaignCount: number;
-  nextCampaignNumber: number;
-  isFree: boolean;
-  unitPrice: number;
-  bundleApplied: boolean;
-  bundleType: "none" | "bundle-3" | "bundle-5";
-  bundlePrice: number | null;
-  savings: number;
-  totalDue: number;
-  currency: "usd";
+export interface CampaignEntitlement {
+  baseCampaigns: number;
+  addonCampaigns: number;
+  totalEntitlement: number;
+  activeCount: number;
+  slotsAvailable: number;
 }
 
-export async function getCampaignPricing(workspaceId: string): Promise<CampaignPricing> {
-  const currentCount = await countActiveCampaigns(workspaceId);
-  const nextNumber = currentCount + 1;
+export async function getAddonCampaignCount(workspaceId: string): Promise<number> {
+  const [result] = await db
+    .select({ total: sum(pseoCampaignEntitlements.quantity) })
+    .from(pseoCampaignEntitlements)
+    .where(eq(pseoCampaignEntitlements.venueId, workspaceId));
+  return Number(result?.total) || 0;
+}
 
-  if (nextNumber <= FREE_CAMPAIGNS_PER_WORKSPACE) {
-    return {
-      currentCampaignCount: currentCount,
-      nextCampaignNumber: nextNumber,
-      isFree: true,
-      unitPrice: 0,
-      bundleApplied: false,
-      bundleType: "none",
-      bundlePrice: null,
-      savings: 0,
-      totalDue: 0,
-      currency: "usd",
-    };
-  }
+export async function checkCampaignEntitlement(workspaceId: string): Promise<CampaignEntitlement> {
+  const baseCampaigns = await getCampaignLimit(workspaceId);
+  const addonCampaigns = await getAddonCampaignCount(workspaceId);
+  const activeCount = await countActiveCampaigns(workspaceId);
 
-  const paidCampaignNumber = nextNumber - FREE_CAMPAIGNS_PER_WORKSPACE;
-
-  let bundleApplied = false;
-  let bundleType: CampaignPricing["bundleType"] = "none";
-  let bundlePrice: number | null = null;
-  let savings = 0;
-  let totalDue = BASE_CAMPAIGN_PRICE;
-
-  if (paidCampaignNumber >= BUNDLE_5_THRESHOLD && paidCampaignNumber % BUNDLE_5_THRESHOLD === 0) {
-    bundleApplied = true;
-    bundleType = "bundle-5";
-    bundlePrice = BUNDLE_5_PRICE;
-    totalDue = BUNDLE_5_PRICE;
-    savings = (BASE_CAMPAIGN_PRICE * BUNDLE_5_THRESHOLD) - BUNDLE_5_PRICE;
-  } else if (paidCampaignNumber >= BUNDLE_3_THRESHOLD && paidCampaignNumber % BUNDLE_3_THRESHOLD === 0) {
-    bundleApplied = true;
-    bundleType = "bundle-3";
-    bundlePrice = BUNDLE_3_PRICE;
-    totalDue = BUNDLE_3_PRICE;
-    savings = (BASE_CAMPAIGN_PRICE * BUNDLE_3_THRESHOLD) - BUNDLE_3_PRICE;
-  }
+  const effectiveBase = baseCampaigns === -1 ? Infinity : baseCampaigns;
+  const totalEntitlement = effectiveBase + addonCampaigns;
+  const slotsAvailable = Math.max(0, totalEntitlement - activeCount);
 
   return {
-    currentCampaignCount: currentCount,
-    nextCampaignNumber: nextNumber,
-    isFree: false,
-    unitPrice: BASE_CAMPAIGN_PRICE,
-    bundleApplied,
-    bundleType,
-    bundlePrice,
-    savings,
-    totalDue,
-    currency: "usd",
+    baseCampaigns: baseCampaigns === -1 ? -1 : baseCampaigns,
+    addonCampaigns,
+    totalEntitlement: baseCampaigns === -1 ? -1 : effectiveBase + addonCampaigns,
+    activeCount,
+    slotsAvailable: baseCampaigns === -1 ? -1 : slotsAvailable,
   };
 }
 
-async function getStripeSecretKey(workspaceId: string): Promise<string | null> {
-  const settings = await storage.getPaymentSettings(workspaceId);
-  if (!settings?.stripeConnected || !settings?.stripeSecretKey) {
-    return null;
-  }
-  return settings.stripeSecretKey;
+export function generatePolarCheckoutUrl(
+  workspaceId: string,
+  quantity: number
+): string {
+  const productId = process.env.POLAR_PSEO_PRODUCT_ID || "";
+  const successUrl = process.env.POLAR_SUCCESS_URL || `${process.env.APP_URL || ""}/checkout/success`;
+  const cancelUrl = process.env.POLAR_CANCEL_URL || `${process.env.APP_URL || ""}/checkout/cancel`;
+
+  const params = new URLSearchParams();
+  params.append("product_id", productId);
+  params.append("quantity", String(quantity));
+  params.append("metadata[workspace_id]", workspaceId);
+  params.append("metadata[type]", "pseo_campaign_addon");
+  params.append("success_url", successUrl);
+  params.append("cancel_url", cancelUrl);
+
+  return `https://polar.sh/checkout?${params.toString()}`;
 }
 
-async function logPaymentAudit(
+async function logBillingAudit(
   workspaceId: string,
   action: string,
   meta: Record<string, any>
 ): Promise<void> {
   try {
     await db.insert(pseoAuditLog).values({
-      campaignId: meta.campaignId || "system",
+      campaignId: "system",
       venueId: workspaceId,
       action,
-      message: `Payment ${action}: ${meta.outcome || "initiated"}`,
+      message: `Billing ${action}: ${meta.outcome || "initiated"}`,
       level: meta.outcome === "failed" ? "error" : "info",
       triggeredBy: meta.triggeredBy || null,
       meta,
@@ -109,183 +82,46 @@ async function logPaymentAudit(
   }
 }
 
-export interface PaymentIntentResult {
-  success: boolean;
-  clientSecret: string | null;
-  paymentIntentId: string | null;
-  pricing: CampaignPricing;
-  error: string | null;
-}
-
-export async function createCampaignPaymentIntent(
-  workspaceId: string,
-  triggeredBy?: string
-): Promise<PaymentIntentResult> {
-  const pricing = await getCampaignPricing(workspaceId);
-
-  if (pricing.isFree) {
-    await logPaymentAudit(workspaceId, "campaign-purchase", {
-      outcome: "free",
-      amount: 0,
-      priceType: "free",
-      bundleApplied: false,
-      triggeredBy,
-    });
-
-    return {
-      success: true,
-      clientSecret: null,
-      paymentIntentId: null,
-      pricing,
-      error: null,
-    };
-  }
-
-  const stripeKey = await getStripeSecretKey(workspaceId);
-  if (!stripeKey) {
-    await logPaymentAudit(workspaceId, "campaign-purchase", {
-      outcome: "failed",
-      amount: pricing.totalDue,
-      priceType: pricing.bundleType,
-      bundleApplied: pricing.bundleApplied,
-      reason: "No Stripe connection configured",
-      triggeredBy,
-    });
-
-    return {
-      success: false,
-      clientSecret: null,
-      paymentIntentId: null,
-      pricing,
-      error: "Stripe is not connected for this workspace. Configure payment settings first.",
-    };
-  }
-
-  try {
-    const amountInCents = Math.round(pricing.totalDue * 100);
-
-    const params = new URLSearchParams();
-    params.append("amount", String(amountInCents));
-    params.append("currency", pricing.currency);
-    params.append("automatic_payment_methods[enabled]", "true");
-    params.append("metadata[workspace_id]", workspaceId);
-    params.append("metadata[campaign_number]", String(pricing.nextCampaignNumber));
-    params.append("metadata[bundle_type]", pricing.bundleType);
-    params.append("metadata[bundle_applied]", String(pricing.bundleApplied));
-    params.append("metadata[type]", "pseo_campaign_addon");
-    if (triggeredBy) {
-      params.append("metadata[triggered_by]", triggeredBy);
-    }
-
-    const resp = await fetch("https://api.stripe.com/v1/payment_intents", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${stripeKey}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: params.toString(),
-      signal: AbortSignal.timeout(15000),
-    });
-
-    if (!resp.ok) {
-      const body = await resp.text().catch(() => "");
-      await logPaymentAudit(workspaceId, "campaign-purchase", {
-        outcome: "failed",
-        amount: pricing.totalDue,
-        priceType: pricing.bundleType,
-        bundleApplied: pricing.bundleApplied,
-        reason: `Stripe API error ${resp.status}: ${body.slice(0, 200)}`,
-        triggeredBy,
-      });
-
-      return {
-        success: false,
-        clientSecret: null,
-        paymentIntentId: null,
-        pricing,
-        error: "Payment processing failed. Please try again.",
-      };
-    }
-
-    const intent = await resp.json();
-
-    await logPaymentAudit(workspaceId, "campaign-purchase", {
-      outcome: "intent_created",
-      amount: pricing.totalDue,
-      priceType: pricing.bundleType,
-      bundleApplied: pricing.bundleApplied,
-      savings: pricing.savings,
-      stripePaymentIntentId: intent.id,
-      triggeredBy,
-    });
-
-    return {
-      success: true,
-      clientSecret: intent.client_secret,
-      paymentIntentId: intent.id,
-      pricing,
-      error: null,
-    };
-  } catch (err: any) {
-    await logPaymentAudit(workspaceId, "campaign-purchase", {
-      outcome: "failed",
-      amount: pricing.totalDue,
-      priceType: pricing.bundleType,
-      bundleApplied: pricing.bundleApplied,
-      reason: err.message,
-      triggeredBy,
-    });
-
-    return {
-      success: false,
-      clientSecret: null,
-      paymentIntentId: null,
-      pricing,
-      error: "Payment processing failed. Please try again.",
-    };
-  }
-}
-
-async function verifyStripeSignature(
+async function verifyPolarSignature(
   payload: string,
   signature: string,
-  webhookSecret: string
+  secret: string
 ): Promise<boolean> {
   try {
     const crypto = await import("crypto");
-    const elements = signature.split(",");
-    const timestampStr = elements.find((e) => e.startsWith("t="))?.slice(2);
-    const signatureV1 = elements.find((e) => e.startsWith("v1="))?.slice(3);
-
-    if (!timestampStr || !signatureV1) return false;
-
-    const signedPayload = `${timestampStr}.${payload}`;
-    const expectedSignature = crypto
-      .createHmac("sha256", webhookSecret)
-      .update(signedPayload)
+    const expected = crypto
+      .createHmac("sha256", secret)
+      .update(payload)
       .digest("hex");
-
     return crypto.timingSafeEqual(
-      Buffer.from(signatureV1),
-      Buffer.from(expectedSignature)
+      Buffer.from(signature),
+      Buffer.from(expected)
     );
   } catch {
     return false;
   }
 }
 
-export async function handlePaymentWebhook(req: Request, res: Response): Promise<void> {
-  const signature = req.headers["stripe-signature"] as string;
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+export async function handlePolarWebhook(req: Request, res: Response): Promise<void> {
+  const webhookSecret = process.env.POLAR_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    res.status(500).json({ error: "Webhook secret not configured" });
+    return;
+  }
 
-  if (!signature || !webhookSecret) {
-    res.status(400).json({ error: "Missing signature or webhook secret" });
+  const signature =
+    (req.headers["x-polar-signature"] as string) ||
+    (req.headers["webhook-signature"] as string) ||
+    "";
+
+  if (!signature) {
+    res.status(400).json({ error: "Missing webhook signature" });
     return;
   }
 
   const rawBody = typeof req.body === "string" ? req.body : JSON.stringify(req.body);
 
-  const isValid = await verifyStripeSignature(rawBody, signature, webhookSecret);
+  const isValid = await verifyPolarSignature(rawBody, signature, webhookSecret);
   if (!isValid) {
     res.status(400).json({ error: "Invalid webhook signature" });
     return;
@@ -299,53 +135,67 @@ export async function handlePaymentWebhook(req: Request, res: Response): Promise
     return;
   }
 
-  if (event.type === "payment_intent.succeeded") {
-    const intent = event.data.object;
-    const metadata = intent.metadata || {};
+  if (event.type !== "order.created") {
+    res.json({ received: true, handled: false });
+    return;
+  }
 
-    if (metadata.type !== "pseo_campaign_addon") {
-      res.json({ received: true, handled: false });
-      return;
-    }
+  const order = event.data;
+  if (!order) {
+    res.status(400).json({ error: "Missing order data" });
+    return;
+  }
 
-    const workspaceId = metadata.workspace_id;
-    if (!workspaceId) {
-      res.status(400).json({ error: "Missing workspace_id in metadata" });
-      return;
-    }
+  const metadata = order.metadata || {};
+  const workspaceId = metadata.workspace_id;
+  const quantity = order.quantity || order.items?.length || 1;
+  const polarOrderId = order.id || "";
+  const polarProductId = order.product_id || metadata.product_id || "";
 
-    await logPaymentAudit(workspaceId, "campaign-purchase-confirmed", {
-      outcome: "success",
-      amount: intent.amount / 100,
-      stripePaymentIntentId: intent.id,
-      bundleType: metadata.bundle_type,
-      bundleApplied: metadata.bundle_applied === "true",
-      campaignNumber: metadata.campaign_number,
-      triggeredBy: metadata.triggered_by,
+  if (!workspaceId) {
+    await logBillingAudit("unknown", "polar-webhook-rejected", {
+      outcome: "failed",
+      reason: "Missing workspace_id in order metadata",
+      polarOrderId,
+    });
+    res.status(400).json({ error: "Missing workspace_id in order metadata" });
+    return;
+  }
+
+  if (metadata.type !== "pseo_campaign_addon") {
+    res.json({ received: true, handled: false });
+    return;
+  }
+
+  try {
+    await db.insert(pseoCampaignEntitlements).values({
+      venueId: workspaceId,
+      quantity,
+      unitPrice: BASE_CAMPAIGN_PRICE,
+      polarOrderId,
+      polarProductId,
     });
 
-    res.json({ received: true, handled: true });
-    return;
+    await logBillingAudit(workspaceId, "polar-campaign-purchase", {
+      outcome: "success",
+      polarOrderId,
+      polarProductId,
+      quantity,
+      slotsGranted: quantity,
+      unitPrice: BASE_CAMPAIGN_PRICE,
+      totalAmount: BASE_CAMPAIGN_PRICE * quantity,
+    });
+
+    res.json({ received: true, handled: true, slotsGranted: quantity });
+  } catch (err: any) {
+    await logBillingAudit(workspaceId, "polar-campaign-purchase", {
+      outcome: "failed",
+      polarOrderId,
+      polarProductId,
+      quantity,
+      reason: err.message,
+    });
+
+    res.status(500).json({ error: "Failed to grant campaign entitlement" });
   }
-
-  if (event.type === "payment_intent.payment_failed") {
-    const intent = event.data.object;
-    const metadata = intent.metadata || {};
-
-    if (metadata.type === "pseo_campaign_addon" && metadata.workspace_id) {
-      await logPaymentAudit(metadata.workspace_id, "campaign-purchase-failed", {
-        outcome: "failed",
-        amount: intent.amount / 100,
-        stripePaymentIntentId: intent.id,
-        bundleType: metadata.bundle_type,
-        reason: intent.last_payment_error?.message || "Payment failed",
-        triggeredBy: metadata.triggered_by,
-      });
-    }
-
-    res.json({ received: true, handled: true });
-    return;
-  }
-
-  res.json({ received: true, handled: false });
 }
