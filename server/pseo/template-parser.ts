@@ -20,6 +20,22 @@ export interface ParseResult {
   dynamicZones: TemplateZoneDescriptor[];
 }
 
+export interface BrandingInfo {
+  primaryColour: string | null;
+  fonts: string[];
+  logoUrl: string | null;
+}
+
+export interface TemplateParseResult {
+  lockedZones: TemplateZoneDescriptor[];
+  dynamicZones: TemplateZoneDescriptor[];
+  primaryColour: string | null;
+  fonts: string[];
+  logoUrl: string | null;
+  hasMinimumDynamicZones: boolean;
+  error?: string;
+}
+
 export interface DiffEntry {
   zoneKey: string;
   label: string;
@@ -206,6 +222,120 @@ export function parseTemplate(html: string): ParseResult {
   }
 
   return { lockedZones, dynamicZones };
+}
+
+export function extractBranding(html: string): BrandingInfo {
+  const hexCounts: Record<string, number> = {};
+  const hexRegex = /#([0-9a-fA-F]{3,8})\b/g;
+  let hexMatch;
+  while ((hexMatch = hexRegex.exec(html)) !== null) {
+    const hex = hexMatch[0].toLowerCase();
+    if (hex.length === 4 || hex.length === 7 || hex.length === 9) {
+      hexCounts[hex] = (hexCounts[hex] || 0) + 1;
+    }
+  }
+
+  let primaryColour: string | null = null;
+  let maxCount = 0;
+  for (const [hex, count] of Object.entries(hexCounts)) {
+    if (count > maxCount && hex !== "#000" && hex !== "#000000" && hex !== "#fff" && hex !== "#ffffff") {
+      primaryColour = hex;
+      maxCount = count;
+    }
+  }
+
+  const fonts: string[] = [];
+  const fontRegex = /font-family\s*:\s*([^;}]+)/gi;
+  let fontMatch;
+  while ((fontMatch = fontRegex.exec(html)) !== null) {
+    const families = fontMatch[1]
+      .split(",")
+      .map((f) => f.trim().replace(/["']/g, ""))
+      .filter((f) => f.length > 0 && !["inherit", "initial", "unset"].includes(f.toLowerCase()));
+    for (const family of families) {
+      if (!fonts.includes(family)) {
+        fonts.push(family);
+      }
+    }
+  }
+
+  let logoUrl: string | null = null;
+  const headerMatch = html.match(/<header[^>]*>([\s\S]*?)<\/header>/i);
+  if (headerMatch) {
+    const imgMatch = headerMatch[1].match(/<img[^>]*src=["']([^"']+)["'][^>]*>/i);
+    if (imgMatch) {
+      logoUrl = imgMatch[1];
+    }
+  }
+
+  return { primaryColour, fonts, logoUrl };
+}
+
+export function parseTemplateWithBranding(html: string): TemplateParseResult {
+  const { lockedZones, dynamicZones } = parseTemplate(html);
+  const branding = extractBranding(html);
+
+  const hasMinimumDynamicZones = dynamicZones.length > 0;
+
+  const result: TemplateParseResult = {
+    lockedZones,
+    dynamicZones,
+    primaryColour: branding.primaryColour,
+    fonts: branding.fonts,
+    logoUrl: branding.logoUrl,
+    hasMinimumDynamicZones,
+  };
+
+  if (!hasMinimumDynamicZones) {
+    result.error = "Template must contain at least one dynamic zone (h1, h2, main, article, or section)";
+  }
+
+  return result;
+}
+
+export async function fetchTemplateHtml(
+  url: string,
+  fetchFn: (url: string) => Promise<Response> = fetch
+): Promise<{ html: string | null; error?: string }> {
+  try {
+    const response = await fetchFn(url);
+    if (!response.ok) {
+      return { html: null, error: `HTTP ${response.status}: ${response.statusText}` };
+    }
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("text/html") && !contentType.includes("text/plain") && !contentType.includes("application/xhtml")) {
+      return { html: null, error: `Unexpected content type: ${contentType}` };
+    }
+    const html = await response.text();
+    return { html };
+  } catch (err: any) {
+    return { html: null, error: `Fetch failed: ${err.message}` };
+  }
+}
+
+export async function parseTemplateFromSource(
+  source: string,
+  fetchFn?: (url: string) => Promise<Response>
+): Promise<TemplateParseResult> {
+  let html = source;
+
+  if (source.startsWith("http://") || source.startsWith("https://")) {
+    const fetched = await fetchTemplateHtml(source, fetchFn);
+    if (!fetched.html) {
+      return {
+        lockedZones: [],
+        dynamicZones: [],
+        primaryColour: null,
+        fonts: [],
+        logoUrl: null,
+        hasMinimumDynamicZones: false,
+        error: fetched.error || "Failed to fetch template HTML",
+      };
+    }
+    html = fetched.html;
+  }
+
+  return parseTemplateWithBranding(html);
 }
 
 export async function refreshTemplate(

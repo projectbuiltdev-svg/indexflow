@@ -1,0 +1,61 @@
+Confirmed. Main Build Step 6 complete.
+
+Main Build Step 7 — Template Parser.
+
+Create /server/pseo/template-parser.ts implementing all rules and 
+logic from Section 6.1 of the context document.
+
+Note: The template refresh flow was already built in Pre-Build 
+Step 14. Do not rebuild it — integrate with it. This step adds 
+the initial parseTemplate function and all supporting logic.
+
+Requirements:
+
+1. parseTemplate(html, campaignId?) — initial parse:
+   - Parse full HTML DOM tree (use node-html-parser or similar)
+   - Identify locked zones with confidence scores:
+     * nav element or ul/li in header → locked, 95% confidence
+     * Logo: img in header element → locked, 90% confidence
+     * Footer element → locked, 95% confidence
+     * CTA buttons matching primary colour → locked, 85% confidence
+     * Any element with class containing brand/logo/nav → 
+       locked, 85% confidence
+   - Auto-lock if confidence >= 80%
+   - Flag for manual agency decision if confidence < 80%
+   - Identify dynamic zones:
+     * h1, h2 outside header/nav/footer → dynamic, 90%
+     * main, article, section outside header/nav/footer → dynamic
+     * Any element containing lorem ipsum → dynamic, 95%
+     * Any element with placeholder text → dynamic, 95%
+   - Must contain at least one dynamic zone or return error
+   - URL fetch: if input is URL not HTML — fetch raw HTML only, 
+     no JavaScript rendering, static HTML only
+   - Return structured TemplateParseResult:
+     { lockedZones[], dynamicZones[], primaryColour, fonts[], 
+       logoUrl, hasMinimumDynamicZones: boolean }
+
+2. extractBranding(html) — extract:
+   - primaryColour: most frequent hex in inline styles
+   - fonts: font-family declarations
+   - logoUrl: img src in header
+   - These are used to populate locked zone detection
+
+3. Rules enforced:
+   - Template HTML stored as-is — no sanitisation
+   - Static HTML fetch only — no JS rendering
+   - Parser runs once per campaign — integrate with campaign 
+     state machine draft state
+   - Manual toggles override system detection permanently
+   - At least one dynamic zone required
+
+Write tests covering:
+- Locked zone detection for nav, header, footer, logo
+- Dynamic zone detection for h1, h2, main, article
+- Lorem ipsum auto-flagged as dynamic
+- Primary colour extraction from inline styles
+- URL fetch returns static HTML
+- Missing dynamic zones returns error
+- Confidence threshold auto-lock at 80%
+
+Show complete file and test results. Stop. Wait for confirmation 
+before proceeding.
