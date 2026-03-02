@@ -1,0 +1,69 @@
+Confirmed. Main Build Step 12 complete.
+
+Main Build Step 13 — Schema Generator and Internal Link Mapper.
+
+Create the following files:
+
+1. /server/pseo/schema-generator.ts:
+   - generateLocalBusinessSchema(context) — returns valid 
+     LocalBusiness JSON-LD as specified in Section 6.8:
+     * @type: LocalBusiness (or subtype if category matches 
+       e.g. Plumber, Dentist, LegalService)
+     * name: service name + location town
+     * description: meta description
+     * address: PostalAddress with street, city, state, country
+     * geo: GeoCoordinates with lat/lng
+     * areaServed: ServiceArea radius or named region
+     * url: canonical page URL
+     * telephone: from workspace profile if available
+     * openingHours: from workspace profile if available
+     * priceRange: from workspace profile if available
+
+   - generateServiceSchema(context) — returns Service JSON-LD:
+     * @type: Service
+     * name: primary keyword
+     * serviceType: service category
+     * provider: nested LocalBusiness
+     * areaServed: location town + county
+
+   - generateFaqSchema(faqs) — returns FAQPage JSON-LD:
+     * @type: FAQPage
+     * mainEntity: array of Question objects
+     * Used when AI generates FAQ sections
+
+   - generateBreadcrumbSchema(breadcrumbs) — returns 
+     BreadcrumbList JSON-LD:
+     * Hub page → Service page → Location page hierarchy
+
+   - combineSchemas(schemas) — wraps multiple schemas in 
+     <script type="application/ld+json"> tag as array
+
+2. /server/pseo/internal-link-mapper.ts:
+   - buildInternalLinks(context) — returns all internal links 
+     for a page as specified in Section 6.9:
+     * Link to service hub page if it exists
+     * Link to location hub page if it exists
+     * Links to up to 3 nearest neighbour location pages
+       (same service, within 25 miles, sorted by distance)
+     * Link to parent campaign index page
+     * Enforces MIN_INTERNAL_LINKS (2) minimum
+     * Enforces MAX_INTERNAL_LINKS (8) maximum
+
+   - buildNeighbourLinks(location, campaignId) — finds already 
+     published pages for neighbour locations with same service
+     Uses Haversine from Step 2 to find nearest
+
+   - buildHubLinks(campaignId, serviceId, locationId) — 
+     finds or builds hub page links
+
+3. Write tests covering:
+   - LocalBusiness schema has all required fields
+   - Service schema nests provider correctly
+   - FAQ schema has mainEntity array
+   - Breadcrumb schema has correct item list
+   - Internal links always within MIN/MAX bounds
+   - Neighbour links use correct Haversine distances
+   - Hub links resolve to correct URLs
+
+Show all files and test results. Stop. Wait for confirmation 
+before proceeding.
