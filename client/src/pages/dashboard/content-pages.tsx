@@ -24,7 +24,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Pencil, Search, Trash2, ChevronLeft, ChevronRight, Loader2, Bold, Italic, Heading2, Heading3, List, ListOrdered, Link, Undo, Redo, Code } from "lucide-react";
+import { Plus, Pencil, Search, Trash2, ChevronLeft, ChevronRight, Loader2, Bold, Italic, Heading2, Heading3, List, ListOrdered, Link, Undo, Redo, Code, Copy } from "lucide-react";
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
 import { useRef, useCallback, useEffect } from "react";
 
@@ -275,6 +275,38 @@ export default function ContentPages() {
     deleteMutation.mutate(deletePage.id);
   };
 
+  const cloneMutation = useMutation({
+    mutationFn: (data: any) => apiRequest("POST", "/api/site-pages", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+      toast({ title: "Page cloned", description: "A copy of the page has been created as a draft." });
+    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+  });
+
+  const handleClone = (page: Page) => {
+    const existingSlugs = new Set(pages.map((p) => p.slug));
+    let candidateSlug = `${page.slug}-copy`;
+    let counter = 2;
+    while (existingSlugs.has(candidateSlug)) {
+      candidateSlug = `${page.slug}-copy-${counter}`;
+      counter++;
+    }
+    cloneMutation.mutate({
+      workspaceId,
+      title: `Copy of ${page.title}`,
+      slug: candidateSlug,
+      template: page.template || "default",
+      description: page.description || "",
+      content: page.content || "",
+      isPublished: false,
+      parentId: page.parentId || null,
+      metaTitle: page.metaTitle || "",
+      metaDescription: page.metaDescription || "",
+      sortOrder: page.sortOrder || null,
+    });
+  };
+
   const toggleSelectRow = (id: number) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -490,6 +522,9 @@ export default function ContentPages() {
                       <div className="flex items-center gap-1 flex-wrap">
                         <Button variant="ghost" size="icon" data-testid={`button-edit-page-${page.id}`} onClick={() => handleEdit(page)}>
                           <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" data-testid={`button-clone-page-${page.id}`} onClick={() => handleClone(page)} disabled={cloneMutation.isPending} title="Clone page">
+                          <Copy className="w-4 h-4" />
                         </Button>
                         <Button variant="ghost" size="icon" data-testid={`button-audit-page-${page.id}`} onClick={() => handleAudit(page)}>
                           <Search className="w-4 h-4" />
