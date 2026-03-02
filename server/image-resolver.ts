@@ -121,26 +121,27 @@ async function saveStockAsset(item: StockResult, postId?: string, workspaceId?: 
 }
 
 export async function resolvePostImages(postId: string): Promise<{ resolved: number; failed: number }> {
-  const post = await storage.getWorkspaceBlogPost(postId);
-  if (!post || !post.mdxContent) return { resolved: 0, failed: 0 };
+  try {
+    const post = await storage.getWorkspaceBlogPost(postId);
+    if (!post || !post.mdxContent) return { resolved: 0, failed: 0 };
 
-  const promptRegex = /<BlogImage\s+prompt="([^"]+)"\s*\/>/g;
-  const placeholders: Array<{ fullMatch: string; prompt: string }> = [];
-  let match;
-  while ((match = promptRegex.exec(post.mdxContent)) !== null) {
-    placeholders.push({ fullMatch: match[0], prompt: match[1] });
-  }
+    const promptRegex = /<BlogImage\s+prompt="([^"]+)"\s*\/>/g;
+    const placeholders: Array<{ fullMatch: string; prompt: string }> = [];
+    let match;
+    while ((match = promptRegex.exec(post.mdxContent)) !== null) {
+      placeholders.push({ fullMatch: match[0], prompt: match[1] });
+    }
 
-  if (placeholders.length === 0) return { resolved: 0, failed: 0 };
+    if (placeholders.length === 0) return { resolved: 0, failed: 0 };
 
-  console.log(`[ImageResolver] Processing ${placeholders.length} placeholders for post "${post.title}"`);
+    console.log(`[ImageResolver] Processing ${placeholders.length} placeholders for post "${post.title}"`);
 
-  const openai = new OpenAI({
-    baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || undefined,
-    apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY,
-  });
+    const openai = new OpenAI({
+      baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || undefined,
+      apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY,
+    });
 
-  const seoPrompt = `You are an SEO specialist. For each image prompt below, generate optimized image metadata.
+    const seoPrompt = `You are an SEO specialist. For each image prompt below, generate optimized image metadata.
 
 Post title: "${post.title}"
 Post category: "${post.category || "general"}"
@@ -156,102 +157,112 @@ Return a JSON array with one object per image, in order. Return ONLY valid JSON,
 Image prompts:
 ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
 
-  let imageData: Array<{ alt: string; caption: string; searchQuery: string }> = [];
-  try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: seoPrompt }],
-      max_tokens: 2048,
-      temperature: 0.3,
-    });
-    const raw = response.choices[0]?.message?.content || "[]";
-    const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-    imageData = JSON.parse(cleaned);
-  } catch (err: any) {
-    console.error("[ImageResolver] AI metadata generation failed:", err.message);
-    imageData = placeholders.map(p => ({
-      alt: p.prompt.slice(0, 125),
-      caption: "",
-      searchQuery: p.prompt.split(",")[0].trim().split(" ").slice(0, 4).join(" "),
-    }));
-  }
-
-  const resolvedImages: ResolvedImage[] = [];
-  let resolved = 0;
-  let failed = 0;
-
-  for (let i = 0; i < placeholders.length; i++) {
-    const meta = imageData[i] || { alt: placeholders[i].prompt.slice(0, 125), caption: "", searchQuery: placeholders[i].prompt.split(",")[0].trim() };
-    const searchQuery = meta.searchQuery || placeholders[i].prompt.split(",")[0].trim();
-
-    const stockResult = await searchWithFallback(searchQuery, i);
-
-    if (stockResult) {
-      const url = await saveStockAsset(stockResult, postId, post.workspaceId);
-      resolvedImages.push({
-        src: url,
-        alt: meta.alt || searchQuery,
-        caption: meta.caption || "",
-        credit: stockResult.credit_name || "",
-        creditUrl: stockResult.credit_url || "",
+    let imageData: Array<{ alt: string; caption: string; searchQuery: string }> = [];
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [{ role: "user", content: seoPrompt }],
+        max_tokens: 2048,
+        temperature: 0.3,
       });
-      resolved++;
-      console.log(`[ImageResolver]   [${i + 1}/${placeholders.length}] Found: ${stockResult.credit_name} (${stockResult.source})`);
-    } else {
-      resolvedImages.push({ src: "", alt: "", caption: "", credit: "", creditUrl: "" });
-      failed++;
-      console.log(`[ImageResolver]   [${i + 1}/${placeholders.length}] No results for "${searchQuery}"`);
+      const raw = response.choices[0]?.message?.content || "[]";
+      const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+      imageData = JSON.parse(cleaned);
+    } catch (err: any) {
+      console.error("[ImageResolver] AI metadata generation failed:", err.message);
+      imageData = placeholders.map(p => ({
+        alt: p.prompt.slice(0, 125),
+        caption: "",
+        searchQuery: p.prompt.split(",")[0].trim().split(" ").slice(0, 4).join(" "),
+      }));
     }
 
-    await new Promise(r => setTimeout(r, 300));
-  }
+    const resolvedImages: ResolvedImage[] = [];
+    let resolved = 0;
+    let failed = 0;
 
-  if (resolved === 0) return { resolved: 0, failed };
+    for (let i = 0; i < placeholders.length; i++) {
+      const meta = imageData[i] || { alt: placeholders[i].prompt.slice(0, 125), caption: "", searchQuery: placeholders[i].prompt.split(",")[0].trim() };
+      const searchQuery = meta.searchQuery || placeholders[i].prompt.split(",")[0].trim();
 
-  let updatedMdx = post.mdxContent;
-  const matchesForReplace: string[] = [];
-  const regex2 = /<BlogImage\s+prompt="([^"]+)"\s*\/>/g;
-  let m2;
-  while ((m2 = regex2.exec(post.mdxContent)) !== null) {
-    matchesForReplace.push(m2[0]);
-  }
+      const stockResult = await searchWithFallback(searchQuery, i);
 
-  function sanitizeAttr(val: string): string {
-    return val.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
-  function validateUrl(url: string): string {
-    const trimmed = (url || "").trim();
-    if (/^https?:\/\//i.test(trimmed)) return sanitizeAttr(trimmed);
-    return "";
-  }
+      if (stockResult) {
+        const url = await saveStockAsset(stockResult, postId, post.workspaceId);
+        resolvedImages.push({
+          src: url,
+          alt: meta.alt || searchQuery,
+          caption: meta.caption || "",
+          credit: stockResult.credit_name || "",
+          creditUrl: stockResult.credit_url || "",
+        });
+        resolved++;
+        console.log(`[ImageResolver]   [${i + 1}/${placeholders.length}] Found: ${stockResult.credit_name} (${stockResult.source})`);
+      } else {
+        resolvedImages.push({ src: "", alt: "", caption: "", credit: "", creditUrl: "" });
+        failed++;
+        console.log(`[ImageResolver]   [${i + 1}/${placeholders.length}] No results for "${searchQuery}"`);
+      }
 
-  for (let i = 0; i < Math.min(matchesForReplace.length, resolvedImages.length); i++) {
-    const img = resolvedImages[i];
-    const safeSrc = validateUrl(img.src);
-    if (!safeSrc) continue;
-    const attrs = [
-      `src="${safeSrc}"`,
-      `alt="${sanitizeAttr(img.alt || "")}"`,
-    ];
-    if (img.caption) attrs.push(`caption="${sanitizeAttr(img.caption)}"`);
-    if (img.credit) attrs.push(`credit="${sanitizeAttr(img.credit)}"`);
-    if (img.creditUrl) {
-      const safeCredit = validateUrl(img.creditUrl);
-      if (safeCredit) attrs.push(`creditUrl="${safeCredit}"`);
+      await new Promise(r => setTimeout(r, 300));
     }
-    const replacement = `<BlogImage ${attrs.join(" ")} />`;
-    updatedMdx = updatedMdx.replace(matchesForReplace[i], replacement);
+
+    if (resolved === 0) {
+      console.warn(`[ImageResolver] All ${failed} image lookups failed for post "${post.title}" (${postId})`);
+      return { resolved: 0, failed };
+    }
+
+    let updatedMdx = post.mdxContent;
+    const matchesForReplace: string[] = [];
+    const regex2 = /<BlogImage\s+prompt="([^"]+)"\s*\/>/g;
+    let m2;
+    while ((m2 = regex2.exec(post.mdxContent)) !== null) {
+      matchesForReplace.push(m2[0]);
+    }
+
+    function sanitizeAttr(val: string): string {
+      return val.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    function validateUrl(url: string): string {
+      const trimmed = (url || "").trim();
+      if (/^https?:\/\//i.test(trimmed)) return sanitizeAttr(trimmed);
+      return "";
+    }
+
+    for (let i = 0; i < Math.min(matchesForReplace.length, resolvedImages.length); i++) {
+      const img = resolvedImages[i];
+      const safeSrc = validateUrl(img.src);
+      if (!safeSrc) continue;
+      const attrs = [
+        `src="${safeSrc}"`,
+        `alt="${sanitizeAttr(img.alt || "")}"`,
+      ];
+      if (img.caption) attrs.push(`caption="${sanitizeAttr(img.caption)}"`);
+      if (img.credit) attrs.push(`credit="${sanitizeAttr(img.credit)}"`);
+      if (img.creditUrl) {
+        const safeCredit = validateUrl(img.creditUrl);
+        if (safeCredit) attrs.push(`creditUrl="${safeCredit}"`);
+      }
+      const replacement = `<BlogImage ${attrs.join(" ")} />`;
+      updatedMdx = updatedMdx.replace(matchesForReplace[i], replacement);
+    }
+
+    const { html } = await compileMdxToHtml(updatedMdx);
+
+    await storage.updateWorkspaceBlogPost(postId, {
+      mdxContent: updatedMdx,
+      compiledHtml: html,
+    });
+
+    console.log(`[ImageResolver] Done: ${resolved} resolved, ${failed} failed for "${post.title}"`);
+    return { resolved, failed };
+  } catch (error) {
+    console.error(`[ImageResolver] Failed for post ${postId}:`, error);
+    await storage.updateWorkspaceBlogPost(postId, {
+      qualityFailReasons: [`Image resolution failed: ${error instanceof Error ? error.message : 'Unknown error'}`],
+    });
+    return { resolved: 0, failed: 0 };
   }
-
-  const { html } = await compileMdxToHtml(updatedMdx);
-
-  await storage.updateWorkspaceBlogPost(postId, {
-    mdxContent: updatedMdx,
-    compiledHtml: html,
-  });
-
-  console.log(`[ImageResolver] Done: ${resolved} resolved, ${failed} failed for "${post.title}"`);
-  return { resolved, failed };
 }
 
 export interface ImageSuggestion {
