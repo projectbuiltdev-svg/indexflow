@@ -66,7 +66,7 @@ import { z } from "zod";
 import { setupAuth, registerAuthRoutes } from "./replit_integrations/auth";
 import { registerTwilioWebhooks } from "./twilio-webhooks";
 import { registerCrmRoutes } from "./crm-routes";
-import { registerContentRoutes } from "./content-routes";
+import { registerContentRoutes, runScheduledPublisher } from "./content-routes";
 
 export async function registerRoutes(
   httpServer: Server,
