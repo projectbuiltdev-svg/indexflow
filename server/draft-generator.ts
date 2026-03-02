@@ -4,6 +4,10 @@ import { batchProcess } from "./replit_integrations/batch/utils";
 import type { WorkspaceBlogPost } from "@shared/schema";
 import { resolvePostImages } from "./image-resolver";
 
+// TODO: BYOK — This client uses the platform-level OpenAI key only.
+// Per-workspace BYOK key resolution is not yet implemented for content generation.
+// BYOK for content generation must be built before this cost is passed to clients.
+// See server/ai-chat.ts resolveAiKey() for the existing BYOK pattern to follow.
 const openai = new OpenAI({
   baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || undefined,
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY,
