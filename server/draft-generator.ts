@@ -100,6 +100,16 @@ Write the full MDX content now.`;
 }
 
 export async function generateSingleDraft(postId: string): Promise<WorkspaceBlogPost | null> {
+  const apiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    await storage.updateWorkspaceBlogPost(postId, {
+      generationStatus: "needs_review",
+      qualityGateStatus: "fail",
+      qualityFailReasons: ["AI provider not configured — no API key found. Contact your administrator."],
+    });
+    return null;
+  }
+
   const post = await storage.getWorkspaceBlogPost(postId);
   if (!post || !post.primaryKeyword) return null;
 
