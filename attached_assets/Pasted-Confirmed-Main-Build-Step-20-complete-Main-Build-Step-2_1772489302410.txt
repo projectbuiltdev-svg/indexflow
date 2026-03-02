@@ -1,0 +1,82 @@
+Confirmed. Main Build Step 20 complete.
+
+Main Build Step 21 — End-to-End Smoke Test.
+
+This is the final build step. Run a full end-to-end validation 
+of the entire pSEO engine.
+
+1. Run all tests and report total count and pass rate:
+   - tests/pseo/campaign-state-machine.test.ts
+   - tests/pseo/pseo-campaign-limit.test.ts
+   - tests/pseo/pseo-permissions.test.ts
+   - tests/pseo/pseo-url-builder.test.ts
+   - tests/pseo/pseo-gsc-verification.test.ts
+   - tests/pseo/pseo-page-deletion.test.ts
+   - tests/pseo/spintax-engine.test.ts
+   - tests/pseo/quality-gate-engine.test.ts
+   - tests/pseo/similarity-checker.test.ts
+   - tests/pseo/schema-generator.test.ts
+   - tests/pseo/internal-link-mapper.test.ts
+   - tests/pseo/pseo-indexing.test.ts
+   - tests/pseo/pseo-rank-tracker.test.ts
+
+2. Verify all database tables exist with correct columns:
+   - Run: SELECT table_name FROM information_schema.tables 
+     WHERE table_name LIKE 'pseo_%' ORDER BY table_name
+   - Confirm all 15 pseo_ tables are present
+
+3. Verify all server routes are registered:
+   - GET /api/pseo/entitlement
+   - POST /api/pseo/campaigns
+   - GET /api/pseo/campaigns
+   - GET /api/pseo/campaigns/:id/detail
+   - PATCH /api/pseo/campaigns/:id/status
+   - POST /api/pseo/campaigns/:id/generate
+   - GET /api/pseo/campaigns/:id/progress
+   - GET /api/pseo/campaigns/:id/review-queue
+   - POST /api/pseo/review/:itemId/approve
+   - POST /api/pseo/review/:itemId/reject
+   - POST /api/pseo/review/:itemId/regenerate
+   - GET /api/pseo/campaigns/:id/ranks
+   - POST /api/pseo/campaigns/:id/ranks/refresh
+   - GET /api/pseo/campaigns/:id/report
+   - GET /api/pseo/campaigns/:id/report/export
+   - GET /api/admin/pseo/stats
+   - GET /api/admin/pseo/workspaces
+   - POST /api/admin/pseo/workspaces/:id/grant-slots
+   - POST /api/admin/pseo/workspaces/:id/toggle
+   - POST /api/pseo/template/parse
+
+4. Verify all client components exist:
+   - client/src/components/pseo/CampaignWizard.tsx
+   - client/src/components/pseo/CampaignDashboard.tsx
+   - client/src/components/pseo/ReviewQueueTab.tsx
+   - client/src/components/pseo/RankTrackingTab.tsx
+   - client/src/components/pseo/CampaignReportsTab.tsx
+   - client/src/components/pseo/wizard-steps/TemplateUploadStep.tsx
+   - client/src/components/pseo/wizard-steps/LocationSetupStep.tsx
+   - client/src/components/pseo/wizard-steps/ServicesKeywordsStep.tsx
+   - client/src/components/pseo/wizard-steps/ConfirmActivateStep.tsx
+   - client/src/components/pseo/ServiceLocationMatrix.tsx
+   - client/src/components/pseo/PageCountCalculator.tsx
+   - client/src/components/pseo/KeywordReviewPanel.tsx
+   - client/src/components/admin/PseoAdminPanel.tsx
+
+5. Verify TypeScript compiles with zero pSEO errors:
+   - Run: npx tsc --noEmit
+   - Report any errors found
+
+6. Final file count:
+   - Count all files in server/pseo/
+   - Count all files in server/integrations/ added this session
+   - Count all files in server/config/ added this session
+   - Count all files in server/middleware/ added this session
+   - Count all files in client/src/components/pseo/
+   - Count all files in tests/pseo/
+
+Report full results. If any test fails or any file is missing 
+identify exactly what is missing and fix it before reporting 
+complete.
+
+This is the final step. Do not proceed to anything else after 
+this. Report results and stop.

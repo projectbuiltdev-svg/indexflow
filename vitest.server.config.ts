@@ -3,7 +3,7 @@ import path from "path";
 
 export default defineConfig({
   test: {
-    include: ["server/__tests__/**/*.test.ts"],
+    include: ["server/__tests__/**/*.test.ts", "tests/pseo/**/*.test.ts"],
     globals: true,
   },
   resolve: {
