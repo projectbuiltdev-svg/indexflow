@@ -24,7 +24,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Pencil, Search, Trash2, ChevronLeft, ChevronRight, Loader2, Bold, Italic, Heading2, Heading3, List, ListOrdered, Link, Undo, Redo, Code, Copy } from "lucide-react";
+import { Plus, Pencil, Search, Trash2, ChevronLeft, ChevronRight, Loader2, Bold, Italic, Heading2, Heading3, List, ListOrdered, Link, Undo, Redo, Code, Copy, Eye } from "lucide-react";
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
 import { useRef, useCallback, useEffect } from "react";
 
@@ -151,6 +151,9 @@ export default function ContentPages() {
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deletePage, setDeletePage] = useState<Page | null>(null);
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewPage, setPreviewPage] = useState<Page | null>(null);
 
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
@@ -529,6 +532,9 @@ export default function ContentPages() {
                         <Button variant="ghost" size="icon" data-testid={`button-edit-page-${page.id}`} onClick={() => handleEdit(page)}>
                           <Pencil className="w-4 h-4" />
                         </Button>
+                        <Button variant="ghost" size="icon" data-testid={`button-preview-page-${page.id}`} onClick={() => { setPreviewPage(page); setPreviewOpen(true); }} title="Preview">
+                          <Eye className="w-4 h-4" />
+                        </Button>
                         <Button variant="ghost" size="icon" data-testid={`button-clone-page-${page.id}`} onClick={() => handleClone(page)} disabled={cloneMutation.isPending} title="Clone page">
                           <Copy className="w-4 h-4" />
                         </Button>
@@ -747,6 +753,56 @@ export default function ContentPages() {
               {deleteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               Delete
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto" data-testid="dialog-preview-page">
+          <DialogHeader>
+            <DialogTitle>{previewPage?.title || "Page Preview"}</DialogTitle>
+          </DialogHeader>
+          {previewPage && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 flex-wrap text-sm">
+                <Badge variant="secondary">{previewPage.template || "default"}</Badge>
+                <Badge variant={previewPage.isPublished ? "default" : "outline"}>
+                  {previewPage.isPublished ? "Published" : "Draft"}
+                </Badge>
+                <span className="text-muted-foreground font-mono text-xs">/{previewPage.slug}</span>
+              </div>
+              {previewPage.metaTitle && (
+                <div className="text-sm">
+                  <span className="text-muted-foreground font-medium">Meta Title:</span>{" "}
+                  <span data-testid="text-preview-meta-title">{previewPage.metaTitle}</span>
+                </div>
+              )}
+              {previewPage.metaDescription && (
+                <div className="text-sm">
+                  <span className="text-muted-foreground font-medium">Meta Description:</span>{" "}
+                  <span data-testid="text-preview-meta-description">{previewPage.metaDescription}</span>
+                </div>
+              )}
+              {previewPage.description && (
+                <div className="text-sm border-l-2 border-muted pl-3 text-muted-foreground italic" data-testid="text-preview-description">
+                  {previewPage.description}
+                </div>
+              )}
+              <div className="border-t pt-4">
+                {previewPage.content ? (
+                  <div
+                    className="prose prose-sm dark:prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: previewPage.content }}
+                    data-testid="preview-content"
+                  />
+                ) : (
+                  <p className="text-muted-foreground text-sm italic" data-testid="text-preview-no-content">No content yet.</p>
+                )}
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPreviewOpen(false)} data-testid="button-close-preview">Close</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
