@@ -5,6 +5,8 @@ import { TIER_CAMPAIGN_LIMITS } from "../../config/pseo-geographic-divisions";
 import { resolveAiKey } from "../../ai-chat";
 import { db } from "../../db";
 import { pseoCampaigns, pseoServices, pseoLocations } from "@shared/schema";
+import { eq } from "drizzle-orm";
+import { processGenerationQueue } from "../../jobs/pseo-generation-queue";
 
 const router = Router();
 
@@ -146,6 +148,76 @@ router.post("/", async (req: Request, res: Response) => {
     return res.status(201).json({ id: campaign.id, status: campaign.status });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || "Campaign creation failed" });
+  }
+});
+
+router.post("/:id/generate", async (req: Request, res: Response) => {
+  try {
+    const campaignId = req.params.id;
+
+    const [campaign] = await db
+      .select()
+      .from(pseoCampaigns)
+      .where(eq(pseoCampaigns.id, campaignId))
+      .limit(1);
+
+    if (!campaign) {
+      return res.status(404).json({ error: "Campaign not found" });
+    }
+
+    if (campaign.status !== "active" && campaign.status !== "generating") {
+      return res.status(400).json({ error: `Campaign must be in active status to generate (current: ${campaign.status})` });
+    }
+
+    await db
+      .update(pseoCampaigns)
+      .set({ status: "generating", updatedAt: new Date() })
+      .where(eq(pseoCampaigns.id, campaignId));
+
+    res.json({ status: "generating", campaignId });
+
+    processGenerationQueue(campaignId, campaign.venueId).catch((err) => {
+      console.error(`[pseo-generation] Campaign ${campaignId} failed:`, err.message);
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || "Failed to start generation" });
+  }
+});
+
+router.get("/:id/progress", async (req: Request, res: Response) => {
+  try {
+    const campaignId = req.params.id;
+
+    const [campaign] = await db
+      .select({
+        id: pseoCampaigns.id,
+        status: pseoCampaigns.status,
+        totalPages: pseoCampaigns.totalPages,
+        pagesGenerated: pseoCampaigns.pagesGenerated,
+        pagesPublished: pseoCampaigns.pagesPublished,
+      })
+      .from(pseoCampaigns)
+      .where(eq(pseoCampaigns.id, campaignId))
+      .limit(1);
+
+    if (!campaign) {
+      return res.status(404).json({ error: "Campaign not found" });
+    }
+
+    const total = campaign.totalPages || 0;
+    const generated = campaign.pagesGenerated || 0;
+    const percentage = total > 0 ? Math.round((generated / total) * 100) : 0;
+
+    return res.json({
+      campaignId: campaign.id,
+      status: campaign.status,
+      total,
+      generated,
+      published: campaign.pagesPublished || 0,
+      percentage,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || "Failed to fetch progress" });
   }
 });
 

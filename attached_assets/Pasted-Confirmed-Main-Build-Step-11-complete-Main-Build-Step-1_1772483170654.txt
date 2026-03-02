@@ -1,0 +1,69 @@
+Confirmed. Main Build Step 11 complete.
+
+Main Build Step 12 — Content Generation Pipeline.
+
+Create the following files:
+
+1. /server/jobs/pseo-generation-queue.ts — job queue processor:
+   - processGenerationQueue(campaignId, workspaceId) — main 
+     entry point
+   - Fetches all active service×location matrix combinations
+   - Processes in batches of MAX_CONCURRENT_AI_CALLS_PER_CAMPAIGN 
+     (10) using config
+   - Enforces MAX_CONCURRENT_AI_CALLS_PLATFORM (100) across all 
+     campaigns simultaneously
+   - Real-time progress tracking — updates pseo_campaigns 
+     generated_pages count after each batch
+   - On complete — transitions campaign state to "reviewing" via 
+     campaign state machine
+   - On critical failure — transitions to "draft" via state machine
+
+2. /server/pseo/content-generator.ts — per-page generation:
+   generateSinglePage(context) — full pipeline per page:
+   
+   Step 1: Resolve spintax pool (or generate if not exists)
+   Step 2: Resolve H1 using hash seeder + collision check
+   Step 3: Resolve H2s per section
+   Step 4: Resolve paragraphs per section  
+   Step 5: Apply micro-variation to each paragraph
+   Step 6: Select location images from image bank
+   Step 7: Generate schema JSON via schema-generator (Step 13)
+   Step 8: Build internal links via internal-link-mapper (Step 13)
+   Step 9: Assess external links
+   Step 10: Assemble full HTML page
+   Step 11: Run quality gates (Main Build Step 4)
+   Step 12: If gates fail → write to review queue, continue
+   Step 13: If gates pass → run similarity check (Step 5)
+   Step 14: If similarity holds → write to review queue
+   Step 15: If similarity passes → write to venue_site_pages
+   Step 16: Update pseo_pages record with final status
+   Step 17: Log to pseo_audit_log
+   
+   - AI_CALL_TIMEOUT_MS (30000) enforced per AI call
+   - On timeout → retry once → if fails → review queue
+   - Uses BYOK key from workspace via byok-ai-client
+
+3. /server/integrations/byok-ai-client.ts:
+   - callAi(workspaceId, prompt, model) — resolves workspace 
+     BYOK key, calls correct provider API, returns response text
+   - Enforces AI_CALL_TIMEOUT_MS timeout
+   - On 401/403 → triggers mid-generation auth failure handler 
+     from Step 4
+   - Never throws — always returns result or error object
+
+4. /server/integrations/image-bank-client.ts:
+   - searchImages(query, workspaceId) — searches connected 
+     image banks (Unsplash/Pexels/Pixabay) using BYOK keys
+   - Returns array of image URLs weighted by relevance
+   - Falls back to category-generic images if location search 
+     returns zero results
+   - Rate limited to IMAGE_BANK_RATE_LIMIT_PER_SECOND (5)
+
+Wire generation queue to campaign routes:
+- POST /api/pseo/campaigns/:id/generate — triggers generation
+- GET /api/pseo/campaigns/:id/progress — returns current 
+  progress { total, generated, percentage, status }
+
+All thresholds from config. No magic numbers.
+
+Show all files. Stop. Wait for confirmation before proceeding.
