@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, CheckCircle, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, CheckCircle, Pencil, Trash2, Search, Lock } from "lucide-react";
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
 import type { WorkspaceDomain } from "@shared/schema";
 
@@ -62,6 +62,12 @@ export default function ContentDomains() {
   const { data: domains = [], isLoading } = useQuery<WorkspaceDomain[]>({
     queryKey: ["/api/blog/domains", `?workspaceId=${workspaceId}`],
     enabled: !!workspaceId,
+  });
+
+  const firstDomainId = domains.length > 0 ? domains[0].id : null;
+  const { data: lockStatus } = useQuery<{ locked: boolean; reason: string | null }>({
+    queryKey: [`/api/blog/domains/${firstDomainId}/lock-status`],
+    enabled: !!firstDomainId,
   });
 
   const createMutation = useMutation({
@@ -233,7 +239,14 @@ export default function ContentDomains() {
                 ) : (
                   filtered.map((d) => (
                     <TableRow key={d.id} data-testid={`row-domain-${d.id}`}>
-                      <TableCell className="font-medium" data-testid={`text-domain-${d.id}`}>{d.domain}</TableCell>
+                      <TableCell className="font-medium" data-testid={`text-domain-${d.id}`}>
+                        <span className="flex items-center gap-1.5">
+                          {d.domain}
+                          {lockStatus?.locked && (
+                            <Lock className="w-3.5 h-3.5 text-amber-500" title="Domain locked — upgrade to Pro to change your domain" data-testid={`icon-lock-domain-${d.id}`} />
+                          )}
+                        </span>
+                      </TableCell>
                       <TableCell>
                         <Badge variant={statusVariant(d.displayStatus)} data-testid={`badge-domain-status-${d.id}`}>{d.displayStatus}</Badge>
                       </TableCell>
@@ -247,7 +260,7 @@ export default function ContentDomains() {
                           <Button variant="ghost" size="icon" data-testid={`button-edit-domain-${d.id}`} onClick={() => handleEditDomain(d)}>
                             <Pencil className="w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" data-testid={`button-remove-domain-${d.id}`} onClick={() => { setRemoveDomain(d); setRemoveOpen(true); }}>
+                          <Button variant="ghost" size="icon" data-testid={`button-remove-domain-${d.id}`} disabled={lockStatus?.locked} title={lockStatus?.locked ? "Domain locked — upgrade to Pro to change your domain" : undefined} onClick={() => { setRemoveDomain(d); setRemoveOpen(true); }}>
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
