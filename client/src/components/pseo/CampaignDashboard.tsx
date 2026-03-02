@@ -112,19 +112,17 @@ interface PageItem {
   createdAt: string;
 }
 
-import CampaignWizard from "./CampaignWizard";
-
 interface CampaignDashboardProps {
   workspaceId: string;
+  onOpenWizard?: () => void;
 }
 
-export default function CampaignDashboard({ workspaceId }: CampaignDashboardProps) {
+export default function CampaignDashboard({ workspaceId, onOpenWizard }: CampaignDashboardProps) {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<Record<string, string>>({});
   const [confirmDialog, setConfirmDialog] = useState<{ campaignId: string; transition: TransitionMeta } | null>(null);
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
 
   const fetchCampaigns = useCallback(async () => {
     try {
@@ -159,20 +157,6 @@ export default function CampaignDashboard({ workspaceId }: CampaignDashboardProp
     }
   };
 
-  if (isWizardOpen) {
-    return (
-      <CampaignWizard
-        workspaceId={workspaceId}
-        onClose={() => setIsWizardOpen(false)}
-        onComplete={(id) => {
-          setIsWizardOpen(false);
-          setSelectedCampaignId(id);
-          fetchCampaigns();
-        }}
-      />
-    );
-  }
-
   if (selectedCampaignId) {
     return (
       <CampaignDetailView
@@ -205,10 +189,12 @@ export default function CampaignDashboard({ workspaceId }: CampaignDashboardProp
             <ShoppingCart className="h-3.5 w-3.5 mr-1" />
             Add Campaign Slot
           </Button>
-          <Button size="sm" onClick={() => setIsWizardOpen(true)} data-testid="button-new-campaign">
-            <Plus className="h-3.5 w-3.5 mr-1" />
-            New Campaign
-          </Button>
+          {onOpenWizard && (
+            <Button size="sm" onClick={onOpenWizard} data-testid="button-new-campaign">
+              <Plus className="h-3.5 w-3.5 mr-1" />
+              New Campaign
+            </Button>
+          )}
         </div>
       </div>
 
@@ -219,10 +205,12 @@ export default function CampaignDashboard({ workspaceId }: CampaignDashboardProp
               <Globe className="h-10 w-10 mx-auto mb-3 text-muted-foreground" />
               <p className="font-medium">No Campaigns Yet</p>
               <p className="text-sm text-muted-foreground mt-1">Create your first pSEO campaign to generate location pages at scale.</p>
-              <Button className="mt-4" onClick={() => setIsWizardOpen(true)} data-testid="button-create-first">
-                <Plus className="h-4 w-4 mr-2" />
-                Create Campaign
-              </Button>
+              {onOpenWizard && (
+                <Button className="mt-4" onClick={onOpenWizard} data-testid="button-create-first">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Campaign
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>

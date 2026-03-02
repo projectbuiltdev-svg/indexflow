@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useWorkspace } from "@/lib/workspace-context";
 import { queryClient } from "@/lib/queryClient";
@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Lock, Sparkles, Loader2, AlertTriangle, ShoppingCart } from "lucide-react";
 import CampaignDashboard from "@/components/pseo/CampaignDashboard";
 import CampaignWizard from "@/components/pseo/CampaignWizard";
-import { useState } from "react";
 
 interface PseoEntitlement {
   baseCampaigns: number;
@@ -71,6 +70,7 @@ export default function ContentCampaigns() {
   }
 
   const slotsExhausted = entitlement && entitlement.slotsAvailable === 0 && entitlement.totalEntitlement !== -1;
+  const canCreateCampaign = entitlement && (entitlement.slotsAvailable > 0 || entitlement.slotsAvailable === -1);
 
   return (
     <div className="p-6">
@@ -97,7 +97,10 @@ export default function ContentCampaigns() {
         </div>
       )}
 
-      <CampaignDashboard workspaceId={workspaceId} />
+      <CampaignDashboard
+        workspaceId={workspaceId}
+        onOpenWizard={canCreateCampaign ? () => setWizardOpen(true) : undefined}
+      />
 
       {wizardOpen && (
         <div className="fixed inset-0 z-50 bg-background">
