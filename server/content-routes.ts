@@ -38,6 +38,30 @@ async function checkPostLimit(workspaceId: string): Promise<{ allowed: boolean; 
   };
 }
 
+async function getDomainLockStatus(workspaceId: string): Promise<{
+  locked: boolean;
+  reason: string | null;
+}> {
+  const workspace = await storage.getWorkspace(workspaceId);
+  if (!workspace) return { locked: false, reason: null };
+
+  const tier = getPlanTier((workspace as any).plan);
+
+  if (tier.workspaces > 1) return { locked: false, reason: null };
+
+  const posts = await storage.getWorkspaceBlogPosts(workspaceId, "published");
+  const hasPublishedContent = posts.length > 0;
+
+  if (hasPublishedContent) {
+    return {
+      locked: true,
+      reason: "Your domain is locked because you have published content. Upgrade to Pro to manage multiple domains.",
+    };
+  }
+
+  return { locked: false, reason: null };
+}
+
 function normalizeTags(tags: any): string[] | null {
   if (!Array.isArray(tags)) return null;
   const normalized = tags
