@@ -24,8 +24,83 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Pencil, Search, Trash2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { Plus, Pencil, Search, Trash2, ChevronLeft, ChevronRight, Loader2, Bold, Italic, Heading2, Heading3, List, ListOrdered, Link, Undo, Redo, Code } from "lucide-react";
 import { ContentEngineTabs } from "@/components/content-engine-tabs";
+import { useRef, useCallback, useEffect } from "react";
+
+function RichTextEditor({ value, onChange, id, testId }: { value: string; onChange: (html: string) => void; id?: string; testId?: string }) {
+  const editorRef = useRef<HTMLDivElement>(null);
+  const isInternalUpdate = useRef(false);
+
+  useEffect(() => {
+    if (editorRef.current && !isInternalUpdate.current) {
+      if (editorRef.current.innerHTML !== value) {
+        editorRef.current.innerHTML = value || "";
+      }
+    }
+    isInternalUpdate.current = false;
+  }, [value]);
+
+  const handleInput = useCallback(() => {
+    if (editorRef.current) {
+      isInternalUpdate.current = true;
+      onChange(editorRef.current.innerHTML);
+    }
+  }, [onChange]);
+
+  const exec = useCallback((command: string, val?: string) => {
+    editorRef.current?.focus();
+    document.execCommand(command, false, val);
+    handleInput();
+  }, [handleInput]);
+
+  const insertLink = useCallback(() => {
+    const url = prompt("Enter URL:");
+    if (url) exec("createLink", url);
+  }, [exec]);
+
+  const toolbarButtons = [
+    { icon: <Bold className="w-3.5 h-3.5" />, cmd: () => exec("bold"), label: "Bold" },
+    { icon: <Italic className="w-3.5 h-3.5" />, cmd: () => exec("italic"), label: "Italic" },
+    { icon: <Code className="w-3.5 h-3.5" />, cmd: () => exec("formatBlock", "pre"), label: "Code" },
+    { icon: <Heading2 className="w-3.5 h-3.5" />, cmd: () => exec("formatBlock", "h2"), label: "H2" },
+    { icon: <Heading3 className="w-3.5 h-3.5" />, cmd: () => exec("formatBlock", "h3"), label: "H3" },
+    { icon: <List className="w-3.5 h-3.5" />, cmd: () => exec("insertUnorderedList"), label: "Bullet List" },
+    { icon: <ListOrdered className="w-3.5 h-3.5" />, cmd: () => exec("insertOrderedList"), label: "Numbered List" },
+    { icon: <Link className="w-3.5 h-3.5" />, cmd: insertLink, label: "Insert Link" },
+    { icon: <Undo className="w-3.5 h-3.5" />, cmd: () => exec("undo"), label: "Undo" },
+    { icon: <Redo className="w-3.5 h-3.5" />, cmd: () => exec("redo"), label: "Redo" },
+  ];
+
+  return (
+    <div className="border rounded-md overflow-hidden">
+      <div className="flex items-center gap-0.5 p-1.5 border-b bg-muted/50 flex-wrap" data-testid={`${testId}-toolbar`}>
+        {toolbarButtons.map((btn) => (
+          <Button
+            key={btn.label}
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={(e) => { e.preventDefault(); btn.cmd(); }}
+            title={btn.label}
+            data-testid={`${testId}-btn-${btn.label.toLowerCase().replace(/\s/g, "-")}`}
+          >
+            {btn.icon}
+          </Button>
+        ))}
+      </div>
+      <div
+        ref={editorRef}
+        id={id}
+        contentEditable
+        className="min-h-[200px] max-h-[400px] overflow-y-auto p-3 text-sm focus:outline-none prose prose-sm dark:prose-invert max-w-none"
+        onInput={handleInput}
+        data-testid={testId}
+      />
+    </div>
+  );
+}
 
 type Page = {
   id: number;
@@ -60,12 +135,14 @@ export default function ContentPages() {
   const [addSlug, setAddSlug] = useState("");
   const [addTemplate, setAddTemplate] = useState("default");
   const [addDescription, setAddDescription] = useState("");
+  const [addContent, setAddContent] = useState("");
 
   const [editOpen, setEditOpen] = useState(false);
   const [editPage, setEditPage] = useState<Page | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editSlug, setEditSlug] = useState("");
   const [editTemplate, setEditTemplate] = useState("");
+  const [editContent, setEditContent] = useState("");
 
   const [auditOpen, setAuditOpen] = useState(false);
   const [auditPage, setAuditPage] = useState<Page | null>(null);
@@ -92,6 +169,7 @@ export default function ContentPages() {
       setAddSlug("");
       setAddTemplate("default");
       setAddDescription("");
+      setAddContent("");
       toast({ title: "Page created", description: `"${addTitle}" has been added.` });
     },
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
@@ -140,6 +218,7 @@ export default function ContentPages() {
       slug: addSlug || undefined,
       template: addTemplate,
       description: addDescription,
+      content: addContent || undefined,
     });
   };
 
@@ -148,6 +227,7 @@ export default function ContentPages() {
     setEditTitle(page.title);
     setEditSlug(page.slug);
     setEditTemplate(page.template || "default");
+    setEditContent(page.content || "");
     setEditOpen(true);
   };
 
@@ -159,6 +239,7 @@ export default function ContentPages() {
         title: editTitle,
         slug: editSlug,
         template: editTemplate,
+        content: editContent,
       },
     });
   };
@@ -333,7 +414,7 @@ export default function ContentPages() {
       </div>
 
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent data-testid="dialog-add-page">
+        <DialogContent className="max-w-2xl" data-testid="dialog-add-page">
           <DialogHeader>
             <DialogTitle>Add New Page</DialogTitle>
           </DialogHeader>
@@ -364,6 +445,10 @@ export default function ContentPages() {
               <Label htmlFor="add-page-description">Description</Label>
               <Textarea id="add-page-description" placeholder="Page description or meta summary..." value={addDescription} onChange={(e) => setAddDescription(e.target.value)} data-testid="input-add-page-description" />
             </div>
+            <div className="space-y-2">
+              <Label>Content</Label>
+              <RichTextEditor value={addContent} onChange={setAddContent} id="add-page-content" testId="editor-add-page-content" />
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAddOpen(false)} data-testid="button-cancel-add-page">Cancel</Button>
@@ -376,7 +461,7 @@ export default function ContentPages() {
       </Dialog>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent data-testid="dialog-edit-page">
+        <DialogContent className="max-w-2xl" data-testid="dialog-edit-page">
           <DialogHeader>
             <DialogTitle>Edit Page</DialogTitle>
           </DialogHeader>
@@ -402,6 +487,10 @@ export default function ContentPages() {
                   <SelectItem value="location">Location</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Content</Label>
+              <RichTextEditor value={editContent} onChange={setEditContent} id="edit-page-content" testId="editor-edit-page-content" />
             </div>
           </div>
           <DialogFooter>
