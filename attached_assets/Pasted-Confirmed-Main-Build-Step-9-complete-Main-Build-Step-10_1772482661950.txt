@@ -1,0 +1,60 @@
+Confirmed. Main Build Step 9 complete.
+
+Main Build Step 10 — Campaign Wizard Step 3 — Services, Matrix, 
+Keywords UI.
+
+Create the following files:
+
+1. /client/components/pseo/wizard-steps/ServicesKeywordsStep.tsx
+   - Main container for services and keyword setup
+   - Two sections: Services input and Keyword setup
+   - "Confirm Services & Keywords" button
+   - On confirm → calls onComplete(servicesKeywordsData)
+
+2. Service input section:
+   - Add service input field with Add button
+   - Minimum 1 service, maximum 20 services per campaign
+   - Duplicate service names rejected with inline error
+   - Each service shows: name, primary keyword, delete button
+   - Services list updates ServiceLocationMatrix in real time
+
+3. /client/components/pseo/ServiceLocationMatrix.tsx
+   - Grid showing services as rows, locations as columns
+   - Checkbox at each intersection — checked = active combination
+   - Select all / deselect all per row (service)
+   - Select all / deselect all per column (location)
+   - Live page count updates on every checkbox change
+   - Uses PageCountCalculator from Step 9
+   - If more than 10 locations — show condensed view with 
+     pagination or horizontal scroll
+
+4. Keyword setup section — two paths:
+   Path A — Manual keyword input:
+   - Text input per service for primary keyword
+   - Optional secondary keywords (comma separated)
+   - Optional longtail keyword
+   - Validates: max 5 keywords per page total
+   
+   Path B — System suggest:
+   - "Suggest Keywords" button
+   - Calls POST /api/pseo/keywords/suggest with campaign context
+   - Shows suggested keywords per service with accept/reject 
+     per suggestion
+   - Agency must review and approve before proceeding
+   - Approved keywords shown in same format as manual input
+
+5. /client/components/pseo/KeywordReviewPanel.tsx
+   - Shows suggested keywords in review table
+   - Per keyword: text, type (primary/secondary/longtail), 
+     service assignment, accept/reject toggle
+   - Bulk accept all button
+   - Count of accepted vs pending shown
+
+6. Server route in /server/routes/pseo/keywords.ts:
+   - POST /api/pseo/keywords/suggest — accepts campaign context 
+     (services, locations, businessCategory) — calls BYOK AI 
+     to generate keyword suggestions per service
+
+Use existing UI components only. No new dependencies.
+
+Show all files. Stop. Wait for confirmation before proceeding.

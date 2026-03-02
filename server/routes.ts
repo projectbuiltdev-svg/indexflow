@@ -10,6 +10,7 @@ import { protectPseoManagedPages } from "./middleware/pseo-page-deletion-protect
 import { registerPseoPageRoutes } from "./routes/pseo/pages";
 import pseoTemplateRouter from "./routes/pseo/template";
 import pseoLocationsRouter from "./routes/pseo/locations";
+import pseoKeywordsRouter from "./routes/pseo/keywords";
 import fs from "fs";
 import path from "path";
 
@@ -2415,6 +2416,7 @@ export async function registerRoutes(
   registerPseoPageRoutes(app);
   app.use("/api/pseo/template", pseoTemplateRouter);
   app.use("/api/pseo/locations", pseoLocationsRouter);
+  app.use("/api/pseo/keywords", pseoKeywordsRouter);
 
   return httpServer;
 }
