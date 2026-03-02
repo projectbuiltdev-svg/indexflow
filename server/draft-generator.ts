@@ -237,6 +237,9 @@ export async function generateCampaignDrafts(
     },
     {
       concurrency: 2,
+      // NOTE: Each retry re-enters generateSingleDraft which makes up to 2 AI calls internally.
+      // Worst case per post: 3 retries × 2 attempts = 6 AI calls.
+      // For a 50-post campaign: up to 300 AI calls. Acceptable but costly.
       retries: 3,
       onProgress: (completed, total) => {
         onProgress?.(completed, total);
