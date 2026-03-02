@@ -2421,6 +2421,7 @@ export async function registerRoutes(
   app.use("/api/pseo/keywords", pseoKeywordsRouter);
   app.use("/api/pseo/campaigns", pseoCampaignsRouter);
   app.use("/api/pseo", pseoCampaignsRouter);
+  app.use("/api/pseo", pseoReviewRouter);
 
   return httpServer;
 }

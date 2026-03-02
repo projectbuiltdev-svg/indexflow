@@ -1,0 +1,58 @@
+Stop. We are not working on T014 or any other tasks.
+
+We are following the pSEO engine build order exactly.
+We are currently on Main Build Step 14.
+
+Ignore T014. Ignore all wiring tasks. Build Main Build Step 14 only.
+
+Main Build Step 14 — Review Queue UI.
+
+Create the following files:
+
+1. /client/components/pseo/ReviewQueueTab.tsx — main review 
+   queue component:
+   - Shows all pages in review queue for the active campaign
+   - Two sections: Quality Gate Failures and Similarity Holds
+   - Tabs or toggle between sections
+   - Count badges on each section tab
+   - Bulk action bar: Approve All, Reject All, Regenerate Selected
+   - Individual page row actions: Approve, Reject, Regenerate, 
+     Preview
+   - Pagination — 25 rows per page
+   - Polling every 30 seconds for new items during generation
+   - Poll interval must use config value — not hardcoded
+
+2. Quality Gate Failures section:
+   - Each row shows: page title, location, service, failure 
+     reasons list, word count, date added
+   - Expand row to see full failure details per gate
+   - "Fix and Resubmit" option — opens page editor inline
+   - "Approve Anyway" option — bypasses gates for this page only
+   - "Reject" option — soft deletes from queue and pseo_pages
+
+3. Similarity Holds section:
+   - Each row shows: page title, similarity score, comparison 
+     page title, date held
+   - "View Comparison" button — opens side-by-side preview modal
+   - "Approve Anyway" button — publishes despite similarity score
+   - "Regenerate" button — triggers single page regeneration
+   - "Reject" button — soft deletes
+
+4. Side-by-side preview modal:
+   - Two panels: held page vs comparison page
+   - Similarity score displayed prominently
+   - Approve / Regenerate / Reject actions at bottom
+
+5. Server routes in /server/routes/pseo/review.ts:
+   - GET /api/pseo/campaigns/:id/review-queue — returns all 
+     review queue items with type, page data, failure reasons
+   - POST /api/pseo/review/:itemId/approve — publishes page 
+     to venue_site_pages, removes from queue, logs audit
+   - POST /api/pseo/review/:itemId/reject — soft deletes page 
+     and queue item, logs audit
+   - POST /api/pseo/review/:itemId/regenerate — triggers 
+     single page regeneration job
+
+Use existing UI components only. No new dependencies.
+
+Show all files. Stop. Wait for confirmation before proceeding.

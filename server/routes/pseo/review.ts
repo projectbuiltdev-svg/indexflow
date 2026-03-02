@@ -1,9 +1,36 @@
 import { Router, Request, Response } from "express";
 import { db } from "../../db";
 import { pseoPages, pseoServices, pseoLocations, workspaceSitePages, pseoCampaigns } from "@shared/schema";
-import { eq, and, inArray, isNull } from "drizzle-orm";
+import { eq, and, inArray, isNull, sql } from "drizzle-orm";
+import { REVIEW_QUEUE_POLL_INTERVAL_MS } from "../../config/pseo-gate-thresholds";
 
 const router = Router();
+
+function extractComparisonPageId(failReasons: string[]): string | null {
+  for (const reason of failReasons) {
+    const match = reason.match(/compared to page ([a-f0-9-]+)/i);
+    if (match) return match[1];
+    const match2 = reason.match(/vs page ([a-f0-9-]+)/i);
+    if (match2) return match2[1];
+  }
+  return null;
+}
+
+function computeWordCount(paragraphVariants: string[] | null, title: string): number {
+  let text = title || "";
+  if (paragraphVariants && Array.isArray(paragraphVariants)) {
+    text += " " + paragraphVariants.join(" ");
+  }
+  const stripped = text.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  return stripped ? stripped.split(" ").length : 0;
+}
+
+router.get("/review/config", async (_req: Request, res: Response) => {
+  return res.json({
+    pollIntervalMs: REVIEW_QUEUE_POLL_INTERVAL_MS,
+    rowsPerPage: 25,
+  });
+});
 
 router.get("/campaigns/:id/review-queue", async (req: Request, res: Response) => {
   try {
@@ -40,8 +67,8 @@ router.get("/campaigns/:id/review-queue", async (req: Request, res: Response) =>
     const qualityFailCount = allReviewPages.filter((p) => p.qualityGateStatus === "fail").length;
     const similarityHoldCount = allReviewPages.filter((p) => p.qualityGateStatus === "review").length;
 
-    const serviceIds = [...new Set(reviewPages.map((p) => p.serviceId).filter(Boolean))];
-    const locationIds = [...new Set(reviewPages.map((p) => p.locationId).filter(Boolean))];
+    const serviceIds = [...new Set(reviewPages.map((p) => p.serviceId).filter(Boolean))] as string[];
+    const locationIds = [...new Set(reviewPages.map((p) => p.locationId).filter(Boolean))] as string[];
 
     let servicesMap: Record<string, string> = {};
     let locationsMap: Record<string, string> = {};
@@ -50,7 +77,7 @@ router.get("/campaigns/:id/review-queue", async (req: Request, res: Response) =>
       const services = await db
         .select({ id: pseoServices.id, name: pseoServices.name })
         .from(pseoServices)
-        .where(inArray(pseoServices.id, serviceIds as string[]));
+        .where(inArray(pseoServices.id, serviceIds));
       servicesMap = Object.fromEntries(services.map((s) => [s.id, s.name]));
     }
 
@@ -58,22 +85,50 @@ router.get("/campaigns/:id/review-queue", async (req: Request, res: Response) =>
       const locations = await db
         .select({ id: pseoLocations.id, name: pseoLocations.name })
         .from(pseoLocations)
-        .where(inArray(pseoLocations.id, locationIds as string[]));
+        .where(inArray(pseoLocations.id, locationIds));
       locationsMap = Object.fromEntries(locations.map((l) => [l.id, l.name]));
     }
 
-    const items = reviewPages.map((p) => ({
-      id: p.id,
-      title: p.title,
-      slug: p.slug,
-      serviceName: p.serviceId ? servicesMap[p.serviceId] || "Unknown" : "Unknown",
-      locationName: p.locationId ? locationsMap[p.locationId] || "Unknown" : "Unknown",
-      qualityGateStatus: p.qualityGateStatus,
-      qualityFailReasons: p.qualityFailReasons || [],
-      similarityScore: p.similarityScore ? parseFloat(p.similarityScore) : null,
-      createdAt: p.createdAt,
-      type: p.qualityGateStatus === "fail" ? "quality_gate" : "similarity_hold",
-    }));
+    const comparisonPageIds = new Set<string>();
+    for (const p of reviewPages) {
+      if (p.qualityGateStatus === "review" && p.qualityFailReasons) {
+        const cpId = extractComparisonPageId(p.qualityFailReasons as string[]);
+        if (cpId) comparisonPageIds.add(cpId);
+      }
+    }
+
+    let comparisonPagesMap: Record<string, string> = {};
+    if (comparisonPageIds.size > 0) {
+      const cpPages = await db
+        .select({ id: pseoPages.id, title: pseoPages.title })
+        .from(pseoPages)
+        .where(inArray(pseoPages.id, [...comparisonPageIds]));
+      comparisonPagesMap = Object.fromEntries(cpPages.map((p) => [p.id, p.title]));
+    }
+
+    const items = reviewPages.map((p) => {
+      const failReasons = (p.qualityFailReasons || []) as string[];
+      const cpId = extractComparisonPageId(failReasons);
+      return {
+        id: p.id,
+        title: p.title,
+        slug: p.slug,
+        serviceName: p.serviceId ? servicesMap[p.serviceId] || "Unknown" : "Unknown",
+        locationName: p.locationId ? locationsMap[p.locationId] || "Unknown" : "Unknown",
+        qualityGateStatus: p.qualityGateStatus,
+        qualityFailReasons: failReasons,
+        similarityScore: p.similarityScore ? parseFloat(p.similarityScore) : null,
+        comparisonPageId: cpId,
+        comparisonPageTitle: cpId ? comparisonPagesMap[cpId] || null : null,
+        wordCount: computeWordCount(p.paragraphVariants as string[] | null, p.title),
+        paragraphVariants: p.paragraphVariants,
+        metaTitle: p.metaTitle,
+        metaDescription: p.metaDescription,
+        h1Variant: p.h1Variant,
+        createdAt: p.createdAt,
+        type: p.qualityGateStatus === "fail" ? "quality_gate" : "similarity_hold",
+      };
+    });
 
     return res.json({
       items,
@@ -132,7 +187,7 @@ router.post("/review/:itemId/approve", async (req: Request, res: Response) => {
 
     await db
       .update(pseoCampaigns)
-      .set({ pagesPublished: require("drizzle-orm").sql`pages_published + 1`, updatedAt: new Date() })
+      .set({ pagesPublished: sql`pages_published + 1`, updatedAt: new Date() })
       .where(eq(pseoCampaigns.id, page.campaignId));
 
     return res.json({ success: true, pageId: itemId, sitePageId: sitePage.id });
@@ -188,6 +243,7 @@ router.post("/review/:itemId/regenerate", async (req: Request, res: Response) =>
       .set({
         qualityGateStatus: "pending",
         qualityFailReasons: [],
+        similarityScore: null,
         updatedAt: new Date(),
       })
       .where(eq(pseoPages.id, itemId));
@@ -195,6 +251,39 @@ router.post("/review/:itemId/regenerate", async (req: Request, res: Response) =>
     return res.json({ success: true, pageId: itemId, status: "queued" });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || "Regenerate failed" });
+  }
+});
+
+router.post("/review/:itemId/update", async (req: Request, res: Response) => {
+  try {
+    const { itemId } = req.params;
+    const { title, metaTitle, metaDescription, h1Variant, paragraphVariants } = req.body;
+
+    const [page] = await db
+      .select({ id: pseoPages.id })
+      .from(pseoPages)
+      .where(eq(pseoPages.id, itemId))
+      .limit(1);
+
+    if (!page) {
+      return res.status(404).json({ error: "Page not found" });
+    }
+
+    const updates: Record<string, any> = { updatedAt: new Date() };
+    if (title !== undefined) updates.title = title;
+    if (metaTitle !== undefined) updates.metaTitle = metaTitle;
+    if (metaDescription !== undefined) updates.metaDescription = metaDescription;
+    if (h1Variant !== undefined) updates.h1Variant = h1Variant;
+    if (paragraphVariants !== undefined) updates.paragraphVariants = paragraphVariants;
+
+    updates.qualityGateStatus = "pending";
+    updates.qualityFailReasons = [];
+
+    await db.update(pseoPages).set(updates).where(eq(pseoPages.id, itemId));
+
+    return res.json({ success: true, pageId: itemId });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || "Update failed" });
   }
 });
 
@@ -261,7 +350,7 @@ router.post("/review/bulk-reject", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "campaignId required" });
     }
 
-    const result = await db
+    await db
       .update(pseoPages)
       .set({ deletedAt: new Date(), updatedAt: new Date() })
       .where(

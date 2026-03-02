@@ -3,6 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -26,10 +29,12 @@ import {
   GitCompare,
   CheckCheck,
   Trash2,
+  Pencil,
+  Save,
 } from "lucide-react";
 
-const REVIEW_QUEUE_POLL_INTERVAL_MS = 30000;
-const ROWS_PER_PAGE = 25;
+const FALLBACK_POLL_INTERVAL_MS = 30000;
+const FALLBACK_ROWS_PER_PAGE = 25;
 
 interface ReviewItem {
   id: string;
@@ -40,6 +45,13 @@ interface ReviewItem {
   qualityGateStatus: string;
   qualityFailReasons: string[];
   similarityScore: number | null;
+  comparisonPageId: string | null;
+  comparisonPageTitle: string | null;
+  wordCount: number;
+  paragraphVariants: string[] | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  h1Variant: string | null;
   createdAt: string;
   type: "quality_gate" | "similarity_hold";
 }
@@ -54,6 +66,11 @@ interface ReviewQueueData {
   totalPages: number;
 }
 
+interface ReviewConfig {
+  pollIntervalMs: number;
+  rowsPerPage: number;
+}
+
 interface ReviewQueueTabProps {
   campaignId: string;
   isGenerating?: boolean;
@@ -61,25 +78,33 @@ interface ReviewQueueTabProps {
 
 export default function ReviewQueueTab({ campaignId, isGenerating }: ReviewQueueTabProps) {
   const [data, setData] = useState<ReviewQueueData | null>(null);
+  const [config, setConfig] = useState<ReviewConfig>({ pollIntervalMs: FALLBACK_POLL_INTERVAL_MS, rowsPerPage: FALLBACK_ROWS_PER_PAGE });
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"quality" | "similarity">("quality");
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [editingRow, setEditingRow] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<Record<string, string>>({});
   const [comparisonModal, setComparisonModal] = useState<ReviewItem | null>(null);
   const [bulkLoading, setBulkLoading] = useState<string | null>(null);
 
+  useEffect(() => {
+    apiRequest("GET", "/api/pseo/review/config")
+      .then((res) => res.json())
+      .then((cfg) => setConfig(cfg))
+      .catch(() => {});
+  }, []);
+
   const fetchQueue = useCallback(async () => {
     try {
-      const res = await apiRequest("GET", `/api/pseo/campaigns/${campaignId}/review-queue?page=${currentPage}&limit=${ROWS_PER_PAGE}`);
+      const res = await apiRequest("GET", `/api/pseo/campaigns/${campaignId}/review-queue?page=${currentPage}&limit=${config.rowsPerPage}`);
       const result = await res.json();
       setData(result);
     } catch {
-      // silently fail on poll
     } finally {
       setIsLoading(false);
     }
-  }, [campaignId, currentPage]);
+  }, [campaignId, currentPage, config.rowsPerPage]);
 
   useEffect(() => {
     fetchQueue();
@@ -87,9 +112,9 @@ export default function ReviewQueueTab({ campaignId, isGenerating }: ReviewQueue
 
   useEffect(() => {
     if (!isGenerating) return;
-    const interval = setInterval(fetchQueue, REVIEW_QUEUE_POLL_INTERVAL_MS);
+    const interval = setInterval(fetchQueue, config.pollIntervalMs);
     return () => clearInterval(interval);
-  }, [isGenerating, fetchQueue]);
+  }, [isGenerating, fetchQueue, config.pollIntervalMs]);
 
   const handleAction = async (itemId: string, action: "approve" | "reject" | "regenerate") => {
     setActionLoading((prev) => ({ ...prev, [itemId]: action }));
@@ -97,7 +122,6 @@ export default function ReviewQueueTab({ campaignId, isGenerating }: ReviewQueue
       await apiRequest("POST", `/api/pseo/review/${itemId}/${action}`);
       await fetchQueue();
     } catch {
-      // error handled silently
     } finally {
       setActionLoading((prev) => {
         const next = { ...prev };
@@ -113,7 +137,6 @@ export default function ReviewQueueTab({ campaignId, isGenerating }: ReviewQueue
       await apiRequest("POST", `/api/pseo/review/bulk-${action}`, { campaignId });
       await fetchQueue();
     } catch {
-      // error handled silently
     } finally {
       setBulkLoading(null);
     }
@@ -172,7 +195,7 @@ export default function ReviewQueueTab({ campaignId, isGenerating }: ReviewQueue
                 {data.total} page{data.total !== 1 ? "s" : ""} require review
                 {isGenerating && (
                   <span className="ml-2 text-amber-500">
-                    — polling every {REVIEW_QUEUE_POLL_INTERVAL_MS / 1000}s
+                    — polling every {config.pollIntervalMs / 1000}s
                   </span>
                 )}
               </CardDescription>
@@ -231,7 +254,20 @@ export default function ReviewQueueTab({ campaignId, isGenerating }: ReviewQueue
                       key={item.id}
                       item={item}
                       expanded={expandedRows.has(item.id)}
+                      isEditing={editingRow === item.id}
                       onToggleExpand={() => toggleExpand(item.id)}
+                      onStartEdit={() => { setEditingRow(item.id); if (!expandedRows.has(item.id)) toggleExpand(item.id); }}
+                      onCancelEdit={() => setEditingRow(null)}
+                      onSaveEdit={async (updates) => {
+                        setActionLoading((prev) => ({ ...prev, [item.id]: "save" }));
+                        try {
+                          await apiRequest("POST", `/api/pseo/review/${item.id}/update`, updates);
+                          setEditingRow(null);
+                          await fetchQueue();
+                        } catch {} finally {
+                          setActionLoading((prev) => { const next = { ...prev }; delete next[item.id]; return next; });
+                        }
+                      }}
                       onAction={(action) => handleAction(item.id, action)}
                       loading={actionLoading[item.id]}
                     />
@@ -308,16 +344,29 @@ export default function ReviewQueueTab({ campaignId, isGenerating }: ReviewQueue
 function QualityRow({
   item,
   expanded,
+  isEditing,
   onToggleExpand,
+  onStartEdit,
+  onCancelEdit,
+  onSaveEdit,
   onAction,
   loading,
 }: {
   item: ReviewItem;
   expanded: boolean;
+  isEditing: boolean;
   onToggleExpand: () => void;
+  onStartEdit: () => void;
+  onCancelEdit: () => void;
+  onSaveEdit: (updates: Record<string, any>) => Promise<void>;
   onAction: (action: "approve" | "reject" | "regenerate") => void;
   loading?: string;
 }) {
+  const [editTitle, setEditTitle] = useState(item.title);
+  const [editMeta, setEditMeta] = useState(item.metaTitle || "");
+  const [editDesc, setEditDesc] = useState(item.metaDescription || "");
+  const [editH1, setEditH1] = useState(item.h1Variant || "");
+
   return (
     <div className="border rounded-lg" data-testid={`quality-row-${item.id}`}>
       <div className="flex items-center justify-between p-3">
@@ -326,17 +375,27 @@ function QualityRow({
             {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
           <div className="min-w-0">
-            <p className="text-sm font-medium truncate">{item.title}</p>
-            <div className="flex items-center gap-2 mt-0.5">
-              <Badge variant="outline" className="text-[10px]">{item.serviceName}</Badge>
+            <p className="text-sm font-medium truncate" data-testid={`text-title-${item.id}`}>{item.title}</p>
+            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
               <Badge variant="outline" className="text-[10px]">{item.locationName}</Badge>
+              <Badge variant="outline" className="text-[10px]">{item.serviceName}</Badge>
+              <span className="text-[10px] text-muted-foreground" data-testid={`text-wordcount-${item.id}`}>
+                {item.wordCount} words
+              </span>
               <span className="text-[10px] text-muted-foreground">
                 {item.qualityFailReasons.length} failure{item.qualityFailReasons.length !== 1 ? "s" : ""}
+              </span>
+              <span className="text-[10px] text-muted-foreground" data-testid={`text-date-${item.id}`}>
+                {new Date(item.createdAt).toLocaleDateString()}
               </span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-1 shrink-0 ml-2">
+          <Button variant="ghost" size="sm" onClick={onStartEdit} disabled={!!loading || isEditing} className="h-7 px-2 text-xs" data-testid={`button-edit-${item.id}`}>
+            <Pencil className="h-3 w-3 mr-1" />
+            Fix
+          </Button>
           <Button variant="ghost" size="sm" onClick={() => onAction("approve")} disabled={!!loading} className="h-7 px-2 text-xs" data-testid={`button-approve-${item.id}`}>
             {loading === "approve" ? <Loader2 className="h-3 w-3 animate-spin" /> : <CheckCircle2 className="h-3 w-3 mr-1 text-green-500" />}
             Approve
@@ -355,7 +414,7 @@ function QualityRow({
       {expanded && (
         <div className="px-3 pb-3 pt-0 border-t" data-testid={`details-${item.id}`}>
           <p className="text-xs font-medium text-muted-foreground mb-2 mt-2">Failure Reasons:</p>
-          <ul className="space-y-1">
+          <ul className="space-y-1 mb-3">
             {item.qualityFailReasons.map((reason, i) => (
               <li key={i} className="flex items-start gap-2 text-xs">
                 <AlertTriangle className="h-3 w-3 text-amber-500 shrink-0 mt-0.5" />
@@ -363,8 +422,46 @@ function QualityRow({
               </li>
             ))}
           </ul>
+
+          {isEditing && (
+            <div className="space-y-3 p-3 rounded-lg bg-muted/50 border" data-testid={`editor-${item.id}`}>
+              <p className="text-xs font-medium">Fix and Resubmit</p>
+              <div>
+                <Label className="text-xs">Title</Label>
+                <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="mt-1 h-8 text-xs" data-testid={`input-title-${item.id}`} />
+              </div>
+              <div>
+                <Label className="text-xs">H1 Variant</Label>
+                <Input value={editH1} onChange={(e) => setEditH1(e.target.value)} className="mt-1 h-8 text-xs" data-testid={`input-h1-${item.id}`} />
+              </div>
+              <div>
+                <Label className="text-xs">Meta Title</Label>
+                <Input value={editMeta} onChange={(e) => setEditMeta(e.target.value)} className="mt-1 h-8 text-xs" data-testid={`input-meta-${item.id}`} />
+              </div>
+              <div>
+                <Label className="text-xs">Meta Description</Label>
+                <Textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)} className="mt-1 text-xs min-h-[60px]" data-testid={`input-desc-${item.id}`} />
+              </div>
+              <div className="flex gap-2 justify-end">
+                <Button variant="outline" size="sm" onClick={onCancelEdit} className="h-7 text-xs" data-testid={`button-cancel-edit-${item.id}`}>
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  className="h-7 text-xs"
+                  disabled={loading === "save"}
+                  onClick={() => onSaveEdit({ title: editTitle, metaTitle: editMeta, metaDescription: editDesc, h1Variant: editH1 })}
+                  data-testid={`button-save-edit-${item.id}`}
+                >
+                  {loading === "save" ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : <Save className="h-3 w-3 mr-1" />}
+                  Save & Resubmit
+                </Button>
+              </div>
+            </div>
+          )}
+
           <p className="text-[10px] text-muted-foreground mt-2">
-            Created: {new Date(item.createdAt).toLocaleString()}
+            Added: {new Date(item.createdAt).toLocaleString()}
           </p>
         </div>
       )}
@@ -389,13 +486,21 @@ function SimilarityRow({
     <div className="border rounded-lg p-3" data-testid={`similarity-row-${item.id}`}>
       <div className="flex items-center justify-between">
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium truncate">{item.title}</p>
-          <div className="flex items-center gap-2 mt-1">
-            <Badge variant="outline" className="text-[10px]">{item.serviceName}</Badge>
+          <p className="text-sm font-medium truncate" data-testid={`text-title-${item.id}`}>{item.title}</p>
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
             <Badge variant="outline" className="text-[10px]">{item.locationName}</Badge>
+            <Badge variant="outline" className="text-[10px]">{item.serviceName}</Badge>
             <Badge variant={item.similarityScore && item.similarityScore >= 0.9 ? "destructive" : "secondary"} className="text-[10px]" data-testid={`badge-score-${item.id}`}>
               {scorePercent}% similar
             </Badge>
+            {item.comparisonPageTitle && (
+              <span className="text-[10px] text-muted-foreground" data-testid={`text-comparison-${item.id}`}>
+                vs "{item.comparisonPageTitle}"
+              </span>
+            )}
+            <span className="text-[10px] text-muted-foreground" data-testid={`text-date-${item.id}`}>
+              {new Date(item.createdAt).toLocaleDateString()}
+            </span>
           </div>
         </div>
         <div className="flex items-center gap-1 shrink-0 ml-2">
@@ -439,7 +544,7 @@ function ComparisonModal({
           <DialogTitle className="flex items-center gap-2">
             <GitCompare className="h-5 w-5" />
             Similarity Comparison
-            <Badge variant="secondary" className="ml-2" data-testid="badge-comparison-score">
+            <Badge variant="destructive" className="ml-2 text-sm" data-testid="badge-comparison-score">
               {scorePercent}% similar
             </Badge>
           </DialogTitle>
@@ -453,11 +558,12 @@ function ComparisonModal({
             <CardContent>
               <div className="space-y-2" data-testid="panel-held-page">
                 <p className="font-medium text-sm">{item.title}</p>
-                <div className="flex gap-1">
-                  <Badge variant="outline" className="text-[10px]">{item.serviceName}</Badge>
+                <div className="flex gap-1 flex-wrap">
                   <Badge variant="outline" className="text-[10px]">{item.locationName}</Badge>
+                  <Badge variant="outline" className="text-[10px]">{item.serviceName}</Badge>
                 </div>
                 <p className="text-xs text-muted-foreground">Slug: /{item.slug}</p>
+                <p className="text-xs text-muted-foreground">{item.wordCount} words</p>
                 {item.qualityFailReasons.length > 0 && (
                   <div className="mt-2 p-2 rounded bg-muted text-xs space-y-1">
                     {item.qualityFailReasons.map((r, i) => (
@@ -475,8 +581,13 @@ function ComparisonModal({
             </CardHeader>
             <CardContent>
               <div className="space-y-2" data-testid="panel-comparison-page">
-                <p className="text-sm text-muted-foreground">
-                  The page this content was compared against. The similarity score of {scorePercent}% exceeds the 80% threshold.
+                {item.comparisonPageTitle ? (
+                  <p className="font-medium text-sm">{item.comparisonPageTitle}</p>
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">Comparison page title unavailable</p>
+                )}
+                <p className="text-xs text-muted-foreground mt-2">
+                  The similarity score of {scorePercent}% exceeds the 80% threshold between these two pages.
                 </p>
                 <div className="mt-4 p-3 rounded bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 text-xs">
                   <p>Consider regenerating this page to produce more unique content, or approve if the similarity is acceptable for these locations.</p>
