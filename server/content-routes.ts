@@ -1,7 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { storage } from "./storage";
 import { compileMdxToHtml } from "./mdx-compiler";
-import { insertWorkspaceBlogPostSchema, insertWorkspaceDomainSchema, insertContentAssetSchema, insertContentAssetUsageSchema, insertInvoiceSchema, insertInvoiceLineItemSchema, insertContentReportSchema, insertCmsApiKeySchema, blogTemplates } from "@shared/schema";
+import { insertWorkspaceBlogPostSchema, insertWorkspaceDomainSchema, insertContentAssetSchema, insertContentAssetUsageSchema, insertInvoiceSchema, insertInvoiceLineItemSchema, insertContentReportSchema, insertCmsApiKeySchema, blogTemplates, getPlanTier } from "@shared/schema";
 import { z } from "zod";
 import { bulkCreateDraftPosts, generateCampaignDrafts, generateSingleDraft } from "./draft-generator";
 import { randomUUID } from "crypto";
@@ -22,6 +22,20 @@ function normalizeCategory(cat: string | undefined | null): string {
   if (!cat) return "general";
   const lower = cat.trim().toLowerCase();
   return VALID_CATEGORIES.includes(lower) ? lower : "general";
+}
+
+async function checkPostLimit(workspaceId: string): Promise<{ allowed: boolean; used: number; limit: number; remaining: number }> {
+  const workspace = await storage.getWorkspace(workspaceId);
+  if (!workspace) return { allowed: false, used: 0, limit: 0, remaining: 0 };
+  const tier = getPlanTier((workspace as any).plan);
+  const limit = tier.postsPerWorkspacePerMonth;
+  const used = await storage.countBlogPostsThisMonth(workspaceId);
+  return {
+    allowed: used < limit,
+    used,
+    limit,
+    remaining: Math.max(0, limit - used),
+  };
 }
 
 function normalizeTags(tags: any): string[] | null {
