@@ -112,9 +112,10 @@ interface PageItem {
   createdAt: string;
 }
 
+import CampaignWizard from "./CampaignWizard";
+
 interface CampaignDashboardProps {
   workspaceId: string;
-  onOpenWizard?: () => void;
 }
 
 export default function CampaignDashboard({ workspaceId }: CampaignDashboardProps) {
