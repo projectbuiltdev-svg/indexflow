@@ -1487,3 +1487,146 @@ export const insertCmsSyncLogSchema = createInsertSchema(cmsSyncLogs).omit({
 });
 export type InsertCmsSyncLog = z.infer<typeof insertCmsSyncLogSchema>;
 export type CmsSyncLog = typeof cmsSyncLogs.$inferSelect;
+
+export const pseoCampaigns = pgTable("pseo_campaigns", {
+  id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
+  venueId: varchar("venue_id", { length: 36 })
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  status: text("status").notNull().default("draft"),
+  urlStructure: text("url_structure").notNull(),
+  templateHtml: text("template_html"),
+  templateLockedZones: jsonb("template_locked_zones").$type<string[]>(),
+  templateVersion: integer("template_version").notNull().default(1),
+  language: text("language").notNull().default("en"),
+  aiModel: text("ai_model").notNull().default("gpt-4o"),
+  totalPages: integer("total_pages").default(0),
+  pagesGenerated: integer("pages_generated").default(0),
+  pagesPublished: integer("pages_published").default(0),
+  gscPropertyVerified: boolean("gsc_property_verified").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  activatedAt: timestamp("activated_at"),
+  activatedBy: varchar("activated_by", { length: 36 })
+    .references(() => users.id, { onDelete: "set null" }),
+}, (t) => [
+  index("pseo_campaigns_venue_idx").on(t.venueId),
+  index("pseo_campaigns_status_idx").on(t.venueId, t.status),
+]);
+
+export const insertPseoCampaignSchema = createInsertSchema(pseoCampaigns).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertPseoCampaign = z.infer<typeof insertPseoCampaignSchema>;
+export type PseoCampaign = typeof pseoCampaigns.$inferSelect;
+
+export const pseoServices = pgTable("pseo_services", {
+  id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
+  campaignId: varchar("campaign_id", { length: 36 })
+    .notNull()
+    .references(() => pseoCampaigns.id, { onDelete: "cascade" }),
+  venueId: varchar("venue_id", { length: 36 })
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  slug: text("slug").notNull(),
+  description: text("description"),
+  category: text("category"),
+  keywords: jsonb("keywords").$type<string[]>(),
+  isExcluded: boolean("is_excluded").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (t) => [
+  index("pseo_services_campaign_idx").on(t.campaignId),
+  index("pseo_services_venue_idx").on(t.venueId),
+  uniqueIndex("pseo_services_campaign_slug_uq").on(t.campaignId, t.slug),
+]);
+
+export const insertPseoServiceSchema = createInsertSchema(pseoServices).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertPseoService = z.infer<typeof insertPseoServiceSchema>;
+export type PseoService = typeof pseoServices.$inferSelect;
+
+export const pseoLocations = pgTable("pseo_locations", {
+  id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
+  campaignId: varchar("campaign_id", { length: 36 })
+    .notNull()
+    .references(() => pseoCampaigns.id, { onDelete: "cascade" }),
+  venueId: varchar("venue_id", { length: 36 })
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  slug: text("slug").notNull(),
+  latitude: decimal("latitude", { precision: 10, scale: 7 }).notNull(),
+  longitude: decimal("longitude", { precision: 10, scale: 7 }).notNull(),
+  population: integer("population"),
+  commercialIntentScore: decimal("commercial_intent_score", { precision: 4, scale: 2 }),
+  state: text("state"),
+  zone: text("zone"),
+  country: text("country").notNull().default("US"),
+  neighbours: jsonb("neighbours").$type<string[]>(),
+  landmarks: jsonb("landmarks").$type<string[]>(),
+  imageIds: jsonb("image_ids").$type<string[]>(),
+  isExcluded: boolean("is_excluded").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (t) => [
+  index("pseo_locations_campaign_idx").on(t.campaignId),
+  index("pseo_locations_venue_idx").on(t.venueId),
+  uniqueIndex("pseo_locations_campaign_slug_uq").on(t.campaignId, t.slug),
+]);
+
+export const insertPseoLocationSchema = createInsertSchema(pseoLocations).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertPseoLocation = z.infer<typeof insertPseoLocationSchema>;
+export type PseoLocation = typeof pseoLocations.$inferSelect;
+
+export const pseoPages = pgTable("pseo_pages", {
+  id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
+  campaignId: varchar("campaign_id", { length: 36 })
+    .notNull()
+    .references(() => pseoCampaigns.id, { onDelete: "cascade" }),
+  venueId: varchar("venue_id", { length: 36 })
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  locationId: varchar("location_id", { length: 36 })
+    .references(() => pseoLocations.id, { onDelete: "set null" }),
+  serviceId: varchar("service_id", { length: 36 })
+    .references(() => pseoServices.id, { onDelete: "set null" }),
+  venueSitePageId: integer("venue_site_page_id")
+    .references(() => workspaceSitePages.id, { onDelete: "set null" }),
+  pageType: text("page_type").notNull().default("location"),
+  slug: text("slug").notNull(),
+  title: text("title").notNull(),
+  h1Variant: text("h1_variant"),
+  paragraphVariants: jsonb("paragraph_variants").$type<string[]>(),
+  metaTitle: text("meta_title"),
+  metaDescription: text("meta_description"),
+  schemaJson: jsonb("schema_json").$type<Record<string, any>>(),
+  internalLinks: jsonb("internal_links").$type<Array<{ url: string; anchor: string }>>(),
+  similarityScore: decimal("similarity_score", { precision: 4, scale: 3 }),
+  qualityGateStatus: text("quality_gate_status").notNull().default("pending"),
+  qualityFailReasons: jsonb("quality_fail_reasons").$type<string[]>(),
+  isPublished: boolean("is_published").notNull().default(false),
+  isIndexed: boolean("is_indexed").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (t) => [
+  index("pseo_pages_campaign_idx").on(t.campaignId),
+  index("pseo_pages_venue_idx").on(t.venueId),
+  index("pseo_pages_quality_idx").on(t.campaignId, t.qualityGateStatus),
+  uniqueIndex("pseo_pages_campaign_slug_uq").on(t.campaignId, t.slug),
+]);
+
+export const insertPseoPageSchema = createInsertSchema(pseoPages).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertPseoPage = z.infer<typeof insertPseoPageSchema>;
+export type PseoPage = typeof pseoPages.$inferSelect;

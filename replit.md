@@ -39,6 +39,8 @@ indexFlow is a white-label SEO, content management, and client management SaaS p
 - Primary keys: workspaces/users use varchar(36) UUIDs, most other tables use serial integers
 - All resource tables have `venue_id` (DB) / `workspaceId` (JS) foreign key referencing workspaces
 - CRITICAL: Do NOT run db:push - database already has correct schema from SQL import
+- **pSEO tables** (added Feb 2026): `pseo_campaigns`, `pseo_services`, `pseo_locations`, `pseo_pages` — programmatic SEO engine for location×service landing pages
+- `pseo_locations.imageIds` references `content_assets.id` records (not raw image bank IDs) — images fetched via image-resolver.ts and persisted to content_assets before storing IDs here
 
 ## Routes
 
