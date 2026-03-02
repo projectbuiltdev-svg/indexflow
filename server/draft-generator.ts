@@ -263,20 +263,33 @@ export interface BulkCreateInput {
 }
 
 export async function bulkCreateDraftPosts(input: BulkCreateInput): Promise<WorkspaceBlogPost[]> {
-  const postsToCreate = input.posts.map((p) => ({
-    workspaceId: input.workspaceId,
-    slug: slugify(p.title),
-    title: p.title,
-    primaryKeyword: p.primaryKeyword,
-    intent: p.intent || "informational",
-    funnel: p.funnel || "tofu",
-    category: p.category || "general",
-    status: "draft" as const,
-    generationStatus: "pending",
-    qualityGateStatus: "unknown",
-    campaignId: input.campaignId,
-    mdxContent: "",
-  }));
+  const existingPosts = await storage.getWorkspaceBlogPosts(input.workspaceId);
+  const existingSlugs = new Set(existingPosts.map(p => p.slug));
+
+  const postsToCreate = input.posts.map((p) => {
+    let slug = slugify(p.title);
+    let counter = 1;
+    let candidateSlug = slug;
+    while (existingSlugs.has(candidateSlug)) {
+      candidateSlug = `${slug}-${counter}`;
+      counter++;
+    }
+    existingSlugs.add(candidateSlug);
+    return {
+      workspaceId: input.workspaceId,
+      slug: candidateSlug,
+      title: p.title,
+      primaryKeyword: p.primaryKeyword,
+      intent: p.intent || "informational",
+      funnel: p.funnel || "tofu",
+      category: p.category || "general",
+      status: "draft" as const,
+      generationStatus: "pending",
+      qualityGateStatus: "unknown",
+      campaignId: input.campaignId,
+      mdxContent: "",
+    };
+  });
 
   return storage.bulkCreateWorkspaceBlogPosts(postsToCreate);
 }
