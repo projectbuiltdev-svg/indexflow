@@ -87,16 +87,6 @@ function requireSuperAdmin(req: Request, res: Response): boolean {
 
 export function registerContentRoutes(app: Express) {
 
-  app.get("/api/workspaces", async (req, res) => {
-    if (!requireSuperAdmin(req, res)) return;
-    try {
-      const workspaces = await storage.getWorkspaces();
-      res.json(workspaces);
-    } catch (err: any) {
-      res.status(500).json({ error: err.message });
-    }
-  });
-
   app.post("/api/blog/posts", async (req, res) => {
     if (!requireSuperAdmin(req, res)) return;
     try {
