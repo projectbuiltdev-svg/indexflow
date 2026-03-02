@@ -198,6 +198,24 @@ export default function ContentPages() {
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
+  const togglePublishMutation = useMutation({
+    mutationFn: ({ id, isPublished }: { id: number; isPublished: boolean }) =>
+      apiRequest("PUT", `/api/site-pages/${id}`, { isPublished }),
+    onMutate: async ({ id, isPublished }) => {
+      await queryClient.cancelQueries({ queryKey });
+      const previous = queryClient.getQueryData<Page[]>(queryKey);
+      queryClient.setQueryData<Page[]>(queryKey, (old) =>
+        old?.map((p) => (p.id === id ? { ...p, isPublished } : p))
+      );
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) queryClient.setQueryData(queryKey, context.previous);
+      toast({ title: "Error", description: "Failed to update publish status", variant: "destructive" });
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey }),
+  });
+
   const templates = Array.from(new Set(pages.map((p) => p.template || "default")));
 
   const filtered = pages.filter((p) => {
@@ -350,9 +368,15 @@ export default function ContentPages() {
                       <Badge variant="secondary" data-testid={`badge-page-template-${page.id}`}>{page.template || "default"}</Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={page.isPublished ? "default" : "outline"} data-testid={`badge-page-status-${page.id}`}>
-                        {page.isPublished ? "Published" : "Draft"}
-                      </Badge>
+                      <button
+                        className="inline-flex items-center cursor-pointer"
+                        onClick={() => togglePublishMutation.mutate({ id: page.id, isPublished: !page.isPublished })}
+                        data-testid={`button-toggle-publish-${page.id}`}
+                      >
+                        <Badge variant={page.isPublished ? "default" : "outline"} className="transition-colors">
+                          {page.isPublished ? "Published" : "Draft"}
+                        </Badge>
+                      </button>
                     </TableCell>
                     <TableCell className="text-muted-foreground">{page.updatedAt ? new Date(page.updatedAt).toLocaleDateString() : ""}</TableCell>
                     <TableCell>
