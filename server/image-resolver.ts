@@ -208,7 +208,10 @@ ${placeholders.map((p, i) => `${i + 1}. "${p.prompt}"`).join("\n")}`;
     }
 
     if (resolved === 0) {
-      console.warn(`[ImageResolver] All ${failed} image lookups failed for post "${post.title}" (${postId})`);
+      console.warn(`[ImageResolver] No images resolved for post ${postId}`);
+      await storage.updateWorkspaceBlogPost(postId, {
+        qualityFailReasons: [`Image resolution incomplete: no images could be resolved from any image bank. Manual image selection required.`],
+      });
       return { resolved: 0, failed };
     }
 
