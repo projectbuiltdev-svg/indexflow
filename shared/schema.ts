@@ -1352,7 +1352,6 @@ export const workspaceSitePages = pgTable(
   },
   (t) => [
     index("venue_site_pages_workspace_idx").on(t.workspaceId),
-    index("venue_site_pages_venue_idx").on(t.workspaceId),
     index("venue_site_pages_slug_idx").on(t.slug),
   ]
 );
