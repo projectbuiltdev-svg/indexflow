@@ -12,7 +12,7 @@ indexFlow is a white-label SEO, content management, and client management SaaS p
 - **Workspace Context**: WorkspaceProvider wraps ClientLayout, persists selection to localStorage
 
 ## Key Files
-- `shared/schema.ts` - All data models (37 tables)
+- `shared/schema.ts` - All data models (39 tables, includes cms_api_keys + cms_sync_logs)
 - `server/db.ts` - Database connection
 - `server/storage.ts` - DatabaseStorage class implementing IStorage interface (workspace-scoped)
 - `server/routes.ts` - All API endpoints under /api/ (workspace-scoped)

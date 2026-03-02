@@ -83,6 +83,10 @@ import {
   type InsertPostKeywordIndex,
   type PostValidationResult,
   type InsertPostValidationResult,
+  type CmsApiKey,
+  type InsertCmsApiKey,
+  type CmsSyncLog,
+  type InsertCmsSyncLog,
   contactMessages,
   workspaces,
   reservations,
@@ -128,6 +132,8 @@ import {
   workspaceSitePages,
   postKeywordIndex,
   postValidationResults,
+  cmsApiKeys,
+  cmsSyncLogs,
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
@@ -275,6 +281,10 @@ export interface IStorage {
   updateWorkspaceBlogPost(id: string, post: Partial<WorkspaceBlogPost>): Promise<WorkspaceBlogPost | undefined>;
   deleteWorkspaceBlogPost(id: string): Promise<boolean>;
   // Content Assets
+  getCmsApiKeys(workspaceId: string): Promise<CmsApiKey[]>;
+  createCmsApiKey(data: InsertCmsApiKey): Promise<CmsApiKey>;
+  deleteCmsApiKey(id: string): Promise<boolean>;
+  getCmsSyncLogs(workspaceId: string): Promise<CmsSyncLog[]>;
   getContentAssets(postId: string): Promise<ContentAsset[]>;
   searchContentAssets(workspaceId: string, query?: string): Promise<ContentAsset[]>;
   createContentAsset(asset: InsertContentAsset): Promise<ContentAsset>;
@@ -1406,6 +1416,22 @@ export class MemStorage implements IStorage {
     return this.workspaceBlogPostsMap.delete(id);
   }
 
+  private cmsApiKeysMap: Map<string, CmsApiKey> = new Map();
+  private cmsSyncLogsList: CmsSyncLog[] = [];
+  async getCmsApiKeys(workspaceId: string): Promise<CmsApiKey[]> {
+    return Array.from(this.cmsApiKeysMap.values()).filter(k => k.workspaceId === workspaceId);
+  }
+  async createCmsApiKey(data: InsertCmsApiKey): Promise<CmsApiKey> {
+    const record: CmsApiKey = { ...data, id: randomUUID(), workspaceId: data.workspaceId ?? null, label: data.label ?? null, isActive: data.isActive ?? true, createdAt: new Date() };
+    this.cmsApiKeysMap.set(record.id, record);
+    return record;
+  }
+  async deleteCmsApiKey(id: string): Promise<boolean> {
+    return this.cmsApiKeysMap.delete(id);
+  }
+  async getCmsSyncLogs(workspaceId: string): Promise<CmsSyncLog[]> {
+    return this.cmsSyncLogsList.filter(l => l.workspaceId === workspaceId).slice(0, 100);
+  }
   async getContentAssets(postId: string): Promise<ContentAsset[]> {
     return Array.from(this.contentAssetsMap.values()).filter(a => a.postId === postId);
   }
@@ -2402,6 +2428,20 @@ export class DbStorage implements IStorage {
     return result.length > 0;
   }
 
+  async getCmsApiKeys(workspaceId: string): Promise<CmsApiKey[]> {
+    return db!.select().from(cmsApiKeys).where(eq(cmsApiKeys.workspaceId, workspaceId)).orderBy(desc(cmsApiKeys.createdAt));
+  }
+  async createCmsApiKey(data: InsertCmsApiKey): Promise<CmsApiKey> {
+    const [row] = await db!.insert(cmsApiKeys).values(data).returning();
+    return row;
+  }
+  async deleteCmsApiKey(id: string): Promise<boolean> {
+    const result = await db!.delete(cmsApiKeys).where(eq(cmsApiKeys.id, id)).returning();
+    return result.length > 0;
+  }
+  async getCmsSyncLogs(workspaceId: string): Promise<CmsSyncLog[]> {
+    return db!.select().from(cmsSyncLogs).where(eq(cmsSyncLogs.workspaceId, workspaceId)).orderBy(desc(cmsSyncLogs.createdAt)).limit(100);
+  }
   async getContentAssets(postId: string): Promise<ContentAsset[]> {
     return db!.select().from(contentAssets).where(eq(contentAssets.postId, postId));
   }

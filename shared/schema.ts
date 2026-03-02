@@ -1437,3 +1437,53 @@ export const insertPostValidationResultSchema = createInsertSchema(postValidatio
 });
 export type InsertPostValidationResult = z.infer<typeof insertPostValidationResultSchema>;
 export type PostValidationResult = typeof postValidationResults.$inferSelect;
+
+export const cmsApiKeys = pgTable(
+  "cms_api_keys",
+  {
+    id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
+    workspaceId: varchar("workspace_id", { length: 36 })
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    platform: varchar("platform", { length: 50 }).notNull(),
+    label: text("label"),
+    apiKey: text("api_key").notNull(),
+    isActive: boolean("is_active").default(true),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    index("cms_api_keys_workspace_idx").on(t.workspaceId),
+  ]
+);
+
+export const insertCmsApiKeySchema = createInsertSchema(cmsApiKeys).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertCmsApiKey = z.infer<typeof insertCmsApiKeySchema>;
+export type CmsApiKey = typeof cmsApiKeys.$inferSelect;
+
+export const cmsSyncLogs = pgTable(
+  "cms_sync_logs",
+  {
+    id: serial("id").primaryKey(),
+    workspaceId: varchar("workspace_id", { length: 36 })
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    platform: varchar("platform", { length: 50 }).notNull(),
+    apiKeyId: varchar("api_key_id", { length: 36 })
+      .references(() => cmsApiKeys.id, { onDelete: "set null" }),
+    status: text("status").notNull().default("success"),
+    message: text("message"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    index("cms_sync_logs_workspace_idx").on(t.workspaceId),
+    index("cms_sync_logs_key_idx").on(t.apiKeyId),
+  ]
+);
+
+export const insertCmsSyncLogSchema = createInsertSchema(cmsSyncLogs).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertCmsSyncLog = z.infer<typeof insertCmsSyncLogSchema>;
+export type CmsSyncLog = typeof cmsSyncLogs.$inferSelect;

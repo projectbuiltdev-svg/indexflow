@@ -99,11 +99,11 @@ export default function SeoCms() {
   });
 
   const { data: apiKeys = [], isLoading: keysLoading } = useQuery<ApiKey[]>({
-    queryKey: ["/api/admin/cms/api-keys"],
+    queryKey: [`/api/blog/cms/api-keys?workspaceId=${workspaceId}`],
   });
 
   const { data: syncLogs = [], isLoading: logsLoading } = useQuery<SyncLog[]>({
-    queryKey: ["/api/admin/cms/sync-logs"],
+    queryKey: [`/api/blog/cms/sync-logs?workspaceId=${workspaceId}`],
   });
 
   const cmsProviders: CmsProvider[] = cmsFormats.map((f) => {
@@ -118,7 +118,7 @@ export default function SeoCms() {
 
   const generateKeyMutation = useMutation({
     mutationFn: async (data: { platform: string; label: string; endpoint: string }) => {
-      const res = await apiRequest("POST", "/api/admin/cms/generate-key", {
+      const res = await apiRequest("POST", "/api/blog/cms/generate-key", {
         workspaceId,
         platform: data.platform,
         label: data.label,
@@ -126,7 +126,7 @@ export default function SeoCms() {
       return res.json();
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/cms/api-keys"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/blog/cms/api-keys?workspaceId=${workspaceId}`] });
       setConfigureOpen(false);
       toast({ title: "Configuration Saved", description: `${variables.platform} has been configured and connected.` });
     },
@@ -144,7 +144,7 @@ export default function SeoCms() {
       return res.json();
     },
     onSuccess: (result, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/cms/sync-logs"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/blog/cms/sync-logs?workspaceId=${workspaceId}`] });
       toast({
         title: "Export Complete",
         description: `Exported ${result.exported} posts in ${variables.cmsName} format.`,

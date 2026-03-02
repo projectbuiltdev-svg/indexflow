@@ -1,7 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { storage } from "./storage";
 import { compileMdxToHtml } from "./mdx-compiler";
-import { insertWorkspaceBlogPostSchema, insertWorkspaceDomainSchema, insertContentAssetSchema, insertContentAssetUsageSchema, insertInvoiceSchema, insertInvoiceLineItemSchema, insertContentReportSchema, blogTemplates } from "@shared/schema";
+import { insertWorkspaceBlogPostSchema, insertWorkspaceDomainSchema, insertContentAssetSchema, insertContentAssetUsageSchema, insertInvoiceSchema, insertInvoiceLineItemSchema, insertContentReportSchema, insertCmsApiKeySchema, blogTemplates } from "@shared/schema";
 import { z } from "zod";
 import { bulkCreateDraftPosts, generateCampaignDrafts, generateSingleDraft } from "./draft-generator";
 import { randomUUID } from "crypto";
@@ -1710,6 +1710,59 @@ Return ONLY valid JSON, no markdown.`;
       res.json(report);
     } catch (error) {
       res.status(500).json({ error: "Failed to save snapshot" });
+    }
+  });
+
+  app.get("/api/blog/cms/api-keys", async (req, res) => {
+    try {
+      const workspaceId = req.query.workspaceId as string;
+      if (!workspaceId) return res.json([]);
+      const keys = await storage.getCmsApiKeys(workspaceId);
+      res.json(keys);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch CMS API keys" });
+    }
+  });
+
+  app.post("/api/blog/cms/generate-key", async (req, res) => {
+    try {
+      const { workspaceId, platform, label } = req.body;
+      if (!workspaceId || !platform) {
+        return res.status(400).json({ error: "workspaceId and platform are required" });
+      }
+      const keyString = `ixf_${platform.toLowerCase()}_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 10)}`;
+      const record = await storage.createCmsApiKey({
+        workspaceId,
+        platform,
+        label: label || platform,
+        apiKey: keyString,
+        isActive: true,
+      });
+      res.json(record);
+    } catch (error: any) {
+      console.error("[CMS] generate-key error:", error?.message || error);
+      res.status(500).json({ error: "Failed to generate CMS API key" });
+    }
+  });
+
+  app.delete("/api/blog/cms/api-keys/:id", async (req, res) => {
+    try {
+      const deleted = await storage.deleteCmsApiKey(req.params.id);
+      if (!deleted) return res.status(404).json({ error: "Key not found" });
+      res.json({ ok: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete CMS API key" });
+    }
+  });
+
+  app.get("/api/blog/cms/sync-logs", async (req, res) => {
+    try {
+      const workspaceId = req.query.workspaceId as string;
+      if (!workspaceId) return res.json([]);
+      const logs = await storage.getCmsSyncLogs(workspaceId);
+      res.json(logs);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch CMS sync logs" });
     }
   });
 }

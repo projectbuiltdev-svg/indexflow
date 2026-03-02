@@ -2642,35 +2642,6 @@ export async function registerRoutes(
     }
   });
 
-  // ═══════════════════════════════════════════════════
-  // Content Engine: CMS Integration
-  // ═══════════════════════════════════════════════════
-  app.get("/api/admin/cms/api-keys", async (req, res) => {
-    try {
-      res.json([]);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch API keys" });
-    }
-  });
-
-  app.post("/api/admin/cms/generate-key", async (req, res) => {
-    try {
-      const { workspaceId, platform, label } = req.body;
-      const key = `ixf_${platform.toLowerCase()}_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 10)}`;
-      res.json({ id: Date.now(), workspaceId, platform, label: label || platform, key, createdAt: new Date() });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to generate API key" });
-    }
-  });
-
-  app.get("/api/admin/cms/sync-logs", async (req, res) => {
-    try {
-      res.json([]);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch sync logs" });
-    }
-  });
-
   setInterval(() => {
     const now = Date.now();
     const keys = Array.from(widgetRateLimit.keys());

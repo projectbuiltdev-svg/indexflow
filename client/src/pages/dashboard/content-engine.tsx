@@ -1130,13 +1130,13 @@ function CmsTab({ workspaceId }: { workspaceId: string }) {
   const [platform, setPlatform] = useState("WordPress");
   const [apiLabel, setApiLabel] = useState("");
 
-  const { data: apiKeys = [] } = useQuery<any[]>({ queryKey: [`/api/admin/cms/api-keys?workspaceId=${workspaceId}`] });
-  const { data: syncHistory = [] } = useQuery<any[]>({ queryKey: [`/api/admin/cms/sync-logs?workspaceId=${workspaceId}`] });
+  const { data: apiKeys = [] } = useQuery<any[]>({ queryKey: [`/api/blog/cms/api-keys?workspaceId=${workspaceId}`] });
+  const { data: syncHistory = [] } = useQuery<any[]>({ queryKey: [`/api/blog/cms/sync-logs?workspaceId=${workspaceId}`] });
 
   const generateKeyMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("POST", "/api/admin/cms/generate-key", data),
+    mutationFn: (data: any) => apiRequest("POST", "/api/blog/cms/generate-key", data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/admin/cms/api-keys?workspaceId=${workspaceId}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/blog/cms/api-keys?workspaceId=${workspaceId}`] });
       setApiLabel("");
       toast({ title: "API key generated" });
     },
