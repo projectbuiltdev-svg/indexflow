@@ -305,6 +305,13 @@ export default function ContentPosts() {
             <Badge variant={statusVariant(post.status)} data-testid={`badge-post-status-${post.id}`}>
               {post.status}
             </Badge>
+            {post.qualityFailReasons && (post.qualityFailReasons as string[]).length > 0 && (
+              <div className="mt-1 text-xs text-destructive space-y-0.5" data-testid={`text-qa-reasons-${post.id}`}>
+                {(post.qualityFailReasons as string[]).map((r, i) => (
+                  <div key={i}>{r}</div>
+                ))}
+              </div>
+            )}
           </TableCell>
           <TableCell className="text-right" data-testid={`text-post-words-${post.id}`}>
             {wordCount(post.mdxContent).toLocaleString()}
