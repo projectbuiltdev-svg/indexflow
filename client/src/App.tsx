@@ -228,6 +228,21 @@ function hasAdminPermission(role: AdminRole, permission: string): boolean {
   return perms.includes(permission);
 }
 
+function WorkspaceRedirect() {
+  const savedId = typeof window !== "undefined"
+    ? localStorage.getItem("indexflow_workspace_id")
+    : null;
+  const [, navigate] = useLocation();
+  const currentPath = window.location.pathname;
+
+  if (savedId) {
+    navigate(`/${savedId}${currentPath}`, { replace: true });
+  } else {
+    navigate("/select-workspace", { replace: true });
+  }
+  return null;
+}
+
 function ClientRoute({ component: Component }: { component: ComponentType }) {
   return (
     <ClientLayout>
@@ -381,6 +396,20 @@ export function AppRoutes() {
         <Route path="/admin/seo/ai-visibility">{() => <AdminRoute component={AdminSeoAIVisibility} permission="seo" />}</Route>
         <Route path="/admin/call-logs">{() => <AdminRoute component={AdminCallLogs} permission="calls" />}</Route>
         <Route path="/admin/widget-config">{() => <AdminRoute component={AdminWidgetConfig} permission="widgets" />}</Route>
+
+        {/* Bare path redirects — prepend saved workspace ID */}
+        <Route path="/content/:rest*" component={WorkspaceRedirect} />
+        <Route path="/seo/:rest*" component={WorkspaceRedirect} />
+        <Route path="/rank-tracker/:rest*" component={WorkspaceRedirect} />
+        <Route path="/crm/:rest*" component={WorkspaceRedirect} />
+        <Route path="/settings/:rest*" component={WorkspaceRedirect} />
+        <Route path="/connections/:rest*" component={WorkspaceRedirect} />
+        <Route path="/analytics/:rest*" component={WorkspaceRedirect} />
+        <Route path="/widget/:rest*" component={WorkspaceRedirect} />
+        <Route path="/twilio/:rest*" component={WorkspaceRedirect} />
+        <Route path="/ai-training/:rest*" component={WorkspaceRedirect} />
+        <Route path="/support/:rest*" component={WorkspaceRedirect} />
+        <Route path="/today" component={WorkspaceRedirect} />
 
         {/* Client Dashboard Routes */}
         <Route path="/select-workspace" component={SelectWorkspace} />
