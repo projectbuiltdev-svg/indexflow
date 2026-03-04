@@ -1,0 +1,137 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 19 — Super admin panel.
+
+CREATE server/routes/we-admin.ts
+Register: app.use('/api/we/admin', weAuth) — super admin
+  role check inside each route
+
+TEMPLATE MANAGEMENT ROUTES:
+
+GET /api/we/admin/templates
+- Returns all templates including inactive
+- { templates[], total }
+- Includes usage count per template
+
+POST /api/we/admin/templates
+- Creates new template
+- Body: { name, category, styleTags, featureTags,
+  grapejsState, version }
+- Validates grapejsState against block library —
+  rejects any block not in we-block-library.ts
+- Sets isActive: false on creation
+- Logs to we_audit_log
+
+PATCH /api/we/admin/templates/:templateId
+- Updates template metadata
+- Can update isActive to activate or deactivate
+- Incrementing version creates new record —
+  existing projects keep old version
+- Logs to we_audit_log
+
+DELETE /api/we/admin/templates/:templateId
+- Soft delete only — sets deletedAt
+- Templates used by existing projects never
+  fully removed — kept for rendering
+- Logs to we_audit_log
+
+POST /api/we/admin/templates/:templateId/validate
+- Re-runs block library validation
+- Returns { valid, unknownBlocks[], warnings[] }
+
+WORKSPACE VISIBILITY ROUTES:
+
+GET /api/we/admin/workspaces
+- Returns all workspaces with Website Engine data:
+  { venueId, name, tier, projectCount, deploymentCount,
+  templateUsage, storageUsed, lastActive }
+
+GET /api/we/admin/workspaces/:venueId
+- Category 1 data only — always visible:
+  Workspace metadata, tier, domain connections,
+  template usage, deployment history, form submission
+  counts (not content), storage usage, BYOK status
+
+GET /api/we/admin/workspaces/:venueId/audit
+- Returns we_audit_log entries for workspace
+- Supports ?action= ?severity= ?from= ?to= filters
+
+POST /api/we/admin/workspaces/:venueId/access
+- Category 3 access — requires reason in body
+- Body: { reason, dataType }
+- dataType: 'grapesjs_state' | 'version_history' |
+  'analytics_config'
+- Logs to we_audit_log with super admin userId,
+  venueId, reason, dataType, timestamp
+- Sends email to workspace owner automatically —
+  cannot be disabled
+- Returns requested data
+
+STATS ROUTES:
+
+GET /api/we/admin/stats
+- Platform-wide stats:
+  { totalProjects, totalDeployments, totalTemplateUses,
+  activeWorkspaces, formSubmissionCount,
+  deploymentsByType, topTemplates[] }
+
+Register route in server/routes.ts
+
+---
+
+CREATE client/src/components/website-engine/WEAdminPanel.tsx
+
+LAYOUT:
+- Replaces /admin/website-engine placeholder page
+- Four tabs: Templates | Workspaces | Stats | Audit Log
+
+TEMPLATES TAB:
+- Table of all templates
+- Columns: Name, Category, Version, Status badge,
+  Usage count, Created, Actions
+- Status badge: Active (green) | Inactive (grey)
+- Actions per row:
+  Activate/Deactivate toggle
+  Edit metadata button — opens inline form
+  Validate button — runs block validation
+  Delete button — confirmation required
+- 'Upload Template' button at top:
+  Form: name, category, style tags, feature tags
+  GrapesJS JSON file upload
+  Validate button before save
+  Shows validation result before activating
+
+WORKSPACES TAB:
+- Table of all workspaces
+- Columns: Name, Tier, Projects, Deployments,
+  Storage, Last Active
+- Click row: opens workspace detail panel
+  Shows Category 1 data
+  'Access workspace data' button — opens reason modal
+  Reason modal: dropdown dataType + text reason
+  Submit logs access and emails workspace owner
+
+STATS TAB:
+- Summary cards: total projects, deployments,
+  active workspaces, form submissions
+- Top 5 templates by usage — bar chart or simple list
+- Deployments by type: test/staging/live — breakdown
+
+AUDIT LOG TAB:
+- Full we_audit_log for Website Engine
+- Filterable by: action, severity, venueId, date range
+- Each row: timestamp, venueId, action, severity badge,
+  metadata expandable
+- Export CSV button
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEAdminPanel to exports
+
+Show:
+- server/routes/we-admin.ts created and registered
+- WEAdminPanel.tsx created replacing placeholder
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.

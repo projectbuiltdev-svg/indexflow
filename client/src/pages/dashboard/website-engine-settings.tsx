@@ -9,8 +9,8 @@ export default function WebsiteEngineSettings() {
     <div className="p-6" data-testid="page-we-settings">
       <WEWhiteLabel
         venueId={venueId}
-        tier={selectedWorkspace?.subscriptionTier || "solo"}
-        isOnTrial={selectedWorkspace?.onTrial || false}
+        tier={(selectedWorkspace as any)?.subscriptionTier || selectedWorkspace?.plan || "solo"}
+        isOnTrial={(selectedWorkspace as any)?.onTrial || false}
         userEmail=""
       />
     </div>
