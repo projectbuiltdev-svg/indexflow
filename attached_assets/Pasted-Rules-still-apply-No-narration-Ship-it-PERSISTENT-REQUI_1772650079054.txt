@@ -1,0 +1,94 @@
+Rules still apply. No narration. Ship it.
+
+PERSISTENT REQUIREMENT for all remaining steps:
+The Website Engine must appear in two places in the client.
+Do this now as part of this step.
+
+1. CLIENT DASHBOARD — add 'Website Engine' nav item to the
+   main dashboard navigation.
+   Route: /dashboard/website-engine
+   Icon: Globe from lucide-react
+   Placeholder page: just renders <div>Website Engine</div>
+   for now — full UI comes later.
+
+2. SUPER ADMIN DASHBOARD — add 'Website Engine' section to
+   the super admin nav.
+   Route: /admin/website-engine
+   Placeholder page: just renders <div>Website Engine Admin</div>
+   for now — full UI comes later.
+
+Neither should 404. That is all for these two — do not build
+further UI yet.
+
+---
+
+Main Build Step 4 — AI context strategy and conversation route.
+
+CREATE server/services/we-ai-context.ts
+
+THREE LAYER CONTEXT STRATEGY:
+Every AI call assembles context in this exact order:
+
+Layer 1 — System context (static per session):
+- You are a website builder assistant for IndexFlow.
+- You customise pre-built blocks only. Never generate
+  structure from scratch.
+- You always respond in {projectLanguage}.
+- You return only a JSON diff of changed blocks.
+- You never argue. You execute the instruction.
+- Current block library: [inject full block list from
+  we-block-library.ts]
+
+Layer 2 — Project context (per project):
+- Project name, business type, style preferences
+- From we_projects.intakeAnswers
+- Current page name and slug
+- Selected template category
+
+Layer 3 — Canvas diff (per message):
+- Current grapejsState of active page
+- Last 5 messages from conversation history
+- Current instruction from user
+
+EXPORTS:
+buildAiContext(projectId, pageId, userMessage,
+  conversationHistory, venueId): Promise<AiContext>
+  Returns { systemPrompt, userPrompt, model, maxTokens }
+  maxTokens: 4000
+  model: read from workspace BYOK provider setting
+
+---
+
+CREATE server/routes/we-ai.ts
+Register: app.use('/api/we/ai', weAuth, weVenue, weByok,
+  weLanguage)
+
+POST /api/we/ai/:projectId/:pageId/chat
+- 5 second cooldown per venueId between calls
+  Return 429 if within cooldown window
+- 30 second timeout on AI call
+  Return 504 if exceeded
+- Build context via buildAiContext()
+- Call AI using resolved BYOK key
+- Stream response back to client
+- Validate response is parseable JSON diff
+- If not parseable: return 422, do not apply to canvas
+- If parseable: return diff to client
+- Log to we_audit_log: action 'ai_chat', no prompt content logged
+
+POST /api/we/ai/:projectId/out-of-library
+- For requests outside block library
+- Generates raw HTML/CSS/JS code for custom code panel
+- Returns { html, css, js } — does not apply to canvas
+- No cooldown — separate endpoint
+- Log to we_audit_log: action 'ai_code_generation'
+
+Show:
+- Client dashboard nav entry confirmed — route not 404
+- Super admin nav entry confirmed — route not 404
+- we-ai-context.ts created
+- we-ai.ts created and registered
+- tsc: 0 errors
+- tests: 468 passing
+
+Stop. Wait for confirmation.

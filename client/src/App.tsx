@@ -71,6 +71,7 @@ const AdminWebsiteChanges = lazy(() => import("@/pages/admin/website-changes"));
 const AdminCrm = lazy(() => import("@/pages/admin/crm"));
 const AdminContent = lazy(() => import("@/pages/admin/content"));
 const AdminPseo = lazy(() => import("@/pages/admin/pseo"));
+const AdminWebsiteEngine = lazy(() => import("@/pages/admin/website-engine"));
 const AdminSeoRankTracker = lazy(() => import("@/pages/admin/seo-rank-tracker"));
 const AdminSeoLocalGrid = lazy(() => import("@/pages/admin/seo-local-grid"));
 const AdminSeoAIVisibility = lazy(() => import("@/pages/admin/seo-ai-visibility"));
@@ -95,6 +96,7 @@ const SeoHealth = lazy(() => import("@/pages/dashboard/seo-health"));
 const SeoCms = lazy(() => import("@/pages/dashboard/seo-cms"));
 const SeoReports = lazy(() => import("@/pages/dashboard/seo-reports"));
 const ContentEngine = lazy(() => import("@/pages/dashboard/content-engine"));
+const WebsiteEngine = lazy(() => import("@/pages/dashboard/website-engine"));
 const PostEditor = lazy(() => import("@/pages/dashboard/post-editor"));
 
 const TwilioCallLogs = lazy(() => import("@/pages/dashboard/twilio-call-logs"));
@@ -389,6 +391,7 @@ export function AppRoutes() {
         <Route path="/admin/crm">{() => <AdminRoute component={AdminCrm} permission="crm" />}</Route>
         <Route path="/admin/content">{() => <AdminRoute component={AdminContent} permission="*" />}</Route>
         <Route path="/admin/pseo">{() => <AdminRoute component={AdminPseo} permission="*" />}</Route>
+        <Route path="/admin/website-engine">{() => <AdminRoute component={AdminWebsiteEngine} permission="*" />}</Route>
         <Route path="/admin/notifications">{() => <AdminRoute component={AdminNotifications} permission="notifications" />}</Route>
         <Route path="/admin/settings">{() => <AdminRoute component={AdminSettings} permission="settings" />}</Route>
         <Route path="/admin/seo/rank-tracker">{() => <AdminRoute component={AdminSeoRankTracker} permission="seo" />}</Route>
@@ -428,6 +431,7 @@ export function AppRoutes() {
 
         {/* Content Engine (unified) */}
         <Route path="/:workspaceId/content-engine">{() => <ClientRoute component={ContentEngine} />}</Route>
+        <Route path="/:workspaceId/website-engine">{() => <ClientRoute component={WebsiteEngine} />}</Route>
         <Route path="/:workspaceId/content/posts/:postId/edit">{() => <ClientRoute component={PostEditor} />}</Route>
 
         {/* SEO */}

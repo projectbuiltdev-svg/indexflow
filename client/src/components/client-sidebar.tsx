@@ -127,6 +127,13 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "Website Engine",
+    collapsible: true,
+    items: [
+      { title: "Website Engine", path: "/website-engine", icon: Globe },
+    ],
+  },
+  {
     label: "Rank Tracker",
     collapsible: true,
     items: [

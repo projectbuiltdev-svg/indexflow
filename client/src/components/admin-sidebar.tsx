@@ -49,6 +49,7 @@ const navItems: NavItem[] = [
   { title: "Call Logs", icon: PhoneCall, path: "/admin/support/call-logs" },
   { title: "Content Engine", icon: PenTool, path: "/admin/content/posts" },
   { title: "pSEO", icon: Layers, path: "/admin/pseo" },
+  { title: "Website Engine", icon: Globe, path: "/admin/website-engine" },
   { title: "SEO & Rankings", icon: TrendingUp, path: "/admin/platform-seo/keywords" },
   { title: "Support Tickets", icon: LifeBuoy, path: "/admin/support/tickets" },
   { title: "Analytics", icon: BarChart3, path: "/admin/analytics" },
