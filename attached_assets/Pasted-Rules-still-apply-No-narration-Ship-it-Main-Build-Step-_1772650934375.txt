@@ -1,0 +1,83 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 8 — Custom code panel (Monaco editor).
+
+CREATE client/src/components/website-engine/WECustomCode.tsx
+
+SETUP:
+- Install @monaco-editor/react via npm if not present
+- Monaco must be lazy loaded — dynamic import only
+- Zero impact on canvas or chat panel load time
+
+LAYOUT:
+- Slide-in panel from right side of screen
+- Width: 600px on desktop, full width on smaller screens
+- Overlays canvas — does not push canvas
+- Close button top right (X)
+- Panel header: 'Code Editor'
+
+THREE TABS:
+- HTML | CSS | JavaScript
+- Each tab has its own Monaco editor instance
+- Default language per tab: html, css, javascript
+- Tabs switch without losing content in other tabs
+
+AI-GENERATED BANNER:
+- If panel opened via out-of-library AI request:
+  Show yellow banner at top:
+  'AI-generated code — review before applying'
+  Banner stays until user manually dismisses it
+- If panel opened manually (not from AI):
+  No banner shown
+
+MONACO SETTINGS:
+- Theme: vs-dark
+- Font size: 13px
+- minimap: disabled
+- lineNumbers: on
+- wordWrap: on
+- automaticLayout: true (handles panel resize)
+
+SYNTAX VALIDATION:
+- Run before Apply — check for syntax errors
+- HTML: basic tag balance check
+- CSS: check for unclosed braces
+- JS: attempt JSON.parse on eval-safe subset
+- If errors found: show inline error message below editor
+  'Fix syntax errors before applying'
+- Apply button disabled until errors resolved
+
+APPLY BUTTON:
+- Single 'Apply to Page' button at top right of panel
+- Disabled if syntax errors present
+- On click: passes { html, css, js } to onApply callback
+- Shows 'Applied ✓' for 2 seconds then resets
+- Does not close panel automatically after apply
+
+SCOPE WARNING:
+- Yellow info text below tabs:
+  'This code applies to the selected block only.
+   It will not affect other blocks or pages.'
+
+PROPS:
+interface WECustomCodeProps {
+  isOpen: boolean
+  onClose: () => void
+  onApply: (code: { html: string, css: string,
+    js: string }) => void
+  initialCode?: { html: string, css: string, js: string }
+  isAiGenerated?: boolean
+  blockName?: string
+}
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WECustomCode to exports
+
+Show:
+- @monaco-editor/react installed
+- WECustomCode.tsx created
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.
