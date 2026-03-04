@@ -7,8 +7,10 @@ function getKey(): Buffer {
   return crypto.createHash("sha256").update(SECRET).digest();
 }
 
-export function encryptField(text: string): string {
-  if (!text) return text;
+export function encryptField(text: string): string;
+export function encryptField(text: string | null | undefined): string | null;
+export function encryptField(text: string | null | undefined): string | null {
+  if (!text) return text as string | null;
   try {
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(ALGORITHM, getKey(), iv);
@@ -20,8 +22,10 @@ export function encryptField(text: string): string {
   }
 }
 
-export function decryptField(encrypted: string): string {
-  if (!encrypted || !encrypted.includes(":")) return encrypted;
+export function decryptField(encrypted: string): string;
+export function decryptField(encrypted: string | null | undefined): string | null;
+export function decryptField(encrypted: string | null | undefined): string | null {
+  if (!encrypted || !encrypted.includes(":")) return encrypted as string | null;
   try {
     const [ivHex, encryptedText] = encrypted.split(":");
     const iv = Buffer.from(ivHex, "hex");

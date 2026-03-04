@@ -443,6 +443,8 @@ export class MemStorage implements IStorage {
       plan: data.plan ?? "solo",
       status: data.status ?? "active",
       shardId: (data as any).shardId ?? 1,
+      aiKeySource: (data as any).aiKeySource ?? "agency",
+      pseoAdminOverride: (data as any).pseoAdminOverride ?? null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -1602,6 +1604,97 @@ export class MemStorage implements IStorage {
     return updated;
   }
   async deleteContentReport(id: number): Promise<boolean> { return this.contentReportsMap.delete(id); }
+
+  private siteProfilesMap = new Map<string, WorkspaceSiteProfile>();
+  private sitePagesMap = new Map<number, WorkspaceSitePage>();
+  private sitePageIdCounter = 1;
+  private postKeywordIndexMap = new Map<number, PostKeywordIndex>();
+  private postKeywordIndexIdCounter = 1;
+  private postValidationResultsMap = new Map<number, PostValidationResult>();
+  private postValidationResultIdCounter = 1;
+
+  async getSiteProfile(workspaceId: string): Promise<WorkspaceSiteProfile | undefined> {
+    return this.siteProfilesMap.get(workspaceId);
+  }
+  async upsertSiteProfile(data: InsertWorkspaceSiteProfile): Promise<WorkspaceSiteProfile> {
+    const existing = this.siteProfilesMap.get(data.workspaceId);
+    const profile: WorkspaceSiteProfile = { id: existing?.id ?? this.sitePageIdCounter++, ...data, businessName: data.businessName ?? null, tagline: data.tagline ?? null, logoUrl: data.logoUrl ?? null, heroImageUrl: data.heroImageUrl ?? null, primaryColor: data.primaryColor ?? null, secondaryColor: data.secondaryColor ?? null, fontFamily: data.fontFamily ?? null, footerText: data.footerText ?? null, socialLinks: data.socialLinks ?? null, customCss: data.customCss ?? null, updatedAt: new Date() } as WorkspaceSiteProfile;
+    this.siteProfilesMap.set(data.workspaceId, profile);
+    return profile;
+  }
+  async getSitePages(workspaceId: string): Promise<WorkspaceSitePage[]> {
+    return Array.from(this.sitePagesMap.values()).filter(p => p.workspaceId === workspaceId);
+  }
+  async getSitePage(id: number): Promise<WorkspaceSitePage | undefined> {
+    return this.sitePagesMap.get(id);
+  }
+  async createSitePage(data: InsertWorkspaceSitePage): Promise<WorkspaceSitePage> {
+    const record = { ...data, id: this.sitePageIdCounter++, createdAt: new Date(), updatedAt: new Date() } as WorkspaceSitePage;
+    this.sitePagesMap.set(record.id, record);
+    return record;
+  }
+  async updateSitePage(id: number, data: Partial<InsertWorkspaceSitePage>): Promise<WorkspaceSitePage | undefined> {
+    const existing = this.sitePagesMap.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...data, updatedAt: new Date() };
+    this.sitePagesMap.set(id, updated);
+    return updated;
+  }
+  async deleteSitePage(id: number): Promise<boolean> {
+    return this.sitePagesMap.delete(id);
+  }
+  async getPostKeywordIndex(workspaceId: string): Promise<PostKeywordIndex[]> {
+    return Array.from(this.postKeywordIndexMap.values()).filter(k => k.workspaceId === workspaceId);
+  }
+  async getPostKeywordIndexByPost(postId: string): Promise<PostKeywordIndex[]> {
+    return Array.from(this.postKeywordIndexMap.values()).filter(k => k.postId === postId);
+  }
+  async getPostKeywordIndexByKeyword(workspaceId: string, keyword: string): Promise<PostKeywordIndex[]> {
+    return Array.from(this.postKeywordIndexMap.values()).filter(k => k.workspaceId === workspaceId && k.keyword === keyword);
+  }
+  async upsertPostKeywordIndex(data: InsertPostKeywordIndex): Promise<PostKeywordIndex> {
+    const record = { ...data, id: this.postKeywordIndexIdCounter++, updatedAt: new Date() } as PostKeywordIndex;
+    this.postKeywordIndexMap.set(record.id, record);
+    return record;
+  }
+  async bulkUpsertPostKeywordIndex(items: InsertPostKeywordIndex[]): Promise<PostKeywordIndex[]> {
+    const results: PostKeywordIndex[] = [];
+    for (const item of items) { results.push(await this.upsertPostKeywordIndex(item)); }
+    return results;
+  }
+  async deletePostKeywordIndexByPost(postId: string): Promise<void> {
+    for (const [id, entry] of this.postKeywordIndexMap) {
+      if (entry.postId === postId) this.postKeywordIndexMap.delete(id);
+    }
+  }
+  async getPostValidationResults(postId: string): Promise<PostValidationResult[]> {
+    return Array.from(this.postValidationResultsMap.values()).filter(r => r.postId === postId);
+  }
+  async getPostValidationResultsByWorkspace(workspaceId: string): Promise<PostValidationResult[]> {
+    return Array.from(this.postValidationResultsMap.values()).filter(r => r.workspaceId === workspaceId);
+  }
+  async createPostValidationResult(data: InsertPostValidationResult): Promise<PostValidationResult> {
+    const record = { ...data, id: this.postValidationResultIdCounter++, createdAt: new Date() } as PostValidationResult;
+    this.postValidationResultsMap.set(record.id, record);
+    return record;
+  }
+  async bulkCreatePostValidationResults(items: InsertPostValidationResult[]): Promise<PostValidationResult[]> {
+    const results: PostValidationResult[] = [];
+    for (const item of items) { results.push(await this.createPostValidationResult(item)); }
+    return results;
+  }
+  async deletePostValidationResultsByPost(postId: string): Promise<void> {
+    for (const [id, entry] of this.postValidationResultsMap) {
+      if (entry.postId === postId) this.postValidationResultsMap.delete(id);
+    }
+  }
+  async updatePostValidationResult(id: number, data: Partial<InsertPostValidationResult>): Promise<PostValidationResult | undefined> {
+    const existing = this.postValidationResultsMap.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...data };
+    this.postValidationResultsMap.set(id, updated);
+    return updated;
+  }
 }
 
 export class DbStorage implements IStorage {
@@ -2399,19 +2492,19 @@ export class DbStorage implements IStorage {
     return db!.select().from(workspaceBlogPosts).where(and(eq(workspaceBlogPosts.status, "scheduled"), lte(workspaceBlogPosts.publishAt, new Date())));
   }
   async createWorkspaceBlogPost(post: InsertWorkspaceBlogPost): Promise<WorkspaceBlogPost> {
-    const [row] = await db!.insert(workspaceBlogPosts).values(post).returning();
+    const [row] = await db!.insert(workspaceBlogPosts).values(post as any).returning();
     return row;
   }
   async bulkCreateWorkspaceBlogPosts(posts: InsertWorkspaceBlogPost[]): Promise<WorkspaceBlogPost[]> {
     if (posts.length === 0) return [];
-    const rows = await db!.insert(workspaceBlogPosts).values(posts).returning();
+    const rows = await db!.insert(workspaceBlogPosts).values(posts as any).returning();
     return rows;
   }
   async getWorkspaceBlogPostsByCampaign(workspaceId: string, campaignId: string): Promise<WorkspaceBlogPost[]> {
     return db!.select().from(workspaceBlogPosts).where(and(eq(workspaceBlogPosts.workspaceId, workspaceId), eq(workspaceBlogPosts.campaignId, campaignId))).orderBy(desc(workspaceBlogPosts.createdAt));
   }
   async createContentCampaign(data: InsertContentCampaign): Promise<ContentCampaign> {
-    const [row] = await db!.insert(contentCampaigns).values(data).returning();
+    const [row] = await db!.insert(contentCampaigns).values(data as any).returning();
     return row;
   }
   async getContentCampaign(id: string): Promise<ContentCampaign | undefined> {
@@ -2424,7 +2517,7 @@ export class DbStorage implements IStorage {
   }
   async getWorkspaceCampaigns(workspaceId: string): Promise<{ campaignId: string; name: string; status: string; postCount: number; createdAt: Date; statuses: Record<string, number> }[]> {
     const posts = await db!.select().from(workspaceBlogPosts).where(and(eq(workspaceBlogPosts.workspaceId, workspaceId), sql`${workspaceBlogPosts.campaignId} IS NOT NULL`)).orderBy(desc(workspaceBlogPosts.createdAt));
-    const campaignIds = [...new Set(posts.map(p => p.campaignId!))];
+    const campaignIds = Array.from(new Set(posts.map(p => p.campaignId!)));
     const campaignRecords = campaignIds.length > 0
       ? await db!.select().from(contentCampaigns).where(sql`${contentCampaigns.id} IN (${sql.join(campaignIds.map(id => sql`${id}`), sql`, `)})`)
       : [];
