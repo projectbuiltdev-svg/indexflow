@@ -1,0 +1,88 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 15 — Form submissions panel UI.
+
+CREATE client/src/components/website-engine/WEFormSubmissions.tsx
+
+LAYOUT:
+- Slide-in panel from right — same pattern as WEVersionHistory
+- Width: 600px
+- Header: 'Form Submissions'
+- Subtitle: project name
+
+SUBMISSIONS LIST:
+- Fetches from GET /api/we/forms/:projectId/submissions
+- Filters bar at top:
+  Form name dropdown — lists all unique formNames
+  Date range: from/to date pickers
+  'Clear filters' link
+- Each submission row shows:
+  Date and time: '4 Mar 2026 at 14:32'
+  Form name badge
+  First 2 fields as preview: 'John Smith — john@example.com'
+  Expand chevron
+- Expanded row shows all fields as key/value pairs
+  Clean table layout — label | value
+- Empty state:
+  'No submissions yet.
+   Submissions will appear here when visitors
+   complete forms on your live site.'
+- Pagination: 20 per page, prev/next buttons
+- Total count shown: 'Showing 1–20 of 47 submissions'
+
+SUBMISSION ACTIONS:
+- Delete button per row — trash icon revealed on hover
+  Confirmation modal:
+  'Delete this submission? This cannot be undone.
+   This is a permanent deletion for GDPR compliance.'
+  Two buttons: 'Delete permanently' | 'Cancel'
+  Calls DELETE /api/we/forms/submissions/:submissionId
+
+EXPORT CSV:
+- 'Export CSV' button at top right of panel
+- Calls GET /api/we/forms/:projectId/submissions/export
+- Downloads CSV immediately
+- Button shows 'Exporting...' then resets
+- If no submissions: button disabled
+  Tooltip: 'No submissions to export'
+
+RETENTION NOTICE:
+- Info box at bottom of panel:
+  'Submissions are retained for 90 days after
+   project deletion. Export before deleting
+   your project to keep a permanent record.'
+
+DATA DISPLAY RULES:
+- Never truncate email addresses
+- Phone numbers displayed as-is
+- Long text fields capped at 200 chars in preview
+  with 'Show more' toggle
+- All field labels title-cased
+
+ADD submissions button to canvas toolbar area:
+- Inbox icon in WECanvas.tsx toolbar
+- Opens WEFormSubmissions panel
+- Shows unread badge count if new submissions
+  since last opened — store last opened timestamp
+  in localStorage keyed by projectId
+
+PROPS:
+interface WEFormSubmissionsProps {
+  isOpen: boolean
+  onClose: () => void
+  projectId: string
+  venueId: string
+  projectLanguage: string
+}
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEFormSubmissions to exports
+
+Show:
+- WEFormSubmissions.tsx created
+- WECanvas.tsx updated with inbox button
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.

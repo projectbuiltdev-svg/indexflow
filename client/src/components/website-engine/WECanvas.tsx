@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe, Settings } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe, Settings, Inbox } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import WEExportModal from "./WEExportModal";
 import WEDeployModal from "./WEDeployModal";
 import WEDomainSettings from "./WEDomainSettings";
+import WEFormSubmissions from "./WEFormSubmissions";
 
 interface WECanvasProps {
   projectId: string;
@@ -79,6 +80,7 @@ export default function WECanvas({
   const [showExport, setShowExport] = useState(false);
   const [showDeploy, setShowDeploy] = useState(false);
   const [showDomainSettings, setShowDomainSettings] = useState(false);
+  const [showSubmissions, setShowSubmissions] = useState(false);
   const [editorLoaded, setEditorLoaded] = useState(false);
   const isDirtyRef = useRef(false);
   const autoSaveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -313,6 +315,9 @@ export default function WECanvas({
             <Globe className="w-4 h-4 mr-1" />
             Publish
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => setShowSubmissions(true)} data-testid="btn-submissions">
+            <Inbox className="w-4 h-4" />
+          </Button>
           <Button variant="ghost" size="sm" onClick={() => setShowDomainSettings(!showDomainSettings)} data-testid="btn-domain-settings">
             <Settings className="w-4 h-4" />
           </Button>
@@ -389,6 +394,14 @@ export default function WECanvas({
           />
         </div>
       )}
+
+      <WEFormSubmissions
+        isOpen={showSubmissions}
+        onClose={() => setShowSubmissions(false)}
+        projectId={projectId}
+        venueId={venueId}
+        projectLanguage={projectLanguage}
+      />
 
       {showShortcuts && (
         <div className="absolute inset-0 z-50 bg-black/50 flex items-center justify-center" data-testid="we-shortcuts-modal">
