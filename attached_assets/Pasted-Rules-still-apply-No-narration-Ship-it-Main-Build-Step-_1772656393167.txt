@@ -1,0 +1,118 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 21 — Full integration test.
+This is the final main build step.
+
+Run a comprehensive validation across the entire
+Website Engine. No new code — validate what exists.
+
+TEST GROUP 1 — Database
+- Confirm all 10 we_ tables exist with correct columns
+- Confirm all 4 enums exist
+- Confirm all foreign keys intact
+- Confirm buildState column on we_projects
+
+TEST GROUP 2 — Server routes
+Confirm all these routes are registered and return
+expected status codes with valid auth:
+
+GET    /api/we/projects                → 200
+POST   /api/we/projects                → 201
+GET    /api/we/pages/:projectId        → 200
+POST   /api/we/pages/:projectId        → 201
+GET    /api/we/versions/:pid/:pageId   → 200
+POST   /api/we/build/:projectId/start  → 202
+GET    /api/we/build/:projectId/status → 200
+POST   /api/we/export/:projectId       → 403 solo
+GET    /api/we/deploy/:projectId/history → 200
+POST   /api/we/domains                 → 200
+GET    /api/we/whitelabel              → 403 solo
+POST   /api/we/ai/:pid/:pageId/chat    → 429 or 200
+GET    /api/we/admin/templates         → 200 admin
+GET    /api/we/admin/stats             → 200 admin
+POST   /api/we/forms/:projectId/submit → 200 no auth
+
+TEST GROUP 3 — Middleware
+- weAuth: unauth request returns 401
+- weVenue: missing venueId returns 403
+- weTier requireExport: solo returns 403
+- weTier requireWhiteLabel: solo returns 403
+- weTier requirePaidDeployment: trial returns 403
+- weByok: missing key returns 402
+- weLanguage: missing project defaults to 'en'
+
+TEST GROUP 4 — Services
+- scoreTemplates() returns array of 3
+- parseDiff() rejects invalid JSON without throwing
+- applyDiff() does not mutate input state
+- validateDiff() catches out-of-bounds positions
+- buildAiContext() returns all 3 layers populated
+- generateExport() rejects solo tier with 403
+- deployToLive() rejects trial with hard block
+- checkDnsTxtRecord() returns false on bad domain
+  without throwing
+
+TEST GROUP 5 — Config files
+- getTierConfig('solo').canExport === false
+- getTierConfig('pro').canExport === true
+- canDeploy('solo', true) === false (trial)
+- canDeploy('solo', false) === true (paid)
+- canDeploy('agency', true) === false (trial)
+- isSupported('en') === true
+- isSupported('xx') === false
+- getAllBlocks().length === 44
+- getPrompt('hero-centered') is defined string
+- getPrompt('utility-embed') is defined string
+
+TEST GROUP 6 — Client components
+Confirm these files exist and export correctly:
+WECanvas, WEChatPanel, WEPageManager, WECustomCode,
+WEVersionHistory, WEExportModal, WEDeployModal,
+WEDomainSettings, WECollabPanel, WEFormSubmissions,
+WEClientPreview, WEEmptyState, WEWhiteLabel,
+WEAdminPanel
+All 14 exported from index.ts
+
+TEST GROUP 7 — Rule set validation
+Confirm these absolute rules are enforced in code:
+
+Rule: trial cannot deploy live
+- deployToLive() with isOnTrial: true → throws or
+  returns error, never deploys
+
+Rule: solo cannot export
+- requireExport middleware with solo tier → 403
+
+Rule: one domain per workspace
+- POST /api/we/domains with existing domain → 409
+
+Rule: home page cannot be deleted
+- DELETE /api/we/pages/:pid/:pageId where
+  isHome: true → 400
+
+Rule: language lock
+- weLanguage middleware never overrides project
+  language from Accept-Language header
+
+Rule: version cap
+- POST /api/we/versions when count >= 500 →
+  archives oldest 50 before inserting
+
+Write all tests in tests/we/we-integration.test.ts
+
+Show:
+- tests/we/we-integration.test.ts created
+- All groups passing
+- Final test count
+- tsc: 0 errors
+
+Once all groups pass report:
+WEBSITE ENGINE MAIN BUILD COMPLETE
+- 21/21 steps confirmed
+- X total tests passing
+- 0 TypeScript errors
+- All 14 components built
+- All 19 rule sets enforced
+- Ready for beta launch
+
+Stop. Wait for confirmation.
