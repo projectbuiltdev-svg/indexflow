@@ -1,0 +1,79 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 5 — AI diff parser and applicator.
+
+CREATE server/services/we-diff.ts
+
+PURPOSE:
+Takes AI response JSON and applies it to GrapesJS state safely.
+The diff is the only thing the AI ever returns.
+The canvas never receives partial or broken state.
+
+DIFF FORMAT the AI returns:
+{
+  "changes": [
+    {
+      "blockId": "string",
+      "action": "update" | "add" | "remove" | "reorder",
+      "data": {} — new block data for update/add
+      "position": number — for reorder and add
+    }
+  ],
+  "pageLevel": {
+    "title": "string | null",
+    "slug": "string | null"
+  }
+}
+
+EXPORTS:
+
+parseDiff(aiResponse: string): DiffResult
+- Strips any markdown code fences before parsing
+- Validates JSON structure matches diff format exactly
+- Validates every blockId in changes exists in
+  we-block-library.ts — unknown blocks rejected
+- Validates action is one of 4 valid values
+- Returns { valid: boolean, diff: Diff | null, errors: string[] }
+- Never throws — always returns result object
+
+applyDiff(currentGrapejsState: object, diff: Diff): ApplyResult
+- Deep clones currentGrapejsState before any mutation
+- Never mutates the input state directly
+- Applies each change in order:
+  update — finds block by id, merges data
+  add — inserts block at position
+  remove — removes block by id
+  reorder — moves block to new position
+- If any single change fails: abort entire diff,
+  return original state unchanged
+- Returns { success: boolean, newState: object,
+  failedChange: Change | null }
+
+validateDiff(diff: Diff, currentState: object): ValidationResult
+- Pre-flight check before applying
+- Checks all blockIds referenced exist in current state
+  (except action: add — those are new)
+- Checks positions are within bounds
+- Returns { valid: boolean, warnings: string[] }
+
+Write tests/we/we-diff.test.ts:
+- Valid diff parses correctly
+- Invalid JSON returns valid: false, no throw
+- Unknown blockId in diff rejected
+- Unknown action rejected
+- Markdown fences stripped before parse
+- update action merges data correctly
+- add action inserts at correct position
+- remove action removes correct block
+- reorder action moves to correct position
+- Failed change aborts entire diff, original state returned
+- Input state never mutated
+- pageLevel title and slug applied correctly
+
+Show:
+- we-diff.ts created
+- tests/we/we-diff.test.ts created
+- all tests passing including new ones
+- tsc: 0 errors
+
+Stop. Wait for confirmation.
