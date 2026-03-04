@@ -1,0 +1,165 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 2 — Core engine server routes.
+6 files in parallel.
+
+CREATE server/routes/we-projects.ts
+Register: app.use('/api/we/projects', weAuth, weVenue)
+
+GET /api/we/projects
+- Returns all projects for venueId ordered by updatedAt desc
+- Returns { projects[], total }
+
+POST /api/we/projects
+- Creates new project in we_projects
+- Generates unique slug from name
+- Sets projectLanguage from body or 'en'
+- Sets tierAtCreation from current session tier
+- Sets status: 'draft'
+- Returns created project
+
+GET /api/we/projects/:projectId
+- Returns single project with page count
+- 404 if not found or venueId mismatch
+
+PATCH /api/we/projects/:projectId
+- Updates name, projectLanguage, intakeAnswers, status
+- Cannot update venueId or tierAtCreation
+- Logs to we_audit_log
+
+DELETE /api/we/projects/:projectId
+- Soft concept only — sets status: 'deleted'
+- Does NOT delete we_pages or we_versions
+- Shows warning about form submissions retention
+- Logs to we_audit_log
+
+---
+
+CREATE server/routes/we-pages.ts
+Register: app.use('/api/we/pages', weAuth, weVenue)
+
+GET /api/we/pages/:projectId
+- Returns all pages for project ordered by pageOrder
+- Excludes grapejsState from list response (too large)
+- Returns { pages[], total }
+
+GET /api/we/pages/:projectId/:pageId
+- Returns single page including full grapejsState
+- 404 if not found or venueId mismatch
+
+POST /api/we/pages/:projectId
+- Creates new page
+- Validates slug unique within project
+- Sets pageOrder to last + 1
+- Sets accessTag: 'public' by default
+- Logs to we_audit_log
+
+PATCH /api/we/pages/:projectId/:pageId
+- Updates grapejsState, name, slug, seoMeta,
+  accessTag, pageOrder
+- Validates slug unique if changed
+- Updates updatedAt
+- Does NOT create version — version creation is separate
+
+DELETE /api/we/pages/:projectId/:pageId
+- Blocks if isHome: true — return 400
+- Sets deletedAt timestamp (soft delete)
+- Logs to we_audit_log
+
+---
+
+CREATE server/routes/we-versions.ts
+Register: app.use('/api/we/versions', weAuth, weVenue)
+
+GET /api/we/versions/:projectId/:pageId
+- Returns all versions for page ordered by versionNumber desc
+- Returns { versions[], total }
+- Excludes grapejsState from list (too large)
+
+GET /api/we/versions/:projectId/:pageId/:versionId
+- Returns single version with full grapejsState
+
+POST /api/we/versions/:projectId/:pageId
+- Creates new version from current page grapejsState
+- Auto-increments versionNumber
+- Caps at 500 versions — archives oldest 50 to we_audit_log
+  if over limit
+- Records createdBy from session userId
+
+POST /api/we/versions/:projectId/:pageId/:versionId/restore
+- Copies version grapejsState to we_pages current state
+- Creates new version checkpoint before restoring
+- Logs to we_audit_log with action: 'version_restored'
+- Returns updated page
+
+---
+
+CREATE server/routes/we-assets.ts
+Register: app.use('/api/we/assets', weAuth, weVenue)
+
+POST /api/we/assets/:projectId/upload
+- Accepts multipart/form-data
+- Validates file type: jpg, png, webp, svg, gif only
+- Validates file size: max 10MB
+- Sanitises filename: spaces to hyphens, strip special chars
+- Stores to we_project_assets
+- Returns asset record with filePath
+
+GET /api/we/assets/:projectId
+- Returns all assets for project
+- Returns { assets[], total }
+
+DELETE /api/we/assets/:projectId/:assetId
+- Soft delete — retains file for 30 days
+- Logs to we_audit_log
+
+---
+
+CREATE server/routes/we-domains.ts
+Register: app.use('/api/we/domains', weAuth, weVenue,
+  requirePaidDeployment)
+
+GET /api/we/domains
+- Returns all domains for venueId
+
+POST /api/we/domains
+- Validates only 1 domain per workspace — 409 if exists
+- Generates unique DNS TXT record value
+- Creates domain record with status: 'pending'
+- Returns domain with TXT record for user to add to DNS
+
+POST /api/we/domains/:domainId/verify
+- Polls DNS for TXT record (single check)
+- Updates status to 'verified' if found
+- Updates verifiedAt timestamp
+- Logs to we_audit_log
+
+DELETE /api/we/domains/:domainId
+- Removes domain record
+- Logs to we_audit_log
+
+---
+
+CREATE server/routes/we-seo.ts
+Register: app.use('/api/we/seo', weAuth, weVenue)
+
+POST /api/we/seo/:projectId/:pageId/generate
+- Reads page grapejsState and projectLanguage
+- Calls existing Content Engine SEO module
+- Stores returned meta in we_pages.seoMeta
+- Returns { title, description, ogTitle, ogDescription }
+- Does not overwrite fields where user has manually edited
+
+PATCH /api/we/seo/:projectId/:pageId
+- Allows manual edit of any seoMeta field
+- Marks field as manually_edited: true in seoMeta
+- Manually edited fields never overwritten by auto-generate
+
+Register all 6 route files in server/routes.ts.
+
+Show:
+- All 6 files created and registered
+- tsc: 0 errors
+- tests: 459 passing
+
+Stop. Wait for confirmation.

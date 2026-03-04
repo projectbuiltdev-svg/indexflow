@@ -16,6 +16,15 @@ import pseoReviewRouter from "./routes/pseo/review";
 import pseoAdminRouter from "./routes/pseo/admin";
 import pseoRanksRouter from "./routes/pseo/ranks";
 import pseoReportsRouter from "./routes/pseo/reports";
+import weProjectsRouter from "./routes/we-projects";
+import wePagesRouter from "./routes/we-pages";
+import weVersionsRouter from "./routes/we-versions";
+import weAssetsRouter from "./routes/we-assets";
+import weDomainsRouter from "./routes/we-domains";
+import weSeoRouter from "./routes/we-seo";
+import { weAuth } from "./middleware/we-auth";
+import { weVenue } from "./middleware/we-venue";
+import { requirePaidDeployment } from "./middleware/we-tier";
 import fs from "fs";
 import path from "path";
 
@@ -2416,6 +2425,13 @@ export async function registerRoutes(
       res.status(500).json({ error: "Failed to check entitlement" });
     }
   });
+
+  app.use("/api/we/projects", weAuth, weVenue, weProjectsRouter);
+  app.use("/api/we/pages", weAuth, weVenue, wePagesRouter);
+  app.use("/api/we/versions", weAuth, weVenue, weVersionsRouter);
+  app.use("/api/we/assets", weAuth, weVenue, weAssetsRouter);
+  app.use("/api/we/domains", weAuth, weVenue, requirePaidDeployment, weDomainsRouter);
+  app.use("/api/we/seo", weAuth, weVenue, weSeoRouter);
 
   return httpServer;
 }
