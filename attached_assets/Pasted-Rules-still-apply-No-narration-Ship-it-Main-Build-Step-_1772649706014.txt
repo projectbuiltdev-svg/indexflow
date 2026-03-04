@@ -1,0 +1,93 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 3 — Template scoring engine.
+1 file. Target: under 500ms per score run.
+
+CREATE server/services/we-template-scorer.ts
+
+SCORING ALGORITHM:
+Takes intakeAnswers from we_projects and scores every
+active template in we_templates. Returns top 3 ranked
+by score descending.
+
+SCORE EACH TEMPLATE against these 8 signals — each
+signal worth 1 point, max score 8:
+
+Signal 1 — Business category match
+intakeAnswers.businessType matches template.category
+Exact match = 1 point. No match = 0.
+
+Signal 2 — Has contact form
+intakeAnswers.needsContactForm === true AND template
+block list includes 'form-contact' = 1 point
+
+Signal 3 — Has portfolio/gallery
+intakeAnswers.needsGallery === true AND template
+block list includes 'media-gallery-grid' OR
+'media-gallery-masonry' = 1 point
+
+Signal 4 — Has pricing section
+intakeAnswers.needsPricing === true AND template
+block list includes 'pricing-table-2col' OR
+'pricing-table-3col' = 1 point
+
+Signal 5 — Has testimonials
+intakeAnswers.needsTestimonials === true AND template
+block list includes 'social-testimonials-grid' OR
+'social-testimonials-carousel' = 1 point
+
+Signal 6 — Has team section
+intakeAnswers.needsTeam === true AND template
+block list includes 'team-grid' OR 'team-list' = 1 point
+
+Signal 7 — Page count match
+intakeAnswers.pageCount <= 3 AND template is single
+page style (footer block present, no nav-mega) = 1 point
+intakeAnswers.pageCount > 3 AND template has nav-mega
+OR nav-standard = 1 point
+
+Signal 8 — Style preference match
+intakeAnswers.stylePreference matches template.styleTags
+array (any tag match) = 1 point
+
+IMPLEMENTATION RULES:
+- Scoring runs entirely in memory — no DB writes during score
+- If intakeAnswers field is missing treat as 0 for that signal
+- Minimum score to qualify: 0 (always return top 3 regardless)
+- If tie in score: sort by template.createdAt desc (newest wins)
+- All 3 returned templates use same category — if top 3 are
+  different categories, return top scorer plus 2 others from
+  same category as top scorer
+- Template IDs never sent to client — internal only
+- Store selectedTemplateId in we_projects after selection
+
+EXPORTS:
+scoreTemplates(intakeAnswers, venueId): Promise<ScoredTemplate[]>
+  Returns top 3 scored templates with scores
+  
+selectTemplate(projectId, templateId, venueId): Promise<void>
+  Stores selectedTemplateId in we_projects
+  Clones template grapejsState to we_pages as first page
+  Sets page name: 'Home', slug: '/', isHome: true
+  Logs to we_audit_log
+
+getSelectedTemplate(projectId, venueId): Promise<Template | null>
+  Returns selected template for project
+  Never returns grapejsState to client directly
+
+Write tests/we/we-template-scorer.test.ts:
+- Score with perfect match on all 8 signals = 8
+- Score with no matches = 0
+- Missing intakeAnswers fields default to 0 not error
+- Tie broken by createdAt desc
+- selectTemplate clones grapejsState to we_pages
+- selectTemplate logs to we_audit_log
+- Template ID never exposed in scoreTemplates return
+
+Show:
+- we-template-scorer.ts created
+- test file created
+- all tests passing including new ones
+- tsc: 0 errors
+
+Stop. Wait for confirmation.
