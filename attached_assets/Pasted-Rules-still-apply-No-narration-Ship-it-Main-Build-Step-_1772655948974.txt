@@ -1,0 +1,124 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 20 — Empty state component and full
+dashboard integration.
+
+CREATE client/src/components/website-engine/WEEmptyState.tsx
+
+LAYOUT:
+- Shown when user has no projects yet
+- Full center of canvas area — not a modal
+- Clean illustration placeholder — simple SVG of
+  a browser window outline, centred
+- Headline: from WE_UI_STRINGS emptyState.headline
+  in projectLanguage
+  English: 'Let\'s build your first website'
+- Subline: from WE_UI_STRINGS emptyState.subline
+  English: 'Describe your business and we\'ll build
+  it for you in minutes.'
+- Disappears permanently after first project created
+
+LANGUAGE REMINDER:
+- Below illustration, above prompt field
+- If language set: subtle green badge
+  'Building in [flag] [language name]'
+- If language not set: yellow banner
+  'No language selected — defaulting to English'
+  'Select Language' button inline
+
+BYOK REMINDER:
+- If no BYOK key connected: amber banner
+  'Connect your AI key before building'
+  'Connect API Key' button — links to workspace settings
+- Shown above prompt field
+- If BYOK connected: not shown
+
+PROMPT FIELD:
+- Large textarea — auto-focused on mount
+- Placeholder from WE_UI_STRINGS emptyState.placeholder
+  English: 'e.g. I run a plumbing business in Dublin.
+  I need a professional website with a contact form
+  and a list of my services...'
+- Minimum height: 120px
+- 'Start Building' button below — primary style
+- Ctrl+Enter to submit
+- Disabled if no BYOK connected
+
+EXAMPLE PROMPTS:
+- Three clickable example prompt chips below textarea
+- Clicking populates textarea
+- Examples:
+  'A local restaurant in Edinburgh with an online
+   menu and booking form'
+  'A freelance graphic designer portfolio with a
+   project gallery and contact page'
+  'A SaaS product landing page with pricing table
+   and free trial signup'
+- Subtle animated arrow pointing to textarea
+  on first mount — disappears after 3 seconds
+
+FIRST PROJECT FLOW:
+- On submit: POST /api/we/projects to create project
+- Then POST /api/we/build/:projectId/start
+- Shows build progress overlay (already in WECanvas)
+- Empty state never shown again for this workspace
+  once first project exists — check on mount
+
+---
+
+UPDATE /:workspaceId/website-engine main page:
+
+This is the main Website Engine entry point.
+Wire it up fully now.
+
+DATA LOADING:
+- On mount: GET /api/we/projects to check if projects exist
+- If no projects: render WEEmptyState
+- If projects exist: render full editor layout
+
+FULL EDITOR LAYOUT:
+- Project selector dropdown at top — lists all projects
+  Switch project without page reload
+- Page title shows: [Project Name] — [Page Name]
+- Three panel layout:
+  WEPageManager (left 240px, collapsible)
+  WECanvas (center, fills remaining space)
+  WEChatPanel (right 320px, collapsible)
+- WECustomCode, WEVersionHistory, WEFormSubmissions,
+  WECollabPanel, WEDeployModal, WEExportModal,
+  WEDomainSettings, WEClientPreview all wired as
+  overlays triggered from WECanvas toolbar buttons
+- All components receive real projectId, pageId,
+  venueId from loaded project data
+- Active page defaults to home page on project load
+- Language passed through to all components from
+  project.projectLanguage
+
+PROJECT CREATION FROM EMPTY STATE:
+- After WEEmptyState submits:
+  Create project → start build → poll status
+  On build complete: load full editor layout
+  Transition is seamless — no page reload
+
+SUBSCRIPTION HEARTBEAT:
+- Every 60 seconds: GET /api/auth/session or equivalent
+  Check subscription status
+- If expired or lapsed:
+  Amber notification bar slides in at top — non-blocking
+  'Your trial has ended. Subscribe to keep your work.'
+  Subscribe button
+  Does not interrupt canvas or auto-save
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEEmptyState to exports
+
+Show:
+- WEEmptyState.tsx created
+- /:workspaceId/website-engine fully wired
+- All 14 components integrated in one layout
+- Subscription heartbeat implemented
+- index.ts updated with all exports
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.

@@ -11,3 +11,4 @@ export { default as WEPageManager } from "./WEPageManager";
 export { default as WEVersionHistory } from "./WEVersionHistory";
 export { default as WEWhiteLabel } from "./WEWhiteLabel";
 export { default as WEAdminPanel } from "./WEAdminPanel";
+export { default as WEEmptyState } from "./WEEmptyState";
