@@ -34,7 +34,7 @@ router.get("/review/config", async (_req: Request, res: Response) => {
 
 router.get("/campaigns/:id/review-queue", async (req: Request, res: Response) => {
   try {
-    const campaignId = req.params.id;
+    const campaignId = req.params.id as string;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 25;
     const offset = (page - 1) * limit;
@@ -146,7 +146,7 @@ router.get("/campaigns/:id/review-queue", async (req: Request, res: Response) =>
 
 router.post("/review/:itemId/approve", async (req: Request, res: Response) => {
   try {
-    const { itemId } = req.params;
+    const itemId = req.params.itemId as string;
 
     const [page] = await db
       .select()
@@ -198,7 +198,7 @@ router.post("/review/:itemId/approve", async (req: Request, res: Response) => {
 
 router.post("/review/:itemId/reject", async (req: Request, res: Response) => {
   try {
-    const { itemId } = req.params;
+    const itemId = req.params.itemId as string;
 
     const [page] = await db
       .select({ id: pseoPages.id, campaignId: pseoPages.campaignId })
@@ -226,7 +226,7 @@ router.post("/review/:itemId/reject", async (req: Request, res: Response) => {
 
 router.post("/review/:itemId/regenerate", async (req: Request, res: Response) => {
   try {
-    const { itemId } = req.params;
+    const itemId = req.params.itemId as string;
 
     const [page] = await db
       .select()
@@ -256,7 +256,7 @@ router.post("/review/:itemId/regenerate", async (req: Request, res: Response) =>
 
 router.post("/review/:itemId/update", async (req: Request, res: Response) => {
   try {
-    const { itemId } = req.params;
+    const itemId = req.params.itemId as string;
     const { title, metaTitle, metaDescription, h1Variant, paragraphVariants } = req.body;
 
     const [page] = await db

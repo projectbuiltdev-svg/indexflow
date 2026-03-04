@@ -38,7 +38,7 @@ export function registerPseoPageRoutes(app: Express): void {
     "/api/pseo/pages/:pageId",
     requirePseoPermission("activation"),
     async (req, res) => {
-      const pageId = req.params.pageId;
+      const pageId = req.params.pageId as string;
       const { userId } = extractUserRole(req);
 
       try {

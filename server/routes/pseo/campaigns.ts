@@ -155,7 +155,7 @@ router.post("/", async (req: Request, res: Response) => {
 
 router.post("/:id/generate", async (req: Request, res: Response) => {
   try {
-    const campaignId = req.params.id;
+    const campaignId = req.params.id as string;
 
     const [campaign] = await db
       .select()
@@ -188,7 +188,7 @@ router.post("/:id/generate", async (req: Request, res: Response) => {
 
 router.get("/:id/progress", async (req: Request, res: Response) => {
   try {
-    const campaignId = req.params.id;
+    const campaignId = req.params.id as string;
 
     const [campaign] = await db
       .select({
@@ -272,7 +272,7 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:id/detail", async (req: Request, res: Response) => {
   try {
-    const campaignId = req.params.id;
+    const campaignId = req.params.id as string;
 
     const [campaign] = await db
       .select()
@@ -340,7 +340,7 @@ router.get("/:id/detail", async (req: Request, res: Response) => {
 
 router.get("/:id/pages", async (req: Request, res: Response) => {
   try {
-    const campaignId = req.params.id;
+    const campaignId = req.params.id as string;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 50;
     const offset = (page - 1) * limit;
@@ -428,7 +428,7 @@ router.get("/:id/pages", async (req: Request, res: Response) => {
 
 router.patch("/:id/status", async (req: Request, res: Response) => {
   try {
-    const campaignId = req.params.id;
+    const campaignId = req.params.id as string;
     const { status: newStatus } = req.body;
 
     if (!newStatus) {
@@ -485,7 +485,7 @@ router.patch("/:id/status", async (req: Request, res: Response) => {
 
 router.get("/:id/activity", async (req: Request, res: Response) => {
   try {
-    const campaignId = req.params.id;
+    const campaignId = req.params.id as string;
 
     const entries = await db
       .select()
