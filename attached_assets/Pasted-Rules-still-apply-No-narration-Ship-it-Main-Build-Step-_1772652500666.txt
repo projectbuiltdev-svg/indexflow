@@ -1,0 +1,177 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 13 — Deployment pipeline and staging preview.
+
+CREATE server/services/we-deployer.ts
+
+PURPOSE:
+Handles all deployment types: test URL, staging, and live domain.
+Uses existing IndexFlow deployment pipeline.
+
+EXPORTS:
+
+deployToTestUrl(projectId, venueId): Promise<DeployResult>
+- Available on all tiers including trial
+- Deploys to username.indexflow.cloud/project-slug
+- Uses /dist/ optimised output from we-exporter
+- Generates GDPR cookie consent banner and injects
+- Records in we_deployments: type 'test'
+- Returns { url, deployedAt }
+
+deployToStaging(projectId, venueId): Promise<DeployResult>
+- Available on Pro and above paid only
+- Deploys to staging.agencyname.com/project-slug
+  if white label configured, else test URL
+- Records in we_deployments: type 'staging'
+- Returns { url, deployedAt }
+
+deployToLive(projectId, venueId,
+  domainId: string): Promise<DeployResult>
+- Validates domain exists and is verified in we_domains
+- Validates tier allows live deployment
+- NEVER allowed on trial — hard block regardless of tier
+- Validates staging preview has been seen this session
+- Deploys to verified domain
+- Records in we_deployments: type 'live'
+- Returns { url, deployedAt }
+
+rollbackDeployment(deploymentId, venueId): Promise<DeployResult>
+- Reads htmlSnapshot from we_deployments record
+- Pushes previous snapshot live
+- Creates new we_deployments record for rollback
+- Logs to we_audit_log: action 'deployment_rolled_back'
+- Returns { url, deployedAt }
+
+getStagingPreview(projectId, venueId): Promise<PreviewData>
+- Generates side-by-side diff of current vs last deployment
+- Returns { currentUrl, previousUrl, hasChanges }
+
+generateCookieBanner(projectId, venueId): Promise<string>
+- Generates GDPR cookie consent HTML snippet
+- Uses project design tokens for styling
+- AI writes copy in projectLanguage
+- Three categories: necessary, analytics, marketing
+- Returns HTML string for injection into deployment
+
+---
+
+CREATE server/services/we-dns-poller.ts
+
+EXPORTS:
+
+startDnsPolling(domainId, venueId): void
+- Polls DNS every 60 seconds for TXT record
+- Calls we-domains verify endpoint internally
+- Stops polling when domain verified or after 72 hours
+- On verification: emits event to notify client
+
+checkDnsTxtRecord(domain, txtValue): Promise<boolean>
+- Single DNS TXT record lookup
+- Returns true if record found matching txtValue
+- Returns false if not found or DNS error
+- Never throws
+
+getDnsPollingStatus(domainId): DnsPollingStatus
+- Returns { isPolling, startedAt, lastCheckedAt,
+  expiresAt, verified }
+
+---
+
+CREATE server/routes/we-deploy.ts
+Register: app.use('/api/we/deploy', weAuth, weVenue)
+
+POST /api/we/deploy/:projectId/test
+- Calls deployToTestUrl()
+- Available all tiers
+- Returns { url, deployedAt }
+
+POST /api/we/deploy/:projectId/staging
+- Calls deployToStaging()
+- Requires paid tier — 403 on trial
+- Returns { url, deployedAt }
+
+POST /api/we/deploy/:projectId/live
+- Calls deployToLive()
+- Requires paid tier — NEVER on trial
+- Requires domainId in body
+- Returns staging preview first:
+  Returns { requiresPreviewConfirm: true, preview }
+  if client has not confirmed staging preview
+- On confirmation flag in body: proceeds with live deploy
+
+POST /api/we/deploy/:projectId/rollback
+- Requires deploymentId in body
+- Calls rollbackDeployment()
+- Returns { url, deployedAt }
+
+GET /api/we/deploy/:projectId/history
+- Returns all we_deployments for project ordered by
+  deployedAt desc
+- Returns { deployments[], total }
+
+GET /api/we/deploy/:projectId/dns-status/:domainId
+- Returns getDnsPollingStatus()
+- Client polls this every 5 seconds during verification
+
+Register route in server/routes.ts
+
+---
+
+CREATE client/src/components/website-engine/WEDeployModal.tsx
+
+LAYOUT:
+- Modal triggered by 'Publish' button in canvas toolbar
+- Three sections: Test URL | Staging | Live
+
+TEST URL SECTION:
+- Always available
+- Shows current test URL if deployed
+- 'Deploy to Test URL' button
+- Copy URL button
+
+STAGING SECTION:
+- Shows lock if on trial:
+  'Staging is available on paid plans.'
+- Shows staging URL if configured
+- 'Deploy to Staging' button
+- Copy URL button
+
+LIVE SECTION:
+- Shows lock if on trial:
+  'Live deployment is not available during trial.'
+- If no domain connected: 'Connect a domain first'
+  Link to domain settings
+- If domain pending verification: shows TXT record
+  verification status with polling indicator
+  'Checking DNS...' updates every 5 seconds
+- If domain verified: shows live URL
+  'Deploy to Live' button — requires staging preview confirm
+  Staging preview confirm: checkbox
+  'I have reviewed the staging preview'
+  Deploy button disabled until checked
+
+DEPLOYMENT HISTORY:
+- Collapsible section at bottom of modal
+- Lists last 10 deployments with type badge and timestamp
+- 'Rollback' button per deployment row
+  Confirmation: 'Roll back to this version?
+  Your current live site will be replaced immediately.'
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEDeployModal to exports
+
+ADD publish button to WECanvas.tsx toolbar:
+- Globe icon button
+- Opens WEDeployModal
+
+Show:
+- server/services/we-deployer.ts created
+- server/services/we-dns-poller.ts created
+- server/routes/we-deploy.ts created and registered
+- WEDeployModal.tsx created
+- WECanvas.tsx updated with publish button
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.

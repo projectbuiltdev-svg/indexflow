@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import WEExportModal from "./WEExportModal";
+import WEDeployModal from "./WEDeployModal";
 
 interface WECanvasProps {
   projectId: string;
@@ -17,6 +18,8 @@ interface WECanvasProps {
   onOpenVersionHistory?: () => void;
   projectName?: string;
   tierAllowsExport?: boolean;
+  tierAllowsDeploy?: boolean;
+  isOnTrial?: boolean;
 }
 
 interface CanvasState {
@@ -58,6 +61,8 @@ export default function WECanvas({
   onOpenVersionHistory,
   projectName = "Project",
   tierAllowsExport = false,
+  tierAllowsDeploy = false,
+  isOnTrial = false,
 }: WECanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
@@ -67,6 +72,7 @@ export default function WECanvas({
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [showExport, setShowExport] = useState(false);
+  const [showDeploy, setShowDeploy] = useState(false);
   const [editorLoaded, setEditorLoaded] = useState(false);
   const isDirtyRef = useRef(false);
   const autoSaveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -297,6 +303,10 @@ export default function WECanvas({
             <Download className="w-4 h-4 mr-1" />
             Export
           </Button>
+          <Button variant="default" size="sm" onClick={() => setShowDeploy(true)} data-testid="btn-publish">
+            <Globe className="w-4 h-4 mr-1" />
+            Publish
+          </Button>
         </div>
 
         <div className="flex items-center gap-2 text-sm" data-testid="we-save-status">
@@ -341,6 +351,16 @@ export default function WECanvas({
         venueId={venueId}
         projectName={projectName}
         tierAllowsExport={tierAllowsExport}
+      />
+
+      <WEDeployModal
+        isOpen={showDeploy}
+        onClose={() => setShowDeploy(false)}
+        projectId={projectId}
+        venueId={venueId}
+        projectName={projectName}
+        tierAllowsDeploy={tierAllowsDeploy}
+        isOnTrial={isOnTrial}
       />
 
       {showShortcuts && (
