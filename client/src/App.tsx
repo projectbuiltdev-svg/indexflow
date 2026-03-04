@@ -195,6 +195,7 @@ const WaitlistFeature = lazy(() => import("@/pages/features/waitlist"));
 const Locations = lazy(() => import("@/pages/locations"));
 const LocationLanding = lazy(() => import("@/pages/location-landing"));
 
+const ClientPreviewPage = lazy(() => import("@/pages/preview/preview-page"));
 const RestaurantBold = lazy(() => import("@/pages/templates/restaurant-bold"));
 const RestaurantVibrant = lazy(() => import("@/pages/templates/restaurant-vibrant"));
 const RestaurantSimple = lazy(() => import("@/pages/templates/restaurant-simple"));
@@ -521,6 +522,7 @@ export function AppRoutes() {
         <Route path="/preview/hotel-vibrant" component={HotelVibrant} />
         <Route path="/preview/hotel-simple" component={HotelSimple} />
         <Route path="/preview/hotel-minimalistic" component={HotelMinimalistic} />
+        <Route path="/preview/client/:token" component={ClientPreviewPage} />
         
         <Route component={NotFound} />
       </Switch>

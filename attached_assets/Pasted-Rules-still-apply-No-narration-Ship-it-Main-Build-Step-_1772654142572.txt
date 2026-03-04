@@ -1,0 +1,136 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 17 — Client preview and commenting system.
+
+CREATE server/routes/we-comments.ts
+Register: app.use('/api/we/comments', weAuth where
+  required — see per-route rules below)
+
+COMMENT ROUTES:
+
+POST /api/we/comments/:token/add
+- NO auth required — public endpoint for clients
+- Validates preview token exists and not expired
+  in we_deployments
+- Resolves projectId and venueId from token
+- Body: { elementSelector, xPercent, yPercent,
+  comment, clientName, clientEmail? }
+- elementSelector: CSS selector of clicked element
+- xPercent/yPercent: position as % of viewport
+  for pin placement
+- Stores comment in we_form_submissions with
+  formName: 'client_preview_comment'
+- Returns { commentId, pinNumber }
+- Emails agency via workspace SMTP if configured:
+  Subject: 'New comment on [project name]'
+  Body: client name, comment text, page, timestamp
+- Rate limit: 20 comments per IP per hour
+
+GET /api/we/comments/:token
+- NO auth required — for client preview page
+- Returns all unresolved comments for this token's project
+- Returns { comments[], total }
+
+GET /api/we/comments/project/:projectId
+- Requires auth + venueId
+- Returns all comments for project
+- Supports ?resolved=true/false filter
+- Returns { comments[], total }
+
+PATCH /api/we/comments/:commentId/resolve
+- Requires auth + venueId
+- Sets resolved: true, resolvedAt, resolvedBy
+- Logs to we_audit_log
+
+POST /api/we/comments/:commentId/reply
+- Requires auth + venueId
+- Stores reply text against comment
+- Emails client if clientEmail was provided
+- Returns updated comment
+
+Register route in server/routes.ts
+
+---
+
+CREATE client/src/pages/preview/[token].tsx
+PUBLIC PREVIEW PAGE — no auth required
+
+LAYOUT:
+- Full page iframe showing deployed site
+- Thin comment toolbar overlaid at top:
+  Project name | 'Leave a comment' toggle button |
+  Comment count badge | Powered by [agency name or
+  IndexFlow if no white label]
+- Comment mode toggle:
+  Off: normal browsing — iframe is interactive
+  On: click anywhere on page to leave comment
+      cursor changes to crosshair
+      click creates comment pin
+
+COMMENT PIN OVERLAY:
+- Numbered circular pins overlaid on iframe
+- Pin position matches xPercent/yPercent stored
+- Hover pin: shows comment preview tooltip
+- Click pin: opens comment thread panel
+
+COMMENT THREAD PANEL:
+- Slides in from right — width 320px
+- Shows selected comment in full
+- Client name, timestamp, full comment text
+- Reply thread below if agency replied
+- 'Add a comment' form at bottom:
+  Name input (required)
+  Email input (optional)
+  Comment textarea (required)
+  Submit button
+
+COMMENT SUBMISSION FLOW:
+- Click on page in comment mode:
+  Small popover appears at click location
+  Name input, comment textarea, Submit button
+  On submit: POST /api/we/comments/:token/add
+  Pin appears immediately at click location
+  Popover closes
+
+---
+
+CREATE client/src/components/website-engine/WEClientPreview.tsx
+AGENCY VIEW — requires auth
+
+LAYOUT:
+- Opens in new tab or full-screen modal
+- Shows preview page with comment pins overlaid
+- Agency can see all pins from client
+- Comment management panel on right: 320px
+
+AGENCY COMMENT PANEL:
+- Lists all comments ordered by createdAt desc
+- Each comment: pin number, client name, timestamp,
+  comment text, resolved status
+- Resolve button per comment
+  On resolve: pin disappears from preview overlay
+  Comment marked resolved in panel with strikethrough
+- Reply button per comment
+  Opens reply input inline
+  On submit: POST /api/we/comments/:commentId/reply
+- Filter tabs: All | Unresolved | Resolved
+- 'Copy Preview Link' button at top
+- 'Regenerate Link' button
+
+UPDATE WECanvas.tsx toolbar:
+- Add comment/eye icon button
+- Opens WEClientPreview for current project
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEClientPreview to exports
+
+Show:
+- server/routes/we-comments.ts created and registered
+- client/src/pages/preview/[token].tsx created
+- WEClientPreview.tsx created
+- WECanvas.tsx updated with preview button
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.

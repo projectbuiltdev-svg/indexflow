@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe, Settings, Inbox, Users, Lock } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe, Settings, Inbox, Users, Lock, Eye } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import WEExportModal from "./WEExportModal";
@@ -8,6 +8,7 @@ import WEDeployModal from "./WEDeployModal";
 import WEDomainSettings from "./WEDomainSettings";
 import WEFormSubmissions from "./WEFormSubmissions";
 import WECollabPanel from "./WECollabPanel";
+import WEClientPreview from "./WEClientPreview";
 
 interface WECanvasProps {
   projectId: string;
@@ -84,6 +85,7 @@ export default function WECanvas({
   const [showSubmissions, setShowSubmissions] = useState(false);
   const [showCollab, setShowCollab] = useState(false);
   const [pageLockOwner, setPageLockOwner] = useState<string | null>(null);
+  const [showClientPreview, setShowClientPreview] = useState(false);
   const [editorLoaded, setEditorLoaded] = useState(false);
   const isDirtyRef = useRef(false);
   const autoSaveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -347,6 +349,9 @@ export default function WECanvas({
             <Globe className="w-4 h-4 mr-1" />
             Publish
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => setShowClientPreview(true)} data-testid="btn-client-preview">
+            <Eye className="w-4 h-4" />
+          </Button>
           <Button variant="ghost" size="sm" onClick={() => setShowCollab(true)} data-testid="btn-collab">
             <Users className="w-4 h-4" />
           </Button>
@@ -436,6 +441,13 @@ export default function WECanvas({
           />
         </div>
       )}
+
+      <WEClientPreview
+        isOpen={showClientPreview}
+        onClose={() => setShowClientPreview(false)}
+        projectId={projectId}
+        venueId={venueId}
+      />
 
       <WECollabPanel
         isOpen={showCollab}

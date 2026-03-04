@@ -1,5 +1,6 @@
 export { default as WECanvas, useCanvasState } from "./WECanvas";
 export { default as WEChatPanel } from "./WEChatPanel";
+export { default as WEClientPreview } from "./WEClientPreview";
 export { default as WECollabPanel } from "./WECollabPanel";
 export { default as WECustomCode } from "./WECustomCode";
 export { default as WEDeployModal } from "./WEDeployModal";

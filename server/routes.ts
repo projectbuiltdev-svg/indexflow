@@ -27,6 +27,7 @@ import weBuildRouter from "./routes/we-build";
 import weExportRouter from "./routes/we-export";
 import weDeployRouter from "./routes/we-deploy";
 import weCollabRouter from "./routes/we-collab";
+import weCommentsRouter from "./routes/we-comments";
 import { weAuth } from "./middleware/we-auth";
 import { weVenue } from "./middleware/we-venue";
 import { weByok } from "./middleware/we-byok";
@@ -2444,6 +2445,7 @@ export async function registerRoutes(
   app.use("/api/we/export", weAuth, weVenue, requireExport, weExportRouter);
   app.use("/api/we/deploy", weAuth, weVenue, weDeployRouter);
   app.use("/api/we/collab", weAuth, weVenue, weCollabRouter);
+  app.use("/api/we/comments", weCommentsRouter);
 
   return httpServer;
 }
