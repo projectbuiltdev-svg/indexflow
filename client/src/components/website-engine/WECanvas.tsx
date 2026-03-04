@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe, Settings } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import WEExportModal from "./WEExportModal";
 import WEDeployModal from "./WEDeployModal";
+import WEDomainSettings from "./WEDomainSettings";
 
 interface WECanvasProps {
   projectId: string;
@@ -20,6 +21,8 @@ interface WECanvasProps {
   tierAllowsExport?: boolean;
   tierAllowsDeploy?: boolean;
   isOnTrial?: boolean;
+  tier?: string;
+  whitelabelDomain?: string;
 }
 
 interface CanvasState {
@@ -63,6 +66,8 @@ export default function WECanvas({
   tierAllowsExport = false,
   tierAllowsDeploy = false,
   isOnTrial = false,
+  tier = "solo",
+  whitelabelDomain,
 }: WECanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
@@ -73,6 +78,7 @@ export default function WECanvas({
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showDeploy, setShowDeploy] = useState(false);
+  const [showDomainSettings, setShowDomainSettings] = useState(false);
   const [editorLoaded, setEditorLoaded] = useState(false);
   const isDirtyRef = useRef(false);
   const autoSaveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -307,6 +313,9 @@ export default function WECanvas({
             <Globe className="w-4 h-4 mr-1" />
             Publish
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => setShowDomainSettings(!showDomainSettings)} data-testid="btn-domain-settings">
+            <Settings className="w-4 h-4" />
+          </Button>
         </div>
 
         <div className="flex items-center gap-2 text-sm" data-testid="we-save-status">
@@ -362,6 +371,24 @@ export default function WECanvas({
         tierAllowsDeploy={tierAllowsDeploy}
         isOnTrial={isOnTrial}
       />
+
+      {showDomainSettings && (
+        <div className="absolute inset-0 z-40 bg-background overflow-y-auto p-6" data-testid="we-domain-settings-panel">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-semibold">Domain Settings</h3>
+            <Button variant="ghost" size="icon" onClick={() => setShowDomainSettings(false)} data-testid="btn-close-domain-settings">
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+          <WEDomainSettings
+            venueId={venueId}
+            projectId={projectId}
+            tier={tier}
+            isOnTrial={isOnTrial}
+            whitelabelDomain={whitelabelDomain}
+          />
+        </div>
+      )}
 
       {showShortcuts && (
         <div className="absolute inset-0 z-50 bg-black/50 flex items-center justify-center" data-testid="we-shortcuts-modal">

@@ -1,0 +1,95 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 14 — Domain settings UI component.
+
+CREATE client/src/components/website-engine/WEDomainSettings.tsx
+
+LAYOUT:
+- Full page settings view — not a modal
+- Accessible from canvas toolbar settings icon
+- OR directly from /dashboard/website-engine/domains
+
+SECTIONS:
+
+CURRENT DOMAIN SECTION:
+- Shows connected domain if exists
+- Domain name, verification status badge:
+  pending: amber 'Verifying DNS...'
+  verified: green 'Verified'
+  failed: red 'Verification failed'
+- Remove domain button — confirmation required
+  'Remove [domain]? Your live site will continue
+   running but you cannot redeploy until a new
+   domain is connected.'
+
+CONNECT NEW DOMAIN SECTION:
+- Only shown if no domain connected
+- Input: domain name (e.g. mybusiness.com)
+- 'Connect Domain' button
+- On submit: POST /api/we/domains
+- Shows result: TXT record to add to DNS
+
+DNS VERIFICATION PANEL:
+- Shown after domain connected, while status is pending
+- Step by step instructions:
+  Step 1: 'Log into your domain registrar'
+  Step 2: 'Add a TXT record to your DNS settings'
+  Record name: '@' or your domain
+  Record value: [generated TXT value — copy button]
+  Step 3: 'DNS changes can take up to 72 hours to
+           propagate. We check every 60 seconds.'
+- Live polling indicator:
+  'Last checked: 2 minutes ago'
+  'Next check in: 58 seconds' — live countdown
+  Updates every second
+- Auto-updates to verified state without page refresh
+  when DNS check passes
+- 72 hour expiry warning:
+  If > 48 hours elapsed: amber warning
+  'Verification expires in X hours. If not verified
+   by then you will need to regenerate the TXT record.'
+  'Regenerate TXT Record' button
+
+SSL NOTICE:
+- Info box at bottom:
+  'SSL certificate setup is your responsibility.
+   IndexFlow deploys your files — SSL is configured
+   at your hosting provider or domain registrar.
+   Most registrars offer free SSL via Let\'s Encrypt.'
+
+ONE DOMAIN LIMIT NOTICE:
+- Info text below connect form:
+  'One domain per workspace. Subdomains count as
+   separate domains and require separate workspaces.'
+
+WHITE LABEL DOMAIN NOTE:
+- If Pro or above: additional info box
+  'Your staging URL uses your white label domain:
+   staging.agencyname.com
+   Configure your white label domain in workspace settings.'
+- If Solo or trial: not shown
+
+PROPS:
+interface WEDomainSettingsProps {
+  venueId: string
+  projectId: string
+  tier: string
+  isOnTrial: boolean
+  whitelabelDomain?: string
+}
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEDomainSettings to exports
+
+ADD settings button to WECanvas.tsx toolbar:
+- Settings/gear icon button
+- Opens WEDomainSettings as slide-in panel
+
+Show:
+- WEDomainSettings.tsx created
+- WECanvas.tsx updated with settings button
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.
