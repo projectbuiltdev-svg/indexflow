@@ -1,0 +1,87 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 9 — Page manager component.
+
+CREATE client/src/components/website-engine/WEPageManager.tsx
+
+LAYOUT:
+- Left sidebar panel — sits left of canvas
+- Width: 240px, collapsible to 40px icon strip
+- Collapse toggle button at top
+- Two tabs at top: 'Pages' | 'Programmatic'
+
+PAGES TAB:
+Page list:
+- Lists all pages from GET /api/we/pages/:projectId
+- Each row shows: page name, access tag badge, drag handle
+- Access tag badge colours:
+  public: green
+  admin: amber
+  super-admin: red
+- Home page row has house icon — cannot be deleted
+- Active page highlighted in blue
+- Click page: loads that page into canvas
+- Drag to reorder: updates pageOrder via PATCH
+
+Add page button:
+- '+' button at bottom of list
+- Opens inline form: page name input + access tag select
+- Submit creates page via POST /api/we/pages/:projectId
+- New page appears at bottom of list
+- New page is automatically selected
+
+Page actions (hover reveal per row):
+- Edit name: inline rename on double click
+- Change access tag: dropdown on click
+- Delete: trash icon — disabled on home page
+  Confirmation: 'Delete [page name]? This cannot be undone.'
+  Calls DELETE /api/we/pages/:projectId/:pageId
+
+404 page:
+- Always shown at bottom of list as special row
+- Label: '404 Page' with warning icon
+- Cannot be deleted or reordered
+- Click to edit like any other page
+
+PROGRAMMATIC TAB:
+- Shows connected pSEO campaigns for this project
+- Each campaign shows: name, location count, status badge
+- If no campaigns connected: empty state
+  'No location pages yet.'
+  Button: 'Generate Location Pages'
+  Clicking calls existing pSEO engine inline
+- Design change warning: if project design tokens changed
+  since last pSEO generation show amber banner:
+  'Your location pages may be out of sync.'
+  Button: 'Regenerate' 
+- Location pages listed as read-only — not editable in canvas
+
+PROPS:
+interface WEPageManagerProps {
+  projectId: string
+  venueId: string
+  activePageId: string
+  projectLanguage: string
+  onPageSelect: (pageId: string) => void
+  onPageCreated: (page: Page) => void
+  onPageDeleted: (pageId: string) => void
+}
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEPageManager to exports
+
+UPDATE /:workspaceId/website-engine placeholder page:
+- Import WEPageManager alongside WECanvas and WEChatPanel
+- Render all three in a horizontal layout:
+  WEPageManager (left) | WECanvas (center) | WEChatPanel (right)
+- Still using dummy IDs — no real data connection yet
+- Layout must not break at 1024px minimum viewport
+
+Show:
+- WEPageManager.tsx created
+- index.ts updated
+- placeholder page updated with 3-panel layout
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.
