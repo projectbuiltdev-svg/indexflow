@@ -2644,7 +2644,7 @@ function WorkspaceCombobox({
   selectedWorkspaceId,
   onSelect,
 }: {
-  workspaces: Venue[];
+  workspaces: any[];
   selectedWorkspaceId: string;
   onSelect: (id: string) => void;
 }) {
@@ -3218,7 +3218,7 @@ export default function AdminContent() {
   const [activeView, setActiveView] = useState<"posts" | "domains" | "campaigns">("posts");
   const [guideOpen, setGuideOpen] = useState(false);
 
-  const { data: workspaces = [] } = useQuery<Venue[]>({
+  const { data: workspaces = [] } = useQuery<any[]>({
     queryKey: ["/api/workspaces"],
     queryFn: () => adminApi("GET", "/api/workspaces"),
   });

@@ -1374,7 +1374,7 @@ export class MemStorage implements IStorage {
     return Array.from(this.workspaceBlogPostsMap.values()).filter(p => p.status === "scheduled" && p.publishAt && p.publishAt <= now);
   }
   async createWorkspaceBlogPost(post: InsertWorkspaceBlogPost): Promise<WorkspaceBlogPost> {
-    const record: WorkspaceBlogPost = { ...post, id: randomUUID(), compiledHtml: null, publishedAt: null, tags: post.tags ?? null, description: post.description ?? null, category: post.category ?? null, publishAt: post.publishAt ?? null, mdxContent: post.mdxContent ?? "", status: post.status ?? "draft", primaryKeyword: post.primaryKeyword ?? null, intent: post.intent ?? null, funnel: post.funnel ?? null, generationStatus: post.generationStatus ?? "pending", qualityGateStatus: post.qualityGateStatus ?? "unknown", qualityFailReasons: post.qualityFailReasons ?? null, campaignId: post.campaignId ?? null, createdAt: new Date(), updatedAt: new Date() };
+    const record = { ...post, id: randomUUID(), compiledHtml: null, publishedAt: null, tags: (post.tags as string[] | undefined) ?? null, description: post.description ?? null, category: post.category ?? null, publishAt: post.publishAt ?? null, mdxContent: post.mdxContent ?? "", status: post.status ?? "draft", primaryKeyword: post.primaryKeyword ?? null, intent: post.intent ?? null, funnel: post.funnel ?? null, generationStatus: post.generationStatus ?? "pending", qualityGateStatus: post.qualityGateStatus ?? "unknown", qualityFailReasons: (post.qualityFailReasons as string[] | undefined) ?? null, campaignId: post.campaignId ?? null, createdAt: new Date(), updatedAt: new Date() } as WorkspaceBlogPost;
     this.workspaceBlogPostsMap.set(record.id, record);
     return record;
   }
@@ -1389,8 +1389,8 @@ export class MemStorage implements IStorage {
     return Array.from(this.workspaceBlogPostsMap.values()).filter(p => p.workspaceId === workspaceId && p.campaignId === campaignId);
   }
   async createContentCampaign(data: InsertContentCampaign): Promise<ContentCampaign> {
-    const id = data.id || randomUUID();
-    const campaign: ContentCampaign = { id, ...data, timezone: data.timezone ?? "UTC", status: data.status ?? "draft", startDate: data.startDate ?? null, durationWeeks: data.durationWeeks ?? null, postsTotal: data.postsTotal ?? null, publishDays: data.publishDays ?? null, publishTimeLocal: data.publishTimeLocal ?? null, cadenceJson: data.cadenceJson ?? null, createdAt: new Date(), updatedAt: new Date() };
+    const id = (data as any).id || randomUUID();
+    const campaign = { id, ...data, timezone: data.timezone ?? "UTC", status: data.status ?? "draft", startDate: data.startDate ?? null, durationWeeks: data.durationWeeks ?? null, postsTotal: data.postsTotal ?? null, publishDays: (data.publishDays as string[] | undefined) ?? null, publishTimeLocal: data.publishTimeLocal ?? null, cadenceJson: data.cadenceJson ?? null, createdAt: new Date(), updatedAt: new Date() } as ContentCampaign;
     this.contentCampaignsMap.set(id, campaign);
     return campaign;
   }
@@ -1506,7 +1506,7 @@ export class MemStorage implements IStorage {
     return workspaceId ? all.filter(s => s.workspaceId === workspaceId) : all;
   }
   async createCrmPipelineStage(data: InsertCrmPipelineStage): Promise<CrmPipelineStage> {
-    const record: CrmPipelineStage = { ...data, id: this.crmStageIdCounter++, workspaceId: data.workspaceId ?? null, color: data.color ?? "#3b82f6", createdAt: new Date() };
+    const record = { ...data, id: this.crmStageIdCounter++, workspaceId: data.workspaceId ?? null, color: data.color ?? "#3b82f6", position: data.position ?? 0, createdAt: new Date() } as CrmPipelineStage;
     this.crmPipelineStagesMap.set(record.id, record);
     return record;
   }
@@ -1568,7 +1568,7 @@ export class MemStorage implements IStorage {
     return Array.from(this.invoiceLineItemsMap.values()).filter(i => i.invoiceId === invoiceId).sort((a, b) => a.sortOrder - b.sortOrder);
   }
   async createInvoiceLineItem(data: InsertInvoiceLineItem): Promise<InvoiceLineItem> {
-    const record: InvoiceLineItem = { ...data, id: this.invoiceLineItemIdCounter++ };
+    const record = { ...data, id: this.invoiceLineItemIdCounter++, sortOrder: data.sortOrder ?? 0, amount: data.amount ?? "0", quantity: data.quantity ?? "1", unitPrice: data.unitPrice ?? "0" } as InvoiceLineItem;
     this.invoiceLineItemsMap.set(record.id, record);
     return record;
   }
@@ -1614,12 +1614,12 @@ export class MemStorage implements IStorage {
   private postValidationResultIdCounter = 1;
 
   async getSiteProfile(workspaceId: string): Promise<WorkspaceSiteProfile | undefined> {
-    return this.siteProfilesMap.get(workspaceId);
+    return this.siteProfilesMap.get(workspaceId) ?? undefined;
   }
   async upsertSiteProfile(data: InsertWorkspaceSiteProfile): Promise<WorkspaceSiteProfile> {
-    const existing = this.siteProfilesMap.get(data.workspaceId);
-    const profile: WorkspaceSiteProfile = { id: existing?.id ?? this.sitePageIdCounter++, ...data, businessName: data.businessName ?? null, tagline: data.tagline ?? null, logoUrl: data.logoUrl ?? null, heroImageUrl: data.heroImageUrl ?? null, primaryColor: data.primaryColor ?? null, secondaryColor: data.secondaryColor ?? null, fontFamily: data.fontFamily ?? null, footerText: data.footerText ?? null, socialLinks: data.socialLinks ?? null, customCss: data.customCss ?? null, updatedAt: new Date() } as WorkspaceSiteProfile;
-    this.siteProfilesMap.set(data.workspaceId, profile);
+    const existing = this.siteProfilesMap.get(data.workspaceId ?? "");
+    const profile = { id: existing?.id ?? this.sitePageIdCounter++, ...data, updatedAt: new Date(), createdAt: existing?.createdAt ?? new Date() } as unknown as WorkspaceSiteProfile;
+    this.siteProfilesMap.set(data.workspaceId ?? "", profile);
     return profile;
   }
   async getSitePages(workspaceId: string): Promise<WorkspaceSitePage[]> {
@@ -1653,7 +1653,7 @@ export class MemStorage implements IStorage {
     return Array.from(this.postKeywordIndexMap.values()).filter(k => k.workspaceId === workspaceId && k.keyword === keyword);
   }
   async upsertPostKeywordIndex(data: InsertPostKeywordIndex): Promise<PostKeywordIndex> {
-    const record = { ...data, id: this.postKeywordIndexIdCounter++, updatedAt: new Date() } as PostKeywordIndex;
+    const record = { ...data, id: this.postKeywordIndexIdCounter++, createdAt: new Date() } as unknown as PostKeywordIndex;
     this.postKeywordIndexMap.set(record.id, record);
     return record;
   }

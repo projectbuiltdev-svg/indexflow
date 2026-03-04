@@ -243,7 +243,7 @@ export default function ContentDomains() {
                         <span className="flex items-center gap-1.5">
                           {d.domain}
                           {lockStatus?.locked && (
-                            <Lock className="w-3.5 h-3.5 text-amber-500" title="Domain locked — upgrade to Pro to change your domain" data-testid={`icon-lock-domain-${d.id}`} />
+                            <Lock className="w-3.5 h-3.5 text-amber-500" data-testid={`icon-lock-domain-${d.id}`} />
                           )}
                         </span>
                       </TableCell>

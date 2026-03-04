@@ -55,7 +55,6 @@ const segmentLabels: Record<string, string> = {
   "analytics": "Analytics",
   "local-citations": "Local Citations",
   "dashboard": "Client Dashboard",
-  "cms-integration": "CMS Integration",
   "integrations": "Integrations",
 };
 

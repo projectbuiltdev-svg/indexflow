@@ -25,7 +25,7 @@ export async function softDeleteWhere<T extends TableWithDeletedAt>(
     .update(table)
     .set({ deletedAt: new Date() } as any)
     .where(and(conditions, isNull(table.deletedAt)))
-    .returning({ id: table.id });
+    .returning({ id: table.id as any });
   return result.length;
 }
 

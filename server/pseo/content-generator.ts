@@ -113,9 +113,12 @@ export async function generateSinglePage(
 
     const spintaxPool = pool || await generateSpintaxPool(campaignCtx);
 
-    const h1 = resolveH1WithCollisionAvoidance(
+    const h1Result = resolveH1WithCollisionAvoidance(
+      ctx.locationId,
+      ctx.serviceId,
       spintaxPool,
-      seed,
+      ctx.locationName,
+      ctx.serviceName,
       await storage.getUsedH1s(ctx.campaignId)
     );
 
@@ -124,8 +127,8 @@ export async function generateSinglePage(
     const sectionCount = ctx.sectionCount || DEFAULT_SECTION_COUNT;
 
     for (let i = 0; i < sectionCount; i++) {
-      const h2 = resolveH2(spintaxPool, i, seed + i);
-      const para = resolveParagraph(spintaxPool, i, seed + i + 100);
+      const h2 = resolveH2(ctx.locationId, ctx.serviceId, i, spintaxPool);
+      const para = resolveParagraph(ctx.locationId, ctx.serviceId, i, spintaxPool);
       const varied = applyMicroVariation(
         para.replace(/\{location\}/gi, ctx.locationName).replace(/\{service\}/gi, ctx.serviceName),
         seed + i + 200
@@ -154,7 +157,7 @@ export async function generateSinglePage(
 
     const metaTitle = `${ctx.serviceName} in ${ctx.locationName}${ctx.locationState ? `, ${ctx.locationState}` : ""} | ${ctx.domainName}`;
     const metaDescription = `Find professional ${ctx.serviceName.toLowerCase()} services in ${ctx.locationName}. Trusted local providers with proven results.`;
-    const title = `${h1.replace(/\{location\}/gi, ctx.locationName).replace(/\{service\}/gi, ctx.serviceName)}`;
+    const title = `${h1Result.h1.replace(/\{location\}/gi, ctx.locationName).replace(/\{service\}/gi, ctx.serviceName)}`;
 
     const schemaJson = buildLocalBusinessSchema(ctx, title, metaDescription);
 
@@ -257,8 +260,12 @@ ${internalLinksHtml}
 
     try {
       similarityResult = await checkSimilarity(
-        { pageId: `pending-${slug}`, campaignId: ctx.campaignId, text },
-        storage
+        fullHtml,
+        ctx.campaignId,
+        `pending-${slug}`,
+        ctx.languageCode,
+        storage,
+        ctx.workspaceId
       );
     } catch {
       similarityResult = { similarityScore: 0, comparisonPageId: null, action: "pass" };
