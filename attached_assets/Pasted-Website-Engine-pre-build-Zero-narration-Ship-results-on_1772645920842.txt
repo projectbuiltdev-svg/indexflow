@@ -1,0 +1,131 @@
+Website Engine pre-build. Zero narration. Ship results only.
+
+Run all 5 tasks simultaneously now.
+
+TASK 1 — Create all 10 we_ database tables in db/schema/:
+we-projects.ts, we-pages.ts, we-versions.ts, we-templates.ts,
+we-deployments.ts, we-project-assets.ts, we-form-submissions.ts,
+we-domains.ts, we-audit-log.ts, we-programmatic-pages.ts
+
+Schema for each table per this spec:
+
+we_projects: id, venueId, name, slug, intakeAnswers (jsonb),
+selectedTemplateId, projectLanguage (default 'en'),
+tierAtCreation, status, createdAt, updatedAt
+
+we_pages: id, projectId, venueId, name, slug, grapejsState (jsonb),
+seoMeta (jsonb), accessTag (default 'public'), pageOrder,
+isHome (bool default false), deletedAt, createdAt, updatedAt
+
+we_versions: id, pageId, projectId, venueId, grapejsState (jsonb),
+versionNumber, createdBy, createdAt
+
+we_templates: id, name, category, styleTags (jsonb),
+featureTags (jsonb), grapejsState (jsonb), version,
+isActive (bool default false), createdAt, updatedAt
+
+we_deployments: id, projectId, venueId, domain,
+deploymentType (enum: test, staging, live), htmlSnapshot (text),
+status (enum: pending, success, failed), deployedAt, createdAt
+
+we_project_assets: id, projectId, venueId, filename,
+filePath, fileType, fileSize, altText, createdAt
+
+we_form_submissions: id, projectId, venueId, formName,
+fields (jsonb), pageUrl, createdAt
+
+we_domains: id, venueId, domain, txtRecord, verificationStatus
+(enum: pending, verified, failed), verifiedAt, createdAt, updatedAt
+
+we_audit_log: id, venueId, projectId, userId, action,
+metadata (jsonb), severity (enum: info, warn, error),
+createdAt
+
+we_programmatic_pages: id, projectId, venueId, pseoCampaignId,
+designTokenSnapshot (jsonb), createdAt, updatedAt
+
+Rules: all tables use we_ prefix, all use Drizzle ORM consistent
+with existing schema.ts patterns, export insert schemas and types.
+Run migrations after creation. Confirm all 10 tables exist in DB.
+
+TASK 2 — Create server/config/we-tier-config.ts:
+Export TIER_CONFIG object with entries for solo, pro, agency,
+enterprise. Each entry has: maxWorkspaces, maxDomains,
+canExport (bool), canWhiteLabel (bool), canCollaborate (bool),
+maxUsers, trialDays, trialPrice. Values:
+solo: maxWorkspaces=1, maxDomains=1, canExport=false,
+  canWhiteLabel=false, canCollaborate=false, maxUsers=1,
+  trialDays=14, trialPrice=1
+pro: maxWorkspaces=25, maxDomains=25, canExport=true,
+  canWhiteLabel=true, canCollaborate=true, maxUsers=5,
+  trialDays=30, trialPrice=0
+agency: maxWorkspaces=50, maxDomains=50, canExport=true,
+  canWhiteLabel=true, canCollaborate=true, maxUsers=10,
+  trialDays=30, trialPrice=0
+enterprise: maxWorkspaces=-1, maxDomains=-1, canExport=true,
+  canWhiteLabel=true, canCollaborate=true, maxUsers=20,
+  trialDays=0, trialPrice=0
+Export getTierConfig(tier: string) helper function.
+Export canDeploy(tier, isOnTrial) — returns false if isOnTrial,
+true if paid regardless of tier.
+
+TASK 3 — Create server/config/we-language-config.ts:
+Export SUPPORTED_LANGUAGES array with 7 entries:
+{ code, name, nativeName, flag, rtl }
+en: English, English, 🇬🇧, false
+fr: French, Français, 🇫🇷, false
+de: German, Deutsch, 🇩🇪, false
+es: Spanish, Español, 🇪🇸, false
+pt: Portuguese, Português, 🇵🇹, false
+it: Italian, Italiano, 🇮🇹, false
+nl: Dutch, Nederlands, 🇳🇱, false
+Export DEFAULT_LANGUAGE = 'en'
+Export isSupported(code: string): boolean
+Export getLanguage(code: string): Language | undefined
+
+TASK 4 — Create server/config/we-block-library.ts:
+Define all 41 blocks. Each block has:
+{ id, name, category, version, responsive: true,
+  defaultContent (jsonb stub) }
+Categories and blocks:
+HERO: hero-centered, hero-split, hero-video-bg, hero-minimal
+NAVIGATION: nav-standard, nav-sticky, nav-minimal, nav-mega
+CONTENT: content-text-image, content-text-only, content-columns-2,
+  content-columns-3, content-accordion, content-tabs,
+  content-timeline
+MEDIA: media-gallery-grid, media-gallery-masonry,
+  media-video-embed, media-image-full
+SOCIAL_PROOF: social-testimonials-grid, social-testimonials-carousel,
+  social-logos-strip, social-reviews-stars, social-case-study
+CTA: cta-banner-centered, cta-banner-split, cta-sticky-bar
+FORMS: form-contact, form-newsletter, form-booking
+PRICING: pricing-table-2col, pricing-table-3col, pricing-toggle
+TEAM: team-grid, team-list
+STATS: stats-counters, stats-bar-chart
+FOOTER: footer-standard, footer-minimal, footer-mega
+UTILITY: utility-spacer, utility-divider, utility-custom-code,
+  utility-embed
+Export getBlock(id: string), getBlocksByCategory(category: string),
+getAllBlocks().
+
+TASK 5 — Create server/config/we-ai-prompts.ts:
+For each of the 41 blocks export a constrained prompt template.
+Format: Record<string, string> keyed by block id.
+Each template is a single instruction string telling the AI
+exactly what fields it can modify for that block type.
+Examples:
+hero-centered: "Modify headline text, subheadline text, and CTA
+  button label only. Do not change layout, colours, or structure."
+form-contact: "Modify form title, field labels, and submit button
+  text only. Do not add or remove form fields."
+utility-embed: "Set the iframe src URL only. Do not modify
+  dimensions or sandbox attributes."
+Write appropriate constrained prompts for all 41 blocks.
+Export getPrompt(blockId: string): string
+
+Show results for all 5 tasks with:
+- Migration output (Task 1)
+- TypeScript compile check across all 5 new files
+- 0 errors confirmed
+
+Stop. Wait for confirmation before Steps 11-18.
