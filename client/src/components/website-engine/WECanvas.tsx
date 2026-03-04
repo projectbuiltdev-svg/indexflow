@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
+import { useQuery } from "@tanstack/react-query";
 
 interface WECanvasProps {
   projectId: string;
@@ -321,6 +322,8 @@ export default function WECanvas({
         />
       </div>
 
+      <BuildProgressOverlay projectId={projectId} venueId={venueId} />
+
       {showShortcuts && (
         <div className="absolute inset-0 z-50 bg-black/50 flex items-center justify-center" data-testid="we-shortcuts-modal">
           <div className="bg-background rounded-lg p-6 max-w-sm w-full shadow-xl">
@@ -350,6 +353,87 @@ export default function WECanvas({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function BuildProgressOverlay({ projectId, venueId }: { projectId: string; venueId: string }) {
+  const { data } = useQuery<{
+    status: string;
+    currentStep: number;
+    totalSteps: number;
+    completedSteps: number[];
+    failedStep: number | null;
+    percentComplete: number;
+  }>({
+    queryKey: ["/api/we/build", projectId, "status", venueId],
+    queryFn: async () => {
+      const res = await fetch(`/api/we/build/${projectId}/status?venueId=${venueId}`);
+      if (!res.ok) return { status: "idle", currentStep: 0, totalSteps: 21, completedSteps: [], failedStep: null, percentComplete: 0 };
+      return res.json();
+    },
+    refetchInterval: (query) => {
+      const d = query.state.data as any;
+      return d?.status === "building" ? 3000 : false;
+    },
+    enabled: !!projectId && projectId !== "0",
+  });
+
+  if (!data || data.status === "idle" || data.status === "built") return null;
+
+  const isBuilding = data.status === "building";
+  const isPaused = data.status === "paused";
+
+  return (
+    <div className="absolute inset-0 z-40 bg-background/90 flex items-center justify-center" data-testid="we-build-overlay">
+      <div className="max-w-md w-full p-6 space-y-4 text-center">
+        {isBuilding && (
+          <>
+            <Loader2 className="w-10 h-10 animate-spin mx-auto text-primary" />
+            <h3 className="font-semibold text-lg">Building your website...</h3>
+            <p className="text-sm text-muted-foreground">Step {data.currentStep} of {data.totalSteps}</p>
+            <div className="w-full bg-muted rounded-full h-2">
+              <div
+                className="bg-primary h-2 rounded-full transition-all duration-500"
+                style={{ width: `${data.percentComplete}%` }}
+              />
+            </div>
+            <div className="flex flex-wrap gap-1 justify-center">
+              {Array.from({ length: data.totalSteps }, (_, i) => i + 1).map((step) => (
+                <div
+                  key={step}
+                  className={`w-5 h-5 rounded text-[10px] flex items-center justify-center ${
+                    data.completedSteps.includes(step)
+                      ? "bg-green-100 text-green-700"
+                      : step === data.currentStep
+                      ? "bg-primary/20 text-primary"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {data.completedSteps.includes(step) ? "✓" : step}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {isPaused && (
+          <>
+            <AlertTriangle className="w-10 h-10 mx-auto text-amber-500" />
+            <h3 className="font-semibold text-lg">Build paused at step {data.failedStep} of {data.totalSteps}</h3>
+            <p className="text-sm text-muted-foreground">An error occurred. You can retry from where it stopped.</p>
+            <Button
+              onClick={async () => {
+                await apiRequest("POST", `/api/we/build/${projectId}/resume?venueId=${venueId}`, {});
+              }}
+              data-testid="btn-resume-build"
+            >
+              <Play className="w-4 h-4 mr-1" />
+              Resume Build
+            </Button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

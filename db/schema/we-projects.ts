@@ -16,6 +16,7 @@ export const weProjects = pgTable("we_projects", {
   projectLanguage: text("project_language").notNull().default("en"),
   tierAtCreation: text("tier_at_creation").notNull(),
   status: text("status").notNull().default("draft"),
+  buildState: jsonb("build_state").$type<Record<string, any>>(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

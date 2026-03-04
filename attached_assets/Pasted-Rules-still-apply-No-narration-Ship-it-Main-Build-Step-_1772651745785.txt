@@ -1,0 +1,108 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 11 — Build orchestration engine.
+
+CREATE server/services/we-build.ts
+
+PURPOSE:
+Orchestrates the 21-step build process that converts intake
+answers + selected template into a fully populated website.
+Runs server-side only. Never blocks the UI.
+
+BUILD STEPS (execute in this exact order):
+1.  Validate project exists and has intakeAnswers
+2.  Validate BYOK key connected and valid
+3.  Validate template selected — run scoreTemplates() if not
+4.  Clone template grapejsState to we_pages (home page)
+5.  Extract design tokens (colours, fonts) from template
+6.  Generate site-wide copy via AI (headlines, taglines, about)
+7.  Generate page-by-page copy via AI for each page
+8.  Apply copy to all pages via applyDiff()
+9.  Assign images — BYOK generation first, stock fallback
+10. Apply images to all pages via applyDiff()
+11. Generate SEO meta tags via Content Engine module
+12. Store SEO meta in we_pages.seoMeta for all pages
+13. Generate 404 page using design tokens + AI copy
+14. Generate sitemap.xml from all public pages
+15. Generate robots.txt — allow all crawlers on public pages,
+    block admin pages
+16. Process multilingual i18n — apply projectLanguage to
+    all generated content
+17. Initialise form handler — register project in we_form_submissions
+18. Validate embed block configuration
+19. Validate all pages against block library
+20. Run quality check — all pages have content, no empty blocks
+21. Set project status: 'built', log completion to we_audit_log
+
+RETRY LOGIC:
+- Each step wrapped in try/catch
+- On failure: retry up to 3 times silently
+- After 3 failures: freeze at that step
+- Store failed step number in we_projects.buildState jsonb:
+  { status: 'paused', failedStep: 14, completedSteps: [1-13] }
+- Resume endpoint restarts from failed step only
+
+PROGRESS TRACKING:
+- After each step completes: update we_projects.buildState
+  { status: 'building', completedSteps: [], currentStep: N }
+- Client polls GET /api/we/build/:projectId/status
+  Returns { status, currentStep, totalSteps: 21,
+  completedSteps[], failedStep, percentComplete }
+
+EXPORTS:
+
+startBuild(projectId, venueId): Promise<void>
+- Validates pre-conditions
+- Sets status: 'building' in we_projects
+- Runs all 21 steps
+- Async — returns immediately, build runs in background
+
+resumeBuild(projectId, venueId): Promise<void>
+- Reads failedStep from we_projects.buildState
+- Restarts from failedStep only
+- Re-runs from that step to 21
+
+getBuildStatus(projectId, venueId): Promise<BuildStatus>
+- Returns current build state
+
+---
+
+CREATE server/routes/we-build.ts
+Register: app.use('/api/we/build', weAuth, weVenue)
+
+POST /api/we/build/:projectId/start
+- Calls startBuild()
+- Returns 202 immediately — build is async
+- Returns 409 if already building
+
+POST /api/we/build/:projectId/resume
+- Calls resumeBuild()
+- Returns 202 immediately
+- Returns 400 if no failed step to resume from
+
+GET /api/we/build/:projectId/status
+- Calls getBuildStatus()
+- Returns build state object
+- Used for polling from client
+
+---
+
+ADD build progress indicator to WECanvas.tsx:
+- If project status is 'building': show progress overlay
+  on canvas — semi-transparent with progress bar
+- Shows: 'Building your website... Step X of 21'
+- Shows completed steps as checkmarks
+- If status is 'paused': show error state
+  'Build paused at step X of 21'
+  'Resume Build' button — calls POST /api/we/build/:projectId/resume
+- Polling: client polls /status every 3 seconds while building
+- Overlay dismisses automatically when status becomes 'built'
+
+Show:
+- server/services/we-build.ts created — 21 steps
+- server/routes/we-build.ts created and registered
+- WECanvas.tsx updated with build progress overlay
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.

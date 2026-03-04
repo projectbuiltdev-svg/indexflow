@@ -23,6 +23,7 @@ import weAssetsRouter from "./routes/we-assets";
 import weDomainsRouter from "./routes/we-domains";
 import weSeoRouter from "./routes/we-seo";
 import weAiRouter from "./routes/we-ai";
+import weBuildRouter from "./routes/we-build";
 import { weAuth } from "./middleware/we-auth";
 import { weVenue } from "./middleware/we-venue";
 import { weByok } from "./middleware/we-byok";
@@ -2436,6 +2437,7 @@ export async function registerRoutes(
   app.use("/api/we/domains", weAuth, weVenue, requirePaidDeployment, weDomainsRouter);
   app.use("/api/we/seo", weAuth, weVenue, weSeoRouter);
   app.use("/api/we/ai", weAuth, weVenue, weByok, weLanguage, weAiRouter);
+  app.use("/api/we/build", weAuth, weVenue, weBuildRouter);
 
   return httpServer;
 }
