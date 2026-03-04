@@ -1,0 +1,101 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 6 — GrapesJS canvas component.
+This is a big step. Take the time needed but no narration.
+
+CREATE client/src/components/website-engine/WECanvas.tsx
+
+SETUP:
+- Install grapesjs and @types/grapesjs via npm if not present
+- GrapesJS must be lazy loaded — dynamic import only
+- Zero impact on dashboard load time
+
+CANVAS BEHAVIOUR:
+- Initialise GrapesJS in the mounted div
+- Load grapejsState from props on init
+- If no grapejsState: render empty canvas ready for first build
+- Canvas must be fully contained — no GrapesJS default UI chrome
+  (no default panels, no default toolbar)
+- IndexFlow owns the entire UI shell around it
+
+BREAKPOINT TOGGLE:
+- Three buttons above canvas: Desktop | Tablet | Mobile
+- Desktop: canvas width 100%
+- Tablet: canvas width 768px centered
+- Mobile: canvas width 375px centered
+- Buttons use existing IndexFlow button styles
+
+AUTO-SAVE:
+- Every 30 seconds if canvas has unsaved changes
+- On Ctrl+S — immediate save
+- Save calls PATCH /api/we/pages/:projectId/:pageId
+  with current grapejsState
+- Show save indicator: 'Saving...' then 'Saved' then clears
+- If save fails: show 'Save failed' in amber — do not block editing
+
+UNDO/REDO:
+- Ctrl+Z — undo (GrapesJS native)
+- Ctrl+Shift+Z — redo (GrapesJS native)
+- Session only — clears on component unmount
+- Does not interact with version history
+
+KEYBOARD SHORTCUTS:
+- Ctrl+Z: undo
+- Ctrl+Shift+Z: redo
+- Ctrl+C: copy selected block
+- Ctrl+V: paste block
+- Ctrl+S: save immediately
+- Delete: remove selected block
+- Escape: deselect
+- ?: open keyboard shortcut reference panel
+  (simple modal listing all shortcuts)
+
+OFFLINE DETECTION:
+- Listen to window online/offline events
+- Offline: amber banner at top of canvas
+  'You are offline. Changes will save when reconnected.'
+- AI calls disabled while offline — grey out chat panel
+- On reconnect: trigger immediate save
+
+MOBILE RESTRICTION:
+- If viewport width < 1024px: do not render canvas
+- Show message: 'Website Engine requires a desktop browser.
+  Please open on a computer with a screen wider than 1024px.'
+- Client preview links are exempt — they render on all devices
+
+PROPS:
+interface WECanvasProps {
+  projectId: string
+  pageId: string
+  venueId: string
+  initialState?: object
+  projectLanguage: string
+  onStateChange?: (newState: object) => void
+  onSave?: (state: object) => void
+  readOnly?: boolean
+}
+
+EXPORTS:
+- Default export: WECanvas component
+- Named export: useCanvasState hook — exposes
+  { isDirty, isSaving, lastSaved, canUndo, canRedo }
+
+CREATE client/src/components/website-engine/index.ts
+- Re-exports all Website Engine components as they are created
+- Start with just WECanvas for now
+
+UPDATE /:workspaceId/website-engine placeholder page:
+- Import WECanvas
+- Render it with dummy projectId and pageId for now
+- Route must still not 404
+- No real data connection yet — that comes in Step 9
+
+Show:
+- grapesjs installed
+- WECanvas.tsx created
+- index.ts created
+- placeholder page updated to render canvas
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.
