@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
+import WEExportModal from "./WEExportModal";
 
 interface WECanvasProps {
   projectId: string;
@@ -14,6 +15,8 @@ interface WECanvasProps {
   onSave?: (state: Record<string, any>) => void;
   readOnly?: boolean;
   onOpenVersionHistory?: () => void;
+  projectName?: string;
+  tierAllowsExport?: boolean;
 }
 
 interface CanvasState {
@@ -53,6 +56,8 @@ export default function WECanvas({
   onSave,
   readOnly = false,
   onOpenVersionHistory,
+  projectName = "Project",
+  tierAllowsExport = false,
 }: WECanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
@@ -61,6 +66,7 @@ export default function WECanvas({
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showExport, setShowExport] = useState(false);
   const [editorLoaded, setEditorLoaded] = useState(false);
   const isDirtyRef = useRef(false);
   const autoSaveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -287,6 +293,10 @@ export default function WECanvas({
               History
             </Button>
           )}
+          <Button variant="ghost" size="sm" onClick={() => setShowExport(true)} data-testid="btn-export-code">
+            <Download className="w-4 h-4 mr-1" />
+            Export
+          </Button>
         </div>
 
         <div className="flex items-center gap-2 text-sm" data-testid="we-save-status">
@@ -323,6 +333,15 @@ export default function WECanvas({
       </div>
 
       <BuildProgressOverlay projectId={projectId} venueId={venueId} />
+
+      <WEExportModal
+        isOpen={showExport}
+        onClose={() => setShowExport(false)}
+        projectId={projectId}
+        venueId={venueId}
+        projectName={projectName}
+        tierAllowsExport={tierAllowsExport}
+      />
 
       {showShortcuts && (
         <div className="absolute inset-0 z-50 bg-black/50 flex items-center justify-center" data-testid="we-shortcuts-modal">

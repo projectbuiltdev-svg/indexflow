@@ -1,0 +1,140 @@
+Stop. Ignore everything about T014, blog stubs, and admin routes.
+
+We are building the Website Engine. We are on Main Build Step 12.
+
+Rules still apply. No narration. Ship it.
+
+Main Build Step 12 — Export pipeline and optimiser.
+
+CREATE server/services/we-optimiser.ts
+
+OPTIMISATION PIPELINE:
+Takes raw HTML/CSS/JS and produces two output folders:
+/src/ (readable) and /dist/ (optimised)
+
+EXPORTS:
+
+minifyHtml(html: string): string
+- Remove comments, collapse whitespace
+- Keep inline scripts and styles intact
+
+minifyCss(css: string): string
+- Remove comments, collapse whitespace
+
+minifyJs(js: string): string
+- Remove comments, collapse whitespace
+- Defer all non-critical scripts
+
+optimiseImage(filePath: string): Promise<OptimisedImage>
+- Compress to 85% quality
+- Max width 2000px — downscale if larger, never upscale
+- Convert JPG and PNG to WebP
+- Generate srcset variants: 400w, 800w, 1200w, 1600w
+- Return { original, optimised, srcset[], savings }
+
+inlineCriticalCss(html: string, css: string): string
+- Extract above-fold CSS rules
+- Inline in <head> as <style>
+- Load full stylesheet deferred
+
+generateSrcsets(html: string): string
+- Find all <img> tags
+- Add srcset and sizes attributes
+- Add loading="lazy" to all images except first
+- Add loading="eager" to first image (LCP target)
+
+bundleFonts(html: string, projectId: string,
+  venueId: string): Promise<string>
+- Find all Google Fonts CDN links in html
+- Download each font file
+- Save to we_project_assets as font type
+- Replace CDN links with self-hosted paths
+- Add <link rel="preload"> for each font
+- Return updated html
+
+---
+
+CREATE server/services/we-exporter.ts
+
+EXPORTS:
+
+generateExport(projectId, venueId): Promise<ExportJob>
+- Validates tier — rejects with 403 if solo or trial
+- Reads all pages from we_pages for project
+- Reads all assets from we_project_assets
+- For each page: generates clean HTML from grapejsState
+- Assembles /src/ folder — readable unoptimised output
+- Assembles /dist/ folder — runs full optimiser pipeline
+- Generates sitemap.xml from all public pages
+- Generates robots.txt
+- Generates README.md in projectLanguage — includes:
+  all page names and slugs, access levels, fonts used,
+  third-party scripts, SSL setup guidance,
+  form handler instructions for exported sites
+- Generates optimisation-report.txt — before/after file
+  sizes for all assets
+- Bundles all into ZIP
+- Stores ZIP path in we_deployments record
+- Returns download URL expiring in 24 hours
+- Entire process is async — returns job ID immediately
+
+getExportStatus(jobId, venueId): Promise<ExportJobStatus>
+- Returns { status, downloadUrl, expiresAt, error }
+
+---
+
+CREATE server/routes/we-export.ts
+Register: app.use('/api/we/export', weAuth, weVenue,
+  requireExport)
+
+POST /api/we/export/:projectId
+- Calls generateExport() async
+- Returns 202 with { jobId }
+- Returns 403 if tier does not allow export
+
+GET /api/we/export/:projectId/status/:jobId
+- Calls getExportStatus()
+- Returns job status and download URL when ready
+
+Register route in server/routes.ts
+
+---
+
+CREATE client/src/components/website-engine/WEExportModal.tsx
+
+LAYOUT:
+- Modal triggered by Export button in canvas toolbar
+- Shows tier lock if solo or trial:
+  'Code export is available on Pro and above.'
+  Upgrade button
+- Shows export form if tier allows:
+  Project name confirmation
+  'Generate Export' button
+
+EXPORT FLOW:
+- Click Generate: POST /api/we/export/:projectId
+- Poll GET status every 3 seconds
+- Show progress: 'Generating...' with spinner
+- On complete: show download button
+  'Download ZIP — project-name-export-2026-03-04.zip'
+- Download link expires 24 hours — show expiry time
+- Error state: 'Export failed. Try again.' with retry button
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEExportModal to exports
+
+ADD export button to WECanvas.tsx toolbar:
+- Download icon button
+- Opens WEExportModal
+
+Show:
+- server/services/we-optimiser.ts created
+- server/services/we-exporter.ts created
+- server/routes/we-export.ts created and registered
+- WEExportModal.tsx created
+- WECanvas.tsx updated with export button
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.
