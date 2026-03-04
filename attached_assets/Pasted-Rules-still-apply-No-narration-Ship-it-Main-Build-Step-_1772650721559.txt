@@ -1,0 +1,90 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 7 — Chat panel component.
+
+CREATE client/src/components/website-engine/WEChatPanel.tsx
+
+LAYOUT:
+- Fixed panel — sits alongside canvas, not overlaid
+- Full height of canvas area
+- Width: 320px, collapsible to 40px icon strip
+- Collapse toggle button at top of panel
+
+LANGUAGE REMINDER:
+- Shown at top of panel before first message
+- If projectLanguage is set: green subtle badge
+  'Building in [language flag] [language name]'
+- If projectLanguage not set: yellow warning banner
+  'No language selected. Defaulting to English.'
+  Two buttons: 'Select Language' | 'Continue in English'
+- Warning dismisses permanently once either button clicked
+- Dismissed state stored in localStorage keyed by projectId
+
+BYOK WARNING:
+- If no BYOK key connected: full panel overlay
+  'Connect your AI key to start building'
+  Button: 'Connect API Key' — links to workspace settings
+- Panel is otherwise fully disabled until key connected
+- Check BYOK status via GET /api/we/ai/byok-status/:venueId
+
+PROMPT INPUT:
+- Textarea at bottom of panel — auto-expands up to 5 lines
+- Placeholder: 'Describe a change...' in projectLanguage
+- Send button — arrow icon — disabled during cooldown
+- Ctrl+Enter to send
+- 5 second cooldown after send — send button shows countdown
+  '4s' '3s' '2s' '1s' then re-enables
+- Disabled and greyed out when offline
+
+CONVERSATION HISTORY:
+- Messages displayed in scrollable area above input
+- User messages: right aligned, grey bubble
+- AI messages: left aligned, blue bubble
+- AI messages show diff summary not raw JSON:
+  'Updated hero headline and CTA button text'
+  'Added testimonials section'
+- Error messages: red bubble
+  'Something went wrong. Your canvas was not changed.'
+- Typing indicator: three dots animation while AI responding
+- Auto-scroll to latest message on new message
+- Clear history button at top — clears display only,
+  does not affect version history
+
+MULTI-PAGE CHANGE WARNING:
+- Before AI call — check if instruction affects multiple pages
+- If AI response diff contains changes to more than 1 page:
+  Show modal before applying:
+  'This change will affect [X] pages: [list page names]'
+  Single confirm button: 'Apply to all pages'
+  Cancel button
+  Only applies diff after explicit confirm
+
+OUT-OF-LIBRARY REQUEST:
+- If AI returns action: 'out_of_library' in diff:
+  Show button in chat: 'Open in Code Editor'
+  Clicking opens WECustomCode panel (built in Step 8)
+  Pre-fills panel with HTML/CSS/JS from AI response
+  Yellow badge: 'AI-generated — review before applying'
+
+PROPS:
+interface WEChatPanelProps {
+  projectId: string
+  pageId: string
+  venueId: string
+  projectLanguage: string
+  isOffline: boolean
+  onDiffApplied: (diff: Diff) => void
+  onOpenCodePanel: (code: { html: string, css: string,
+    js: string }) => void
+}
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEChatPanel to exports
+
+Show:
+- WEChatPanel.tsx created
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.
