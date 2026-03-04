@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe, Settings, Inbox } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock, Play, Download, Globe, Settings, Inbox, Users, Lock } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import WEExportModal from "./WEExportModal";
 import WEDeployModal from "./WEDeployModal";
 import WEDomainSettings from "./WEDomainSettings";
 import WEFormSubmissions from "./WEFormSubmissions";
+import WECollabPanel from "./WECollabPanel";
 
 interface WECanvasProps {
   projectId: string;
@@ -81,6 +82,8 @@ export default function WECanvas({
   const [showDeploy, setShowDeploy] = useState(false);
   const [showDomainSettings, setShowDomainSettings] = useState(false);
   const [showSubmissions, setShowSubmissions] = useState(false);
+  const [showCollab, setShowCollab] = useState(false);
+  const [pageLockOwner, setPageLockOwner] = useState<string | null>(null);
   const [editorLoaded, setEditorLoaded] = useState(false);
   const isDirtyRef = useRef(false);
   const autoSaveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -98,6 +101,35 @@ export default function WECanvas({
       return initialState || {};
     }
   }, [initialState]);
+
+  useEffect(() => {
+    if (!projectId || projectId === "0" || !pageId || readOnly) return;
+    let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+
+    (async () => {
+      try {
+        const res = await apiRequest("POST", `/api/we/collab/${projectId}/${pageId}/lock?venueId=${venueId}`, {});
+        const data = await res.json();
+        if (!data.locked) {
+          setPageLockOwner(data.lockedBy);
+        } else {
+          setPageLockOwner(null);
+          heartbeatTimer = setInterval(async () => {
+            try {
+              await apiRequest("POST", `/api/we/collab/${projectId}/${pageId}/heartbeat?venueId=${venueId}`, {});
+            } catch {}
+          }, 5 * 60 * 1000);
+        }
+      } catch {}
+    })();
+
+    return () => {
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      apiRequest("DELETE", `/api/we/collab/${projectId}/${pageId}/lock?venueId=${venueId}`, {}).catch(() => {});
+    };
+  }, [projectId, pageId, venueId, readOnly]);
+
+  const isLockedByOther = !!pageLockOwner;
 
   const doSave = useCallback(async () => {
     if (!isDirtyRef.current || !isOnline) return;
@@ -315,6 +347,9 @@ export default function WECanvas({
             <Globe className="w-4 h-4 mr-1" />
             Publish
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => setShowCollab(true)} data-testid="btn-collab">
+            <Users className="w-4 h-4" />
+          </Button>
           <Button variant="ghost" size="sm" onClick={() => setShowSubmissions(true)} data-testid="btn-submissions">
             <Inbox className="w-4 h-4" />
           </Button>
@@ -341,6 +376,13 @@ export default function WECanvas({
           )}
         </div>
       </div>
+
+      {isLockedByOther && (
+        <div className="px-4 py-2 bg-amber-50 dark:bg-amber-950/30 border-b border-amber-200 dark:border-amber-800 flex items-center gap-2 text-sm text-amber-800 dark:text-amber-200" data-testid="we-lock-banner">
+          <Lock className="w-4 h-4" />
+          <span>{pageLockOwner} is currently editing this page. You can view it but not edit until they leave.</span>
+        </div>
+      )}
 
       <div className="flex-1 overflow-hidden flex justify-center bg-muted/30">
         <div
@@ -394,6 +436,15 @@ export default function WECanvas({
           />
         </div>
       )}
+
+      <WECollabPanel
+        isOpen={showCollab}
+        onClose={() => setShowCollab(false)}
+        projectId={projectId}
+        venueId={venueId}
+        tier={tier}
+        isOnTrial={isOnTrial}
+      />
 
       <WEFormSubmissions
         isOpen={showSubmissions}

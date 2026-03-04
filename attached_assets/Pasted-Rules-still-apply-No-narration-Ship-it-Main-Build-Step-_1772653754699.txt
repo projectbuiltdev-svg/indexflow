@@ -1,0 +1,137 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 16 — Team collaboration and page locks.
+
+CREATE server/routes/we-collab.ts
+Register: app.use('/api/we/collab', weAuth, weVenue,
+  requireCollaboration)
+
+PAGE LOCK SYSTEM:
+
+POST /api/we/collab/:projectId/:pageId/lock
+- Records that userId is editing this page
+- Stores in we_audit_log: action 'page_locked',
+  metadata: { userId, pageId, lockedAt }
+- Returns { locked: true, lockedBy, lockedAt }
+- If already locked by different user:
+  Returns { locked: false, lockedBy, lockedAt }
+  Client shows: '[Name] is currently editing this page'
+
+DELETE /api/we/collab/:projectId/:pageId/lock
+- Releases lock for userId
+- Only the user who locked can release
+- Logs to we_audit_log: action 'page_unlocked'
+
+GET /api/we/collab/:projectId/:pageId/lock
+- Returns current lock status
+- { isLocked, lockedBy, lockedAt, expiresAt }
+- Lock expires after 30 minutes of inactivity
+
+POST /api/we/collab/:projectId/:pageId/heartbeat
+- Extends lock expiry by 30 minutes
+- Called every 5 minutes while user is actively editing
+- Returns { expiresAt }
+
+GET /api/we/collab/:projectId/locks
+- Returns all active page locks for project
+- { locks: [{ pageId, lockedBy, lockedAt, expiresAt }] }
+
+LOCK EXPIRY JOB:
+- Create server/jobs/we-lock-expiry.ts
+- Runs every 5 minutes
+- Finds all locks older than 30 minutes in we_audit_log
+- Releases expired locks
+- Logs expired lock releases
+
+CLIENT PREVIEW LINK SYSTEM:
+
+POST /api/we/collab/:projectId/preview-link
+- No requireCollaboration — available all tiers
+- Generates unique preview token
+- Stores in we_deployments with type: 'preview'
+- Stores expiresAt: 7 days from now
+- URL format: preview.indexflow.cloud/[token]
+  if white label not configured
+  preview.[agencyDomain]/[token]
+  if white label configured
+- Returns { previewUrl, expiresAt, token }
+
+DELETE /api/we/collab/:projectId/preview-link/:token
+- Immediately invalidates token
+- Old link returns 404 after invalidation
+
+GET /api/we/collab/:projectId/preview-link
+- Returns current active preview link if exists
+- Returns null if no active link or all expired
+
+Register route in server/routes.ts
+
+---
+
+CREATE client/src/components/website-engine/WECollabPanel.tsx
+
+LAYOUT:
+- Slide-in panel from right
+- Width: 360px
+- Header: 'Collaboration'
+- Two sections: Team | Client Preview
+
+TEAM SECTION:
+- Only shown on Pro and above paid
+- Solo and trial: lock state
+  'Team collaboration is available on Pro and above.'
+  Upgrade button
+- Active collaborators list:
+  Shows all users currently in this project
+  Each user: avatar initial, name, role badge, 
+  current page they are editing
+- Page lock indicators:
+  Each locked page shows lock icon + user name
+  'John is editing Home'
+  'Sarah is editing About'
+- If current user tries to open locked page:
+  Amber banner: '[Name] is currently editing this page.
+  You can view it but not edit until they leave.'
+  'Open read-only' button
+
+CLIENT PREVIEW SECTION:
+- Available all tiers including trial
+- Current preview link shown if active:
+  Full URL with copy button
+  Expiry: 'Expires in 5 days'
+  'Regenerate link' button — invalidates old link
+  'Disable link' button — immediate invalidation
+- If no active link:
+  'Generate Preview Link' button
+- Link info:
+  'Share this link with your client. No login required.
+   They can view the site and leave comments.
+   Link expires after 7 days.'
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WECollabPanel to exports
+
+ADD collaboration button to WECanvas.tsx toolbar:
+- Users icon button
+- Opens WECollabPanel
+- Shows active user count badge if > 1 user in project
+
+LOCK ENFORCEMENT IN WECanvas.tsx:
+- On canvas mount: call POST lock endpoint for current page
+- On canvas unmount: call DELETE lock endpoint
+- Every 5 minutes: call POST heartbeat endpoint
+- If lock rejected (another user has lock):
+  Canvas renders in readOnly mode
+  Amber banner at top: '[Name] is editing this page'
+  All editing disabled — blocks unselectable
+
+Show:
+- server/routes/we-collab.ts created and registered
+- server/jobs/we-lock-expiry.ts created
+- WECollabPanel.tsx created
+- WECanvas.tsx updated with lock logic and collab button
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.
