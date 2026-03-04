@@ -1,0 +1,81 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 10 — Version history component.
+
+CREATE client/src/components/website-engine/WEVersionHistory.tsx
+
+LAYOUT:
+- Slide-in panel from right side — same pattern as WECustomCode
+- Width: 400px
+- Overlays canvas — does not push layout
+- Close button top right (X)
+- Panel header: 'Version History'
+- Subtitle: current page name
+
+VERSION LIST:
+- Fetches from GET /api/we/versions/:projectId/:pageId
+- Each row shows:
+  Version number (v1, v2, v3...)
+  Timestamp: 'Today at 14:32' or '2 Mar at 09:15'
+  Created by: user display name or 'Auto-save' or 'AI change'
+  Action badge if available: 'AI change' | 'Manual save' |
+    'Auto-save' | 'Restored from v12'
+- Latest version pinned at top with 'Current' badge
+- Infinite scroll or load more button — versions load 20 at a time
+- Empty state: 'No version history yet.
+  Versions are created on every save and AI change.'
+
+VERSION PREVIEW:
+- Click any version row: loads that version grapejsState
+  into a read-only preview canvas below the list
+- Preview canvas is read-only — cannot edit
+- Preview shows at 50% height of panel
+- 'This is a preview — your canvas has not changed'
+  shown in blue info bar above preview
+
+RESTORE FLOW:
+- Each version row has 'Restore' button — revealed on hover
+- Click restore: shows confirmation modal
+  'Restore version [vX]?
+   Your current version will be saved as a new version first.
+   This cannot be undone.'
+  Two buttons: 'Restore' | 'Cancel'
+- On confirm:
+  1. Creates new version checkpoint of current state first
+  2. Calls POST /api/we/versions/:projectId/:pageId/:versionId/restore
+  3. Closes history panel
+  4. Canvas loads restored state
+  5. Toast: 'Restored to version [vX]'
+
+CURRENT SESSION NOTE:
+- Info text at top of panel:
+  'Ctrl+Z undoes changes within your current session.
+   Version history saves snapshots across all sessions.'
+
+PROPS:
+interface WEVersionHistoryProps {
+  isOpen: boolean
+  onClose: () => void
+  projectId: string
+  pageId: string
+  venueId: string
+  projectLanguage: string
+  onRestored: (newState: object) => void
+}
+
+ADD version history trigger to WECanvas.tsx:
+- Clock icon button in canvas toolbar
+- Opens WEVersionHistory panel
+- Passes current projectId, pageId, venueId
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEVersionHistory to exports
+
+Show:
+- WEVersionHistory.tsx created
+- WECanvas.tsx updated with clock icon trigger
+- index.ts updated
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.

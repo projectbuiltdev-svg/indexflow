@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Loader2, Check, AlertTriangle, X, Wifi, WifiOff, Clock } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
 interface WECanvasProps {
@@ -12,6 +12,7 @@ interface WECanvasProps {
   onStateChange?: (newState: Record<string, any>) => void;
   onSave?: (state: Record<string, any>) => void;
   readOnly?: boolean;
+  onOpenVersionHistory?: () => void;
 }
 
 interface CanvasState {
@@ -50,6 +51,7 @@ export default function WECanvas({
   onStateChange,
   onSave,
   readOnly = false,
+  onOpenVersionHistory,
 }: WECanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
@@ -275,6 +277,15 @@ export default function WECanvas({
             <Smartphone className="w-4 h-4 mr-1" />
             Mobile
           </Button>
+        </div>
+
+        <div className="flex items-center gap-2 text-sm">
+          {onOpenVersionHistory && (
+            <Button variant="ghost" size="sm" onClick={onOpenVersionHistory} data-testid="btn-version-history">
+              <Clock className="w-4 h-4 mr-1" />
+              History
+            </Button>
+          )}
         </div>
 
         <div className="flex items-center gap-2 text-sm" data-testid="we-save-status">
