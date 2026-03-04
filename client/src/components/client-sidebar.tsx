@@ -53,6 +53,7 @@ import {
   Sun,
   LogOut,
   ChevronDown,
+  Settings,
 } from "lucide-react";
 
 interface NavItem {
@@ -131,6 +132,7 @@ const navGroups: NavGroup[] = [
     collapsible: true,
     items: [
       { title: "Website Engine", path: "/website-engine", icon: Globe },
+      { title: "White Label Settings", path: "/website-engine/settings", icon: Settings },
     ],
   },
   {

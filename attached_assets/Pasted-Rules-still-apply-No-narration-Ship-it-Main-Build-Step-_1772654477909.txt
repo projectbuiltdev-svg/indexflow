@@ -1,0 +1,147 @@
+Rules still apply. No narration. Ship it.
+
+Main Build Step 18 — White label settings and SMTP.
+
+CREATE server/routes/we-whitelabel.ts
+Register: app.use('/api/we/whitelabel', weAuth, weVenue,
+  requireWhiteLabel)
+
+ROUTES:
+
+GET /api/we/whitelabel
+- Returns current white label config for venueId
+- { agencyName, agencyLogo, brandColours,
+  stagingDomain, smtpConfigured, fromName, fromEmail }
+- Never returns SMTP password or credentials
+
+POST /api/we/whitelabel/config
+- Updates agency name, logo, brand colours
+- Stores in workspace settings
+- Logs to we_audit_log
+
+POST /api/we/whitelabel/smtp
+- Body: { host, port, username, password,
+  fromName, fromEmail }
+- Validates all fields present
+- Stores credentials in HashiCorp Vault
+  keyed by venueId
+- Does NOT save until test passes
+- Triggers test email automatically before saving
+- Returns { testSent: true } — client must confirm
+  test received before credentials saved
+
+POST /api/we/whitelabel/smtp/confirm
+- Called after agency confirms test email received
+- Saves SMTP credentials to Vault
+- Logs to we_audit_log: action 'smtp_configured'
+  never logs credentials
+
+POST /api/we/whitelabel/smtp/test
+- Sends test email using current stored credentials
+- To: authenticated user's email address
+- Subject: 'Test email from [agency name]'
+- Returns { sent: true } or { error: string }
+
+DELETE /api/we/whitelabel/smtp
+- Removes SMTP credentials from Vault
+- Reverts to IndexFlow email domain
+- Logs to we_audit_log
+
+POST /api/we/whitelabel/staging-domain
+- Body: { domain } e.g. staging.boltagency.com
+- Validates domain format
+- Returns DNS configuration instructions:
+  { cnameRecord, cnameTarget, txtRecord, txtValue }
+- Stores pending staging domain
+- Does not activate until DNS verified
+
+POST /api/we/whitelabel/staging-domain/verify
+- Checks CNAME record points to IndexFlow
+- On success: activates staging domain
+- All existing test URLs migrate to new staging domain
+- Logs to we_audit_log
+
+DELETE /api/we/whitelabel/staging-domain
+- Removes custom staging domain
+- Reverts all URLs to indexflow.cloud
+- Logs to we_audit_log
+
+Register route in server/routes.ts
+
+---
+
+CREATE client/src/components/website-engine/WEWhiteLabel.tsx
+
+LAYOUT:
+- Full settings page — not modal
+- Accessible from /dashboard/website-engine/settings
+- Four sections: Branding | Email | Staging Domain |
+  Preview
+
+TIER GATE:
+- If Solo or trial: full page lock state
+  'White label is available on Pro and above.'
+  Upgrade button
+  Do not render any settings
+
+BRANDING SECTION:
+- Agency name: text input
+- Agency logo: file upload — JPG/PNG/SVG max 2MB
+  Shows current logo preview
+- Brand colours: two colour pickers
+  Primary colour, Secondary colour
+- Save button — PATCH /api/we/whitelabel/config
+
+EMAIL SECTION:
+- Current status: 
+  If not configured: amber badge 'Using IndexFlow email'
+  If configured: green badge 'Using your email domain'
+- SMTP form:
+  Host, Port, Username, Password (masked),
+  From Name, From Email
+- 'Send Test Email' button
+  Triggers POST /api/we/whitelabel/smtp
+  Shows: 'Test email sent to [user email].
+  Check your inbox then confirm below.'
+  Confirm button appears: 'Yes, I received the test email'
+  On confirm: POST /api/we/whitelabel/smtp/confirm
+  Success: green badge updates
+- 'Remove SMTP' button if configured
+  Confirmation required
+
+STAGING DOMAIN SECTION:
+- Current staging URL shown:
+  If white label active: staging.agencyname.com
+  If not: username.indexflow.cloud
+- Connect custom domain form:
+  Input: staging domain
+  'Connect' button
+- DNS instructions panel shown after connect:
+  Step by step — CNAME record details
+  Copy buttons for record values
+  Polling indicator — checks every 60 seconds
+  Auto-updates when verified
+
+PREVIEW SECTION:
+- Shows what client sees:
+  Preview URL format
+  Email sender name and address
+  Export ZIP filename format
+- Live preview updates as settings change
+
+UPDATE client/src/components/website-engine/index.ts
+- Add WEWhiteLabel to exports
+
+ADD settings link in dashboard website engine section:
+- 'White Label Settings' link in website engine nav
+- Route: /dashboard/website-engine/settings
+
+Show:
+- server/routes/we-whitelabel.ts created and registered
+- WEWhiteLabel.tsx created
+- index.ts updated
+- Settings link added to dashboard nav
+- tsc: 0 errors
+- tests: 482 passing
+
+Stop. Wait for confirmation.

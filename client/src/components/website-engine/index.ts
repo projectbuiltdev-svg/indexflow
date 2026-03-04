@@ -9,3 +9,4 @@ export { default as WEExportModal } from "./WEExportModal";
 export { default as WEFormSubmissions } from "./WEFormSubmissions";
 export { default as WEPageManager } from "./WEPageManager";
 export { default as WEVersionHistory } from "./WEVersionHistory";
+export { default as WEWhiteLabel } from "./WEWhiteLabel";
