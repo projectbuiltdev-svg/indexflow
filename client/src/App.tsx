@@ -404,6 +404,10 @@ export function AppRoutes() {
         <Route path="/admin/widget-config">{() => <AdminRoute component={AdminWidgetConfig} permission="widgets" />}</Route>
 
         {/* Bare path redirects — prepend saved workspace ID */}
+        <Route path="/content-engine" component={WorkspaceRedirect} />
+        <Route path="/website-engine" component={WorkspaceRedirect} />
+        <Route path="/website-engine/:rest*" component={WorkspaceRedirect} />
+        <Route path="/pseo/:rest*" component={WorkspaceRedirect} />
         <Route path="/content/:rest*" component={WorkspaceRedirect} />
         <Route path="/seo/:rest*" component={WorkspaceRedirect} />
         <Route path="/rank-tracker/:rest*" component={WorkspaceRedirect} />
