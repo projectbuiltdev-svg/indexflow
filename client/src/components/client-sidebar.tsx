@@ -108,31 +108,11 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Content Engine",
-    collapsible: true,
+    label: "Engines",
     items: [
-      { title: "Posts", path: "/content/posts", icon: FileText },
-      { title: "Pages", path: "/content/pages", icon: File },
-      { title: "Domains", path: "/content/domains", icon: Globe },
-      { title: "SEO", path: "/seo/health", icon: HeartPulse },
-      { title: "Links", path: "/seo/links", icon: LinkIcon },
-      { title: "CMS", path: "/seo/cms", icon: RefreshCw },
-      { title: "Reports", path: "/seo/reports", icon: ClipboardList },
-    ],
-  },
-  {
-    label: "pSEO Engine",
-    collapsible: true,
-    items: [
-      { title: "Campaigns", path: "/pseo/campaigns", icon: Megaphone },
-    ],
-  },
-  {
-    label: "Website Engine",
-    collapsible: true,
-    items: [
+      { title: "Content Engine", path: "/content-engine", icon: FileText },
+      { title: "pSEO Engine", path: "/pseo/campaigns", icon: Megaphone },
       { title: "Website Engine", path: "/website-engine", icon: Globe },
-      { title: "White Label Settings", path: "/website-engine/settings", icon: Settings },
     ],
   },
   {
