@@ -232,6 +232,10 @@ export function ClientSidebar() {
                   className="flex w-full items-center gap-1 px-2 py-1.5 text-sm font-medium text-sidebar-foreground/70 cursor-pointer"
                   data-testid={`trigger-${group.label.toLowerCase().replace(/\s+/g, "-")}`}
                 >
+                  {group.label === "Engage" && <MessageCircle className="h-4 w-4 shrink-0 mr-1" />}
+                  {group.label === "Track" && <BarChart3 className="h-4 w-4 shrink-0 mr-1" />}
+                  {group.label === "Connect" && <Sparkles className="h-4 w-4 shrink-0 mr-1" />}
+                  {group.label === "Workspace" && <Settings className="h-4 w-4 shrink-0 mr-1" />}
                   {group.label}
                   <ChevronDown className="ml-auto h-3 w-3 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </CollapsibleTrigger>
