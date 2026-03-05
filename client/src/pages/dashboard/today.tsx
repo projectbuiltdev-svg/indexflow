@@ -161,25 +161,25 @@ const defaultShortcuts: QuickItem[] = [
 ];
 
 const shortcutColors: Record<string, { bg: string; icon: string }> = {
-  "content-engine": { bg: "bg-sky-500/[0.04] dark:bg-sky-400/[0.05]", icon: "text-sky-500/80 dark:text-sky-400/70" },
-  "rank-tracker/track-keywords": { bg: "bg-teal-500/[0.04] dark:bg-teal-400/[0.05]", icon: "text-teal-500/80 dark:text-teal-400/70" },
-  "crm/pipeline": { bg: "bg-amber-500/[0.04] dark:bg-amber-400/[0.05]", icon: "text-amber-500/80 dark:text-amber-400/70" },
-  "widget/monitoring": { bg: "bg-purple-500/[0.04] dark:bg-purple-400/[0.05]", icon: "text-purple-500/80 dark:text-purple-400/70" },
-  "analytics/overview": { bg: "bg-rose-500/[0.04] dark:bg-rose-400/[0.05]", icon: "text-rose-400/80 dark:text-rose-400/70" },
-  "twilio/call-logs": { bg: "bg-sky-500/[0.04] dark:bg-sky-400/[0.05]", icon: "text-sky-500/80 dark:text-sky-400/70" },
-  "ai-training/knowledge-base": { bg: "bg-teal-500/[0.04] dark:bg-teal-400/[0.05]", icon: "text-teal-500/80 dark:text-teal-400/70" },
-  "rank-tracker/google-search-console": { bg: "bg-amber-500/[0.04] dark:bg-amber-400/[0.05]", icon: "text-amber-500/80 dark:text-amber-400/70" },
-  "connections/payments": { bg: "bg-purple-500/[0.04] dark:bg-purple-400/[0.05]", icon: "text-purple-500/80 dark:text-purple-400/70" },
-  "connections/twilio": { bg: "bg-rose-500/[0.04] dark:bg-rose-400/[0.05]", icon: "text-rose-400/80 dark:text-rose-400/70" },
-  "support/documentation": { bg: "bg-sky-500/[0.03] dark:bg-sky-400/[0.04]", icon: "text-sky-500/70 dark:text-sky-400/60" },
-  "crm/contacts": { bg: "bg-teal-500/[0.03] dark:bg-teal-400/[0.04]", icon: "text-teal-500/70 dark:text-teal-400/60" },
-  "support/tickets": { bg: "bg-amber-500/[0.03] dark:bg-amber-400/[0.04]", icon: "text-amber-500/70 dark:text-amber-400/60" },
-  "rank-tracker/local-search-grid": { bg: "bg-purple-500/[0.03] dark:bg-purple-400/[0.04]", icon: "text-purple-500/70 dark:text-purple-400/60" },
-  "twilio/sms": { bg: "bg-rose-500/[0.03] dark:bg-rose-400/[0.04]", icon: "text-rose-400/70 dark:text-rose-400/60" },
-  "widget/code": { bg: "bg-sky-500/[0.03] dark:bg-sky-400/[0.04]", icon: "text-sky-500/70 dark:text-sky-400/60" },
+  "content-engine": { bg: "bg-sky-500/[0.04] dark:bg-sky-400/[0.05]", icon: "text-sky-500/40 dark:text-sky-400/40" },
+  "rank-tracker/track-keywords": { bg: "bg-teal-500/[0.04] dark:bg-teal-400/[0.05]", icon: "text-teal-500/40 dark:text-teal-400/40" },
+  "crm/pipeline": { bg: "bg-amber-500/[0.04] dark:bg-amber-400/[0.05]", icon: "text-amber-500/40 dark:text-amber-400/40" },
+  "widget/monitoring": { bg: "bg-purple-500/[0.04] dark:bg-purple-400/[0.05]", icon: "text-purple-500/40 dark:text-purple-400/40" },
+  "analytics/overview": { bg: "bg-rose-500/[0.04] dark:bg-rose-400/[0.05]", icon: "text-rose-500/40 dark:text-rose-400/40" },
+  "twilio/call-logs": { bg: "bg-sky-500/[0.04] dark:bg-sky-400/[0.05]", icon: "text-sky-500/40 dark:text-sky-400/40" },
+  "ai-training/knowledge-base": { bg: "bg-teal-500/[0.04] dark:bg-teal-400/[0.05]", icon: "text-teal-500/40 dark:text-teal-400/40" },
+  "rank-tracker/google-search-console": { bg: "bg-amber-500/[0.04] dark:bg-amber-400/[0.05]", icon: "text-amber-500/40 dark:text-amber-400/40" },
+  "connections/payments": { bg: "bg-purple-500/[0.04] dark:bg-purple-400/[0.05]", icon: "text-purple-500/40 dark:text-purple-400/40" },
+  "connections/twilio": { bg: "bg-rose-500/[0.04] dark:bg-rose-400/[0.05]", icon: "text-rose-500/40 dark:text-rose-400/40" },
+  "support/documentation": { bg: "bg-sky-500/[0.03] dark:bg-sky-400/[0.04]", icon: "text-sky-500/40 dark:text-sky-400/40" },
+  "crm/contacts": { bg: "bg-teal-500/[0.03] dark:bg-teal-400/[0.04]", icon: "text-teal-500/40 dark:text-teal-400/40" },
+  "support/tickets": { bg: "bg-amber-500/[0.03] dark:bg-amber-400/[0.04]", icon: "text-amber-500/40 dark:text-amber-400/40" },
+  "rank-tracker/local-search-grid": { bg: "bg-purple-500/[0.03] dark:bg-purple-400/[0.04]", icon: "text-purple-500/40 dark:text-purple-400/40" },
+  "twilio/sms": { bg: "bg-rose-500/[0.03] dark:bg-rose-400/[0.04]", icon: "text-rose-500/40 dark:text-rose-400/40" },
+  "widget/code": { bg: "bg-sky-500/[0.03] dark:bg-sky-400/[0.04]", icon: "text-sky-500/40 dark:text-sky-400/40" },
 };
 
-const defaultColor = { bg: "bg-sky-500/[0.03] dark:bg-sky-400/[0.04]", icon: "text-sky-500/60 dark:text-sky-400/50" };
+const defaultColor = { bg: "bg-sky-500/[0.03] dark:bg-sky-400/[0.04]", icon: "text-sky-500/40 dark:text-sky-400/40" };
 
 const STORAGE_KEY = "indexflow_quick_access";
 const STORAGE_VERSION = "2";
