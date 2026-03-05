@@ -73,6 +73,9 @@ const navGroups: NavGroup[] = [
     label: "Main",
     items: [
       { title: "Dashboard Overview", path: "/today", icon: LayoutDashboard },
+      { title: "Content Engine", path: "/content-engine", icon: FileText },
+      { title: "pSEO Engine", path: "/pseo/campaigns", icon: Megaphone },
+      { title: "Website Engine", path: "/website-engine", icon: Globe },
       { title: "Calls", path: "/twilio/call-logs", icon: PhoneCall },
       { title: "Analytics", path: "/analytics/overview", icon: BarChart3 },
       { title: "Export Data", path: "/analytics/export", icon: Download },
@@ -105,14 +108,6 @@ const navGroups: NavGroup[] = [
       { title: "Image Banks", path: "/connections/image-banks", icon: ImageIcon },
       { title: "Payments", path: "/connections/payments", icon: CreditCard },
       { title: "Twilio Account", path: "/connections/twilio", icon: Phone },
-    ],
-  },
-  {
-    label: "Engines",
-    items: [
-      { title: "Content Engine", path: "/content-engine", icon: FileText },
-      { title: "pSEO Engine", path: "/pseo/campaigns", icon: Megaphone },
-      { title: "Website Engine", path: "/website-engine", icon: Globe },
     ],
   },
   {
