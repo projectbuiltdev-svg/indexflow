@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useState, useCallback } from "react";
 import {
   FileText,
   BarChart3,
@@ -13,14 +14,36 @@ import {
   Brain,
   MapPin,
   Receipt,
-  ArrowUpRight,
   ArrowRight,
   LifeBuoy,
-  Zap,
   Clock,
   CheckCircle2,
-  AlertTriangle,
   ExternalLink,
+  Pencil,
+  X,
+  Plus,
+  LayoutDashboard,
+  Download,
+  Palette,
+  Wallet,
+  ListChecks,
+  Mic,
+  MessageCircle,
+  Sparkles,
+  ImageIcon,
+  CreditCard,
+  Phone,
+  Kanban,
+  Contact,
+  Cpu,
+  BookOpen,
+  Monitor,
+  Activity,
+  Code,
+  HeartPulse,
+  LinkIcon,
+  RefreshCw,
+  ClipboardList,
 } from "lucide-react";
 import { Link } from "wouter";
 import { useWorkspace } from "@/lib/workspace-context";
@@ -45,12 +68,143 @@ function useWorkspaceStats(workspaceId: string | undefined) {
 const cardShadow = "shadow-[0_2px_12px_-2px_rgba(0,0,0,0.06),0_1px_4px_-1px_rgba(0,0,0,0.04)]";
 const cardHover = "hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1),0_2px_8px_-2px_rgba(0,0,0,0.06)]";
 
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  LayoutDashboard, FileText, Megaphone, Globe, Kanban, Contact, PhoneCall, Activity, Code,
+  BarChart3, TrendingUp, MapPin, Monitor, Download, Sparkles, ImageIcon, CreditCard, Phone,
+  Mic, MessageCircle, Brain, Cpu, Users, Palette, Wallet, ListChecks, BookOpen, LifeBuoy,
+  HeartPulse, LinkIcon, RefreshCw, ClipboardList, Search, Receipt, MessageSquare, ExternalLink,
+};
+
+interface QuickItem {
+  label: string;
+  icon: string;
+  path: string;
+}
+
+const allAvailable: { group: string; items: QuickItem[] }[] = [
+  {
+    group: "Build",
+    items: [
+      { label: "Content Engine", icon: "FileText", path: "content-engine" },
+      { label: "pSEO Engine", icon: "Megaphone", path: "pseo/campaigns" },
+      { label: "Website Engine", icon: "Globe", path: "website-engine" },
+    ],
+  },
+  {
+    group: "Engage",
+    items: [
+      { label: "Pipeline", icon: "Kanban", path: "crm/pipeline" },
+      { label: "Contacts", icon: "Contact", path: "crm/contacts" },
+      { label: "Calls", icon: "PhoneCall", path: "twilio/call-logs" },
+      { label: "Website Widget (AI)", icon: "Activity", path: "widget/monitoring" },
+      { label: "Widget Code Embed", icon: "Code", path: "widget/code" },
+    ],
+  },
+  {
+    group: "Track",
+    items: [
+      { label: "Analytics", icon: "BarChart3", path: "analytics/overview" },
+      { label: "Track Keywords", icon: "TrendingUp", path: "rank-tracker/track-keywords" },
+      { label: "Local Search Grid", icon: "MapPin", path: "rank-tracker/local-search-grid" },
+      { label: "Search Console", icon: "Monitor", path: "rank-tracker/google-search-console" },
+      { label: "Export Data", icon: "Download", path: "analytics/export" },
+    ],
+  },
+  {
+    group: "Connect",
+    items: [
+      { label: "AI Providers", icon: "Sparkles", path: "connections/ai-providers" },
+      { label: "Image Banks", icon: "ImageIcon", path: "connections/image-banks" },
+      { label: "Payments", icon: "CreditCard", path: "connections/payments" },
+      { label: "Twilio Account", icon: "Phone", path: "connections/twilio" },
+      { label: "Voice Settings", icon: "Mic", path: "twilio/voice" },
+      { label: "SMS Settings", icon: "MessageCircle", path: "twilio/sms" },
+      { label: "Knowledge Base", icon: "Brain", path: "ai-training/knowledge-base" },
+      { label: "Channels", icon: "Cpu", path: "ai-training/channels" },
+    ],
+  },
+  {
+    group: "Workspace",
+    items: [
+      { label: "Team & Invites", icon: "Users", path: "settings/team" },
+      { label: "White Label", icon: "Palette", path: "settings/white-label" },
+      { label: "Billing & Usage", icon: "Wallet", path: "settings/billing" },
+      { label: "Setup Guide", icon: "ListChecks", path: "settings/setup-guide" },
+    ],
+  },
+  {
+    group: "Support",
+    items: [
+      { label: "Documentation", icon: "BookOpen", path: "support/documentation" },
+      { label: "Support Tickets", icon: "LifeBuoy", path: "support/tickets" },
+    ],
+  },
+];
+
+const defaultShortcuts: QuickItem[] = [
+  { label: "Content Engine", icon: "FileText", path: "content-engine" },
+  { label: "Track Keywords", icon: "TrendingUp", path: "rank-tracker/track-keywords" },
+  { label: "Pipeline", icon: "Kanban", path: "crm/pipeline" },
+  { label: "Local Search Grid", icon: "MapPin", path: "rank-tracker/local-search-grid" },
+  { label: "Website Widget (AI)", icon: "Activity", path: "widget/monitoring" },
+  { label: "Analytics", icon: "BarChart3", path: "analytics/overview" },
+  { label: "Calls", icon: "PhoneCall", path: "twilio/call-logs" },
+  { label: "Knowledge Base", icon: "Brain", path: "ai-training/knowledge-base" },
+  { label: "Search Console", icon: "Monitor", path: "rank-tracker/google-search-console" },
+  { label: "Payments", icon: "CreditCard", path: "connections/payments" },
+  { label: "Twilio Account", icon: "Phone", path: "connections/twilio" },
+  { label: "Documentation", icon: "BookOpen", path: "support/documentation" },
+  { label: "Contacts", icon: "Contact", path: "crm/contacts" },
+  { label: "Support Tickets", icon: "LifeBuoy", path: "support/tickets" },
+];
+
+const STORAGE_KEY = "indexflow_quick_access";
+
+function loadShortcuts(): QuickItem[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return defaultShortcuts;
+}
+
+function saveShortcuts(items: QuickItem[]) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
+function QuickIcon({ name, className }: { name: string; className?: string }) {
+  const Icon = iconMap[name] || FileText;
+  return <Icon className={className} />;
+}
+
 export default function Today() {
   const { selectedWorkspace } = useWorkspace();
-  const workspaceName = selectedWorkspace?.name || "Your Workspace";
   const workspaceId = selectedWorkspace?.id;
   const href = (path: string) => workspaceId ? `/${workspaceId}/${path}` : `/${path}`;
   const { postCount, publishedCount, draftCount, contactCount, invoiceCount, keywordCount, isLoading } = useWorkspaceStats(workspaceId);
+
+  const [shortcuts, setShortcuts] = useState<QuickItem[]>(loadShortcuts);
+  const [editing, setEditing] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
+
+  const removeShortcut = useCallback((path: string) => {
+    setShortcuts(prev => {
+      const next = prev.filter(s => s.path !== path);
+      saveShortcuts(next);
+      return next;
+    });
+  }, []);
+
+  const addShortcut = useCallback((item: QuickItem) => {
+    setShortcuts(prev => {
+      if (prev.some(s => s.path === item.path)) return prev;
+      const next = [...prev, item];
+      saveShortcuts(next);
+      return next;
+    });
+  }, []);
+
+  const activePaths = new Set(shortcuts.map(s => s.path));
 
   const engines = [
     { name: "Content Engine", desc: "AI blog posts, pages, SEO", icon: FileText, path: "content-engine", stat: `${postCount} posts`, accent: "from-amber-50 to-yellow-50 dark:from-amber-950/30 dark:to-yellow-950/20", iconBg: "bg-amber-100 dark:bg-amber-900/40", iconColor: "text-amber-600 dark:text-amber-400" },
@@ -64,23 +218,6 @@ export default function Today() {
     { label: "Keywords", value: keywordCount, icon: TrendingUp, color: "text-sky-500" },
     { label: "Contacts", value: contactCount, icon: Users, color: "text-violet-500" },
     { label: "Invoices", value: invoiceCount, icon: Receipt, color: "text-rose-400" },
-  ];
-
-  const shortcuts = [
-    { label: "Content Engine", icon: FileText, path: "content-engine" },
-    { label: "Track Keywords", icon: TrendingUp, path: "rank-tracker/track-keywords" },
-    { label: "CRM Pipeline", icon: BarChart3, path: "crm/pipeline" },
-    { label: "Local Grid", icon: MapPin, path: "rank-tracker/local-search-grid" },
-    { label: "AI Widget", icon: MessageSquare, path: "widget/monitoring" },
-    { label: "Analytics", icon: BarChart3, path: "analytics/overview" },
-    { label: "Call Logs", icon: PhoneCall, path: "twilio/call-logs" },
-    { label: "Knowledge Base", icon: Brain, path: "ai-training/knowledge-base" },
-    { label: "Search Console", icon: Search, path: "rank-tracker/google-search-console" },
-    { label: "Payments", icon: Receipt, path: "connections/payments" },
-    { label: "Twilio", icon: PhoneCall, path: "connections/twilio" },
-    { label: "Documentation", icon: ExternalLink, path: "support/documentation" },
-    { label: "Contacts", icon: Users, path: "crm/contacts" },
-    { label: "Support", icon: LifeBuoy, path: "support/tickets" },
   ];
 
   const setupSteps = [
@@ -132,15 +269,94 @@ export default function Today() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <Card className={`lg:col-span-8 ${cardShadow} border-0 bg-white dark:bg-card`} data-testid="card-shortcuts">
           <CardContent className="p-5">
-            <h2 className="text-sm font-semibold mb-4">Quick Access</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold">Quick Access</h2>
+              <div className="flex items-center gap-1">
+                {editing && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-xs"
+                    onClick={() => setAddOpen(!addOpen)}
+                    data-testid="button-add-shortcut"
+                  >
+                    <Plus className="w-3.5 h-3.5 mr-1" />
+                    Add
+                  </Button>
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2 text-xs"
+                  onClick={() => { setEditing(!editing); setAddOpen(false); }}
+                  data-testid="button-edit-shortcuts"
+                >
+                  {editing ? (
+                    <>Done</>
+                  ) : (
+                    <><Pencil className="w-3.5 h-3.5 mr-1" />Edit</>
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            {addOpen && editing && (
+              <div className="mb-4 border border-border rounded-xl p-4 bg-gray-50/50 dark:bg-muted/20" data-testid="panel-add-shortcuts">
+                <p className="text-xs font-medium text-muted-foreground mb-3">Add from sidebar</p>
+                <div className="space-y-3 max-h-60 overflow-y-auto">
+                  {allAvailable.map((group) => {
+                    const available = group.items.filter(i => !activePaths.has(i.path));
+                    if (available.length === 0) return null;
+                    return (
+                      <div key={group.group}>
+                        <p className="text-[11px] font-semibold text-muted-foreground/60 uppercase tracking-wider mb-1.5">{group.group}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {available.map((item) => (
+                            <button
+                              key={item.path}
+                              onClick={() => addShortcut(item)}
+                              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-card border border-border hover:border-foreground/20 transition-colors"
+                              data-testid={`button-add-${item.path.replace(/\//g, "-")}`}
+                            >
+                              <Plus className="w-3 h-3 text-muted-foreground" />
+                              <QuickIcon name={item.icon} className="w-3.5 h-3.5 text-muted-foreground" />
+                              {item.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {shortcuts.map((s) => (
-                <Link key={s.label} href={href(s.path)}>
-                  <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-muted/30 hover:bg-gray-100 dark:hover:bg-muted/50 transition-colors cursor-pointer shadow-sm`} data-testid={`shortcut-${s.label.toLowerCase().replace(/\s+/g, "-")}`}>
-                    <s.icon className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <span className="text-sm truncate">{s.label}</span>
-                  </div>
-                </Link>
+                <div key={s.path} className="relative">
+                  {editing && (
+                    <button
+                      onClick={() => removeShortcut(s.path)}
+                      className="absolute -top-1.5 -right-1.5 z-10 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors"
+                      data-testid={`button-remove-${s.path.replace(/\//g, "-")}`}
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                  {editing ? (
+                    <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-muted/30 shadow-sm ring-1 ring-border/50 animate-in" data-testid={`shortcut-${s.label.toLowerCase().replace(/\s+/g, "-")}`}>
+                      <QuickIcon name={s.icon} className="w-4 h-4 text-muted-foreground shrink-0" />
+                      <span className="text-sm truncate">{s.label}</span>
+                    </div>
+                  ) : (
+                    <Link href={href(s.path)}>
+                      <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-muted/30 hover:bg-gray-100 dark:hover:bg-muted/50 transition-colors cursor-pointer shadow-sm" data-testid={`shortcut-${s.label.toLowerCase().replace(/\s+/g, "-")}`}>
+                        <QuickIcon name={s.icon} className="w-4 h-4 text-muted-foreground shrink-0" />
+                        <span className="text-sm truncate">{s.label}</span>
+                      </div>
+                    </Link>
+                  )}
+                </div>
               ))}
             </div>
           </CardContent>
