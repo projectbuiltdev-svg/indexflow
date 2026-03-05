@@ -229,7 +229,7 @@ export function ClientSidebar() {
             {group.collapsible ? (
               <Collapsible defaultOpen={false} className="group/collapsible">
                 <CollapsibleTrigger
-                  className="flex w-full items-center gap-1 px-2 py-1.5 text-xs font-medium text-sidebar-foreground/70 cursor-pointer"
+                  className="flex w-full items-center gap-1 px-2 py-1.5 text-sm font-medium text-sidebar-foreground/70 cursor-pointer"
                   data-testid={`trigger-${group.label.toLowerCase().replace(/\s+/g, "-")}`}
                 >
                   {group.label}
