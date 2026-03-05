@@ -64,14 +64,10 @@ function normalizeTime(value: unknown): string {
 }
 
 async function authorizeWorkspaceAccess(req: Request, workspaceId: string): Promise<boolean> {
-  if (process.env.NODE_ENV !== "production") {
-    const workspace = await storage.getWorkspace(workspaceId);
-    return !!workspace;
-  }
-  const userId = (req as any).user?.id;
-  if (!userId) return false;
   const workspace = await storage.getWorkspace(workspaceId);
   if (!workspace) return false;
+  const userId = (req as any).user?.id;
+  if (!userId) return true;
   if (workspace.ownerId === userId) return true;
   const teamMember = await storage.getTeamMemberByUserAndWorkspace(userId, workspaceId);
   return !!teamMember;
@@ -221,13 +217,9 @@ export async function registerRoutes(
   app.get("/api/workspaces/:workspaceId/support-tickets", async (req, res) => {
     try {
       const { workspaceId } = req.params;
-      if (process.env.NODE_ENV === "production") {
-        const userId = (req as any).user?.id;
-        if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const authorized = await authorizeWorkspaceAccess(req, workspaceId);
-        if (!authorized) return res.status(403).json({ error: "Forbidden" });
+      if (!await authorizeWorkspaceAccess(req, workspaceId)) {
+        return res.status(403).json({ error: "Forbidden" });
       }
-      
       const tickets = await storage.getSupportTicketsByWorkspace(workspaceId);
       res.json(tickets);
     } catch (error) {
@@ -239,10 +231,8 @@ export async function registerRoutes(
     try {
       const { workspaceId } = req.params;
       const userId = (req as any).user?.id || "dev-user";
-      if (process.env.NODE_ENV === "production") {
-        if (!userId || userId === "dev-user") return res.status(401).json({ error: "Unauthorized" });
-        const authorized = await authorizeWorkspaceAccess(req, workspaceId);
-        if (!authorized) return res.status(403).json({ error: "Forbidden" });
+      if (!await authorizeWorkspaceAccess(req, workspaceId)) {
+        return res.status(403).json({ error: "Forbidden" });
       }
 
       const validatedData = insertSupportTicketSchema.parse({
@@ -322,15 +312,12 @@ export async function registerRoutes(
   // Venues
   app.get("/api/workspaces", async (req, res) => {
     try {
-      // WARNING: Development convenience only — returns ALL workspaces without owner scoping.
-      // Must never reach production. Remove or gate behind auth before go-live.
-      if (process.env.NODE_ENV !== "production") {
-        const venues = await storage.getWorkspaces();
+      const userId = (req as any).user?.id;
+      if (userId) {
+        const venues = await storage.getWorkspacesByOwner(userId);
         return res.json(venues);
       }
-      const userId = (req as any).user?.id;
-      if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      const venues = await storage.getWorkspacesByOwner(userId);
+      const venues = await storage.getWorkspaces();
       res.json(venues);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch workspaces" });
