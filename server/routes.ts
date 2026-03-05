@@ -350,6 +350,24 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/workspaces/:id/dashboard-stats", async (req, res) => {
+    try {
+      const workspaceId = req.params.id;
+      const [posts, contacts, keywords] = await Promise.all([
+        storage.getWorkspaceBlogPosts(workspaceId),
+        storage.getContactMessages(workspaceId),
+        storage.getRankTrackerKeywords(workspaceId),
+      ]);
+      let invoiceCount = 0;
+      try { const inv = await storage.getInvoices(workspaceId); invoiceCount = inv.length; } catch {}
+      const published = posts.filter((p: any) => p.status === "published").length;
+      const drafts = posts.filter((p: any) => p.status === "draft").length;
+      res.json({ posts: posts.length, published, drafts, contacts: contacts.length, invoices: invoiceCount, keywords: keywords.length });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch dashboard stats" });
+    }
+  });
+
   app.post("/api/workspaces", async (req, res) => {
     try {
       const userId = (req as any).user?.id || "dev-user";

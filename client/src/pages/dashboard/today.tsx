@@ -50,19 +50,21 @@ import { useWorkspace } from "@/lib/workspace-context";
 import { useQuery } from "@tanstack/react-query";
 
 function useWorkspaceStats(workspaceId: string | undefined) {
-  const posts = useQuery({ queryKey: ["/api/blog-posts", { workspaceId }], enabled: !!workspaceId });
-  const contacts = useQuery({ queryKey: ["/api/contact-messages", { workspaceId }], enabled: !!workspaceId });
-  const invoices = useQuery({ queryKey: ["/api/invoices", { workspaceId }], enabled: !!workspaceId });
-  const keywords = useQuery({ queryKey: ["/api/rank-keywords", { workspaceId }], enabled: !!workspaceId });
+  const stats = useQuery<{ posts: number; published: number; drafts: number; contacts: number; invoices: number; keywords: number }>({
+    queryKey: [`/api/workspaces/${workspaceId}/dashboard-stats`],
+    enabled: !!workspaceId,
+  });
 
-  const postCount = Array.isArray(posts.data) ? posts.data.length : 0;
-  const publishedCount = Array.isArray(posts.data) ? posts.data.filter((p: any) => p.status === "published").length : 0;
-  const draftCount = Array.isArray(posts.data) ? posts.data.filter((p: any) => p.status === "draft").length : 0;
-  const contactCount = Array.isArray(contacts.data) ? contacts.data.length : 0;
-  const invoiceCount = Array.isArray(invoices.data) ? invoices.data.length : 0;
-  const keywordCount = Array.isArray(keywords.data) ? keywords.data.length : 0;
-
-  return { postCount, publishedCount, draftCount, contactCount, invoiceCount, keywordCount, isLoading: posts.isLoading };
+  const d = stats.data;
+  return {
+    postCount: d?.posts ?? 0,
+    publishedCount: d?.published ?? 0,
+    draftCount: d?.drafts ?? 0,
+    contactCount: d?.contacts ?? 0,
+    invoiceCount: d?.invoices ?? 0,
+    keywordCount: d?.keywords ?? 0,
+    isLoading: stats.isLoading,
+  };
 }
 
 const cardShadow = "shadow-[0_2px_12px_-2px_rgba(0,0,0,0.06),0_1px_4px_-1px_rgba(0,0,0,0.04)]";
