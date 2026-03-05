@@ -145,7 +145,6 @@ const defaultShortcuts: QuickItem[] = [
   { label: "Content Engine", icon: "FileText", path: "content-engine" },
   { label: "Track Keywords", icon: "TrendingUp", path: "rank-tracker/track-keywords" },
   { label: "Pipeline", icon: "Kanban", path: "crm/pipeline" },
-  { label: "Local Search Grid", icon: "MapPin", path: "rank-tracker/local-search-grid" },
   { label: "Website Widget (AI)", icon: "Activity", path: "widget/monitoring" },
   { label: "Analytics", icon: "BarChart3", path: "analytics/overview" },
   { label: "Calls", icon: "PhoneCall", path: "twilio/call-logs" },
@@ -156,20 +155,49 @@ const defaultShortcuts: QuickItem[] = [
   { label: "Documentation", icon: "BookOpen", path: "support/documentation" },
   { label: "Contacts", icon: "Contact", path: "crm/contacts" },
   { label: "Support Tickets", icon: "LifeBuoy", path: "support/tickets" },
+  { label: "Local Search Grid", icon: "MapPin", path: "rank-tracker/local-search-grid" },
+  { label: "SMS Settings", icon: "MessageCircle", path: "twilio/sms" },
+  { label: "Widget Code Embed", icon: "Code", path: "widget/code" },
 ];
 
+const shortcutColors: Record<string, { bg: string; icon: string }> = {
+  "content-engine": { bg: "bg-amber-50 dark:bg-amber-950/30", icon: "text-amber-600 dark:text-amber-400" },
+  "rank-tracker/track-keywords": { bg: "bg-sky-50 dark:bg-sky-950/30", icon: "text-sky-600 dark:text-sky-400" },
+  "crm/pipeline": { bg: "bg-violet-50 dark:bg-violet-950/30", icon: "text-violet-600 dark:text-violet-400" },
+  "widget/monitoring": { bg: "bg-emerald-50 dark:bg-emerald-950/30", icon: "text-emerald-600 dark:text-emerald-400" },
+  "analytics/overview": { bg: "bg-indigo-50 dark:bg-indigo-950/30", icon: "text-indigo-600 dark:text-indigo-400" },
+  "twilio/call-logs": { bg: "bg-rose-50 dark:bg-rose-950/30", icon: "text-rose-500 dark:text-rose-400" },
+  "ai-training/knowledge-base": { bg: "bg-purple-50 dark:bg-purple-950/30", icon: "text-purple-600 dark:text-purple-400" },
+  "rank-tracker/google-search-console": { bg: "bg-teal-50 dark:bg-teal-950/30", icon: "text-teal-600 dark:text-teal-400" },
+  "connections/payments": { bg: "bg-lime-50 dark:bg-lime-950/30", icon: "text-lime-600 dark:text-lime-400" },
+  "connections/twilio": { bg: "bg-orange-50 dark:bg-orange-950/30", icon: "text-orange-600 dark:text-orange-400" },
+  "support/documentation": { bg: "bg-cyan-50 dark:bg-cyan-950/30", icon: "text-cyan-600 dark:text-cyan-400" },
+  "crm/contacts": { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/30", icon: "text-fuchsia-600 dark:text-fuchsia-400" },
+  "support/tickets": { bg: "bg-blue-50 dark:bg-blue-950/30", icon: "text-blue-600 dark:text-blue-400" },
+  "rank-tracker/local-search-grid": { bg: "bg-yellow-50 dark:bg-yellow-950/30", icon: "text-yellow-600 dark:text-yellow-400" },
+  "twilio/sms": { bg: "bg-pink-50 dark:bg-pink-950/30", icon: "text-pink-600 dark:text-pink-400" },
+  "widget/code": { bg: "bg-slate-50 dark:bg-slate-800/40", icon: "text-slate-600 dark:text-slate-400" },
+};
+
+const defaultColor = { bg: "bg-gray-50 dark:bg-muted/30", icon: "text-muted-foreground" };
+
 const STORAGE_KEY = "indexflow_quick_access";
+const STORAGE_VERSION = "2";
 
 function loadShortcuts(): QuickItem[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    const ver = localStorage.getItem(STORAGE_KEY + "_v");
+    if (ver === STORAGE_VERSION) {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    }
   } catch {}
   return defaultShortcuts;
 }
 
 function saveShortcuts(items: QuickItem[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  localStorage.setItem(STORAGE_KEY + "_v", STORAGE_VERSION);
 }
 
 function QuickIcon({ name, className }: { name: string; className?: string }) {
@@ -334,19 +362,22 @@ export default function Today() {
                       <X className="w-3 h-3" />
                     </button>
                   )}
-                  {editing ? (
-                    <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-muted/30 shadow-sm ring-1 ring-border/50 animate-in" data-testid={`shortcut-${s.label.toLowerCase().replace(/\s+/g, "-")}`}>
-                      <QuickIcon name={s.icon} className="w-4 h-4 text-muted-foreground shrink-0" />
-                      <span className="text-sm truncate">{s.label}</span>
-                    </div>
-                  ) : (
-                    <Link href={href(s.path)}>
-                      <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-muted/30 hover:bg-gray-100 dark:hover:bg-muted/50 transition-colors cursor-pointer shadow-sm" data-testid={`shortcut-${s.label.toLowerCase().replace(/\s+/g, "-")}`}>
-                        <QuickIcon name={s.icon} className="w-4 h-4 text-muted-foreground shrink-0" />
+                  {(() => {
+                    const c = shortcutColors[s.path] || defaultColor;
+                    return editing ? (
+                      <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl ${c.bg} shadow-[0_1px_6px_-1px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.04] dark:ring-white/[0.06]`} data-testid={`shortcut-${s.label.toLowerCase().replace(/\s+/g, "-")}`}>
+                        <QuickIcon name={s.icon} className={`w-4 h-4 ${c.icon} shrink-0`} />
                         <span className="text-sm truncate">{s.label}</span>
                       </div>
-                    </Link>
-                  )}
+                    ) : (
+                      <Link href={href(s.path)}>
+                        <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl ${c.bg} shadow-[0_1px_6px_-1px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.04] dark:ring-white/[0.06] hover:shadow-[0_2px_10px_-2px_rgba(0,0,0,0.12)] transition-all cursor-pointer`} data-testid={`shortcut-${s.label.toLowerCase().replace(/\s+/g, "-")}`}>
+                          <QuickIcon name={s.icon} className={`w-4 h-4 ${c.icon} shrink-0`} />
+                          <span className="text-sm truncate">{s.label}</span>
+                        </div>
+                      </Link>
+                    );
+                  })()}
                 </div>
               ))}
             </div>
