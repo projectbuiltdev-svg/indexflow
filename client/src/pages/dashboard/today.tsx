@@ -75,6 +75,12 @@ export default function Today() {
     { label: "Analytics", icon: BarChart3, path: "analytics/overview" },
     { label: "Call Logs", icon: PhoneCall, path: "twilio/call-logs" },
     { label: "Knowledge Base", icon: Brain, path: "ai-training/knowledge-base" },
+    { label: "Search Console", icon: Search, path: "rank-tracker/google-search-console" },
+    { label: "Payments", icon: Receipt, path: "connections/payments" },
+    { label: "Twilio", icon: PhoneCall, path: "connections/twilio" },
+    { label: "Documentation", icon: ExternalLink, path: "support/documentation" },
+    { label: "Contacts", icon: Users, path: "crm/contacts" },
+    { label: "Support", icon: LifeBuoy, path: "support/tickets" },
   ];
 
   const setupSteps = [
