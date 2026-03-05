@@ -161,25 +161,25 @@ const defaultShortcuts: QuickItem[] = [
 ];
 
 const shortcutColors: Record<string, { bg: string; icon: string }> = {
-  "content-engine": { bg: "bg-amber-50 dark:bg-amber-950/30", icon: "text-amber-600 dark:text-amber-400" },
-  "rank-tracker/track-keywords": { bg: "bg-sky-50 dark:bg-sky-950/30", icon: "text-sky-600 dark:text-sky-400" },
-  "crm/pipeline": { bg: "bg-violet-50 dark:bg-violet-950/30", icon: "text-violet-600 dark:text-violet-400" },
-  "widget/monitoring": { bg: "bg-emerald-50 dark:bg-emerald-950/30", icon: "text-emerald-600 dark:text-emerald-400" },
-  "analytics/overview": { bg: "bg-indigo-50 dark:bg-indigo-950/30", icon: "text-indigo-600 dark:text-indigo-400" },
-  "twilio/call-logs": { bg: "bg-rose-50 dark:bg-rose-950/30", icon: "text-rose-500 dark:text-rose-400" },
-  "ai-training/knowledge-base": { bg: "bg-purple-50 dark:bg-purple-950/30", icon: "text-purple-600 dark:text-purple-400" },
-  "rank-tracker/google-search-console": { bg: "bg-teal-50 dark:bg-teal-950/30", icon: "text-teal-600 dark:text-teal-400" },
-  "connections/payments": { bg: "bg-lime-50 dark:bg-lime-950/30", icon: "text-lime-600 dark:text-lime-400" },
-  "connections/twilio": { bg: "bg-orange-50 dark:bg-orange-950/30", icon: "text-orange-600 dark:text-orange-400" },
-  "support/documentation": { bg: "bg-cyan-50 dark:bg-cyan-950/30", icon: "text-cyan-600 dark:text-cyan-400" },
-  "crm/contacts": { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/30", icon: "text-fuchsia-600 dark:text-fuchsia-400" },
-  "support/tickets": { bg: "bg-blue-50 dark:bg-blue-950/30", icon: "text-blue-600 dark:text-blue-400" },
-  "rank-tracker/local-search-grid": { bg: "bg-yellow-50 dark:bg-yellow-950/30", icon: "text-yellow-600 dark:text-yellow-400" },
-  "twilio/sms": { bg: "bg-pink-50 dark:bg-pink-950/30", icon: "text-pink-600 dark:text-pink-400" },
-  "widget/code": { bg: "bg-slate-50 dark:bg-slate-800/40", icon: "text-slate-600 dark:text-slate-400" },
+  "content-engine": { bg: "bg-amber-50/50 dark:bg-amber-950/15", icon: "text-amber-500/70 dark:text-amber-400/60" },
+  "rank-tracker/track-keywords": { bg: "bg-sky-50/50 dark:bg-sky-950/15", icon: "text-sky-500/70 dark:text-sky-400/60" },
+  "crm/pipeline": { bg: "bg-violet-50/50 dark:bg-violet-950/15", icon: "text-violet-500/70 dark:text-violet-400/60" },
+  "widget/monitoring": { bg: "bg-emerald-50/50 dark:bg-emerald-950/15", icon: "text-emerald-500/70 dark:text-emerald-400/60" },
+  "analytics/overview": { bg: "bg-indigo-50/50 dark:bg-indigo-950/15", icon: "text-indigo-500/70 dark:text-indigo-400/60" },
+  "twilio/call-logs": { bg: "bg-rose-50/50 dark:bg-rose-950/15", icon: "text-rose-400/70 dark:text-rose-400/60" },
+  "ai-training/knowledge-base": { bg: "bg-purple-50/50 dark:bg-purple-950/15", icon: "text-purple-500/70 dark:text-purple-400/60" },
+  "rank-tracker/google-search-console": { bg: "bg-teal-50/50 dark:bg-teal-950/15", icon: "text-teal-500/70 dark:text-teal-400/60" },
+  "connections/payments": { bg: "bg-lime-50/50 dark:bg-lime-950/15", icon: "text-lime-500/70 dark:text-lime-400/60" },
+  "connections/twilio": { bg: "bg-orange-50/50 dark:bg-orange-950/15", icon: "text-orange-400/70 dark:text-orange-400/60" },
+  "support/documentation": { bg: "bg-cyan-50/50 dark:bg-cyan-950/15", icon: "text-cyan-500/70 dark:text-cyan-400/60" },
+  "crm/contacts": { bg: "bg-fuchsia-50/50 dark:bg-fuchsia-950/15", icon: "text-fuchsia-400/70 dark:text-fuchsia-400/60" },
+  "support/tickets": { bg: "bg-blue-50/50 dark:bg-blue-950/15", icon: "text-blue-500/70 dark:text-blue-400/60" },
+  "rank-tracker/local-search-grid": { bg: "bg-yellow-50/50 dark:bg-yellow-950/15", icon: "text-yellow-500/70 dark:text-yellow-400/60" },
+  "twilio/sms": { bg: "bg-pink-50/50 dark:bg-pink-950/15", icon: "text-pink-400/70 dark:text-pink-400/60" },
+  "widget/code": { bg: "bg-slate-50/50 dark:bg-slate-800/20", icon: "text-slate-400/70 dark:text-slate-400/60" },
 };
 
-const defaultColor = { bg: "bg-gray-50 dark:bg-muted/30", icon: "text-muted-foreground" };
+const defaultColor = { bg: "bg-gray-50/50 dark:bg-muted/20", icon: "text-muted-foreground/60" };
 
 const STORAGE_KEY = "indexflow_quick_access";
 const STORAGE_VERSION = "2";
