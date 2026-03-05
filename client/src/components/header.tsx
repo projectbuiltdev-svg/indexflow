@@ -551,6 +551,11 @@ export function Header() {
               <LogIn className="w-3 h-3" />
               Log In
             </a>
+            <span className="text-gray-500">|</span>
+            <a href="/dev/client" className="text-gray-200/90 hover:text-white transition-colors flex items-center gap-1" data-testid="link-topbar-login2">
+              <LogIn className="w-3 h-3" />
+              Login 2
+            </a>
           </div>
         </div>
       </div>
