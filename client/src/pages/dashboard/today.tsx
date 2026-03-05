@@ -237,9 +237,9 @@ export default function Today() {
   const activePaths = new Set(shortcuts.map(s => s.path));
 
   const engines = [
-    { name: "Content Engine", desc: "AI blog posts, pages, SEO", icon: FileText, path: "content-engine", stat: `${postCount} posts`, accent: "from-sky-500/10 to-sky-400/5 dark:from-sky-500/15 dark:to-sky-400/10", iconBg: "bg-sky-500/15 dark:bg-sky-400/20", iconColor: "text-sky-600 dark:text-sky-300" },
-    { name: "pSEO Engine", desc: "Programmatic landing pages", icon: Megaphone, path: "pseo/campaigns", stat: "Campaigns", accent: "from-teal-500/10 to-teal-400/5 dark:from-teal-500/15 dark:to-teal-400/10", iconBg: "bg-teal-500/15 dark:bg-teal-400/20", iconColor: "text-teal-600 dark:text-teal-300" },
-    { name: "Website Engine", desc: "AI website builder", icon: Globe, path: "website-engine", stat: "Projects", accent: "from-amber-500/10 to-amber-400/5 dark:from-amber-500/15 dark:to-amber-400/10", iconBg: "bg-amber-500/15 dark:bg-amber-400/20", iconColor: "text-amber-600 dark:text-amber-300" },
+    { name: "Content Engine", desc: "AI blog posts, pages, SEO", icon: FileText, path: "content-engine", stat: `${postCount} posts`, cta: "Create Post", ctaPath: "content-engine?new=1", accent: "from-sky-500/10 to-sky-400/5 dark:from-sky-500/15 dark:to-sky-400/10", iconBg: "bg-sky-500/15 dark:bg-sky-400/20", iconColor: "text-sky-600 dark:text-sky-300" },
+    { name: "pSEO Engine", desc: "Programmatic landing pages", icon: Megaphone, path: "pseo/campaigns", stat: "Campaigns", cta: "New Campaign", ctaPath: "pseo/campaigns?new=1", accent: "from-teal-500/10 to-teal-400/5 dark:from-teal-500/15 dark:to-teal-400/10", iconBg: "bg-teal-500/15 dark:bg-teal-400/20", iconColor: "text-teal-600 dark:text-teal-300" },
+    { name: "Website Engine", desc: "AI website builder", icon: Globe, path: "website-engine", stat: "Projects", cta: "New Project", ctaPath: "website-engine?new=1", accent: "from-amber-500/10 to-amber-400/5 dark:from-amber-500/15 dark:to-amber-400/10", iconBg: "bg-amber-500/15 dark:bg-amber-400/20", iconColor: "text-amber-600 dark:text-amber-300" },
   ];
 
   const kpis = [
@@ -257,21 +257,29 @@ export default function Today() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {engines.map((e) => (
-          <Link key={e.name} href={href(e.path)}>
-            <Card className={`group ${cardShadow} ${cardHover} transition-all duration-200 cursor-pointer h-full border-0 bg-gradient-to-br ${e.accent}`} data-testid={`card-engine-${e.name.toLowerCase().replace(/\s+/g, "-")}`}>
-              <CardContent className="p-5">
-                <div className="flex items-start justify-between">
-                  <div className={`w-10 h-10 rounded-xl ${e.iconBg} flex items-center justify-center`}>
-                    <e.icon className={`w-5 h-5 ${e.iconColor}`} />
+          <Card key={e.name} className={`group ${cardShadow} ${cardHover} transition-all duration-200 h-full border-0 bg-gradient-to-br ${e.accent}`} data-testid={`card-engine-${e.name.toLowerCase().replace(/\s+/g, "-")}`}>
+            <CardContent className="p-5">
+              <Link href={href(e.path)}>
+                <div className="cursor-pointer">
+                  <div className="flex items-start justify-between">
+                    <div className={`w-10 h-10 rounded-xl ${e.iconBg} flex items-center justify-center`}>
+                      <e.icon className={`w-5 h-5 ${e.iconColor}`} />
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all mt-1" />
                   </div>
-                  <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all mt-1" />
+                  <h3 className="text-base font-semibold mt-3">{e.name}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">{e.desc}</p>
+                  <p className="text-xs text-muted-foreground/60 mt-2">{isLoading ? "..." : e.stat}</p>
                 </div>
-                <h3 className="text-base font-semibold mt-3">{e.name}</h3>
-                <p className="text-xs text-muted-foreground mt-0.5">{e.desc}</p>
-                <p className="text-xs text-muted-foreground/60 mt-2">{isLoading ? "..." : e.stat}</p>
-              </CardContent>
-            </Card>
-          </Link>
+              </Link>
+              <Link href={href(e.ctaPath)}>
+                <Button size="sm" className="mt-3 w-full" data-testid={`button-cta-${e.name.toLowerCase().replace(/\s+/g, "-")}`}>
+                  <Plus className="w-3.5 h-3.5 mr-1.5" />
+                  {e.cta}
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
