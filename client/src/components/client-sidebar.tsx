@@ -98,6 +98,8 @@ const navGroups: NavGroup[] = [
       { title: "Call Logs", path: "/twilio/call-logs", icon: PhoneCall },
       { title: "Voice Settings", path: "/twilio/voice", icon: Mic },
       { title: "SMS Settings", path: "/twilio/sms", icon: MessageCircle },
+      { title: "Knowledge Base", path: "/ai-training/knowledge-base", icon: Brain },
+      { title: "Channels", path: "/ai-training/channels", icon: Cpu },
     ],
   },
   {
@@ -133,14 +135,6 @@ const navGroups: NavGroup[] = [
     items: [
       { title: "Pipeline", path: "/crm/pipeline", icon: Kanban },
       { title: "Contacts", path: "/crm/contacts", icon: Contact },
-    ],
-  },
-  {
-    label: "AI Training",
-    collapsible: true,
-    items: [
-      { title: "Knowledge Base", path: "/ai-training/knowledge-base", icon: Brain },
-      { title: "Channels", path: "/ai-training/channels", icon: Cpu },
     ],
   },
 ];
