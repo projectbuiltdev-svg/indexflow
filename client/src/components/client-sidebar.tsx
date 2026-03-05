@@ -124,7 +124,7 @@ const navGroups: NavGroup[] = [
     label: "pSEO Engine",
     collapsible: true,
     items: [
-      { title: "Campaigns", path: "/content/campaigns", icon: Megaphone },
+      { title: "Campaigns", path: "/pseo/campaigns", icon: Megaphone },
     ],
   },
   {

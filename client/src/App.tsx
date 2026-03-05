@@ -99,6 +99,7 @@ const ContentEngine = lazy(() => import("@/pages/dashboard/content-engine"));
 const WebsiteEngine = lazy(() => import("@/pages/dashboard/website-engine"));
 const WebsiteEngineSettings = lazy(() => import("@/pages/dashboard/website-engine-settings"));
 const PostEditor = lazy(() => import("@/pages/dashboard/post-editor"));
+const PseoCampaigns = lazy(() => import("@/pages/dashboard/pseo-campaigns"));
 
 const TwilioCallLogs = lazy(() => import("@/pages/dashboard/twilio-call-logs"));
 const TwilioVoice = lazy(() => import("@/pages/dashboard/twilio-voice"));
@@ -436,6 +437,7 @@ export function AppRoutes() {
         <Route path="/:workspaceId/website-engine">{() => <ClientRoute component={WebsiteEngine} />}</Route>
         <Route path="/:workspaceId/website-engine/settings">{() => <ClientRoute component={WebsiteEngineSettings} />}</Route>
         <Route path="/:workspaceId/content/posts/:postId/edit">{() => <ClientRoute component={PostEditor} />}</Route>
+        <Route path="/:workspaceId/pseo/campaigns">{() => <ClientRoute component={PseoCampaigns} />}</Route>
 
         {/* SEO */}
         <Route path="/:workspaceId/seo/links">{() => <ClientRoute component={SeoLinks} />}</Route>
@@ -562,7 +564,10 @@ function AppContent() {
                       location.includes("/twilio/") ||
                       location.includes("/widget/") ||
                       location.includes("/crm/") ||
-                      location.includes("/connections/");
+                      location.includes("/connections/") ||
+                      location.includes("/content-engine") ||
+                      location.includes("/website-engine") ||
+                      location.includes("/pseo/");
 
   useEffect(() => {
     setMounted(true);
