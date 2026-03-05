@@ -89,6 +89,8 @@ export default function Today() {
 
   return (
     <div className="-m-6 p-5 sm:p-6 min-h-[calc(100vh-3rem)] space-y-6 bg-gray-50/50 dark:bg-background">
+      <h1 className="text-2xl font-semibold tracking-tight" data-testid="text-page-title">Dashboard Overview</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {engines.map((e) => (
           <Link key={e.name} href={href(e.path)}>
