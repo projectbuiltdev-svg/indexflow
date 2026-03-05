@@ -220,15 +220,6 @@ export default function Today() {
     { label: "Invoices", value: invoiceCount, icon: Receipt, color: "text-rose-400" },
   ];
 
-  const setupSteps = [
-    { label: "Connect an AI provider", done: false, path: "connections/ai-providers" },
-    { label: "Create your first post", done: postCount > 0, path: "content-engine" },
-    { label: "Add keywords to track", done: keywordCount > 0, path: "rank-tracker/track-keywords" },
-    { label: "Set up white label", done: false, path: "settings/white-label" },
-    { label: "Invite your team", done: false, path: "settings/team" },
-  ];
-
-  const completedSteps = setupSteps.filter(s => s.done).length;
 
   return (
     <div className="-m-6 p-5 sm:p-6 min-h-[calc(100vh-3rem)] space-y-6 bg-gray-50/50 dark:bg-background">
@@ -266,8 +257,8 @@ export default function Today() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <Card className={`lg:col-span-8 ${cardShadow} border-0 bg-white dark:bg-card`} data-testid="card-shortcuts">
+      <div className="grid grid-cols-1 gap-4">
+        <Card className={`${cardShadow} border-0 bg-white dark:bg-card`} data-testid="card-shortcuts">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-semibold">Quick Access</h2>
@@ -362,35 +353,6 @@ export default function Today() {
           </CardContent>
         </Card>
 
-        <Card className={`lg:col-span-4 ${cardShadow} border-0 bg-white dark:bg-card`} data-testid="card-setup">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold">Setup Progress</h2>
-              <span className="text-xs text-muted-foreground font-medium">{completedSteps}/{setupSteps.length}</span>
-            </div>
-            <div className="h-2 rounded-full bg-gray-100 dark:bg-muted overflow-hidden mb-4">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 dark:from-amber-500 dark:to-yellow-400 transition-all duration-500"
-                style={{ width: `${(completedSteps / setupSteps.length) * 100}%` }}
-              />
-            </div>
-            <div className="space-y-1">
-              {setupSteps.map((step) => (
-                <Link key={step.label} href={href(step.path)}>
-                  <div className="flex items-center gap-2.5 py-2 px-2 rounded-lg cursor-pointer group hover:bg-gray-50 dark:hover:bg-muted/30 transition-colors" data-testid={`setup-${step.label.toLowerCase().replace(/\s+/g, "-")}`}>
-                    {step.done ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                    ) : (
-                      <div className="w-4 h-4 rounded-full border-2 border-gray-200 dark:border-muted-foreground/30 shrink-0" />
-                    )}
-                    <span className={`text-sm ${step.done ? "text-muted-foreground line-through" : ""}`}>{step.label}</span>
-                    <ArrowRight className="w-3 h-3 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
