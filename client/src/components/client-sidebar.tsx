@@ -70,32 +70,49 @@ interface NavGroup {
 
 const navGroups: NavGroup[] = [
   {
-    label: "Main",
+    label: "Home",
     items: [
       { title: "Dashboard Overview", path: "/today", icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: "Build",
+    items: [
       { title: "Content Engine", path: "/content-engine", icon: FileText },
       { title: "pSEO Engine", path: "/pseo/campaigns", icon: Megaphone },
       { title: "Website Engine", path: "/website-engine", icon: Globe },
+    ],
+  },
+  {
+    label: "Engage",
+    collapsible: true,
+    items: [
+      { title: "Pipeline", path: "/crm/pipeline", icon: Kanban },
+      { title: "Contacts", path: "/crm/contacts", icon: Contact },
       { title: "Calls", path: "/twilio/call-logs", icon: PhoneCall },
+      { title: "Website Widget (AI)", path: "/widget/monitoring", icon: Activity },
+      { title: "Widget Code Embed", path: "/widget/code", icon: Code },
+    ],
+  },
+  {
+    label: "Track",
+    collapsible: true,
+    items: [
       { title: "Analytics", path: "/analytics/overview", icon: BarChart3 },
+      { title: "Track Keywords", path: "/rank-tracker/track-keywords", icon: TrendingUp },
+      { title: "Local Search Grid", path: "/rank-tracker/local-search-grid", icon: MapPin },
+      { title: "Search Console", path: "/rank-tracker/google-search-console", icon: Monitor },
       { title: "Export Data", path: "/analytics/export", icon: Download },
     ],
   },
   {
-    label: "Settings",
+    label: "Connect",
     collapsible: true,
     items: [
-      { title: "Team & Invites", path: "/settings/team", icon: Users },
-      { title: "White Label", path: "/settings/white-label", icon: Palette },
-      { title: "Billing & Usage", path: "/settings/billing", icon: Wallet },
-      { title: "Setup Guide", path: "/settings/setup-guide", icon: ListChecks },
-    ],
-  },
-  {
-    label: "Twilio",
-    collapsible: true,
-    items: [
-      { title: "Call Logs", path: "/twilio/call-logs", icon: PhoneCall },
+      { title: "AI Providers", path: "/connections/ai-providers", icon: Sparkles },
+      { title: "Image Banks", path: "/connections/image-banks", icon: ImageIcon },
+      { title: "Payments", path: "/connections/payments", icon: CreditCard },
+      { title: "Twilio Account", path: "/connections/twilio", icon: Phone },
       { title: "Voice Settings", path: "/twilio/voice", icon: Mic },
       { title: "SMS Settings", path: "/twilio/sms", icon: MessageCircle },
       { title: "Knowledge Base", path: "/ai-training/knowledge-base", icon: Brain },
@@ -103,38 +120,13 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "BYOK API",
+    label: "Workspace",
     collapsible: true,
     items: [
-      { title: "AI Providers", path: "/connections/ai-providers", icon: Sparkles },
-      { title: "Image Banks", path: "/connections/image-banks", icon: ImageIcon },
-      { title: "Payments", path: "/connections/payments", icon: CreditCard },
-      { title: "Twilio Account", path: "/connections/twilio", icon: Phone },
-    ],
-  },
-  {
-    label: "Rank Tracker",
-    collapsible: true,
-    items: [
-      { title: "Track Keywords", path: "/rank-tracker/track-keywords", icon: TrendingUp },
-      { title: "Local Search Grid", path: "/rank-tracker/local-search-grid", icon: MapPin },
-      { title: "Search Console", path: "/rank-tracker/google-search-console", icon: Monitor },
-    ],
-  },
-  {
-    label: "Widget",
-    collapsible: true,
-    items: [
-      { title: "Website Widget (AI)", path: "/widget/monitoring", icon: Activity },
-      { title: "Widget Code Embed", path: "/widget/code", icon: Code },
-    ],
-  },
-  {
-    label: "CRM",
-    collapsible: true,
-    items: [
-      { title: "Pipeline", path: "/crm/pipeline", icon: Kanban },
-      { title: "Contacts", path: "/crm/contacts", icon: Contact },
+      { title: "Team & Invites", path: "/settings/team", icon: Users },
+      { title: "White Label", path: "/settings/white-label", icon: Palette },
+      { title: "Billing & Usage", path: "/settings/billing", icon: Wallet },
+      { title: "Setup Guide", path: "/settings/setup-guide", icon: ListChecks },
     ],
   },
 ];
