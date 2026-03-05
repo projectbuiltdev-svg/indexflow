@@ -161,25 +161,25 @@ const defaultShortcuts: QuickItem[] = [
 ];
 
 const shortcutColors: Record<string, { bg: string; icon: string }> = {
-  "content-engine": { bg: "bg-blue-950/[0.04] dark:bg-blue-400/[0.06]", icon: "text-blue-800/70 dark:text-blue-300/70" },
-  "rank-tracker/track-keywords": { bg: "bg-indigo-950/[0.04] dark:bg-indigo-400/[0.06]", icon: "text-indigo-800/70 dark:text-indigo-300/70" },
-  "crm/pipeline": { bg: "bg-blue-950/[0.03] dark:bg-blue-400/[0.05]", icon: "text-blue-700/70 dark:text-blue-300/70" },
-  "widget/monitoring": { bg: "bg-indigo-950/[0.03] dark:bg-indigo-400/[0.05]", icon: "text-indigo-700/70 dark:text-indigo-300/70" },
-  "analytics/overview": { bg: "bg-blue-950/[0.04] dark:bg-blue-400/[0.06]", icon: "text-blue-800/60 dark:text-blue-300/60" },
-  "twilio/call-logs": { bg: "bg-slate-800/[0.04] dark:bg-slate-400/[0.06]", icon: "text-slate-700/70 dark:text-slate-300/70" },
-  "ai-training/knowledge-base": { bg: "bg-indigo-950/[0.04] dark:bg-indigo-400/[0.06]", icon: "text-indigo-800/60 dark:text-indigo-300/60" },
-  "rank-tracker/google-search-console": { bg: "bg-blue-950/[0.03] dark:bg-blue-400/[0.05]", icon: "text-blue-700/60 dark:text-blue-300/60" },
-  "connections/payments": { bg: "bg-indigo-950/[0.03] dark:bg-indigo-400/[0.05]", icon: "text-indigo-700/60 dark:text-indigo-300/60" },
-  "connections/twilio": { bg: "bg-blue-950/[0.03] dark:bg-blue-400/[0.05]", icon: "text-blue-800/60 dark:text-blue-300/60" },
-  "support/documentation": { bg: "bg-slate-800/[0.03] dark:bg-slate-400/[0.05]", icon: "text-slate-700/60 dark:text-slate-300/60" },
-  "crm/contacts": { bg: "bg-indigo-950/[0.03] dark:bg-indigo-400/[0.05]", icon: "text-indigo-800/60 dark:text-indigo-300/60" },
-  "support/tickets": { bg: "bg-blue-950/[0.03] dark:bg-blue-400/[0.05]", icon: "text-blue-700/60 dark:text-blue-300/60" },
-  "rank-tracker/local-search-grid": { bg: "bg-indigo-950/[0.03] dark:bg-indigo-400/[0.05]", icon: "text-indigo-700/60 dark:text-indigo-300/60" },
-  "twilio/sms": { bg: "bg-slate-800/[0.03] dark:bg-slate-400/[0.05]", icon: "text-slate-600/60 dark:text-slate-300/60" },
-  "widget/code": { bg: "bg-blue-950/[0.03] dark:bg-blue-400/[0.05]", icon: "text-blue-700/60 dark:text-blue-300/60" },
+  "content-engine": { bg: "bg-violet-500/[0.07] dark:bg-violet-400/[0.08]", icon: "text-violet-600 dark:text-violet-400" },
+  "rank-tracker/track-keywords": { bg: "bg-blue-500/[0.07] dark:bg-blue-400/[0.08]", icon: "text-blue-600 dark:text-blue-400" },
+  "crm/pipeline": { bg: "bg-indigo-500/[0.07] dark:bg-indigo-400/[0.08]", icon: "text-indigo-600 dark:text-indigo-400" },
+  "widget/monitoring": { bg: "bg-emerald-500/[0.07] dark:bg-emerald-400/[0.08]", icon: "text-emerald-600 dark:text-emerald-400" },
+  "analytics/overview": { bg: "bg-cyan-500/[0.07] dark:bg-cyan-400/[0.08]", icon: "text-cyan-600 dark:text-cyan-400" },
+  "twilio/call-logs": { bg: "bg-rose-500/[0.07] dark:bg-rose-400/[0.08]", icon: "text-rose-500 dark:text-rose-400" },
+  "ai-training/knowledge-base": { bg: "bg-purple-500/[0.07] dark:bg-purple-400/[0.08]", icon: "text-purple-600 dark:text-purple-400" },
+  "rank-tracker/google-search-console": { bg: "bg-teal-500/[0.07] dark:bg-teal-400/[0.08]", icon: "text-teal-600 dark:text-teal-400" },
+  "connections/payments": { bg: "bg-amber-500/[0.07] dark:bg-amber-400/[0.08]", icon: "text-amber-600 dark:text-amber-400" },
+  "connections/twilio": { bg: "bg-sky-500/[0.07] dark:bg-sky-400/[0.08]", icon: "text-sky-600 dark:text-sky-400" },
+  "support/documentation": { bg: "bg-slate-500/[0.07] dark:bg-slate-400/[0.08]", icon: "text-slate-600 dark:text-slate-400" },
+  "crm/contacts": { bg: "bg-fuchsia-500/[0.07] dark:bg-fuchsia-400/[0.08]", icon: "text-fuchsia-600 dark:text-fuchsia-400" },
+  "support/tickets": { bg: "bg-blue-500/[0.06] dark:bg-blue-400/[0.07]", icon: "text-blue-500 dark:text-blue-400" },
+  "rank-tracker/local-search-grid": { bg: "bg-orange-500/[0.07] dark:bg-orange-400/[0.08]", icon: "text-orange-600 dark:text-orange-400" },
+  "twilio/sms": { bg: "bg-pink-500/[0.07] dark:bg-pink-400/[0.08]", icon: "text-pink-500 dark:text-pink-400" },
+  "widget/code": { bg: "bg-indigo-500/[0.06] dark:bg-indigo-400/[0.07]", icon: "text-indigo-500 dark:text-indigo-400" },
 };
 
-const defaultColor = { bg: "bg-blue-950/[0.03] dark:bg-blue-400/[0.05]", icon: "text-blue-700/50 dark:text-blue-300/50" };
+const defaultColor = { bg: "bg-violet-500/[0.05] dark:bg-violet-400/[0.06]", icon: "text-violet-500 dark:text-violet-400" };
 
 const STORAGE_KEY = "indexflow_quick_access";
 const STORAGE_VERSION = "2";
@@ -235,17 +235,17 @@ export default function Today() {
   const activePaths = new Set(shortcuts.map(s => s.path));
 
   const engines = [
-    { name: "Content Engine", desc: "AI blog posts, pages, SEO", icon: FileText, path: "content-engine", stat: `${postCount} posts`, accent: "from-blue-950/[0.04] to-indigo-950/[0.03] dark:from-blue-400/[0.06] dark:to-indigo-400/[0.04]", iconBg: "bg-blue-900/10 dark:bg-blue-400/15", iconColor: "text-blue-800 dark:text-blue-300" },
-    { name: "pSEO Engine", desc: "Programmatic landing pages", icon: Megaphone, path: "pseo/campaigns", stat: "Campaigns", accent: "from-indigo-950/[0.04] to-violet-950/[0.03] dark:from-indigo-400/[0.06] dark:to-violet-400/[0.04]", iconBg: "bg-indigo-900/10 dark:bg-indigo-400/15", iconColor: "text-indigo-800 dark:text-indigo-300" },
-    { name: "Website Engine", desc: "AI website builder", icon: Globe, path: "website-engine", stat: "Projects", accent: "from-slate-950/[0.04] to-blue-950/[0.03] dark:from-slate-400/[0.06] dark:to-blue-400/[0.04]", iconBg: "bg-slate-800/10 dark:bg-slate-400/15", iconColor: "text-slate-700 dark:text-slate-300" },
+    { name: "Content Engine", desc: "AI blog posts, pages, SEO", icon: FileText, path: "content-engine", stat: `${postCount} posts`, accent: "from-violet-500/10 to-fuchsia-500/5 dark:from-violet-500/15 dark:to-fuchsia-500/10", iconBg: "bg-violet-500/15 dark:bg-violet-400/20", iconColor: "text-violet-600 dark:text-violet-300" },
+    { name: "pSEO Engine", desc: "Programmatic landing pages", icon: Megaphone, path: "pseo/campaigns", stat: "Campaigns", accent: "from-blue-500/10 to-cyan-500/5 dark:from-blue-500/15 dark:to-cyan-500/10", iconBg: "bg-blue-500/15 dark:bg-blue-400/20", iconColor: "text-blue-600 dark:text-blue-300" },
+    { name: "Website Engine", desc: "AI website builder", icon: Globe, path: "website-engine", stat: "Projects", accent: "from-emerald-500/10 to-teal-500/5 dark:from-emerald-500/15 dark:to-teal-500/10", iconBg: "bg-emerald-500/15 dark:bg-emerald-400/20", iconColor: "text-emerald-600 dark:text-emerald-300" },
   ];
 
   const kpis = [
-    { label: "Published", value: publishedCount, icon: CheckCircle2, color: "text-blue-800 dark:text-blue-300" },
-    { label: "Drafts", value: draftCount, icon: Clock, color: "text-indigo-700 dark:text-indigo-300" },
-    { label: "Keywords", value: keywordCount, icon: TrendingUp, color: "text-blue-700 dark:text-blue-400" },
-    { label: "Contacts", value: contactCount, icon: Users, color: "text-indigo-800 dark:text-indigo-300" },
-    { label: "Invoices", value: invoiceCount, icon: Receipt, color: "text-slate-600 dark:text-slate-400" },
+    { label: "Published", value: publishedCount, icon: CheckCircle2, color: "text-emerald-500 dark:text-emerald-400" },
+    { label: "Drafts", value: draftCount, icon: Clock, color: "text-amber-500 dark:text-amber-400" },
+    { label: "Keywords", value: keywordCount, icon: TrendingUp, color: "text-blue-500 dark:text-blue-400" },
+    { label: "Contacts", value: contactCount, icon: Users, color: "text-violet-500 dark:text-violet-400" },
+    { label: "Invoices", value: invoiceCount, icon: Receipt, color: "text-rose-500 dark:text-rose-400" },
   ];
 
 
